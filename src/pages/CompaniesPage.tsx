@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCompanies } from "@/hooks/useCompanies";
+import { useCompanies } from "@/hooks/companies/useCompanies";
 import { CompanyCard } from "@/components/companies/list/CompanyCard";
 import { SectionedCompanyList } from "@/components/companies/list/SectionedCompanyList";
 import { Filter, Check, X, BarChart, List } from "lucide-react";
@@ -29,12 +29,12 @@ import {
   useSectors,
   useSectorNames,
   SectorCode,
-} from "@/hooks/useCompanyFilters";
+} from "@/hooks/companies/useCompanyFilters";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { useTranslation } from "react-i18next";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { cn } from "@/lib/utils";
-import SectorGraphs from "@/components/companies/list/SectorGraphs";
+import SectorGraphs from "@/components/companies/sectors/SectorGraphs";
 
 type FilterBadge = {
   type: "filter" | "sort";
