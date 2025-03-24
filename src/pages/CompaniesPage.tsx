@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCompanies } from "@/hooks/companies/useCompanies";
 import { CompanyCard } from "@/components/companies/list/CompanyCard";
 import { SectionedCompanyList } from "@/components/companies/list/SectionedCompanyList";
@@ -235,7 +235,8 @@ export function CompaniesPage() {
   const [filterOpen, setFilterOpen] = useState(false);
   const sortOptions = useSortOptions();
   const sectorNames = useSectorNames();
-  const [viewMode, setViewMode] = useState<"graphs" | "list">("graphs");
+  const [viewMode, setViewMode] = useState<"graphs" | "list">("list");
+  const [isDevEnvironment, setIsDevEnvironment] = useState(false);
 
   const {
     searchQuery,
@@ -246,6 +247,23 @@ export function CompaniesPage() {
     setSortBy,
     filteredCompanies,
   } = useCompanyFilters(companies);
+
+  // Detect environment on component mount
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    const isDev =
+      hostname.includes("dev.") ||
+      hostname.includes("staging.") ||
+      hostname.includes("localhost") ||
+      hostname.includes("127.0.0.1");
+
+    setIsDevEnvironment(isDev);
+
+    // If in dev environment, we can default to graphs view
+    if (isDev) {
+      setViewMode("graphs");
+    }
+  }, []);
 
   const activeFilters: FilterBadge[] = [
     ...sectors.map((sec) => ({
@@ -312,36 +330,40 @@ export function CompaniesPage() {
             isMobile ? "flex-col" : "items-center"
           )}
         >
-          {/* View Toggle */}
-          <div className="flex bg-black-1 rounded-md overflow-hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 px-3 rounded-none",
-                viewMode === "graphs" ? "bg-blue-5/30 text-blue-2" : "text-grey"
-              )}
-              onClick={() => setViewMode("graphs")}
-              title={t("companiesPage.viewModes.graphs")}
-            >
-              <BarChart className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 px-3 rounded-none",
-                viewMode === "list" ? "bg-blue-5/30 text-blue-2" : "text-grey"
-              )}
-              onClick={() => setViewMode("list")}
-              title={t("companiesPage.viewModes.list")}
-            >
-              <List className="w-4 h-4" />
-            </Button>
-          </div>
+          {/* View Toggle - Only show in dev environments */}
+          {isDevEnvironment && (
+            <div className="flex bg-black-1 rounded-md overflow-hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-8 px-3 rounded-none",
+                  viewMode === "graphs"
+                    ? "bg-blue-5/30 text-blue-2"
+                    : "text-grey"
+                )}
+                onClick={() => setViewMode("graphs")}
+                title={t("companiesPage.viewModes.graphs")}
+              >
+                <BarChart className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-8 px-3 rounded-none",
+                  viewMode === "list" ? "bg-blue-5/30 text-blue-2" : "text-grey"
+                )}
+                onClick={() => setViewMode("list")}
+                title={t("companiesPage.viewModes.list")}
+              >
+                <List className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
 
-          {/* Search Input - Only show in list view */}
-          {viewMode === "list" && (
+          {/* Search Input - Always show in production, only in list view for dev */}
+          {(!isDevEnvironment || viewMode === "list") && (
             <Input
               type="text"
               placeholder={t("companiesPage.searchPlaceholder")}
@@ -359,10 +381,10 @@ export function CompaniesPage() {
             setSectors={setSectors}
             sortBy={sortBy}
             setSortBy={setSortBy}
-            viewMode={viewMode}
+            viewMode={isDevEnvironment ? viewMode : "list"}
           />
 
-          {/* Badges - Stay inline on desktop, wrap on mobile */}
+          {/* Badges */}
           {activeFilters.length > 0 && (
             <div
               className={cn(
@@ -385,37 +407,7 @@ export function CompaniesPage() {
             {t("companiesPage.tryDifferentCriteria")}
           </p>
         </div>
-      ) : viewMode === "list" ? (
-        sectors.length === 0 && !searchQuery ? (
-          <SectionedCompanyList
-            companies={filteredCompanies.map(({ ...rest }) => ({
-              ...rest,
-              metrics: {
-                emissionsReduction: 0,
-                displayReduction: "0%",
-              },
-              reportingPeriods: rest.reportingPeriods.map((period) => ({
-                ...period,
-                id: period.startDate,
-              })),
-            }))}
-            sortBy={sortBy}
-          />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredCompanies.map((company) => (
-              <CompanyCard
-                key={company.wikidataId}
-                {...company}
-                metrics={{
-                  emissionsReduction: 0,
-                  displayReduction: "0%",
-                }}
-              />
-            ))}
-          </div>
-        )
-      ) : (
+      ) : isDevEnvironment && viewMode === "graphs" ? (
         <SectorGraphs
           companies={companies}
           selectedSectors={
@@ -424,6 +416,35 @@ export function CompaniesPage() {
               : Object.keys(sectorNames).filter((key) => key !== "all")
           }
         />
+      ) : // Always show list view in production
+      sectors.length === 0 && !searchQuery ? (
+        <SectionedCompanyList
+          companies={filteredCompanies.map(({ ...rest }) => ({
+            ...rest,
+            metrics: {
+              emissionsReduction: 0,
+              displayReduction: "0%",
+            },
+            reportingPeriods: rest.reportingPeriods.map((period) => ({
+              ...period,
+              id: period.startDate,
+            })),
+          }))}
+          sortBy={sortBy}
+        />
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredCompanies.map((company) => (
+            <CompanyCard
+              key={company.wikidataId}
+              {...company}
+              metrics={{
+                emissionsReduction: 0,
+                displayReduction: "0%",
+              }}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
