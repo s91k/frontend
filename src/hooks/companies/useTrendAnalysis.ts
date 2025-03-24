@@ -48,7 +48,7 @@ export const useTrendAnalysis = (
 
       const changePercent = ((latestEmissions - baselineEmissions) / baselineEmissions) * 100;
       
-      if (Math.abs(changePercent) > 80) {
+      if (Math.abs(changePercent) > 60) {
         trends.noComparable.push(company);
       } else if (changePercent < 0) {
         trends.decreasing.push({

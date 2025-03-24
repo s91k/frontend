@@ -147,28 +147,28 @@ export type SectorColors = {
 // Add the sector colors
 export const sectorColors: SectorColors = {
   "10": {
-    base: "var(--green-5)",
-    scope1: "var(--green-5)",
-    scope2: "var(--green-4)",
-    scope3: "var(--green-3)",
+    base: "var(--green-4)",
+    scope1: "var(--green-4)",
+    scope2: "var(--green-3)",
+    scope3: "var(--green-2)",
   },
   "15": {
-    base: "var(--blue-5)",
-    scope1: "var(--blue-5)",
-    scope2: "var(--blue-4)",
-    scope3: "var(--blue-3)",
+    base: "var(--blue-4)",
+    scope1: "var(--blue-4)",
+    scope2: "var(--blue-3)",
+    scope3: "var(--blue-2)",
   },
   "20": {
-    base: "var(--pink-5)",
-    scope1: "var(--pink-5)",
-    scope2: "var(--pink-4)",
-    scope3: "var(--pink-3)",
+    base: "var(--pink-4)",
+    scope1: "var(--pink-4)",
+    scope2: "var(--pink-3)",
+    scope3: "var(--pink-2)",
   },
   "25": {
-    base: "var(--orange-5)",
-    scope1: "var(--orange-5)",
-    scope2: "var(--orange-4)",
-    scope3: "var(--orange-3)",
+    base: "var(--orange-4)",
+    scope1: "var(--orange-4)",
+    scope2: "var(--orange-3)",
+    scope3: "var(--orange-2)",
   },
   "30": {
     base: "var(--green-3)",
@@ -196,21 +196,21 @@ export const sectorColors: SectorColors = {
   },
   "50": {
     base: "var(--blue-2)",
-    scope1: "var(--blue-4)",
+    scope1: "var(--blue-2)",
     scope2: "var(--blue-3)",
-    scope3: "var(--blue-2)",
+    scope3: "var(--blue-1)",
   },
   "55": {
     base: "var(--green-2)",
-    scope1: "var(--green-4)",
+    scope1: "var(--green-2)",
     scope2: "var(--green-3)",
-    scope3: "var(--green-2)",
+    scope3: "var(--green-1)",
   },
   "60": {
     base: "var(--pink-2)",
-    scope1: "var(--pink-4)",
+    scope1: "var(--pink-2)",
     scope2: "var(--pink-3)",
-    scope3: "var(--pink-2)",
+    scope3: "var(--pink-1)",
   },
 };
 

@@ -143,15 +143,14 @@ export const useChartData = (
             periodForYear?.emissions?.scope2?.calculatedTotalEmissions || 0;
           const scope3 =
             periodForYear?.emissions?.scope3?.calculatedTotalEmissions || 0;
-          const value = scope1 + scope2 + scope3;
+          const totalEmissions = scope1 + scope2 + scope3;
 
           return {
             name: company.name,
-            value,
-            companyName: company.name,
-            scope1,
-            scope2,
-            scope3,
+            value: totalEmissions,
+            sectorCode: company.industry?.industryGics.sectorCode,
+            wikidataId: company.wikidataId,
+            total: totalEmissions,
           };
         })
         .filter((item) => item.value > 0);

@@ -22,7 +22,7 @@ const ScopeCard: React.FC<ScopeCardProps> = ({
   onClick
 }) => (
   <div 
-    className="bg-black-2 border border-black-1 rounded-lg p-6 space-y-4 cursor-pointer hover:scale-105 transition-transform duration-200"
+    className="bg-black- border border-black-1 rounded-lg p-6 space-y-4 cursor-pointer hover:scale-105 transition-transform duration-200"
     onClick={onClick}
   >
     <div className="flex items-center gap-3 mb-2">

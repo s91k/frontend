@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { X } from "lucide-react";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
+import { Link } from "react-router-dom";
 import {
   SECTOR_NAMES,
   sectorColors,
@@ -84,6 +85,12 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
     return { sectors: data, total: totalEmissions };
   }, [companies, selectedSectors, selectedYear, scope]);
 
+  // Add a function to find the company's wikidataId by name
+  const getCompanyWikidataId = (companyName: string): string | undefined => {
+    const company = companies.find((c) => c.name === companyName);
+    return company?.wikidataId;
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-black-2 border border-black-1 rounded-xl shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] flex flex-col">
@@ -106,7 +113,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
               return (
                 <div
                   key={sector.sectorCode}
-                  className="bg-black-1 rounded-lg p-6"
+                  className="bg-black-3 rounded-lg p-6"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div>
@@ -135,30 +142,62 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                   </div>
 
                   <div className="space-y-2">
-                    {sector.companies.map((company) => (
-                      <div
-                        key={company.name}
-                        className="bg-black-2 rounded-lg p-4 flex items-center justify-between group hover:bg-opacity-80 transition-colors"
-                      >
-                        <div className="text-sm font-medium text-white">
-                          {company.name}
-                        </div>
-                        <div className="text-right">
-                          <div
-                            className="text-sm"
-                            style={{ color: sectorColor }}
-                          >
-                            {company.emissions.toLocaleString()} tCO₂e
+                    {sector.companies.map((company) => {
+                      const wikidataId = getCompanyWikidataId(company.name);
+
+                      return wikidataId ? (
+                        <Link
+                          key={company.name}
+                          to={`/companies/${wikidataId}`}
+                          className="block"
+                        >
+                          <div className="bg-black-2 rounded-lg p-4 flex items-center justify-between group hover:bg-opacity-60 transition-colors cursor-pointer">
+                            <div className="text-sm font-medium text-white hover:scale-105 transition-transform">
+                              {company.name}
+                            </div>
+                            <div className="text-right">
+                              <div
+                                className="text-sm"
+                                style={{ color: sectorColor }}
+                              >
+                                {company.emissions.toLocaleString()} tCO₂e
+                              </div>
+                              <div className="text-xs text-grey">
+                                {(
+                                  (company.emissions / sector.total) *
+                                  100
+                                ).toFixed(1)}
+                                % of sector
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-xs text-grey">
-                            {((company.emissions / sector.total) * 100).toFixed(
-                              1
-                            )}
-                            % of sector
+                        </Link>
+                      ) : (
+                        <div
+                          key={company.name}
+                          className="bg-black-2 rounded-lg p-4 flex items-center justify-between"
+                        >
+                          <div className="text-sm font-medium text-white">
+                            {company.name}
+                          </div>
+                          <div className="text-right">
+                            <div
+                              className="text-sm"
+                              style={{ color: sectorColor }}
+                            >
+                              {company.emissions.toLocaleString()} tCO₂e
+                            </div>
+                            <div className="text-xs text-grey">
+                              {(
+                                (company.emissions / sector.total) *
+                                100
+                              ).toFixed(1)}
+                              % of sector
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );

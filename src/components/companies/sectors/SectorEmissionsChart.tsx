@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   BarChart,
   Bar,
@@ -60,6 +60,14 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     chartType,
     selectedYear
   );
+
+  const [legendData, setLegendData] = useState<any[]>([]);
+
+  const handlePieMouseEnter = useCallback((data: any) => {
+    if (data && data.payload) {
+      setLegendData(data.payload);
+    }
+  }, []);
 
   const handleBarClick = (data: any) => {
     if (!data || !data.activePayload || !data.activePayload[0]) return;
@@ -126,7 +134,10 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
         SECTOR_NAMES={SECTOR_NAMES}
       />
 
-      <div className={`h-[${pieChartHeight}px] mt-8`} style={{ height: pieChartHeight }}>
+      <div
+        className={`h-[${pieChartHeight}px] mt-8`}
+        style={{ height: pieChartHeight }}
+      >
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
             <PieChart>
@@ -137,6 +148,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                 cx="50%"
                 cy={isMobile ? "35%" : "40%"}
                 outerRadius={isMobile ? 100 : 160}
+                onMouseEnter={handlePieMouseEnter}
               >
                 {pieChartData.map((entry, index) => (
                   <Cell
@@ -161,7 +173,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
               <Legend
                 content={
                   <PieLegend
-                    payload={[]}
+                    payload={pieChartData}
                     selectedSector={selectedSector}
                     handlePieClick={handlePieClick}
                   />

@@ -18,7 +18,29 @@ const PieLegend: React.FC<PieLegendProps> = ({
 }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const navigateToCompany = (wikidataId: string) => {
+    window.location.href = `/companies/${wikidataId}`;
+  };
+
+  console.log("PieLegend payload:", payload);
+
   if (!payload) return null;
+
+  const handleItemClick = (entry: any) => {
+    if (selectedSector) {
+      // If we're viewing companies within a sector, navigate to company detail page
+      if (entry.wikidataId) {
+        navigateToCompany(entry.wikidataId);
+      } else if (entry.payload && entry.payload.wikidataId) {
+        navigateToCompany(entry.payload.wikidataId);
+      } else {
+        console.log("No wikidataId found in entry:", entry);
+      }
+    } else {
+      // If we're viewing sectors, handle the sector selection
+      handlePieClick(entry);
+    }
+  };
 
   return (
     <div
@@ -27,6 +49,7 @@ const PieLegend: React.FC<PieLegendProps> = ({
       }`}
     >
       {payload.map((entry, index) => {
+        console.log("Entry in map:", entry);
         const percentage = (
           (entry.payload.value / entry.payload.total) *
           100
@@ -50,8 +73,13 @@ const PieLegend: React.FC<PieLegendProps> = ({
         return (
           <div
             key={`legend-${index}`}
-            className="flex items-center gap-2 p-2 rounded bg-black-2 hover:bg-black-1 transition-colors cursor-pointer"
-            onClick={() => handlePieClick(entry)}
+            className={`flex items-center gap-2 p-2 rounded bg-black-2 hover:bg-black-1 transition-colors cursor-pointer ${
+              selectedSector ? "hover:ring-1 hover:ring-blue-3" : ""
+            }`}
+            onClick={() => handleItemClick(entry)}
+            title={
+              selectedSector ? "View company details" : "View sector details"
+            }
           >
             <div
               className="w-3 h-3 rounded flex-shrink-0"
