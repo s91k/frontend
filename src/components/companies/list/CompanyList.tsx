@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Building2, TrendingDown, Users, Wallet } from "lucide-react";
-import { useCompanies } from "@/hooks/useCompanies";
+import { useCompanies } from "@/hooks/companies/useCompanies";
 import {
   Select,
   SelectContent,

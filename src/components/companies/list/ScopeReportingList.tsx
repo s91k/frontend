@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { useCategoryMetadata } from "@/hooks/useCategories";
+import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import {
   Tooltip,
   TooltipContent,
