@@ -1,58 +1,64 @@
+import React from "react";
 import { TooltipProps } from "recharts";
+import { sectorColors } from "@/hooks/companies/useCompanyFilters";
 
-const CustomTooltip = ({
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   active,
   payload,
   label,
-}: TooltipProps<number, string>) => {
+}) => {
   if (!active || !payload || !payload.length) return null;
 
-  const dataKey = payload[0]?.dataKey;
-  if (!dataKey) return null;
+  // Group payload items by sector and calculate totals
+  const sectorTotals: { [key: string]: { total: number; color: string } } = {};
 
-  if (typeof dataKey !== "string") return null;
+  payload.forEach((item) => {
+    if (!item.dataKey || typeof item.dataKey !== "string") return;
 
-  const [sector] = dataKey.split("_scope");
-  const scope1 =
-    payload.find((p) => p.dataKey === `${sector}_scope1`)?.value || 0;
-  const scope2 =
-    payload.find((p) => p.dataKey === `${sector}_scope2`)?.value || 0;
-  const scope3 =
-    payload.find((p) => p.dataKey === `${sector}_scope3`)?.value || 0;
-  const total = scope1 + scope2 + scope3;
+    const [sector] = item.dataKey.split("_scope");
+    if (!sectorTotals[sector]) {
+      sectorTotals[sector] = { total: 0, color: item.color || "#888888" };
+    }
+    sectorTotals[sector].total += item.value || 0;
+  });
+
+  // Calculate total emissions for the year
+  const yearTotal = Object.values(sectorTotals).reduce(
+    (sum, { total }) => sum + total,
+    0
+  );
 
   return (
-    <div className="bg-black-2 border border-black-1 rounded-lg shadow-xl p-4 text-white">
-      <p className="text-sm font-medium mb-2">{label}</p>
-      <div className="mb-3">
-        <p className="text-sm font-medium mb-2">{sector}</p>
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm text-grey">
-            <span>Scope 1:</span>
-            <span className="font-medium text-white">
-              {Math.round(Number(scope1)).toLocaleString()} tCO₂e
-            </span>
-          </div>
-          <div className="flex justify-between text-sm text-grey">
-            <span>Scope 2:</span>
-            <span className="font-medium text-white">
-              {Math.round(Number(scope2)).toLocaleString()} tCO₂e
-            </span>
-          </div>
-          <div className="flex justify-between text-sm text-grey">
-            <span>Scope 3:</span>
-            <span className="font-medium text-white">
-              {Math.round(Number(scope3)).toLocaleString()} tCO₂e
-            </span>
-          </div>
-          <div className="pt-2 border-t border-black-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-grey">Total:</span>
-              <span className="font-medium text-white">
-                {Number(total).toLocaleString()} tCO₂e
+    <div className="bg-black-2 border border-black-1 rounded-lg shadow-xl p-4 text-white min-w-[350px]">
+      <p className="text-lg font-medium mb-3 border-b border-black-1 pb-2">
+        {label}
+      </p>
+      <div className="space-y-2 mb-4">
+        {Object.entries(sectorTotals).map(([sector, { total, color }]) => (
+          <div key={sector} className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <div
+                className="w-3 h-3 rounded"
+                style={{ backgroundColor: color }}
+              />
+              <span className="text-sm font-medium">{sector}</span>
+            </div>
+            <div className="text-xs text-grey">
+              {Math.round(total).toLocaleString()} tCO₂e
+              <span className="ml-1">
+                ({((total / yearTotal) * 100).toFixed(1)}%)
               </span>
             </div>
           </div>
+        ))}
+      </div>
+
+      <div className="pt-3 border-t border-black-1">
+        <div className="flex justify-between text-sm">
+          <span className="text-grey font-medium">Year Total:</span>
+          <span className="font-medium">
+            {Math.round(yearTotal).toLocaleString()} tCO₂e
+          </span>
         </div>
       </div>
     </div>

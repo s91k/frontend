@@ -37,6 +37,17 @@ interface EmissionsChartProps {
 
 type ChartType = "stacked-total" | "pie";
 
+const formatYAxisTick = (value: number) => {
+  if (value >= 1_000_000_000) {
+    return `${(value / 1_000_000_000).toFixed(1)}B`;
+  } else if (value >= 1_000_000) {
+    return `${(value / 1_000_000).toFixed(1)}M`;
+  } else if (value >= 1_000) {
+    return `${(value / 1_000).toFixed(1)}k`;
+  }
+  return value;
+};
+
 const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   companies,
   selectedSectors,
@@ -70,6 +81,8 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   }, []);
 
   const handleBarClick = (data: any) => {
+    if (chartType === "stacked-total") return;
+    
     if (!data || !data.activePayload || !data.activePayload[0]) return;
 
     if (selectedSector) {
@@ -183,25 +196,33 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
           ) : (
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              onClick={handleBarClick}
+              margin={{ top: 20, right: 15, left: 20, bottom: 5 }}
+              onClick={chartType !== "stacked-total" ? handleBarClick : undefined}
               barGap={0}
-              barCategoryGap="40%"
+              barCategoryGap="30%"
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
               <XAxis
                 dataKey="year"
-                padding={{ left: 20, right: 20 }}
                 tick={{ fill: "#888888" }}
+                axisLine={{ stroke: "#2A2A2A" }}
+                tickLine={{ stroke: "#2A2A2A" }}
+                padding={{ left: 10, right: 10 }}
               />
               <YAxis
                 label={{
-                  value: "CO₂e (tonnes)",
+                  value: "tCO₂e",
                   angle: -90,
                   position: "insideLeft",
                   fill: "#888888",
+                  style: { textAnchor: "middle" },
+                  offset: -15,
                 }}
                 tick={{ fill: "#888888" }}
+                axisLine={{ stroke: "#2A2A2A" }}
+                tickLine={{ stroke: "#2A2A2A" }}
+                tickFormatter={formatYAxisTick}
+                width={60}
               />
               <Tooltip
                 content={
@@ -221,7 +242,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                         stackId="total"
                         fill={colors.base}
                         name={sectorName}
-                        cursor="pointer"
+                        cursor="default"
                       />
                     );
                   })
