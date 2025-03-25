@@ -7,11 +7,62 @@ interface KeyInsightsProps {
   totalEmissions: number;
 }
 
+interface InsightItem {
+  icon: React.ElementType;
+  iconColor: string;
+  bgColor: string;
+  title: string;
+  description: (value: string) => string;
+  value: number;
+  total: number;
+}
+
 const KeyInsights: React.FC<KeyInsightsProps> = ({
   scopeData,
   totalEmissions,
 }) => {
   const { t } = useTranslation();
+
+  const insights: InsightItem[] = [
+    {
+      icon: ArrowUpRight,
+      iconColor: "text-blue-3",
+      bgColor: "bg-blue-5",
+      title: t("companiesPage.sectorGraphs.supplyChainImpact"),
+      description: (value) =>
+        `${t("companiesPage.sectorGraphs.scope3UpstreamDetails")}${value}${t(
+          "companiesPage.sectorGraphs.ofTotalEmissionsDescription"
+        )}`,
+      value: scopeData.scope3.upstream.total,
+      total: totalEmissions,
+    },
+    {
+      icon: Factory,
+      iconColor: "text-orange-3",
+      bgColor: "bg-orange-5",
+      title: t("companiesPage.sectorGraphs.operationalFootprint"),
+      description: (value) =>
+        `${t(
+          "companiesPage.sectorGraphs.directEmissionsDescription"
+        )}${value}${t(
+          "companiesPage.sectorGraphs.ofTotalFootprintDescription"
+        )}`,
+      value: scopeData.scope1.total,
+      total: totalEmissions,
+    },
+    {
+      icon: ArrowDownRight,
+      iconColor: "text-green-3",
+      bgColor: "bg-green-5",
+      title: t("companiesPage.sectorGraphs.productLifecycle"),
+      description: (value) =>
+        `${t(
+          "companiesPage.sectorGraphs.downstreamActivitiesDescription"
+        )}${value}${t("companiesPage.sectorGraphs.toTotalEmissions")}`,
+      value: scopeData.scope3.downstream.total,
+      total: totalEmissions,
+    },
+  ];
 
   return (
     <div className="bg-black-1 border border-black-2 rounded-lg p-6">
@@ -19,57 +70,26 @@ const KeyInsights: React.FC<KeyInsightsProps> = ({
         {t("companiesPage.sectorGraphs.keyInsights")}
       </h3>
       <div className="space-y-4">
-        <div className="flex items-start gap-3">
-          <div className="rounded-full p-2 bg-blue-5">
-            <ArrowUpRight className="h-4 w-4 text-blue-3" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-white">
-              {t("companiesPage.sectorGraphs.supplyChainImpact")}
+        {insights.map((insight, index) => {
+          const Icon = insight.icon;
+          const percentage = ((insight.value / insight.total) * 100).toFixed(1);
+
+          return (
+            <div key={index} className="flex items-start gap-3">
+              <div className={`rounded-full p-2 ${insight.bgColor}`}>
+                <Icon className={`h-4 w-4 ${insight.iconColor}`} />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-white">
+                  {insight.title}
+                </div>
+                <div className="text-sm text-grey">
+                  {insight.description(percentage)}
+                </div>
+              </div>
             </div>
-            <div className="text-sm text-grey">
-              {t("companiesPage.sectorGraphs.scope3UpstreamDetails")}
-              {(
-                (scopeData.scope3.upstream.total / totalEmissions) *
-                100
-              ).toFixed(1)}
-              %{t("companiesPage.sectorGraphs.ofTotalEmissionsDescription")}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <div className="rounded-full p-2 bg-orange-5">
-            <Factory className="h-4 w-4 text-orange-3" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-white">
-              {t("companiesPage.sectorGraphs.operationalFootprint")}
-            </div>
-            <div className="text-sm text-grey">
-              {t("companiesPage.sectorGraphs.directEmissionsDescription")}
-              {((scopeData.scope1.total / totalEmissions) * 100).toFixed(1)}%
-              {t("companiesPage.sectorGraphs.ofTotalFootprintDescription")}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <div className="rounded-full p-2 bg-green-5">
-            <ArrowDownRight className="h-4 w-4 text-green-3" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-white">
-              {t("companiesPage.sectorGraphs.productLifecycle")}
-            </div>
-            <div className="text-sm text-grey">
-              {t("companiesPage.sectorGraphs.downstreamActivitiesDescription")}
-              {(
-                (scopeData.scope3.downstream.total / totalEmissions) *
-                100
-              ).toFixed(1)}
-              %{t("companiesPage.sectorGraphs.toTotalEmissions")}
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
