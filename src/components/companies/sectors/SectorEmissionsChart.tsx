@@ -28,7 +28,6 @@ import PieLegend from "./charts/PieLegend";
 import EmissionsTrendAnalysis from "./EmissionsTrendAnalysis/EmissionsTrendAnalysis";
 import EmissionsSourcesAnalysis from "./EmissionsSourcesAnalysis/EmissionsSourcesAnlaysis";
 
-
 interface EmissionsChartProps {
   companies: RankedCompany[];
   selectedSectors: string[];

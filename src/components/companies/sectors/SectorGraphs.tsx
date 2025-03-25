@@ -1,7 +1,10 @@
 import React from "react";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
+import {
+  CompanySector,
+  useSectorNames,
+} from "@/hooks/companies/useCompanyFilters";
 import SectorEmissionsChart from "@/components/companies/sectors/SectorEmissionsChart";
-import { CompanySector, useSectorNames } from "@/hooks/companies/useCompanyFilters";
 
 interface SectorGraphsProps {
   companies: RankedCompany[];

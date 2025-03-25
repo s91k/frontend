@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
+import { ArrowUpRight, ArrowDownRight, AlertCircle } from "lucide-react";
 import { SECTOR_NAMES } from "@/hooks/companies/useCompanyFilters";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
-import { ArrowUpRight, ArrowDownRight, AlertCircle } from "lucide-react";
 import {
   useCategoryMetadata,
   CategoryType,
 } from "@/hooks/companies/useCategories";
 import { useScreenSize } from "@/hooks/useScreenSize";
+
 interface Scope3BreakdownProps {
   companies: RankedCompany[];
   selectedSectors: string[];

@@ -17,7 +17,7 @@ const PieLegend: React.FC<PieLegendProps> = ({
   handlePieClick,
 }) => {
   const isMobile = useScreenSize();
- 
+
   const navigateToCompany = (wikidataId: string) => {
     window.location.href = `/companies/${wikidataId}`;
   };

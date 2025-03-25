@@ -1,7 +1,7 @@
 import React from "react";
-import { RankedCompany } from "@/types/company";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { RankedCompany } from "@/types/company";
 
 interface CompanyListProps {
   category: "decreasing" | "increasing" | "noComparable";

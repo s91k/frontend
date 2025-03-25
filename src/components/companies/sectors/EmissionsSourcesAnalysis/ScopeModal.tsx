@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import { X } from "lucide-react";
-import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { RankedCompany } from "@/hooks/companies/useCompanies";
 import {
   sectorColors,
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
-import { useTranslation } from "react-i18next";
+
 interface ScopeModalProps {
   scope: "scope1" | "scope2" | "scope3_upstream" | "scope3_downstream";
   title: string;
@@ -127,7 +128,8 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                       </h4>
                       <p className="text-sm text-grey">
                         {((sector.total / sectorData.total) * 100).toFixed(1)}%
-                        {t("companiesPage.sectorGraphs.ofTotal")} {title.toLowerCase()}
+                        {t("companiesPage.sectorGraphs.ofTotal")}{" "}
+                        {title.toLowerCase()}
                       </p>
                     </div>
                     <div className="text-right">
@@ -138,7 +140,8 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                         {sector.total.toLocaleString()} tCO₂e
                       </div>
                       <div className="text-sm text-grey">
-                        {sector.companies.length} {t("companiesPage.sectorGraphs.companies")}
+                        {sector.companies.length}{" "}
+                        {t("companiesPage.sectorGraphs.companies")}
                       </div>
                     </div>
                   </div>
@@ -169,7 +172,9 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                                   (company.emissions / sector.total) *
                                   100
                                 ).toFixed(1)}
-                                {t("companiesPage.sectorGraphs.percentOfSector")}
+                                {t(
+                                  "companiesPage.sectorGraphs.percentOfSector"
+                                )}
                               </div>
                             </div>
                           </div>

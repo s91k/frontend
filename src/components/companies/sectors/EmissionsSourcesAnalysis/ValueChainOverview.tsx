@@ -7,8 +7,8 @@ import {
   ChevronRight,
   ArrowRight,
 } from "lucide-react";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { useTranslation } from "react-i18next";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 interface StageDetails {
   title: string;

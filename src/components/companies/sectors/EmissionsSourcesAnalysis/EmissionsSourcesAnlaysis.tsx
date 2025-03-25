@@ -1,11 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { useScopeData } from "@/hooks/companies/useScopeData";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import ScopeCards from "./ScopeCards";
 import ValueChainOverview from "./ValueChainOverview";
 import KeyInsights from "./KeyInsights";
-import { useScreenSize } from "@/hooks/useScreenSize";
-import { useTranslation } from "react-i18next";
+
 interface EmissionsSourcesAnalysisProps {
   companies: RankedCompany[];
   selectedSectors: string[];

@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowUpRight, Factory, ArrowDownRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
 interface KeyInsightsProps {
   scopeData: any;
   totalEmissions: number;
