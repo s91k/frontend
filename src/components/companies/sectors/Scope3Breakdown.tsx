@@ -2,12 +2,11 @@ import React, { useMemo } from "react";
 import { SECTOR_NAMES } from "@/hooks/companies/useCompanyFilters";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { ArrowUpRight, ArrowDownRight, AlertCircle } from "lucide-react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   useCategoryMetadata,
   CategoryType,
 } from "@/hooks/companies/useCategories";
-
+import { useScreenSize } from "@/hooks/useScreenSize";
 interface Scope3BreakdownProps {
   companies: RankedCompany[];
   selectedSectors: string[];
@@ -68,7 +67,7 @@ const CategoryCard = ({
   category: { id: number; name: string; icon: React.ElementType };
   type: CategoryType;
 }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useScreenSize();
   const Icon = category.icon;
   const colorClass = type === "upstream" ? "text-blue-3" : "text-green-3";
 
@@ -102,7 +101,7 @@ const Scope3Breakdown: React.FC<Scope3BreakdownProps> = ({
   selectedSectors,
   selectedYear,
 }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useScreenSize();
   const {
     getCategoryIcon,
     getCategoryName,

@@ -1,9 +1,9 @@
 import React from "react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   sectorColors,
   getCompanyColors,
 } from "@/hooks/companies/useCompanyFilters";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 interface PieLegendProps {
   payload: any[];
@@ -16,8 +16,8 @@ const PieLegend: React.FC<PieLegendProps> = ({
   selectedSector,
   handlePieClick,
 }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const isMobile = useScreenSize();
+ 
   const navigateToCompany = (wikidataId: string) => {
     window.location.href = `/companies/${wikidataId}`;
   };
