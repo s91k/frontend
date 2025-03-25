@@ -3,8 +3,8 @@ import { X } from "lucide-react";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { Link } from "react-router-dom";
 import {
-  SECTOR_NAMES,
   sectorColors,
+  useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
 
 interface ScopeModalProps {
@@ -24,11 +24,12 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
   selectedSectors,
   selectedYear,
 }) => {
+  const sectorNames = useSectorNames();
+
   const sectorData = useMemo(() => {
     const data = selectedSectors
       .map((sectorCode) => {
-        const sectorName =
-          SECTOR_NAMES[sectorCode as keyof typeof SECTOR_NAMES];
+        const sectorName = sectorNames[sectorCode as keyof typeof sectorNames];
         const sectorCompanies = companies.filter(
           (company) => company.industry?.industryGics.sectorCode === sectorCode
         );
@@ -83,7 +84,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
 
     const totalEmissions = data.reduce((sum, sector) => sum + sector.total, 0);
     return { sectors: data, total: totalEmissions };
-  }, [companies, selectedSectors, selectedYear, scope]);
+  }, [companies, selectedSectors, selectedYear, scope, sectorNames]);
 
   // Add a function to find the company's wikidataId by name
   const getCompanyWikidataId = (companyName: string): string | undefined => {

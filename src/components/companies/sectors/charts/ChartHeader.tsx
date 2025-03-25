@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, BarChart3, ArrowLeft, Filter } from "lucide-react";
+import { PieChart, BarChart3, ArrowLeft } from "lucide-react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface ChartHeaderProps {
@@ -12,7 +12,6 @@ interface ChartHeaderProps {
   onChartTypeChange: (type: "stacked-total" | "pie") => void;
   onYearChange: (year: string) => void;
   selectedSectors: string[];
-  SECTOR_NAMES: Record<string, string>;
 }
 
 const ChartHeader: React.FC<ChartHeaderProps> = ({
@@ -24,8 +23,6 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
   onSectorClear,
   onChartTypeChange,
   onYearChange,
-  selectedSectors,
-  SECTOR_NAMES,
 }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -104,20 +101,6 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
           </div>
         )}
       </div>
-
-      {chartType !== "pie" && (
-        <div className="flex items-center gap-2 text-sm text-grey">
-          <Filter className="h-4 w-4" />
-          {selectedSector ? (
-            <span>Showing companies in {SECTOR_NAMES[selectedSector]}</span>
-          ) : (
-            <span>
-              Showing {selectedSectors.length} of{" "}
-              {Object.keys(SECTOR_NAMES).length} sectors
-            </span>
-          )}
-        </div>
-      )}
     </div>
   );
 };

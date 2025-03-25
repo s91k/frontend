@@ -1,6 +1,5 @@
 import React from "react";
 import { TooltipProps } from "recharts";
-import { sectorColors } from "@/hooks/companies/useCompanyFilters";
 
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   active,
@@ -22,7 +21,6 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
     sectorTotals[sector].total += item.value || 0;
   });
 
-  // Calculate total emissions for the year
   const yearTotal = Object.values(sectorTotals).reduce(
     (sum, { total }) => sum + total,
     0

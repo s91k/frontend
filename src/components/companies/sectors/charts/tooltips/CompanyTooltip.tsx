@@ -24,13 +24,13 @@ const CompanyTooltip: React.FC<TooltipProps<number, string>> = ({
       <p className="text-sm font-medium mb-2">{companyName}</p>
       <div className="text-sm text-grey space-y-1">
         <div className="flex justify-between">
-          <span>Total Emissions:</span>
+          <span>Total Emissions: </span>
           <span className="text-white font-medium">
             {Math.round(totalEmissions).toLocaleString()} tCO₂e
           </span>
         </div>
         <div className="flex justify-between">
-          <span>Percentage of Sector:</span>
+          <span>Percent of Sector: </span>
           <span className="text-white font-medium">{percentage}%</span>
         </div>
       </div>

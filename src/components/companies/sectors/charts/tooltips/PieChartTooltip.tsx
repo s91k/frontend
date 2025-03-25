@@ -5,6 +5,7 @@ const PieChartTooltip: React.FC<TooltipProps<number, string>> = ({
   active,
   payload,
 }) => {
+  
   if (!active || !payload || !payload.length) return null;
 
   const { name, value, payload: data } = payload[0];

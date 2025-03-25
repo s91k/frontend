@@ -63,11 +63,12 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
         <KeyInsights scopeData={scopeData} totalEmissions={totalEmissions} />
       </div>
 
-      <Scope3Breakdown
+      {/* Commented out for now as it's not complete */}
+      {/* <Scope3Breakdown
         companies={companies}
         selectedSectors={selectedSectors}
         selectedYear={selectedYear}
-      />
+      /> */}
     </div>
   );
 };

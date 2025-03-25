@@ -22,8 +22,6 @@ const PieLegend: React.FC<PieLegendProps> = ({
     window.location.href = `/companies/${wikidataId}`;
   };
 
-  console.log("PieLegend payload:", payload);
-
   if (!payload) return null;
 
   const handleItemClick = (entry: any) => {
@@ -55,10 +53,6 @@ const PieLegend: React.FC<PieLegendProps> = ({
           100
         ).toFixed(1);
 
-        // Debug to see what's in the entry
-        console.log("Legend entry:", entry);
-
-        // Fix color determination
         let color;
         if (selectedSector) {
           color = getCompanyColors(index).base;
@@ -74,7 +68,7 @@ const PieLegend: React.FC<PieLegendProps> = ({
           <div
             key={`legend-${index}`}
             className={`flex items-center gap-2 p-2 rounded bg-black-2 hover:bg-black-1 transition-colors cursor-pointer ${
-              selectedSector ? "hover:ring-1 hover:ring-blue-3" : ""
+              selectedSector ? "hover:ring-1 hover:ring-black-1" : ""
             }`}
             onClick={() => handleItemClick(entry)}
             title={
