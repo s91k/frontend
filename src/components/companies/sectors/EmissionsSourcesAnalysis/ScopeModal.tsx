@@ -6,7 +6,7 @@ import {
   sectorColors,
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
-
+import { useTranslation } from "react-i18next";
 interface ScopeModalProps {
   scope: "scope1" | "scope2" | "scope3_upstream" | "scope3_downstream";
   title: string;
@@ -91,6 +91,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
     const company = companies.find((c) => c.name === companyName);
     return company?.wikidataId;
   };
+  const { t } = useTranslation();
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50">
@@ -126,7 +127,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                       </h4>
                       <p className="text-sm text-grey">
                         {((sector.total / sectorData.total) * 100).toFixed(1)}%
-                        of total {title.toLowerCase()}
+                        {t("companiesPage.sectorGraphs.ofTotal")} {title.toLowerCase()}
                       </p>
                     </div>
                     <div className="text-right">
@@ -137,7 +138,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                         {sector.total.toLocaleString()} tCO₂e
                       </div>
                       <div className="text-sm text-grey">
-                        {sector.companies.length} companies reporting
+                        {sector.companies.length} {t("companiesPage.sectorGraphs.companies")}
                       </div>
                     </div>
                   </div>
@@ -168,7 +169,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                                   (company.emissions / sector.total) *
                                   100
                                 ).toFixed(1)}
-                                % of sector
+                                {t("companiesPage.sectorGraphs.percentOfSector")}
                               </div>
                             </div>
                           </div>
@@ -193,7 +194,7 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
                                 (company.emissions / sector.total) *
                                 100
                               ).toFixed(1)}
-                              % of sector
+                              {t("companiesPage.sectorGraphs.percentOfSector")}
                             </div>
                           </div>
                         </div>

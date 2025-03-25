@@ -4,9 +4,8 @@ import { useScopeData } from "@/hooks/companies/useScopeData";
 import ScopeCards from "./ScopeCards";
 import ValueChainOverview from "./ValueChainOverview";
 import KeyInsights from "./KeyInsights";
-import Scope3Breakdown from "../Scope3Breakdown";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-
+import { useScreenSize } from "@/hooks/useScreenSize";
+import { useTranslation } from "react-i18next";
 interface EmissionsSourcesAnalysisProps {
   companies: RankedCompany[];
   selectedSectors: string[];
@@ -23,7 +22,8 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
     selectedSectors,
     selectedYear
   );
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useScreenSize();
+  const { t } = useTranslation();
 
   return (
     <div className="mt-12 space-y-6">
@@ -38,12 +38,16 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
           }`}
         >
           <h2 className="text-xl font-light text-white">
-            Emissions Sources Analysis
+            {t("companiesPage.sectorGraphs.emissionsSourcesAnalysis")}
           </h2>
-          <span className="text-sm text-grey">(GHG Protocol Scopes)</span>
+          <span className="text-sm text-grey">
+            {t("companiesPage.sectorGraphs.ghgProtocolScopes")}
+          </span>
         </div>
         <div className={`${isMobile ? "mt-2" : ""} text-right`}>
-          <div className="text-sm text-grey">Total Emissions</div>
+          <div className="text-sm text-grey">
+            {t("companiesPage.sectorGraphs.totalEmissions")}
+          </div>
           <div className="text-2xl font-light text-white">
             {totalEmissions.toLocaleString()} tCO₂e
           </div>

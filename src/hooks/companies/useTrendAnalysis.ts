@@ -1,5 +1,8 @@
-import { useMemo } from 'react';
-import { RankedCompany, TrendData } from '@/types/company';
+import { useMemo } from "react";
+import { RankedCompany, TrendData } from "@/types/company";
+import { TrendingDown, TrendingUp, MinusCircle } from "lucide-react";
+import { TrendCardInfo } from "@/types/company";
+import { useTranslation } from "react-i18next";
 
 const getTotalEmissions = (emissions: any) => {
   if (!emissions) return 0;
@@ -8,6 +11,31 @@ const getTotalEmissions = (emissions: any) => {
     (emissions.scope2?.calculatedTotalEmissions || 0) +
     (emissions.scope3?.calculatedTotalEmissions || 0)
   );
+};
+
+export const useCategoryInfo = (): Record<string, TrendCardInfo> => {
+  const { t } = useTranslation();
+
+  return {
+    decreasing: {
+      title: t("companiesPage.sectorGraphs.decreasing"),
+      icon: TrendingDown,
+      color: "bg-green-5",
+      textColor: "text-green-3",
+    },
+    increasing: {
+      title: t("companiesPage.sectorGraphs.increasing"),
+      icon: TrendingUp,
+      color: "bg-orange-5",
+      textColor: "text-orange-3",
+    },
+    noComparable: {
+      title: t("companiesPage.sectorGraphs.noComparable"),
+      icon: MinusCircle,
+      color: "bg-blue-5",
+      textColor: "text-blue-3",
+    },
+  };
 };
 
 export const useTrendAnalysis = (
@@ -21,14 +49,18 @@ export const useTrendAnalysis = (
       noComparable: [],
     };
 
-    companies.forEach(company => {
-      if (!selectedSectors.includes(company.industry?.industryGics.sectorCode || '')) {
+    companies.forEach((company) => {
+      if (
+        !selectedSectors.includes(
+          company.industry?.industryGics.sectorCode || ""
+        )
+      ) {
         return;
       }
 
       const periods = company.reportingPeriods
         .sort((a, b) => a.startDate.localeCompare(b.startDate))
-        .filter(period => period.startDate.startsWith('202'));
+        .filter((period) => period.startDate.startsWith("202"));
 
       if (periods.length < 2) {
         trends.noComparable.push(company);
@@ -37,7 +69,7 @@ export const useTrendAnalysis = (
 
       const latestPeriod = periods[periods.length - 1];
       const baselinePeriod = periods[0];
-      
+
       const latestEmissions = getTotalEmissions(latestPeriod.emissions);
       const baselineEmissions = getTotalEmissions(baselinePeriod.emissions);
 
@@ -46,8 +78,9 @@ export const useTrendAnalysis = (
         return;
       }
 
-      const changePercent = ((latestEmissions - baselineEmissions) / baselineEmissions) * 100;
-      
+      const changePercent =
+        ((latestEmissions - baselineEmissions) / baselineEmissions) * 100;
+
       if (Math.abs(changePercent) > 60) {
         trends.noComparable.push(company);
       } else if (changePercent < 0) {
@@ -55,14 +88,14 @@ export const useTrendAnalysis = (
           company,
           changePercent,
           baseYear: baselinePeriod.startDate.substring(0, 4),
-          currentYear: latestPeriod.startDate.substring(0, 4)
+          currentYear: latestPeriod.startDate.substring(0, 4),
         });
       } else {
         trends.increasing.push({
           company,
           changePercent,
           baseYear: baselinePeriod.startDate.substring(0, 4),
-          currentYear: latestPeriod.startDate.substring(0, 4)
+          currentYear: latestPeriod.startDate.substring(0, 4),
         });
       }
     });

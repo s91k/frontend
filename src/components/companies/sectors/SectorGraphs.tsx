@@ -1,8 +1,7 @@
 import React from "react";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import SectorEmissionsChart from "@/components/companies/sectors/SectorEmissionsChart";
-import { CompanySector } from "@/hooks/companies/useCompanyFilters";
-import { SECTOR_NAMES } from "@/hooks/companies/useCompanyFilters";
+import { CompanySector, useSectorNames } from "@/hooks/companies/useCompanyFilters";
 
 interface SectorGraphsProps {
   companies: RankedCompany[];
@@ -15,6 +14,7 @@ const SectorGraphs: React.FC<SectorGraphsProps> = ({
 }) => {
   // Convert selectedSectors to string[] for SectorEmissionsChart
   const sectorCodes = selectedSectors.filter((sector) => sector !== "all");
+  const sectorNames = useSectorNames();
 
   return (
     <div className="bg-black">
@@ -24,7 +24,7 @@ const SectorGraphs: React.FC<SectorGraphsProps> = ({
           selectedSectors={
             sectorCodes.length > 0
               ? sectorCodes
-              : Object.keys(SECTOR_NAMES).filter((key) => key !== "all")
+              : Object.keys(sectorNames).filter((key) => key !== "all")
           }
         />
       </div>

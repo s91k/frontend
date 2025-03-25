@@ -18,15 +18,16 @@ import {
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
-import EmissionsTrendAnalysis from "./EmissionsTrendAnalysis/EmissionsTrendAnalysis";
-import EmissionsSourcesAnalysis from "./EmissionsSourcesAnalysis/EmissionsSourcesAnlaysis";
+import { useScreenSize } from "@/hooks/useScreenSize";
+import { useChartData } from "@/hooks/companies/useChartData";
 import CustomTooltip from "./charts/tooltips/CustomTooltip";
 import PieChartTooltip from "./charts/tooltips/PieChartTooltip";
 import CompanyTooltip from "./charts/tooltips/CompanyTooltip";
 import ChartHeader from "./charts/ChartHeader";
-import { useChartData } from "@/hooks/companies/useChartData";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import PieLegend from "./charts/PieLegend";
+import EmissionsTrendAnalysis from "./EmissionsTrendAnalysis/EmissionsTrendAnalysis";
+import EmissionsSourcesAnalysis from "./EmissionsSourcesAnalysis/EmissionsSourcesAnlaysis";
+
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -71,7 +72,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   const [chartType, setChartType] = useState<ChartType>("pie");
   const [selectedYear, setSelectedYear] = useState<string>("2023");
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useScreenSize();
 
   const { chartData, pieChartData, totalEmissions, years } = useChartData(
     companies,

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 
 interface ScopeCardProps {
@@ -20,10 +21,12 @@ const ScopeCard: React.FC<ScopeCardProps> = ({
   percent,
   description,
   onClick
-}) => (
-  <div 
-    className="bg-black- border border-black-1 rounded-lg p-6 space-y-4 cursor-pointer hover:scale-105 transition-transform duration-200"
-    onClick={onClick}
+}) => {
+  const { t } = useTranslation();
+  return (
+    <div 
+      className="bg-black- border border-black-1 rounded-lg p-6 space-y-4 cursor-pointer hover:scale-105 transition-transform duration-200"
+      onClick={onClick}
   >
     <div className="flex items-center gap-3 mb-2">
       <div className={`rounded-full p-2 ${color}`}>
@@ -36,19 +39,25 @@ const ScopeCard: React.FC<ScopeCardProps> = ({
 
     <div className="space-y-4">
       <div className="space-y-1">
-        <div className="text-sm text-grey">Total Emissions</div>
+        <div className="text-sm text-grey">
+          {t("companiesPage.sectorGraphs.totalEmissions")}
+        </div>
         <div className={`text-xl font-light ${color.replace('bg-', 'text-')}`}>
           {value.toLocaleString()} tCO₂e
         </div>
       </div>
 
       <div className="space-y-1">
-        <div className="text-sm text-grey">Companies Reporting</div>
-        <div className="text-sm text-white">{companies} companies</div>
+        <div className="text-sm text-grey">
+          {t("companiesPage.sectorGraphs.companiesReporting")}
+        </div>
+        <div className="text-sm text-white">{companies} {t("companiesPage.sectorGraphs.companies")}</div>
       </div>
 
       <div className="space-y-1">
-        <div className="text-sm text-grey">Share of Total</div>
+        <div className="text-sm text-grey">
+          {t("companiesPage.sectorGraphs.shareOfTotal")}
+        </div>
         <div className={`text-sm ${color.replace('bg-', 'text-')}`}>{percent.toFixed(1)}%</div>
       </div>
 
@@ -60,6 +69,7 @@ const ScopeCard: React.FC<ScopeCardProps> = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
-export default ScopeCard
+export default ScopeCard;

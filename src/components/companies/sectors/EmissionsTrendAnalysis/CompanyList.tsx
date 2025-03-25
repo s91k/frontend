@@ -1,6 +1,7 @@
 import React from "react";
 import { RankedCompany } from "@/types/company";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface CompanyListProps {
   category: "decreasing" | "increasing" | "noComparable";
@@ -16,10 +17,12 @@ interface CompanyListProps {
 }
 
 const CompanyList: React.FC<CompanyListProps> = ({ category, data }) => {
+  const { t } = useTranslation();
+
   if (!data || data.length === 0) {
     return (
       <div className="text-sm text-grey text-center py-4">
-        No companies in this category
+        {t("companiesPage.sectorGraphs.noCompaniesInSector")}
       </div>
     );
   }
@@ -59,27 +62,32 @@ const CompanyList: React.FC<CompanyListProps> = ({ category, data }) => {
                 key={company.wikidataId}
                 className="bg-black-1 rounded-lg px-4 py-3 text-sm"
               >
-                <div className="flex justify-between items-start mb-2">
-                  <Link to={`/companies/${company.wikidataId}`}>
+                {" "}
+                <Link to={`/companies/${company.wikidataId}`}>
+                  <div className="flex justify-between items-start mb-2">
                     <div className="font-medium text-white hover:scale-105">
                       {company.name}
                     </div>
-                  </Link>
-                  {typeof changePercent === "number" && (
-                    <div
-                      className={`text-sm ${
-                        category === "decreasing"
-                          ? "text-green-3"
-                          : "text-orange-3"
-                      }`}
-                    >
-                      {changePercent.toFixed(1)}%
-                    </div>
-                  )}
-                </div>
+
+                    {typeof changePercent === "number" && (
+                      <div
+                        className={`text-sm ${
+                          category === "decreasing"
+                            ? "text-green-3"
+                            : "text-orange-3"
+                        }`}
+                      >
+                        {changePercent.toFixed(1)}%
+                      </div>
+                    )}
+                  </div>
+                </Link>
                 {baseYear && currentYear && (
                   <div className="text-grey text-xs mb-2">
-                    Base year: {baseYear} → Current: {currentYear}
+                    {t("companiesPage.sectorGraphs.yearRange", {
+                      baseYear,
+                      currentYear,
+                    })}
                   </div>
                 )}
                 {company.description && (

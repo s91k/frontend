@@ -1,8 +1,8 @@
 import React from "react";
 import { TrendData } from "@/types/company";
+import { useScreenSize } from "@/hooks/useScreenSize";
+import { useCategoryInfo } from "@/hooks/companies/useTrendAnalysis";
 import TrendCard from "./TrendCard";
-import { categoryInfo } from "@/utils/trendCategories";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface TrendCardsProps {
   trends: TrendData;
@@ -17,8 +17,8 @@ const TrendCards: React.FC<TrendCardsProps> = ({
   selectedCategory,
   onCategorySelect,
 }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const isMobile = useScreenSize();
+  const categoryInfo = useCategoryInfo();
   return (
     <div
       className={`grid ${isMobile ? "grid-cols-1" : "md:grid-cols-3"} gap-6`}

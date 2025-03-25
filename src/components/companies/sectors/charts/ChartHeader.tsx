@@ -1,6 +1,7 @@
 import React from "react";
 import { PieChart, BarChart3, ArrowLeft } from "lucide-react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useTranslation } from "react-i18next";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 interface ChartHeaderProps {
   selectedSector: string | null;
@@ -24,8 +25,8 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
   onChartTypeChange,
   onYearChange,
 }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const isMobile = useScreenSize();
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -42,7 +43,9 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-grey hover:text-white focus:outline-none transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm font-medium">Back</span>
+              <span className="text-sm font-medium">
+                {t("companiesPage.sectorGraphs.back")}
+              </span>
             </button>
           )}
           <div
@@ -57,7 +60,9 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
               }`}
             >
               <PieChart className="h-4 w-4" />
-              <span className="text-sm font-medium">Pie</span>
+              <span className="text-sm font-medium">
+                {t("companiesPage.sectorGraphs.pie")}
+              </span>
             </button>
             <button
               onClick={() => onChartTypeChange("stacked-total")}
@@ -68,7 +73,9 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
               }`}
             >
               <BarChart3 className="h-4 w-4" />
-              <span className="text-sm font-medium">Total</span>
+              <span className="text-sm font-medium">
+                {t("companiesPage.sectorGraphs.stackedTotal")}
+              </span>
             </button>
           </div>
         </div>
@@ -81,7 +88,9 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
           >
             <div className={isMobile ? "text-left" : "text-right"}>
               <div className="text-sm text-grey">
-                {selectedSector ? "Sector Total" : "Total"} Emissions
+                {selectedSector
+                  ? t("companiesPage.sectorGraphs.sectorTotal")
+                  : t("companiesPage.sectorGraphs.total")}
               </div>
               <div className="text-xl font-light text-white">
                 {Math.round(totalEmissions).toLocaleString()} tCO₂e

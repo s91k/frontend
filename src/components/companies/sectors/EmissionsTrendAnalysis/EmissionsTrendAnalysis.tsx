@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RankedCompany } from "@/types/company";
 import { useTrendAnalysis } from "@/hooks/companies/useTrendAnalysis";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import TrendCards from "./TrendCards";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface EmissionsTrendAnalysisProps {
   companies: RankedCompany[];
@@ -17,15 +18,18 @@ const EmissionsTrendAnalysis: React.FC<EmissionsTrendAnalysisProps> = ({
     "decreasing" | "increasing" | "noComparable" | null
   >(null);
   const trends = useTrendAnalysis(companies, selectedSectors);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useScreenSize();
+  const { t } = useTranslation();
 
   return (
     <div className="mt-12 space-y-6">
       <div className={`flex ${isMobile ? "flex-col" : "items-center"} gap-2`}>
         <h2 className="text-xl font-light text-white">
-          Emissions Trend Analysis
+          {t("companiesPage.sectorGraphs.emissionsTrendAnalysis")}
         </h2>
-        <span className="text-sm text-grey">(From Base Year)</span>
+        <span className="text-sm text-grey">
+          {t("companiesPage.sectorGraphs.fromBaseYear")}
+        </span>
       </div>
 
       <TrendCards
