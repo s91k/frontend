@@ -26,7 +26,7 @@ export function NewsletterPopover({
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const { t } = useTranslation();
-  const MAILCHIMP_URL = process.env.NEXT_PUBLIC_MAILCHIMP_URL || "https://";
+  const MAILCHIMP_URL = import.meta.env.VITE_MAILCHIMP_URL || "https://";
   const autoCloseTimerRef = useRef<number | null>(null);
 
   // Use the props if provided, otherwise use internal state
