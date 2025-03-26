@@ -673,5 +673,54 @@
     "whyText3": "Vi följer Dataskyddsförordningen och de andra lagar och regler som gäller på dataskyddsområdet. Du har alltid rätt att begära korrigering eller radering av dina personliga uppgifter.",
     "contactTitle": "Kontakta Oss",
     "contactText1": "Om du har frågor eller önskemål kring hantering av dina personuppgifter, vänligen kontakta oss."
+  },
+  "learnMorePage": {
+    "title": "Globala utsläpp",
+    "subtitle": "Varför spårning, rapportering och transparens av utsläpp är kritiskt för att vidta mätbara förändringar.",
+    "measuringToManage": "Mäta för att hantera",
+    "measuringDescription": "Vi kan inte effektivt minska det som inte mäts. Korrekt utsläppsspårning är grunden för meningsfull klimatåtgärd.",
+    "impactTitle": "Förstå utsläppsmåttet",
+    "impactDescription": "Varje partikel representerar miljontals ton CO₂-utsläpp. Titta hur de ackumuleras över tid, visar den exponentiella tillväxten av globala utsläpp sedan industriella revolutionen.",
+    "impactDescription2": "Klimatkollen visar hur utsläppen har ökat dramatiskt sedan 1950, med en särskilt snabb tillväxt under de senaste decennierna.",
+    "companies": "Företag",
+    "companiesDescription": "Företagsutsläpp utgör en betydande del av de globala koldioxidutsläppen. Korrekt spårning gör det möjligt för företag att identifiera minskningsmöjligheter.",
+    "communities": "Samhällen",
+    "communitiesDescription": "Lokala samhällen behöver förstå sitt koldioxidavtryck för att implementera effektiva minskningsstrategier och hållbara metoder.",
+    "countries": "Länder",
+    "countriesDescription": "Nationella utsläppsdata är avgörande för att sätta och uppnå klimatmål, och hålla länder ansvariga för sina åtaganden.",
+    "dataGaps": "Dataluckor",
+    "dataGapsDescription": "Saknade eller felaktiga utsläppsdata hindrar vår förmåga att fatta informerade beslut och vidta effektiva klimatåtgärder.",
+    "whyTrackingMatters": "Varför spårning är viktigt",
+    "trackingMattersDescription": "Omfattande utsläppsspårning är nödvändig för:",
+    "trackingBenefits": [
+      "Att sätta vetenskapligt baserade minskningsmål",
+      "Att identifiera de mest effektiva minskningsstrategierna",
+      "Att mäta framsteg över tid",
+      "Att säkerställa ansvarsskyldighet och transparens",
+      "Att möjliggöra informerade politiska beslut"
+    ],
+    "csrdTitle": "Corporate Sustainability Reporting Directive (CSRD)",
+    "csrdDescription": "EU:s CSRD representerar ett betydande framsteg inom utsläppsrapportering genom att kräva:",
+    "csrdFeatures": [
+      "Standardiserad rapportering över alla sektorer",
+      "Detaljerad redovisning av alla utsläppsområden",
+      "Omfattande täckning av miljöpåverkan",
+      "Obligatorisk tredjepartsförsäkran",
+      "Digital taggning för förbättrad datatillgänglighet"
+    ],
+    "parisAlignment": "Anpassning till Parisavtalet",
+    "parisAlignmentDescription": "CSRD hjälper till att spåra framsteg mot Parisavtalets mål genom:",
+    "parisFeatures": [
+      "Att kräva detaljerade övergångsplaner",
+      "Att kräva vetenskapligt baserade mål",
+      "Att säkerställa konsekvent framstegsspårning"
+    ],
+    "implementationTimeline": "Implementeringstidslinje",
+    "implementationSteps": [
+      "2024: Stora börsnoterade företag",
+      "2025: Stora företag som ännu inte rapporterar",
+      "2026: Börsnoterade SMF och andra företag",
+      "Gradvis expansion för att täcka fler företag"
+    ]
   }
 }
