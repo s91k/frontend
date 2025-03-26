@@ -187,9 +187,11 @@ export function EmissionsHistory({
               </>
             )}
 
+
+            
             {dataView === "scopes" && (
               <>
-              {!hiddenScopes.includes("scope3") && (
+{/*               {!hiddenScopes.includes("scope3") && (
                 <Line
                   type="monotone"
                   dataKey="total"
@@ -199,7 +201,7 @@ export function EmissionsHistory({
                   activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
                   name="Total"
                 />
-              )}
+              )} */}
                 {!hiddenScopes.includes("scope1") && (
                   <Line
                     type="monotone"

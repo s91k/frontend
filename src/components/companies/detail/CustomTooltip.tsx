@@ -43,9 +43,15 @@ export const CustomTooltip = ({
               : `${localizeUnit(Math.round(entry.value), currentLanguage)} ${t(
                   "companies.tooltip.tonsCO2e"
                 )}`;
-                
+
+          const totalEmissions = entry.payload?.scope1 + entry.payload?.scope2 + entry.payload?.scope3
+          console.log(totalEmissions)
+
+          console.log(totalEmissions)
+          // perhaps adding the scopes together manually. Or pass a custom variable for view scopes 1-3.    
           return (
             <div key={entry.dataKey} className={`${entry.name === 'Total' ? 'my-2' : 'my-0'} text-grey mr-2 text-sm`}>
+              <span>{totalEmissions}</span>
               <span className="text-grey mr-2">{name}:</span>
               <span style={{ color: entry.color }}>{displayValue}</span>
             </div>
