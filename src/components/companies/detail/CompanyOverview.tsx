@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Pen } from "lucide-react";
-import { useSectorNames, SectorCode } from "@/hooks/useCompanyFilters";
+import { useSectorNames, SectorCode } from "@/hooks/companies/useCompanyFilters";
 import { useLanguage } from "@/components/LanguageProvider";
 import { localizeUnit } from "@/utils/localizeUnit";
 import { cn } from "@/lib/utils";
