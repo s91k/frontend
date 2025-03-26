@@ -694,12 +694,26 @@
     "csrdTitle": "The Future of Emissions Reporting",
     "csrdDescription": "The EU's Corporate Sustainability Reporting Directive (CSRD) represents a significant step forward towards standardized and comprehensive emissionsreporting.",
     "currentChallenges": "Historical Reporting Challenges",
-    "currentChallengesDescription": "[Inconsistent methodologies across companies and regions, limited scope of emissions coverage, and lack of standardized verification processes are among the challenges faced by companies in reporting emissions.",
+    "currentChallengesDescription1": "Inconsistent methodologies across companies and regions",
+    "currentChallengesDescription2": "Limited scope of emissions coverage",
+    "currentChallengesDescription3": "Lack of standardized verification processes",
+    "currentChallengesDescription4": "Difficulty tracking progress towards Paris Agreement goals",
+    "csrdImprovements": "CSRD Improvements",
+    "csrdImprovementsDescription1": "Standardized reporting requirements across the EU",
+    "csrdImprovementsDescription2": "Comprehensive coverage of environmental impacts",
+    "csrdImprovementsDescription3": "Mandatory third-party assurance",
+    "csrdImprovementsDescription4": "Digital tagging for improved data accessibility and transparency",
+    "parisAlignment": "Paris Agreement Alignment",
+    "parisAlignmentDescription": "CSRD helps track progress towards Paris Agreement goals by:",
+    "parisAlignmentDescription1": "Requiring detailed transition plans",
+    "parisAlignmentDescription2": "Mandating science-based targets",
+    "parisAlignmentDescription3": "Ensuring consistent progress tracking",
     "implementationTimeline": "Implementation Timeline",
     "implementationSteps": [
       "2024: Large-cap listed companies",
       "2025: Large companies that have not yet reported",
-      "2026: Large-cap listed SMEs and other companies"
+      "2026: Large-cap listed SMEs and other companies",
+      "Gradual expansion to cover more businesses"
     ]
   }
 }
