@@ -1,12 +1,13 @@
 import React from "react";
 import { TooltipProps } from "recharts";
-
+import { useTranslation } from "react-i18next";
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   active,
   payload,
   label,
 }) => {
   if (!active || !payload || !payload.length) return null;
+  const { t } = useTranslation();
 
   // Group payload items by sector and calculate totals
   const sectorTotals: { [key: string]: { total: number; color: string } } = {};
@@ -53,7 +54,9 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
 
       <div className="pt-3 border-t border-black-1">
         <div className="flex justify-between text-sm">
-          <span className="text-grey font-medium">Year Total:</span>
+          <span className="text-grey font-medium">
+            {t("companies.sectorGraphs.yearTotal")}
+          </span>
           <span className="font-medium">
             {Math.round(yearTotal).toLocaleString()} tCO₂e
           </span>

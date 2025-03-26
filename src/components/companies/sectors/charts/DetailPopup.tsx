@@ -1,5 +1,6 @@
 import React from "react";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DetailPopupProps {
   year: string;
@@ -18,6 +19,7 @@ const DetailPopup: React.FC<DetailPopupProps> = ({
   scope3,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const total = scope1 + scope2 + scope3;
 
   return (
@@ -37,7 +39,9 @@ const DetailPopup: React.FC<DetailPopupProps> = ({
 
         <div className="space-y-4">
           <div>
-            <h4 className="text-sm text-grey mb-2">Total Emissions</h4>
+            <h4 className="text-sm text-grey mb-2">
+              {t("companies.sectorGraphs.total")}
+            </h4>
             <p className="text-2xl font-light text-white">
               {total.toLocaleString()} tCO₂e
             </p>
@@ -46,7 +50,9 @@ const DetailPopup: React.FC<DetailPopupProps> = ({
           <div className="space-y-3">
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-grey">Scope 1</span>
+                <span className="text-sm text-grey">
+                  {t("companies.sectorGraphs.scope1")}
+                </span>
                 <span className="text-sm text-white">
                   {scope1.toLocaleString()} tCO₂e
                 </span>
@@ -61,7 +67,9 @@ const DetailPopup: React.FC<DetailPopupProps> = ({
 
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-grey">Scope 2</span>
+                <span className="text-sm text-grey">
+                  {t("companies.sectorGraphs.scope2")}
+                </span>
                 <span className="text-sm text-white">
                   {scope2.toLocaleString()} tCO₂e
                 </span>
@@ -76,7 +84,9 @@ const DetailPopup: React.FC<DetailPopupProps> = ({
 
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-grey">Scope 3</span>
+                <span className="text-sm text-grey">
+                  {t("companies.sectorGraphs.scope3")}
+                </span>
                 <span className="text-sm text-white">
                   {scope3.toLocaleString()} tCO₂e
                 </span>

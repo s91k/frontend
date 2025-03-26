@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   sectorColors,
   getCompanyColors,
@@ -17,7 +18,7 @@ const PieLegend: React.FC<PieLegendProps> = ({
   handlePieClick,
 }) => {
   const isMobile = useScreenSize();
-
+  const { t } = useTranslation();
   const navigateToCompany = (wikidataId: string) => {
     window.location.href = `/companies/${wikidataId}`;
   };
@@ -72,7 +73,9 @@ const PieLegend: React.FC<PieLegendProps> = ({
             }`}
             onClick={() => handleItemClick(entry)}
             title={
-              selectedSector ? "View company details" : "View sector details"
+              selectedSector
+                ? t("companies.sectorGraphs.pieLegendCompany")
+                : t("companies.sectorGraphs.pieLegendSector")
             }
           >
             <div
