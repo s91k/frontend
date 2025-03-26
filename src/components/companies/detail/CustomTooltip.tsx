@@ -34,6 +34,7 @@ export const CustomTooltip = ({
 
           // Extract the original value from payload
           const originalValue = entry.payload?.originalValues?.[entry.dataKey];
+          console.log(entry)
 
           // Correctly display "No Data Available" if original value was null
           const displayValue =
@@ -42,9 +43,9 @@ export const CustomTooltip = ({
               : `${localizeUnit(Math.round(entry.value), currentLanguage)} ${t(
                   "companies.tooltip.tonsCO2e"
                 )}`;
-
+                
           return (
-            <div key={entry.dataKey} className="text-sm">
+            <div key={entry.dataKey} className={`${entry.name === 'Total' ? 'my-2' : 'my-0'} text-grey mr-2 text-sm`}>
               <span className="text-grey mr-2">{name}:</span>
               <span style={{ color: entry.color }}>{displayValue}</span>
             </div>
