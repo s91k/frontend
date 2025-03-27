@@ -19,7 +19,7 @@ interface StageDetails {
 }
 
 const ValueChainOverview: React.FC = () => {
-  const isMobile = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
   const { t } = useTranslation();
   const [selectedStage, setSelectedStage] = useState<number | null>(null);
 
@@ -66,7 +66,7 @@ const ValueChainOverview: React.FC = () => {
     return (
       <div className="bg-black-2 border border-black-1 rounded-lg p-4">
         <h3 className="text-base font-light text-white mb-3">
-          Value Chain Overview
+          {t("companiesPage.sectorGraphs.valueChainOverview")}
         </h3>
 
         <div className="space-y-2">
@@ -134,6 +134,60 @@ const ValueChainOverview: React.FC = () => {
     );
   }
 
+  if (isTablet) {
+    return (
+      <div className="bg-black-2 border border-black-1 rounded-lg p-6">
+        <h3 className="text-lg font-light text-white mb-4">
+          {t("companiesPage.sectorGraphs.valueChainOverview")}
+        </h3>
+        <div className="flex flex-col space-y-4">
+          {stages.map((stage, index) => {
+            const Icon = stage.icon;
+            const isLast = index === stages.length - 1;
+
+            return (
+              <div key={index} className="relative">
+                <div className="bg-black-1 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`rounded-full p-2 bg-black-2 shrink-0`}>
+                      <Icon className={`h-5 w-5 ${stage.color}`} />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-white">
+                        {stage.title}
+                      </div>
+                      <div className="text-xs text-grey">
+                        {stage.description}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {stage.details.map((detail, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <div
+                          className={`w-1 h-1 rounded-full shrink-0 mt-1.5 ${stage.color.replace(
+                            "text-",
+                            "bg-"
+                          )}`}
+                        />
+                        <span className="text-xs text-grey">{detail}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {!isLast && (
+                  <div className="flex justify-center h-6">
+                    <ArrowDown className="h-4 w-4 text-grey" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black-2 border border-black-1 rounded-lg p-6">
       <h3 className="text-lg font-light text-white mb-4">
@@ -146,8 +200,8 @@ const ValueChainOverview: React.FC = () => {
 
           return (
             <div key={index} className="relative">
-              <div className="bg-black-1 rounded-lg p-2">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="bg-black-1 rounded-lg p-4 h-full">
+                <div className="flex items-center gap-2 mb-3">
                   <div className={`rounded-full p-2 bg-black-2 shrink-0`}>
                     <Icon className={`h-5 w-5 ${stage.color}`} />
                   </div>
@@ -158,20 +212,18 @@ const ValueChainOverview: React.FC = () => {
                     <div className="text-xs text-grey">{stage.description}</div>
                   </div>
                 </div>
-                <div className="bg-black-1 rounded-lg p-2">
-                  <div className="space-y-2">
-                    {stage.details.map((detail, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div
-                          className={`w-1 h-1 rounded-full shrink-0 ${stage.color.replace(
-                            "text-",
-                            "bg-"
-                          )}`}
-                        />
-                        <span className="text-xs text-grey">{detail}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="space-y-2">
+                  {stage.details.map((detail, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <div
+                        className={`w-1 h-1 rounded-full shrink-0 mt-1.5 ${stage.color.replace(
+                          "text-",
+                          "bg-"
+                        )}`}
+                      />
+                      <span className="text-xs text-grey">{detail}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
               {!isLast && (
