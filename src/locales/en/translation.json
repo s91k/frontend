@@ -220,7 +220,7 @@
       "toTotalEmissions": " to total emissions.",
       "scope3UpstreamDetails": "Scope 3 upstream emissions account for ",
       "ofTotalEmissionsDescription": " of total emissions.",
-      "directEmissionsDescription": "Direct emissions (Scope1) represent ",
+      "directEmissionsDescription": "Direct emissions (Scope 1) represent ",
       "ofTotalFootprintDescription": " of the total footprint.",
       "downstreamActivitiesDescription": "Downstream activities contribute "
     }
