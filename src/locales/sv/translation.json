@@ -171,6 +171,7 @@
       "sectorTotal": "Totala utsläpp i sektorn",
       "total": "Totala utsläpp",
       "yearTotal": "Årlig total",
+      "unknownCompany": "Okänt företag",
       "pieLegendCompany": "Visa företagsdetaljer",
       "pieLegendSector": "Visa sektordetaljer",
       "emissionsSourcesAnalysis": "Analys av utsläppskällor",
