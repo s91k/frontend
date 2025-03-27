@@ -25,17 +25,22 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
   onChartTypeChange,
   onYearChange,
 }) => {
-  const isMobile = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
   const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-4">
       <div
         className={`flex ${
-          isMobile ? "flex-col gap-4" : "justify-between items-center"
+          isMobile || isTablet
+            ? "flex-col gap-4"
+            : "justify-between items-center"
         }`}
       >
         <div
-          className={`flex ${isMobile ? "flex-wrap" : ""} items-center gap-2`}
+          className={`flex ${
+            isMobile || isTablet ? "flex-wrap" : ""
+          } items-center gap-2`}
         >
           {selectedSector && (
             <button
@@ -49,7 +54,9 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
             </button>
           )}
           <div
-            className={`flex ${isMobile ? "flex-wrap" : ""} items-center gap-2`}
+            className={`flex ${
+              isMobile || isTablet ? "flex-wrap" : ""
+            } items-center gap-2`}
           >
             <button
               onClick={() => onChartTypeChange("pie")}
@@ -82,24 +89,38 @@ const ChartHeader: React.FC<ChartHeaderProps> = ({
 
         {chartType === "pie" && (
           <div
-            className={`flex items-center ${
-              isMobile ? "justify-between w-full" : "gap-4"
+            className={`${
+              isMobile
+                ? "flex flex-col gap-3 w-full"
+                : isTablet
+                ? "flex items-center justify-between w-full"
+                : "flex items-center gap-4 ml-auto"
             }`}
           >
-            <div className={isMobile ? "text-left" : "text-right"}>
+            <div
+              className={
+                isMobile
+                  ? "w-full"
+                  : isTablet
+                  ? "text-left"
+                  : "flex items-center gap-4"
+              }
+            >
               <div className="text-sm text-grey">
                 {selectedSector
                   ? t("companiesPage.sectorGraphs.sectorTotal")
                   : t("companiesPage.sectorGraphs.total")}
-              </div>
-              <div className="text-xl font-light text-white">
-                {Math.round(totalEmissions).toLocaleString()} tCO₂e
+                <span className="ml-2 text-xl font-light text-white">
+                  {Math.round(totalEmissions).toLocaleString()} tCO₂e
+                </span>
               </div>
             </div>
             <select
               value={selectedYear}
               onChange={(e) => onYearChange(e.target.value)}
-              className="bg-black-2 border border-black-1 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-orange-3 transition-shadow"
+              className={`bg-black-2 border border-black-1 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-orange-3 transition-shadow ${
+                isMobile ? "w-full" : ""
+              }`}
             >
               {years.map((year) => (
                 <option key={year} value={year}>

@@ -324,12 +324,7 @@ export function CompaniesPage() {
         <div className="absolute inset-0 w-full bg-black -z-10" />
 
         {/* Wrapper for View Toggle, Filters, Search, and Badges */}
-        <div
-          className={cn(
-            "flex flex-wrap items-start gap-4",
-            isMobile ? "flex-col" : "items-center"
-          )}
-        >
+        <div className={cn("flex flex-wrap items-start gap-4", "items-center")}>
           {/* View Toggle - Only show in dev environments */}
           {isDevEnvironment && (
             <div className="flex bg-black-1 rounded-md overflow-hidden">
