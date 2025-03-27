@@ -252,10 +252,8 @@ export function CompaniesPage() {
   useEffect(() => {
     const hostname = window.location.hostname;
     const isDev =
-      hostname.includes("dev.") ||
-      hostname.includes("staging.") ||
-      hostname.includes("localhost") ||
-      hostname.includes("127.0.0.1");
+      hostname.includes("stage.") ||
+      hostname.includes("localhost")
 
     setIsDevEnvironment(isDev);
 
