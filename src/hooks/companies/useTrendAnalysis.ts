@@ -3,6 +3,7 @@ import { RankedCompany, TrendData } from "@/types/company";
 import { TrendingDown, TrendingUp, MinusCircle } from "lucide-react";
 import { TrendCardInfo } from "@/types/company";
 import { useTranslation } from "react-i18next";
+import { EmissionsUtils, EmissionsValue } from "@/types/emissions";
 
 const getTotalEmissions = (emissions: any) => {
   if (!emissions) return 0;
@@ -70,32 +71,50 @@ export const useTrendAnalysis = (
       const latestPeriod = periods[periods.length - 1];
       const baselinePeriod = periods[0];
 
-      const latestEmissions = getTotalEmissions(latestPeriod.emissions);
-      const baselineEmissions = getTotalEmissions(baselinePeriod.emissions);
+      const latestEmissions = EmissionsUtils.getTotal(latestPeriod.emissions);
+      const baselineEmissions = EmissionsUtils.getTotal(
+        baselinePeriod.emissions
+      );
 
-      if (baselineEmissions === 0) {
+      if (baselineEmissions === null) {
         trends.noComparable.push(company);
         return;
       }
 
-      const changePercent =
-        ((latestEmissions - baselineEmissions) / baselineEmissions) * 100;
+      const changePercent = EmissionsUtils.percentChange(
+        latestEmissions,
+        baselineEmissions
+      );
 
       if (Math.abs(changePercent) > 60) {
         trends.noComparable.push(company);
       } else if (changePercent < 0) {
         trends.decreasing.push({
           company,
-          changePercent,
+          changePercent: changePercent ?? 0,
           baseYear: baselinePeriod.startDate.substring(0, 4),
           currentYear: latestPeriod.startDate.substring(0, 4),
+          hasData: latestEmissions !== null && baselineEmissions !== null,
+          noDataMessage:
+            latestEmissions === null
+              ? "Latest period has no data"
+              : baselineEmissions === null
+              ? "Previous period has no data"
+              : "",
         });
       } else {
         trends.increasing.push({
           company,
-          changePercent,
+          changePercent: changePercent ?? 0,
           baseYear: baselinePeriod.startDate.substring(0, 4),
           currentYear: latestPeriod.startDate.substring(0, 4),
+          hasData: latestEmissions !== null && baselineEmissions !== null,
+          noDataMessage:
+            latestEmissions === null
+              ? "Latest period has no data"
+              : baselineEmissions === null
+              ? "Previous period has no data"
+              : "",
         });
       }
     });

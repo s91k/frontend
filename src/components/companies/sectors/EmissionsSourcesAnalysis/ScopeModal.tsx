@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import {
-  sectorColors,
+  useSectorColors,
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
 
@@ -110,9 +110,8 @@ const ScopeModal: React.FC<ScopeModalProps> = ({
         <div className="overflow-y-auto flex-1 p-6">
           <div className="space-y-6">
             {sectorData.sectors.map((sector) => {
-              const sectorColor =
-                sectorColors[sector.sectorCode as keyof typeof sectorColors]
-                  .base;
+              const sectorColors = useSectorColors();
+              const sectorColor = sectorColors(sector.sectorCode);
               return (
                 <div
                   key={sector.sectorCode}

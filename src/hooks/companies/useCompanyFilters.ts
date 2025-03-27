@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { CompanyDetails as Company, RankedCompany } from "@/types/company";
+import { getSectorColor, getCompanyColorPalette } from "@/utils/colorPalettes";
+import { EmissionsUtils, EmissionsValue } from "@/types/emissions";
 
 export const SECTOR_NAMES = {
   "10": "Energi",
@@ -132,93 +134,6 @@ export type SortOption =
   | "name_asc"
   | "name_desc";
 
-// Add sector color types
-export interface SectorColor {
-  base: string;
-  scope1: string;
-  scope2: string;
-  scope3: string;
-}
-
-export type SectorColors = {
-  [key in SectorCode]: SectorColor;
-};
-
-// Add the sector colors
-export const sectorColors: SectorColors = {
-  "10": {
-    base: "var(--green-4)",
-    scope1: "var(--green-4)",
-    scope2: "var(--green-3)",
-    scope3: "var(--green-2)",
-  },
-  "15": {
-    base: "var(--blue-4)",
-    scope1: "var(--blue-4)",
-    scope2: "var(--blue-3)",
-    scope3: "var(--blue-2)",
-  },
-  "20": {
-    base: "var(--pink-4)",
-    scope1: "var(--pink-4)",
-    scope2: "var(--pink-3)",
-    scope3: "var(--pink-2)",
-  },
-  "25": {
-    base: "var(--orange-4)",
-    scope1: "var(--orange-4)",
-    scope2: "var(--orange-3)",
-    scope3: "var(--orange-2)",
-  },
-  "30": {
-    base: "var(--green-3)",
-    scope1: "var(--green-3)",
-    scope2: "var(--green-2)",
-    scope3: "var(--green-1)",
-  },
-  "35": {
-    base: "var(--blue-3)",
-    scope1: "var(--blue-3)",
-    scope2: "var(--blue-2)",
-    scope3: "var(--blue-1)",
-  },
-  "40": {
-    base: "var(--pink-3)",
-    scope1: "var(--pink-3)",
-    scope2: "var(--pink-2)",
-    scope3: "var(--pink-1)",
-  },
-  "45": {
-    base: "var(--orange-3)",
-    scope1: "var(--orange-3)",
-    scope2: "var(--orange-2)",
-    scope3: "var(--orange-1)",
-  },
-  "50": {
-    base: "var(--blue-2)",
-    scope1: "var(--blue-2)",
-    scope2: "var(--blue-3)",
-    scope3: "var(--blue-1)",
-  },
-  "55": {
-    base: "var(--green-2)",
-    scope1: "var(--green-2)",
-    scope2: "var(--green-3)",
-    scope3: "var(--green-1)",
-  },
-  "60": {
-    base: "var(--pink-2)",
-    scope1: "var(--pink-2)",
-    scope2: "var(--pink-3)",
-    scope3: "var(--pink-1)",
-  },
-};
-
-export const getCompanyColors = (index: number) => {
-  const colors = Object.values(sectorColors);
-  return colors[index % colors.length];
-};
-
 export const useCompanyFilters = (companies: RankedCompany[]) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -249,6 +164,10 @@ export const useCompanyFilters = (companies: RankedCompany[]) => {
         return matchesSector && matchesSearch;
       })
       .sort((a, b) => {
+        // Get the total emissions for each company
+        const emissionsA = getCompanyEmissions(a);
+        const emissionsB = getCompanyEmissions(b);
+
         // Sort companies
         switch (sortBy) {
           case "emissions_reduction": {
@@ -269,13 +188,13 @@ export const useCompanyFilters = (companies: RankedCompany[]) => {
               : bChange - aChange;
           }
           case "total_emissions": {
-            const aEmissions =
-              a.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
-            const bEmissions =
-              b.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
+            // Handle null values in sorting
+            if (emissionsA === null && emissionsB === null) return 0;
+            if (emissionsA === null) return sortDirection === "asc" ? -1 : 1; // Null at start or end based on direction
+            if (emissionsB === null) return sortDirection === "asc" ? 1 : -1;
             return sortDirection === "asc"
-              ? aEmissions - bEmissions
-              : bEmissions - aEmissions;
+              ? emissionsA - emissionsB
+              : emissionsB - emissionsA;
           }
           case "scope3_coverage": {
             const aCategories =
@@ -312,53 +231,21 @@ export const useCompanyFilters = (companies: RankedCompany[]) => {
   };
 };
 
-// Update the useCompanyColors hook to use CSS variables
+// Helper to get emissions consistently
+const getCompanyEmissions = (company: RankedCompany): EmissionsValue => {
+  if (!company.reportingPeriods || company.reportingPeriods.length === 0) {
+    return null;
+  }
+
+  const latestPeriod = company.reportingPeriods[0];
+  return EmissionsUtils.getTotal(latestPeriod.emissions);
+};
+
+// Remove any remaining color-related code and ensure we're using the imports
+export function useSectorColors() {
+  return (sectorCode: string) => getSectorColor(sectorCode);
+}
+
 export function useCompanyColors() {
-  const companyColorPalettes = [
-    // Blue palette
-    {
-      base: "var(--blue-5)",
-      scope1: "var(--blue-5)",
-      scope2: "var(--blue-3)",
-      scope3: "var(--blue-1)",
-    },
-    {
-      base: "var(--blue-4)",
-      scope1: "var(--blue-4)",
-      scope2: "var(--blue-2)",
-      scope3: "var(--blue-1)",
-    },
-    {
-      base: "var(--blue-3)",
-      scope1: "var(--blue-3)",
-      scope2: "var(--blue-5)",
-      scope3: "var(--blue-1)",
-    },
-
-    // Green palette
-    {
-      base: "var(--green-5)",
-      scope1: "var(--green-5)",
-      scope2: "var(--green-3)",
-      scope3: "var(--green-1)",
-    },
-    // Pink palette
-    {
-      base: "var(--pink-5)",
-      scope1: "var(--pink-5)",
-      scope2: "var(--pink-3)",
-      scope3: "var(--pink-1)",
-    },
-    // Orange palette
-    {
-      base: "var(--orange-5)",
-      scope1: "var(--orange-5)",
-      scope2: "var(--orange-3)",
-      scope3: "var(--orange-1)",
-    },
-  ];
-
-  return (index: number) => {
-    return companyColorPalettes[index % companyColorPalettes.length];
-  };
+  return (index: number) => getCompanyColorPalette(index);
 }

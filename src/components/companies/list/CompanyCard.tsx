@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
 import { localizeUnit } from "@/utils/localizeUnit";
+import { EmissionsUtils } from "@/types/emissions";
 
 type CompanyCardProps = Pick<
   RankedCompany,
@@ -81,6 +82,9 @@ export function CompanyCard({
   const categoryColor = largestCategory
     ? getCategoryColor(largestCategory.category)
     : "var(--blue-2)";
+
+  const totalEmissions = EmissionsUtils.getTotal(latestPeriod?.emissions);
+  const hasEmissionsData = totalEmissions !== null;
 
   return (
     <div className="relative rounded-level-2">
@@ -160,10 +164,9 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {currentEmissions ? (
+              {hasEmissionsData ? (
                 <span className="text-orange-3">
-                  {localizeUnit(Math.ceil(currentEmissions), currentLanguage)}
-                  <span className="text-lg text-grey ml-1">tCO₂e</span>
+                  {EmissionsUtils.format(totalEmissions)} tCO₂e
                 </span>
               ) : (
                 <span className="text-grey">{t("companies.card.noData")}</span>
@@ -213,7 +216,10 @@ export function CompanyCard({
               </Text>
               <Text variant="h6">
                 {latestPeriod.economy.turnover.value
-                  ? localizeUnit(latestPeriod.economy.turnover.value / 1e9, currentLanguage)
+                  ? localizeUnit(
+                      latestPeriod.economy.turnover.value / 1e9,
+                      currentLanguage
+                    )
                   : t("companies.card.noData")}{" "}
                 mdr
                 <span className="text-lg text-grey ml-1">

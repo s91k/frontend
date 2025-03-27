@@ -738,5 +738,10 @@
     "whyText3": "Vi följer Dataskyddsförordningen och de andra lagar och regler som gäller på dataskyddsområdet. Du har alltid rätt att begära korrigering eller radering av dina personliga uppgifter.",
     "contactTitle": "Kontakta Oss",
     "contactText1": "Om du har frågor eller önskemål kring hantering av dina personuppgifter, vänligen kontakta oss."
+  },
+  "common": {
+    "noData": "Ingen data",
+    "noEmissionsData": "Inga utsläppsdata tillgängliga",
+    "incompleteData": "Ofullständig data"
   }
 }

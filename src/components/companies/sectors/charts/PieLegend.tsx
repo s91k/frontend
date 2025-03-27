@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  sectorColors,
-  getCompanyColors,
+  useSectorColors,
+  useCompanyColors,
 } from "@/hooks/companies/useCompanyFilters";
 import { useScreenSize } from "@/hooks/useScreenSize";
 
@@ -56,11 +56,13 @@ const PieLegend: React.FC<PieLegendProps> = ({
 
         let color;
         if (selectedSector) {
-          color = getCompanyColors(index).base;
+          const companyColors = useCompanyColors();
+          color = companyColors(index).base;
         } else if (entry.payload && entry.payload.sectorCode) {
           // Use the sectorCode from payload
           const sectorCode = entry.payload.sectorCode;
-          color = sectorColors[sectorCode as keyof typeof sectorColors]?.base;
+          const sectorColors = useSectorColors();
+          color = sectorColors(sectorCode);
         } else {
           color = "#888888";
         }

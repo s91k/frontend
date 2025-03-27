@@ -13,8 +13,8 @@ import {
   Cell,
 } from "recharts";
 import {
-  sectorColors,
-  getCompanyColors,
+  useSectorColors,
+  useCompanyColors,
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
@@ -67,6 +67,8 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   selectedSectors,
 }) => {
   const sectorNames = useSectorNames();
+  const companyColors = useCompanyColors();
+  const sectorColors = useSectorColors();
 
   const [chartType, setChartType] = useState<ChartType>("pie");
   const [selectedYear, setSelectedYear] = useState<string>("2023");
@@ -148,11 +150,11 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                     key={entry.name}
                     fill={
                       selectedSector
-                        ? getCompanyColors(index).base
+                        ? companyColors(index).base
                         : "sectorCode" in entry
-                        ? sectorColors[
+                        ? sectorColors(
                             entry.sectorCode as keyof typeof sectorColors
-                          ]?.base || "#888888"
+                          )?.base || "#888888"
                         : "#888888"
                     }
                   />
@@ -210,14 +212,15 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
               {selectedSectors.map((sectorCode) => {
                 const sectorName =
                   sectorNames[sectorCode as keyof typeof sectorNames];
-                const colors =
-                  sectorColors[sectorCode as keyof typeof sectorColors];
+                const colors = sectorColors(
+                  sectorCode as keyof typeof sectorColors
+                );
                 return (
                   <Bar
                     key={sectorCode}
                     dataKey={sectorName}
                     stackId="total"
-                    fill={colors.base}
+                    fill={colors?.base || "#888888"}
                     name={sectorName}
                     cursor="default"
                   />
