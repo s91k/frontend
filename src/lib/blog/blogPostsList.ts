@@ -28,6 +28,21 @@ export type BlogPostMeta = {
 
 export const blogMetadata: BlogPostMeta[] = [
   {
+    id: "hållbara-kolet",
+    title: "Hållbara koldioxidutsläpp",
+    excerpt: "Det hållbara kolet och hur vi får kontroll över det",
+    date: "2025-03-28",
+    readTime: "5 min",
+    category: CategoryEnum.Analysis,
+    image: "/images/blogImages/matthias-heyde-co2-unsplash.jpg",
+    language: LangEnum.SE,
+    author: {
+      name: "John Carlbäck",
+      avatar: "/people/carlback_john.jpg",
+    },
+    relatedPosts: ["klimatmal", "utslappsberakning"],
+  },
+  {
     id: "ai-process-del-1",
     title:
       "Så kan AI hjälpa oss förstå företagens klimatdata. Del 1 – Översikt",
@@ -109,20 +124,5 @@ export const blogMetadata: BlogPostMeta[] = [
       avatar: "/people/ola.jpg",
     },
     relatedPosts: ["klimatmal", "metod"],
-  },
-  {
-    id: "hållbara-kolet",
-    title: "Hållbara koldioxidutsläpp",
-    excerpt: "Det hållbara kolet och hur vi får kontroll över det",
-    date: "2025-03-28",
-    readTime: "5 min",
-    category: CategoryEnum.Analysis,
-    image: "/images/blogImages/image1-31.webp",
-    language: LangEnum.SE,
-    author: {
-      name: "John Carlbäck",
-      avatar: "/people/carlback_john.jpg",
-    },
-    relatedPosts: ["klimatmal", "utslappsberakning"],
-  },
+  }
 ];
