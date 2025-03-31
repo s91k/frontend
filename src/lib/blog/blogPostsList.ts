@@ -37,7 +37,7 @@ export const blogMetadata: BlogPostMeta[] = [
     image: "/images/blogImages/matthias-heyde-co2-unsplash.jpg",
     language: LangEnum.SE,
     author: {
-      name: "John Carlbäck",
+      name: "John Carlbäck, Frivillig Rådgivare",
       avatar: "/people/carlback_john.jpg",
     },
     relatedPosts: ["klimatmal", "utslappsberakning"],
