@@ -73,7 +73,7 @@ export function LearnMorePage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="bg-black text-white pb-20">
       <ParticleAnimation />
       <div className="relative z-10">
         {/* Hero Section */}
@@ -211,7 +211,7 @@ export function LearnMorePage() {
           </div>
         </div>
 
-        <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
+        <div className="py-16 flex flex-col items-center justify-center px-4 text-center">
           {/* separated into separate PRs, so this is commented out for now */}
           {/* <div className="animate-bounce mt-12">
             <p>Continue</p><ArrowRight size={32} className="text-white opacity-75" />
