@@ -186,7 +186,6 @@ export function EmissionsHistory({
                 />
               </>
             )}
-   
             {dataView === "scopes" && (
               <>
                 {!hiddenScopes.includes("scope1") && (
