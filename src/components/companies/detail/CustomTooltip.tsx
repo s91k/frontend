@@ -19,7 +19,22 @@ export const CustomTooltip = ({
   const { currentLanguage} = useLanguage();
 
   if (active && payload && payload.length) {
-  
+    
+    if (payload.length === 3) {
+      const totalEmissions = payload[0]?.payload.total;
+      
+      const companyTotal = {
+        dataKey: 'total',
+        name: 'Total',
+        color: "white",
+        payload: {
+          total: totalEmissions,
+        },
+        value: totalEmissions,
+      }
+      payload = [companyTotal, ...payload]
+    }
+    
     return (
       <div className="bg-black-1 px-4 py-3 rounded-level-2">
         <div className="text-sm font-medium mb-2">{label}</div>
@@ -34,7 +49,6 @@ export const CustomTooltip = ({
 
           // Extract the original value from payload
           const originalValue = entry.payload?.originalValues?.[entry.dataKey];
-          console.log(entry)
 
           // Correctly display "No Data Available" if original value was null
           const displayValue =
@@ -44,14 +58,8 @@ export const CustomTooltip = ({
                   "companies.tooltip.tonsCO2e"
                 )}`;
 
-          const totalEmissions = entry.payload?.scope1 + entry.payload?.scope2 + entry.payload?.scope3
-          console.log(totalEmissions)
-
-          console.log(totalEmissions)
-          // perhaps adding the scopes together manually. Or pass a custom variable for view scopes 1-3.    
           return (
             <div key={entry.dataKey} className={`${entry.name === 'Total' ? 'my-2' : 'my-0'} text-grey mr-2 text-sm`}>
-              <span>{totalEmissions}</span>
               <span className="text-grey mr-2">{name}:</span>
               <span style={{ color: entry.color }}>{displayValue}</span>
             </div>
