@@ -110,4 +110,19 @@ export const blogMetadata: BlogPostMeta[] = [
     },
     relatedPosts: ["klimatmal", "metod"],
   },
+  {
+    id: "hållbara-kolet",
+    title: "Hållbara koldioxidutsläpp",
+    excerpt: "Det hållbara kolet och hur vi får kontroll över det",
+    date: "2025-03-28",
+    readTime: "5 min",
+    category: CategoryEnum.Analysis,
+    image: "/images/blogImages/image1-31.webp",
+    language: LangEnum.SE,
+    author: {
+      name: "John Carlbäck",
+      avatar: "/people/carlback_john.jpg",
+    },
+    relatedPosts: ["klimatmal", "utslappsberakning"],
+  },
 ];
