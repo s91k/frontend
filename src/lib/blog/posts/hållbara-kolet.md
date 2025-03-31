@@ -11,7 +11,6 @@ Tester och forskning pågår även på metoder att avlägsna redan gjorda utslä
 
 Och för att undvika missförstånd – **kolet kan förbrännas** – men kolatomerna kvarstår.
 
----
 
 ## Hur rör sig kolet?
 
@@ -20,13 +19,12 @@ För att förstå **HUR** vi ska komma till bukt med kolet (C) och dess ”kompi
 ### 🌍 De fyra sfärerna:
 
 - **Atmosfären** – Gasskiktet som omger jorden skyddar oss från solens skadliga strålar, reglerar temperaturen och möjliggör liv genom att tillhandahålla syre.
-- **Biosfären** – Där livet existerar på jorden – från mikroorganismer till växter och djur – och omfattar alla ekosystem.
+- **Biosfären** – Där livet existerar på jorden, från mikroorganismer till växter och djur, och omfattar alla ekosystem.
 - **Hydrosfären** – Allt vatten på jorden i både flytande och fast form.
 - **Geosfären** – Den fasta delen av jorden med kärnan, manteln och jordskorpan, samt alla bergarter och mineraler.
 
 > För mycket kol i någon av sfärerna skapar obalans och leder till klimatförändringar.
 
----
 
 ## Kan vi inte bara eliminera kol?
 
@@ -35,7 +33,6 @@ Nej – det krävs kärnreaktioner (tänk stjärnor som bildas och dör) eller e
 - Flytta kol mellan olika sfärer, ***eller***
 - Se till att det stannar i rätt sfär
 
----
 
 ## Kolets kretslopp – mellan sfärerna
 
@@ -57,7 +54,6 @@ Nej – det krävs kärnreaktioner (tänk stjärnor som bildas och dör) eller e
 🌋 Genom vulkanutbrott eller mänsklig förbränning av fossila bränslen (det **bruna kolkretsloppet**).  
 📉 Före industrialiseringen låg koldioxidnivån runt **280 ppm**.
 
----
 
 ## Vad kan vi göra?
 
@@ -65,7 +61,6 @@ Eftersom den totala mängden kol på jorden är konstant, handlar klimatåtgärd
 
 Den mest effektiva lösningen känner de flesta till – ***låt kolatomerna stanna kvar i jorden (geosfären)*** så att de inte förbränns och släpper ut koldioxid. 
 
----
 
 ## Vad är nästa steg?
 
