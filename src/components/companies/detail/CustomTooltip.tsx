@@ -16,25 +16,24 @@ export const CustomTooltip = ({
 }: CustomTooltipProps) => {
   const { t } = useTranslation();
   const { getCategoryName } = useCategoryMetadata();
-  const { currentLanguage} = useLanguage();
+  const { currentLanguage } = useLanguage();
 
   if (active && payload && payload.length) {
-    
-    if (payload.length === 3) {
+    if (payload.length === 3 && payload[0]?.payload?.total !== undefined) {
       const totalEmissions = payload[0]?.payload.total;
-      
+
       const companyTotal = {
-        dataKey: 'total',
-        name: 'Total',
+        dataKey: "total",
+        name: t("companies.emissionsHistory.total"),
         color: "white",
         payload: {
           total: totalEmissions,
         },
         value: totalEmissions,
-      }
-      payload = [companyTotal, ...payload]
+      };
+      payload = [companyTotal, ...payload];
     }
-    
+
     return (
       <div className="bg-black-1 px-4 py-3 rounded-level-2">
         <div className="text-sm font-medium mb-2">{label}</div>
@@ -49,6 +48,7 @@ export const CustomTooltip = ({
 
           // Extract the original value from payload
           const originalValue = entry.payload?.originalValues?.[entry.dataKey];
+          const isTotal = entry.dataKey === "total";
 
           // Correctly display "No Data Available" if original value was null
           const displayValue =
@@ -59,7 +59,17 @@ export const CustomTooltip = ({
                 )}`;
 
           return (
-            <div key={entry.dataKey} className={`${entry.name === 'Total' ? 'my-2' : 'my-0'} text-grey mr-2 text-sm`}>
+            <div
+              key={entry.dataKey}
+              className={`
+                ${
+                  isTotal
+                    ? "my-2 font-medium border-b border-grey pb-2"
+                    : "my-0"
+                } 
+                text-grey mr-2 text-sm
+              `}
+            >
               <span className="text-grey mr-2">{name}:</span>
               <span style={{ color: entry.color }}>{displayValue}</span>
             </div>
