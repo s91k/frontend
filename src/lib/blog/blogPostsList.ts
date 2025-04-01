@@ -29,15 +29,15 @@ export type BlogPostMeta = {
 export const blogMetadata: BlogPostMeta[] = [
   {
     id: "hållbara-kolet",
-    title: "Hållbara koldioxidutsläpp",
-    excerpt: "Det hållbara kolet och hur vi får kontroll över det",
+    title: "Låt kolet stanna i jorden",
+    excerpt: "Den totala mängden kolatomer är konstant, men vi kan omfördela det på rätt sätt. Klimatåtgärder handlar om att låta kolet stanna kvar i jorden, så att det inte förbränns och släpper ut koldioxid.",
     date: "2025-03-28",
     readTime: "5 min",
     category: CategoryEnum.Analysis,
     image: "/images/blogImages/matthias-heyde-co2-unsplash.jpg",
     language: LangEnum.SE,
     author: {
-      name: "John Carlbäck, Frivillig Rådgivare",
+      name: "John Carlbäck, volontär och rådgivare",
       avatar: "/people/carlback_john.jpg",
     },
     relatedPosts: ["klimatmal", "utslappsberakning"],
