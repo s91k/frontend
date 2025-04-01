@@ -64,7 +64,7 @@ Den mest effektiva lösningen känner de flesta till – ***låt kolatomerna sta
 
 ## Vad är nästa steg?
 
-För att backa halten koldioxid i atmosfären behöver vi fundera om det är till biosfären, hydrosfären eller geosfären som kolet ska förflyttas. 
+För att minska halten koldioxid i atmosfären behöver vi fundera om det är till biosfären, hydrosfären eller geosfären som kolet ska förflyttas. 
 
 💬 **Låt oss ta kommandot över de koldioxidutsläpp som människan orsakar – innan det är för sent.**
 
