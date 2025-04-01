@@ -59,7 +59,7 @@ Nej – det krävs kärnreaktioner (tänk stjärnor som bildas och dör) eller e
 
 Eftersom den totala mängden kol på jorden är konstant, handlar klimatåtgärder om att omfördela kolet på rätt sätt. 
 
-Den mest effektiva lösningen känner de flesta till – ***låt kolatomerna stanna kvar i jorden (geosfären)*** så att de inte förbränns och släpper ut koldioxid. 
+Den mest effektiva lösningen känner de flesta till – ***låt kolatomerna stanna kvar i jorden (geosfären)*** så att de inte förbränns och släpper ut koldioxid – och byt till förnybara energikällor. 
 
 
 ## Vad är nästa steg?
