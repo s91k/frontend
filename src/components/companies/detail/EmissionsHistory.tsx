@@ -6,6 +6,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  ReferenceLine
 } from "recharts";
 import { Info, X } from "lucide-react";
 import {
@@ -30,6 +31,7 @@ export function EmissionsHistory({
   reportingPeriods,
   onYearSelect,
   className,
+  baseYear,
   features = {
     interpolateScope3: true,
     guessBaseYear: true,
@@ -51,7 +53,6 @@ export function EmissionsHistory({
     );
   }
   const isMobile = useScreenSize();
-
   const { currentLanguage } = useLanguage();
 
   const hasScope3Categories = useMemo(
@@ -68,6 +69,8 @@ export function EmissionsHistory({
     }
     return "overview";
   });
+
+  const companyBaseYear = baseYear?.year;
 
   // Only interpolate if the feature is enabled
   const processedPeriods = useMemo(
@@ -115,6 +118,7 @@ export function EmissionsHistory({
     });
   };
 
+
   return (
     <div
       className={cn("bg-black-2 rounded-level-1 px-4 md:px-16 py-8", className)}
@@ -148,15 +152,41 @@ export function EmissionsHistory({
         <ResponsiveContainer width="100%" height="100%" className="w-full">
           <LineChart
             data={chartData}
-            margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
+            margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
             onClick={handleClick}
           >
+            <ReferenceLine 
+              label={{
+                value: t("companies.emissionsHistory.baseYear"),
+                position: "top",
+                fill: "white",
+                fontSize: 12,
+                fontWeight: "normal",
+              }}
+              x={companyBaseYear} 
+              stroke="#878787" 
+              strokeDasharray="4 4" 
+            />
             <XAxis
               dataKey="year"
               stroke="#878787"
               tickLine={false}
               axisLine={true}
-              tick={{ fontSize: 12 }}
+              tick={({ x, y, payload }) => {
+                const isBaseYear = payload.value === companyBaseYear;
+                return (
+                  <text
+                    x={x - 15}
+                    y={y + 10}
+                    fontSize={12}
+                    fill={`${isBaseYear ? 'white' : '#878787' }`}
+                    fontWeight={`${isBaseYear ? 'bold' : 'normal' }`}
+                  >
+                    {payload.value}
+                  </text>
+                  
+                )
+              }}
               padding={{ left: 0, right: 0 }}
             />
             <YAxis
@@ -173,7 +203,7 @@ export function EmissionsHistory({
                 ).format(value)
               }
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip companyBaseYear={companyBaseYear} />} />
 
             {dataView === "overview" && (
               <>
