@@ -20,7 +20,7 @@ import {
   SectorCode,
 } from "@/hooks/companies/useCompanyFilters";
 import { useLanguage } from "@/components/LanguageProvider";
-import { localizeUnit } from "@/utils/localizeUnit";
+import { localizeEmployeeCount, localizeUnit } from "@/utils/localizeUnit";
 import { cn } from "@/lib/utils";
 
 interface CompanyOverviewProps {
@@ -69,6 +69,13 @@ export function CompanyOverview({
   const sortedPeriods = [...company.reportingPeriods].sort(
     (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
   );
+
+  const formattedEmployeeCount = selectedPeriod.economy?.employees?.value
+    ? localizeEmployeeCount(
+        selectedPeriod.economy.employees.value,
+        currentLanguage,
+      )
+    : t("companies.overview.notReported");
 
   return (
     <div className="bg-black-2 rounded-level-1 p-16">
@@ -236,12 +243,7 @@ export function CompanyOverview({
               {t("companies.overview.employees")} ({periodYear})
             </Text>
             <Text className="text-base md:text-base sm:text-sm">
-              {selectedPeriod.economy?.employees?.value
-                ? localizeUnit(
-                    selectedPeriod.economy.employees.value,
-                    currentLanguage,
-                  )
-                : t("companies.overview.notReported")}
+              {formattedEmployeeCount}
             </Text>
           </div>
 
