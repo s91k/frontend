@@ -6,7 +6,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ReferenceLine
+  ReferenceLine,
 } from "recharts";
 import { Info, X } from "lucide-react";
 import {
@@ -88,6 +88,83 @@ export function EmissionsHistory({
     [processedPeriods],
   );
 
+  const trendLineData = useMemo(() => {
+    if (!chartData || chartData.length < 2)
+      return { pre2025: [], post2025: [] };
+
+    const points = chartData.filter((d) => typeof d.total === "number");
+    const n = points.length;
+    if (n < 2) return { pre2025: [], post2025: [] };
+
+    const sumX = points.reduce((sum, p) => sum + p.year, 0);
+    const sumY = points.reduce((sum, p) => sum + p.total, 0);
+    const sumXY = points.reduce((sum, p) => sum + p.year * p.total, 0);
+    const sumX2 = points.reduce((sum, p) => sum + p.year * p.year, 0);
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    const startYear = Math.max(...points.map((p) => p.year));
+    const endYear = 2030;
+
+    const pre2025Data = [];
+    const post2025Data = [];
+    for (let year = startYear; year <= endYear; year++) {
+      const trendValue = slope * year + intercept;
+      if (year < 2025) {
+        pre2025Data.push({ year, trend: trendValue });
+      } else if (year === 2025) {
+        pre2025Data.push({ year, trend: trendValue });
+        post2025Data.push({ year, trend: trendValue });
+      } else {
+        post2025Data.push({ year, trend: trendValue });
+      }
+    }
+
+    return { pre2025: pre2025Data, post2025: post2025Data };
+  }, [chartData]);
+
+  const calculateTrendForYear = (year: number) => {
+    if (!chartData || chartData.length < 2) return null;
+
+    const points = chartData.filter((d) => typeof d.total === "number");
+    const n = points.length;
+    if (n < 2) return null;
+
+    const sumX = points.reduce((sum, p) => sum + p.year, 0);
+    const sumY = points.reduce((sum, p) => sum + p.total, 0);
+    const sumXY = points.reduce((sum, p) => sum + p.year * p.total, 0);
+    const sumX2 = points.reduce((sum, p) => sum + p.year * p.year, 0);
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return slope * year + intercept;
+  };
+
+  const trend2025 = calculateTrendForYear(2025);
+
+  const declineLineData = useMemo(() => {
+    const startYear = 2025;
+    const endYear = 2030;
+    const reductionRate = 0.139;
+
+    const baseValue = trend2025;
+    if (!baseValue || chartData.length === 0) return [];
+
+    const data: Array<{ year: number; decline: number }> = [];
+    let currentValue = baseValue;
+
+    for (let year = startYear; year <= endYear; year++) {
+      if (year > startYear) {
+        currentValue *= 1 - reductionRate;
+      }
+      data.push({ year, decline: currentValue });
+    }
+
+    return data;
+  }, [chartData, trend2025]);
+
   const handleClick = (data: any) => {
     if (data?.activePayload?.[0]?.payload?.total) {
       onYearSelect?.(data.activePayload[0].payload.year.toString());
@@ -118,7 +195,6 @@ export function EmissionsHistory({
       }
     });
   };
-
 
   return (
     <div
@@ -156,7 +232,7 @@ export function EmissionsHistory({
             margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
             onClick={handleClick}
           >
-            <ReferenceLine 
+            <ReferenceLine
               label={{
                 value: t("companies.emissionsHistory.baseYear"),
                 position: "top",
@@ -164,15 +240,17 @@ export function EmissionsHistory({
                 fontSize: 12,
                 fontWeight: "normal",
               }}
-              x={companyBaseYear} 
-              stroke="#878787" 
-              strokeDasharray="4 4" 
+              x={companyBaseYear}
+              stroke="#878787"
+              strokeDasharray="4 4"
             />
             <XAxis
               dataKey="year"
               stroke="#878787"
               tickLine={false}
               axisLine={true}
+              type="number"
+              domain={[chartData[0]?.year || 2000, 2030]}
               tick={({ x, y, payload }) => {
                 const isBaseYear = payload.value === companyBaseYear;
                 return (
@@ -180,16 +258,16 @@ export function EmissionsHistory({
                     x={x - 15}
                     y={y + 10}
                     fontSize={12}
-                    fill={`${isBaseYear ? 'white' : '#878787' }`}
-                    fontWeight={`${isBaseYear ? 'bold' : 'normal' }`}
+                    fill={isBaseYear ? "white" : "#878787"}
+                    fontWeight={isBaseYear ? "bold" : "normal"}
                   >
                     {payload.value}
                   </text>
-                  
-                )
+                );
               }}
               padding={{ left: 0, right: 0 }}
             />
+
             <YAxis
               stroke="#878787"
               tickLine={false}
@@ -202,10 +280,46 @@ export function EmissionsHistory({
                 formatEmissionsAbsolute(value, currentLanguage)
               }
             />
-            <Tooltip content={<CustomTooltip companyBaseYear={companyBaseYear} />} />
+            <Tooltip
+              content={<CustomTooltip companyBaseYear={companyBaseYear} />}
+            />
 
             {dataView === "overview" && (
               <>
+                <Line
+                  type="monotone"
+                  data={declineLineData}
+                  dataKey="decline"
+                  stroke="#ff4d4d"
+                  strokeWidth={2}
+                  strokeDasharray="6 3"
+                  dot={false}
+                  isAnimationActive={false}
+                  name={t("companies.emissionsHistory.declineLineLabel")}
+                />
+                <Line
+                  type="monotone"
+                  data={trendLineData.pre2025}
+                  dataKey="trend"
+                  stroke="#fff"
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  dot={false}
+                  isAnimationActive={false}
+                  name={t("companies.emissionsHistory.trendLineLabelPre2025")}
+                />
+                <Line
+                  type="monotone"
+                  data={trendLineData.post2025}
+                  dataKey="trend"
+                  stroke="#66FFB2"
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  dot={false}
+                  isAnimationActive={false}
+                  name={t("companies.emissionsHistory.trendLineLabelPost2025")}
+                />
+
                 <Line
                   type="monotone"
                   dataKey="total"
