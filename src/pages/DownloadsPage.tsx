@@ -49,10 +49,10 @@ function DownloadsPage() {
 
           <DownloadCard
             icon={FileText}
-            title={t("downloadsPage.txtFormat")}
-            description={t("downloadsPage.txtDescription")}
-            downloadUrl="/downloads/database.txt"
-            downloadText={t("downloadsPage.txtDownload")}
+            title={t("downloadsPage.jsonFormat")}
+            description={t("downloadsPage.jsonDescription")}
+            downloadUrl="/downloads/database.json"
+            downloadText={t("downloadsPage.jsonDownload")}
           />
         </div>
 
