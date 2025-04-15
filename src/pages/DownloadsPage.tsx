@@ -3,18 +3,49 @@ import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DownloadCard } from "@/components/products/DownloadCard";
 import { DownloadInfoSection } from "@/components/products/DownloadInfoSection";
+import { DownloadControls } from "@/components/products/DownloadControls";
+import { useState, useEffect } from "react";
+import { getReportingYears } from "@/lib/api";
+
+interface InfoItem {
+  title: string;
+  description: string | JSX.Element;
+}
 
 function DownloadsPage() {
   const { t } = useTranslation();
+  const [selectedType, setSelectedType] = useState<
+    "companies" | "municipalities"
+  >("companies");
+  const [selectedYear, setSelectedYear] = useState<string>("");
+  const [years, setYears] = useState<string[]>([]);
 
-  const infoItems = [
+  useEffect(() => {
+    getReportingYears().then(setYears);
+  }, []);
+
+  const handleSelectionChange = (
+    type: "companies" | "municipalities",
+    year: string | null
+  ) => {
+    setSelectedType(type);
+    setSelectedYear(year || "");
+  };
+
+  const infoItems: InfoItem[] = [
     {
       title: t("downloadsPage.dataStructure"),
       description: t("downloadsPage.dataStructureDescription"),
     },
     {
       title: t("downloadsPage.fileSizeAndFormat"),
-      description: t("downloadsPage.fileSizeAndFormatDescription"),
+      description: (
+        <div className="space-y-4">
+          <p>{t("downloadsPage.fileSizeAndFormatDescription.csv")}</p>
+          <p>{t("downloadsPage.fileSizeAndFormatDescription.excel")}</p>
+          <p>{t("downloadsPage.fileSizeAndFormatDescription.json")}</p>
+        </div>
+      ),
     },
     {
       title: t("downloadsPage.usageLicense"),
@@ -30,29 +61,40 @@ function DownloadsPage() {
       />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <DownloadControls
+          onSelectionChange={handleSelectionChange}
+          years={years}
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <DownloadCard
             icon={FileText}
             title={t("downloadsPage.csvFormat")}
             description={t("downloadsPage.csvDescription")}
-            downloadUrl="/downloads/database.csv"
-            downloadText={t("downloadsPage.csvDownload")}
+            format="csv"
+            selectedType={selectedType}
+            selectedYear={selectedYear}
+            years={years}
           />
 
           <DownloadCard
             icon={FileSpreadsheet}
             title={t("downloadsPage.excelFormat")}
             description={t("downloadsPage.excelDescription")}
-            downloadUrl="/downloads/database.xlsx"
-            downloadText={t("downloadsPage.excelDownload")}
+            format="xlsx"
+            selectedType={selectedType}
+            selectedYear={selectedYear}
+            years={years}
           />
 
           <DownloadCard
             icon={FileText}
             title={t("downloadsPage.jsonFormat")}
             description={t("downloadsPage.jsonDescription")}
-            downloadUrl="/downloads/database.json"
-            downloadText={t("downloadsPage.jsonDownload")}
+            format="json"
+            selectedType={selectedType}
+            selectedYear={selectedYear}
+            years={years}
           />
         </div>
 

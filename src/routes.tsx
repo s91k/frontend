@@ -83,7 +83,10 @@ export function AppRoutes() {
       <Route path={`${basePath}/learn-more`} element={<LearnMorePage />} />
       <Route path={`${basePath}/privacy`} element={<PrivacyPage />} />
       <Route path={`${basePath}/products`} element={<ProductsPage />} />
-      <Route path={`${basePath}/products/database-download-20250402`} element={<DownloadsPage />} />
+      <Route
+        path={`${basePath}/products/database-download-2025`}
+        element={<DownloadsPage />}
+      />
 
       {/* Error pages */}
       <Route path={`${basePath}/error/:code`} element={<ErrorPage />} />

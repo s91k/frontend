@@ -171,29 +171,34 @@
   },
   "downloadsPage": {
     "title": "Download Database",
-    "description": "Access our comprehensive climate database in multiple formats. Choose the format that best suits your needs for analysis and research.",
+    "description": "Access our climate database. Download emissions data for companies or municipalities in your preferred format.",
     "csvFormat": "CSV Format",
-    "csvDescription": "Download the database in CSV format. Perfect for data analysis in tools like Python, R, or any spreadsheet software. Includes all fields with comma-separated values.",
+    "csvDescription": "Download the database as a CSV file, ideal for use in Python, R, Excel, or Google Sheets. All fields are comma-separated.",
     "excelFormat": "Excel Format",
-    "excelDescription": "Download the database in Excel format. Perfect for data analysis in tools like Microsoft Excel or Google Sheets. Includes all fields with comma-separated values.",
+    "excelDescription": "Download the database in Excel (XLSX) format, perfect for analysis in Microsoft Excel or Google Sheets. All fields are preserved in spreadsheet structure.",
     "jsonFormat": "JSON Format",
-    "jsonDescription": "Download the database in JSON format. Perfect for data analysis in tools like Python, R, or any spreadsheet software. Includes all fields with comma-separated values.",
-    "requestAccess": "Get Data",
-    "csvDownload": "Download CSV",
-    "excelDownload": "Download Excel",
-    "jsonDownload": "Download JSON",
+    "jsonDescription": "Download the database in JSON format, ideal for developers and data analysis in tools like Python or R. Structured for easy parsing and programmatic access.",
+    "selectType": "Select Data Type",
+    "companies": "Companies",
+    "municipalities": "Municipalities",
+    "selectYear": "Select Year",
+    "allYears": "All Years",
     "download": "Download",
-    "dataStructure": "Data Structure",
-    "fileSizeAndFormat": "File Size and Format",
+    "downloadError": "Failed to download file. Please try again.",
     "downloadInformation": "Download Information",
+    "dataStructure": "Data Structure",
+    "dataStructureDescription": "All download formats share the same database structure, with consistent field names and data types. For details about individual fields, refer to our API documentation.",
+    "fileSizeAndFormat": "File Size and Format",
+    "fileSizeAndFormatDescription": {
+      "csv": "CSV: UTF-8 encoded with comma-separated values. This is the smallest format and loads quickly in most spreadsheet tools. Ideal for general analysis and widely compatible with Excel, Google Sheets, Python, and R.",
+      "excel": "Excel: XLSX format with multiple sheets. Slightly larger than CSV due to built-in formatting. Best for users who want a clean, structured spreadsheet view right away in Excel or Google Sheets.",
+      "json": "JSON: UTF-8 encoded structured data. Tends to be the largest file due to detailed key-value formatting. Best for developers or analysts working with code, APIs, or automation in tools like Python or JavaScript."
+    },
     "usageLicense": "Usage License",
-    "dataDictionary": "Data Dictionary",
-    "dataDictionaryDescription": "Each format includes a data dictionary explaining the fields and their meanings.",
-    "dataDictionaryDownload": "Download Data Dictionary",
-    "dataDictionaryDownloadDescription": "Download the data dictionary in JSON format. Perfect for data analysis in tools like Python, R, or any spreadsheet software. Includes all fields with comma-separated values.",
-    "dataStructureDescription": "All download formats contain the same data structure with consistent field names and data types. Each format includes a data dictionary explaining the fields and their meanings.",
-    "fileSizeAndFormatDescription": "CSV: ~50MB, UTF-8 encoded with comma separators Excel: ~60MB, XLSX format with multiple sheets Text: ~45MB, UTF-8 encoded with tab delimiters",
-    "usageLicenseDescription": "The downloaded data is provided under a research and analysis license. You are free to use the data for research, analysis, and non-commercial purposes. Please attribute Klimatkollen when using the data."
+    "usageLicenseDescription": "The downloaded data is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). You are free to use, modify, and share the data for both commercial and non-commercial purposes, as long as you credit Klimatkollen and include a link to the license.",
+    "loading": "Loading...",
+    "downloadCompanies": "Download Company Data",
+    "downloadMunicipalities": "Download Municipality Data"
   },
   "insightsPage": {
     "title": "Articles",
@@ -869,5 +874,9 @@
       "2026: Large-cap listed SMEs and other companies",
       "Gradual expansion to cover more businesses"
     ]
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error"
   }
 }
