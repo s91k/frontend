@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Selector } from "@/components/layout/Selector";
 
 interface DownloadControlsProps {
   onSelectionChange: (
@@ -24,61 +18,43 @@ export function DownloadControls({
   const [selectedType, setSelectedType] = useState<
     "companies" | "municipalities"
   >("companies");
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const mostRecentYear = years[years.length - 1] || years[0] || "all";
+  const [selectedYear, setSelectedYear] = useState<string>(mostRecentYear);
 
   useEffect(() => {
-    onSelectionChange(selectedType, selectedYear);
+    onSelectionChange(selectedType, selectedYear === "all" ? null : selectedYear);
   }, [selectedType, selectedYear, onSelectionChange]);
+
+  const typeOptions: { value: "companies" | "municipalities"; label: string }[] = [
+    { value: "companies", label: t("downloadsPage.companies") },
+    { value: "municipalities", label: t("downloadsPage.municipalities") },
+  ];
+
+  const sortedYears = [...years].sort((a, b) => parseInt(b) - parseInt(a));
+  const yearOptions: { value: string; label: string }[] = [
+    { value: "all", label: t("downloadsPage.allYears") },
+    ...sortedYears.map((year) => ({ value: year, label: year })),
+  ];
 
   return (
     <div className="flex gap-4 mb-8">
-      <div className="flex-1 space-y-2">
-        <label className="text-sm text-grey">
-          {t("downloadsPage.selectType")}
-        </label>
-        <Select
-          value={selectedType}
-          onValueChange={(value: "companies" | "municipalities") =>
-            setSelectedType(value)
-          }
-        >
-          <SelectTrigger className="w-full bg-black-2 border-black-1">
-            <SelectValue placeholder={t("downloadsPage.selectType")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="companies">
-              {t("downloadsPage.companies")}
-            </SelectItem>
-            <SelectItem value="municipalities">
-              {t("downloadsPage.municipalities")}
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Selector
+        label={t("downloadsPage.selectType")}
+        value={selectedType}
+        onValueChange={(value: "companies" | "municipalities") =>
+          setSelectedType(value)
+        }
+        options={typeOptions}
+        placeholder={t("downloadsPage.selectType")}
+      />
       {selectedType === "companies" && (
-        <div className="flex-1 space-y-2">
-          <label className="text-sm text-grey">
-            {t("downloadsPage.selectYear")}
-          </label>
-          <Select
-            value={selectedYear || "all"}
-            onValueChange={(value) =>
-              setSelectedYear(value === "all" ? null : value)
-            }
-          >
-            <SelectTrigger className="w-full bg-black-2 border-black-1">
-              <SelectValue placeholder={t("downloadsPage.selectYear")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("downloadsPage.allYears")}</SelectItem>
-              {[...years].reverse().map((year) => (
-                <SelectItem key={year} value={year}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Selector
+          label={t("downloadsPage.selectYear")}
+          value={selectedYear}
+          onValueChange={(value) => setSelectedYear(value)}
+          options={yearOptions}
+          placeholder={t("downloadsPage.selectYear")}
+        />
       )}
     </div>
   );
