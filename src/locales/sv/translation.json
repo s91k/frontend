@@ -135,9 +135,9 @@
     "freeAccess": {
       "title": "Gratis databasåtkomst",
       "description": "Få tillgång till vår kompletta klimatdatabas genom bi-årliga datadumpningar, perfekt för forskning och analys.",
-      "export": "Komplett databasexport var 6:e månad",
+      "export": "Databasexport var 6:e månad",
       "data": "Företag och kommuners klimatdata",
-      "license": "Gratis att använda för icke-kommersiellt bruk",
+      "license": "Gratis att använda för både kommersiellt och icke-kommersiellt bruk",
       "requestAccess": "Hämta data"
     },
     "dataOverview": {
