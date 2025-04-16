@@ -4,7 +4,7 @@ id: 'utslappsberakning'
 
 Den nya regeringens klimatåtgärder kan leda till ökade utsläpp av växthusgaser med uppemot 25 miljoner ton under mandatperioden åren 2023-2026, jämfört med nuvarande klimatpolitik. Det motsvarar hälften av de årliga svenska utsläppen. Det handlar framförallt om sänkningar av reduktionsplikten. Hela 33 miljoner ton utsläpp skiljer Sverigedemokraternas och Liberalernas politik åt.
 
-Det visar unika beräkningar av riksdagspartiernas politik för tolv centrala klimatåtgärder. Bakom uträkningarna står Klimatkollen, Världsnaturfonden WWF, ClimateView, Naturskyddsföreningen och Våra barns klimat. [Rapporten finns här](/public/documents/utslappsberakningar.pdf).
+Det visar unika beräkningar av riksdagspartiernas politik för tolv centrala klimatåtgärder. Bakom uträkningarna står Klimatkollen, Världsnaturfonden WWF, ClimateView, Naturskyddsföreningen och Våra barns klimat. [Rapporten finns här](/documents/utslappsberakningar.pdf).
 
 Beräkningarna är den andra delen i Klimatkollens partigranskning. Under Almedalsveckan i juli 2022 presenterades del ett, en [analys av partiernas klimatmål](/insights/klimatmal) som visade att endast två av riksdagens åtta partier (MP och V) har klimatmål i närheten av Parisavtalets 1,5-gradersmål.
 
