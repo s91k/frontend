@@ -4,7 +4,7 @@ id: 'utslappsberakning'
 
 Den nya regeringens klimatåtgärder kan leda till ökade utsläpp av växthusgaser med uppemot 25 miljoner ton under mandatperioden åren 2023-2026, jämfört med nuvarande klimatpolitik. Det motsvarar hälften av de årliga svenska utsläppen. Det handlar framförallt om sänkningar av reduktionsplikten. Hela 33 miljoner ton utsläpp skiljer Sverigedemokraternas och Liberalernas politik åt.
 
-Det visar unika beräkningar av riksdagspartiernas politik för tolv centrala klimatåtgärder. Bakom uträkningarna står Klimatkollen, Världsnaturfonden WWF, ClimateView, Naturskyddsföreningen och Våra barns klimat. [Rapporten finns här](/public/documents/utslappsberakningar.pdf).
+Det visar unika beräkningar av riksdagspartiernas politik för tolv centrala klimatåtgärder. Bakom uträkningarna står Klimatkollen, Världsnaturfonden WWF, ClimateView, Naturskyddsföreningen och Våra barns klimat. [Rapporten finns här](/documents/utslappsberakningar.pdf).
 
 Beräkningarna är den andra delen i Klimatkollens partigranskning. Under Almedalsveckan i juli 2022 presenterades del ett, en [analys av partiernas klimatmål](/insights/klimatmal) som visade att endast två av riksdagens åtta partier (MP och V) har klimatmål i närheten av Parisavtalets 1,5-gradersmål.
 
@@ -30,4 +30,4 @@ I en enkät har alla riksdagspartier utom Moderaterna svarat på hur de ställer
 
 Utsläppseffekten av partiernas politik utgörs av skillnaden jämfört med beslutad politik, både åtgärder och förslag på nya styrmedel. Status quo är således redan beslutade nivåer på styrmedel såsom koldioxidskatt och reduktionsplikt (för nya styrmedel räknas status quo som att det inte finns). För partier som föreslår en försvagning av en beslutad utsläppsminskande åtgärd redovisas effekten som en utsläppsökning. Partier som istället vill skärpa en åtgärd, eller införa en ny, krediteras en utsläppsminskning.
 
-[Här finns hela analysen: “Utsläppsberäkning av riksdagspartiernas politik för kommande mandatperiod, åren 2023-2026”.](/public/documents/utslappsberakningar.pdf)
+[Här finns hela analysen: “Utsläppsberäkning av riksdagspartiernas politik för kommande mandatperiod, åren 2023-2026”.](/documents/utslappsberakningar.pdf)
