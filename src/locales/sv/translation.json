@@ -120,11 +120,11 @@
   },
   "productsPage": {
     "title": "Få tillgång till klimatdata",
-    "description": "Få tillgång till Klimatkollens klimatdatabas, innehållande företagens utsläpp, hållbarhetsrapporter och kommunens klimatdata via vår API.",
+    "description": "Få tillgång till Klimatkollens klimatdatabas, innehållande företagens utsläpp, hållbarhetsrapporter och kommunens klimatdata via vårt API.",
     "viewDocumentation": "Visa API-dokumentation →",
     "apiAccess": {
       "title": "Direkt API-åtkomst",
-      "description": "Real-time åtkomst till vår klimatdatabas via vår dokumenterade REST API med fullständiga slutpunkter.",
+      "description": "Direktåtkomst i realtid till vår klimatdatabas via vårt dokumenterade REST API och endpoints.",
       "realtime": "Real-time data access",
       "documentation": "Full API documentation",
       "secure": "Secure API endpoints",
@@ -157,7 +157,7 @@
     },
     "requestAccess": {
       "title": "Begär åtkomst",
-      "description": "Begär åtkomst till Klimatkollens API för att få real-time åtkomst till vår klimatdatabas via vår dokumenterade REST API med fullständiga slutpunkter.",
+      "description": "Begär åtkomst till Klimatkollens API för att få realtidsåtkomst till vår klimatdatabas via vår dokumenterade REST API och endpoints.",
       "emailLabel": "E-post",
       "formatLabel": "Anledning till åtkomst",
       "submit": "Begär åtkomst"
