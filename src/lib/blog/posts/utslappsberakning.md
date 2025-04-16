@@ -30,4 +30,4 @@ I en enkät har alla riksdagspartier utom Moderaterna svarat på hur de ställer
 
 Utsläppseffekten av partiernas politik utgörs av skillnaden jämfört med beslutad politik, både åtgärder och förslag på nya styrmedel. Status quo är således redan beslutade nivåer på styrmedel såsom koldioxidskatt och reduktionsplikt (för nya styrmedel räknas status quo som att det inte finns). För partier som föreslår en försvagning av en beslutad utsläppsminskande åtgärd redovisas effekten som en utsläppsökning. Partier som istället vill skärpa en åtgärd, eller införa en ny, krediteras en utsläppsminskning.
 
-[Här finns hela analysen: “Utsläppsberäkning av riksdagspartiernas politik för kommande mandatperiod, åren 2023-2026”.](/public/documents/utslappsberakningar.pdf)
+[Här finns hela analysen: “Utsläppsberäkning av riksdagspartiernas politik för kommande mandatperiod, åren 2023-2026”.](/documents/utslappsberakningar.pdf)
