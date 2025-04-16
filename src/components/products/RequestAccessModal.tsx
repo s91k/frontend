@@ -178,6 +178,18 @@ export const RequestAccessModal = ({
                           </div>
                         )}
 
+                        <p className="text-xs text-grey mt-2">
+                          {t("newsletter.privacyNotice")}{" "}
+                          <a
+                            href="/privacy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-white"
+                          >
+                            {t("newsletter.privacyLink")}
+                          </a>
+                        </p>
+
                         <div className="flex justify-end gap-4 mt-6">
                           <button
                             type="button"
