@@ -60,10 +60,10 @@ function ProductsPage() {
       icon: <FileText className="h-5 w-5 text-green-4" />,
       text: t("productsPage.apiAccess.documentation"),
     },
-    {
-      icon: <Lock className="h-5 w-5 text-green-4" />,
-      text: t("productsPage.apiAccess.secure"),
-    },
+    // {
+    //   icon: <Lock className="h-5 w-5 text-green-4" />,
+    //   text: t("productsPage.apiAccess.secure"),
+    // },
     {
       icon: <Mail className="h-5 w-5 text-green-4" />,
       text: t("productsPage.apiAccess.support"),
