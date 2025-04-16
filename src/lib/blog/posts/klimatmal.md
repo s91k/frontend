@@ -28,4 +28,4 @@ Miljöpartiets klimatmål är ”en koldioxidbudget på 180 miljoner ton CO₂�
 
 Inkluderar man partiernas mål för kompletterande åtgärder, där kolinlagring i skog och mark och även bio-CCS (lagring av koldioxid från biobränsle) ingår, så sticker fortfarande Miljöpartiet och Vänsterpartiet ut som mest långtgående, men även Liberalerna utmärker sig, med omfattande mål för bio-CCS.
 
-PM med analysen av partiernas klimatmål i sin helhet finns [här](https://www.klimatkollen.se/path/to/analysis-document.pdf) och en fördjupning om skog och mark finns [här](https://www.klimatkollen.se/path/to/forest-and-land-report.pdf).
+PM med analysen av partiernas klimatmål i sin helhet finns [här](/public/documents/Carbon_budgets-Analysis_final.pdf) och en fördjupning om skog och mark finns [här](/public/documents/Klimatkollen_LULUCF_final.pdf).
