@@ -125,12 +125,12 @@
     "apiAccess": {
       "title": "Direkt API-åtkomst",
       "description": "Direktåtkomst i realtid till vår klimatdatabas via vårt dokumenterade REST API och endpoints.",
-      "realtime": "Real-time data access",
-      "documentation": "Full API documentation",
-      "secure": "Secure API endpoints",
-      "support": "Priority support",
-      "contactPricing": "Contact for Pricing",
-      "viewDocs": "View API Documentation"
+      "realtime": "Realtidsdataåtkomst",
+      "documentation": "Fullständig API-dokumentation",
+      "secure": "Säkra API-endpoints",
+      "support": "Prioriterat stöd",
+      "contactPricing": "Kontakta för priser",
+      "viewDocs": "Visa API-dokumentation"
     },
     "freeAccess": {
       "title": "Gratis databasåtkomst",
