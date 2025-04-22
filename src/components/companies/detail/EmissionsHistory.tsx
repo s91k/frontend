@@ -19,7 +19,6 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { interpolateScope3Categories } from "@/lib/calculations/emissions";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { getChartData } from "../../../utils/getChartData";
 import { CustomTooltip } from "./CustomTooltip";
 import { DataViewSelector } from "./DataViewSelector";
@@ -42,24 +41,12 @@ export function EmissionsHistory({
 }: EmissionsHistoryProps) {
   const { t } = useTranslation();
   const { getCategoryName, getCategoryColor } = useCategoryMetadata();
-
-  // Validate input data
-  if (!reportingPeriods?.length) {
-    return (
-      <div className="text-center py-12">
-        <Text variant="body">
-          {t("companies.emissionsHistory.noReportingPeriods")}
-        </Text>
-      </div>
-    );
-  }
-  const isMobile = useScreenSize();
   const { currentLanguage } = useLanguage();
 
   const hasScope3Categories = useMemo(
     () =>
       reportingPeriods.some(
-        (period) => period.emissions?.scope3?.categories?.length ?? 0 > 0,
+        (period) => period.emissions?.scope3?.categories?.length ?? false,
       ),
     [reportingPeriods],
   );
@@ -88,7 +75,9 @@ export function EmissionsHistory({
     [processedPeriods],
   );
 
-  const handleClick = (data: any) => {
+  const handleClick = (data: {
+    activePayload?: Array<{ payload: { year: number; total: number } }>;
+  }) => {
     if (data?.activePayload?.[0]?.payload?.total) {
       onYearSelect?.(data.activePayload[0].payload.year.toString());
     }
@@ -108,6 +97,17 @@ export function EmissionsHistory({
 
   // Add state for hidden categories
   const [hiddenCategories, setHiddenCategories] = useState<number[]>([]);
+
+  // Validate input data
+  if (!reportingPeriods?.length) {
+    return (
+      <div className="text-center py-12">
+        <Text variant="body">
+          {t("companies.emissionsHistory.noReportingPeriods")}
+        </Text>
+      </div>
+    );
+  }
 
   const handleCategoryToggle = (categoryId: number) => {
     setHiddenCategories((prev) => {
@@ -286,7 +286,9 @@ export function EmissionsHistory({
                   const isInterpolatedKey = `${categoryKey}Interpolated`;
 
                   // Check if the category is hidden
-                  if (hiddenCategories.includes(categoryId)) return null;
+                  if (hiddenCategories.includes(categoryId)) {
+                    return null;
+                  }
                   // Calculate strokeDasharray based on the first data point
                   const strokeDasharray = chartData[0][isInterpolatedKey]
                     ? "4 4"
@@ -331,7 +333,9 @@ export function EmissionsHistory({
                       activeDot={(props) => {
                         const { cx, cy, payload } = props;
 
-                        if (!payload) return undefined;
+                        if (!payload) {
+                          return undefined;
+                        }
 
                         const value = payload.originalValues?.[categoryKey];
 
