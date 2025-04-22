@@ -1,4 +1,5 @@
 import {
+  Legend,
   Line,
   LineChart,
   ReferenceLine,
@@ -176,6 +177,14 @@ export default function EmissionsLineChart({
         margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
         onClick={handleClick}
       >
+        <Legend
+          verticalAlign="top"
+          align="right"
+          height={36}
+          iconType="line"
+          wrapperStyle={{ fontSize: "12px" }}
+        />
+
         <ReferenceLine
           label={{
             value: t("companies.emissionsHistory.baseYear"),
