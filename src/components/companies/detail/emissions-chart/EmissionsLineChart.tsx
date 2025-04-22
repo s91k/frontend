@@ -11,6 +11,7 @@ import { CustomTooltip } from "../CustomTooltip";
 import { ChartData } from "@/types/emissions";
 import { t } from "i18next";
 import { formatEmissionsAbsolute } from "@/utils/localizeUnit";
+import { useMemo } from "react";
 
 interface EmissionsLineChartProps {
   data: ChartData[];
@@ -33,6 +34,54 @@ interface EmissionsLineChartProps {
   currentLanguage: "sv" | "en";
 }
 
+const calculateLinearRegression = (data: { x: number; y: number }[]) => {
+  const n = data.length;
+  if (n < 2) {
+    return null;
+  }
+
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+
+  for (const point of data) {
+    sumX += point.x;
+    sumY += point.y;
+    sumXY += point.x * point.y;
+    sumXX += point.x * point.x;
+  }
+
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+
+  const lastPoint = data[data.length - 1];
+  const intercept = lastPoint.y - slope * lastPoint.x;
+
+  return { slope, intercept };
+};
+
+const generateTrendLineData = (
+  data: ChartData[],
+  regression: { slope: number; intercept: number },
+) => {
+  // Find the last year with reported total emissions
+  const lastReportedYear = data
+    .filter((d) => d.total !== undefined && d.total !== null)
+    .reduce((lastYear, d) => Math.max(lastYear, d.year), 0);
+  const minYear = lastReportedYear;
+  const endYear = 2030;
+
+  const allYears = Array.from(
+    { length: endYear - minYear + 1 },
+    (_, i) => minYear + i,
+  );
+
+  return allYears.map((year) => ({
+    year,
+    trendLine: regression.slope * year + regression.intercept,
+  }));
+};
+
 export default function EmissionsLineChart({
   data,
   companyBaseYear,
@@ -46,6 +95,34 @@ export default function EmissionsLineChart({
   getCategoryColor,
   currentLanguage,
 }: EmissionsLineChartProps) {
+  const trendLineData = useMemo(() => {
+    if (dataView !== "overview") {
+      return null;
+    }
+
+    // Filter out points with no total emissions
+    const validPoints = data
+      .filter(
+        (d): d is ChartData & { total: number } =>
+          d.total !== undefined && d.total !== null,
+      )
+      .map((d) => ({
+        x: d.year,
+        y: d.total,
+      }));
+
+    if (validPoints.length < 2) {
+      return null;
+    }
+
+    const regression = calculateLinearRegression(validPoints);
+    if (!regression) {
+      return null;
+    }
+
+    return generateTrendLineData(data, regression);
+  }, [data, dataView]);
+
   const xAxis = (
     <XAxis
       dataKey="year"
@@ -111,16 +188,31 @@ export default function EmissionsLineChart({
         />
 
         {dataView === "overview" && (
-          <Line
-            type="monotone"
-            dataKey="total"
-            stroke="white"
-            strokeWidth={2}
-            dot={{ r: 4, fill: "white", cursor: "pointer" }}
-            activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
-            connectNulls
-            name={t("companies.emissionsHistory.Emissions")}
-          />
+          <>
+            <Line
+              type="monotone"
+              dataKey="total"
+              stroke="white"
+              strokeWidth={2}
+              dot={{ r: 4, fill: "white", cursor: "pointer" }}
+              activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
+              connectNulls
+              name={t("companies.emissionsHistory.Emissions")}
+            />
+            {trendLineData && (
+              <Line
+                type="linear"
+                dataKey="trendLine"
+                data={trendLineData}
+                stroke="var(--pink-3)"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+                dot={false}
+                activeDot={false}
+                name={t("companies.emissionsHistory.trendLine")}
+              />
+            )}
+          </>
         )}
         {dataView === "scopes" && (
           <>

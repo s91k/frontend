@@ -666,7 +666,8 @@
       "totalEmissions": "Totala utsläpp",
       "baseYear": "Basår",
       "baseYearInfo": "Basår syftar på ett specifikt år som väljs som referenspunkt för att jämföra framtida utsläpp mot.",
-      "total": "Totalt"
+      "total": "Totalt",
+      "trendLine": "Trend"
     },
     "list": {
       "error": {
