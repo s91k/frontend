@@ -666,7 +666,8 @@
       "baseYearInfo": "The base year refers to a specific year chosen as a reference point against which future emissions are compared.",
       "total": "Total",
       "approximated": "Approximated",
-      "trend": "Trend"
+      "trend": "Trend",
+      "carbonLaw": "Carbon law"
     },
     "list": {
       "error": {

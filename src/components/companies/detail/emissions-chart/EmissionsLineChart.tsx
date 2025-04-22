@@ -61,7 +61,7 @@ const calculateLinearRegression = (data: { x: number; y: number }[]) => {
   return { slope, intercept };
 };
 
-const generateTrendData = (
+const generateData = (
   data: ChartData[],
   regression: { slope: number; intercept: number },
 ) => {
@@ -73,10 +73,15 @@ const generateTrendData = (
   const endYear = 2030;
   const currentYear = new Date().getFullYear();
 
+  const currentYearTrendValue =
+    regression.slope * currentYear + regression.intercept;
+
   const allYears = Array.from(
     { length: endYear - trendStartYear + 1 },
     (_, i) => trendStartYear + i,
   );
+
+  const reductionRate = 0.1356;
 
   return allYears.map((year) => {
     const shouldShowTrend = year >= lastReportedYear;
@@ -86,9 +91,14 @@ const generateTrendData = (
 
     return {
       year,
-      trendPast: year <= currentYear ? trendValue : null,
-      trendFuture: year >= currentYear ? trendValue : null,
+      approximated: year <= currentYear ? trendValue : null,
+      trend: year >= currentYear ? trendValue : null,
       total: data.find((d) => d.year === year)?.total,
+      carbonLaw:
+        year >= currentYear
+          ? currentYearTrendValue *
+            Math.pow(1 - reductionRate, year - currentYear)
+          : null,
     };
   });
 };
@@ -107,6 +117,7 @@ export default function EmissionsLineChart({
   currentLanguage,
 }: EmissionsLineChartProps) {
   const endYear = 2030;
+  const currentYear = new Date().getFullYear();
 
   const trendData = useMemo(() => {
     if (dataView !== "overview") {
@@ -132,7 +143,7 @@ export default function EmissionsLineChart({
       return null;
     }
 
-    return generateTrendData(data, regression);
+    return generateData(data, regression);
   }, [data, dataView]);
 
   const xAxis = (
@@ -160,8 +171,6 @@ export default function EmissionsLineChart({
       padding={{ left: 0, right: 0 }}
     />
   );
-
-  const currentYear = new Date().getFullYear();
 
   const yAxis = (
     <YAxis
@@ -229,19 +238,19 @@ export default function EmissionsLineChart({
               <>
                 <ReferenceLine
                   x={currentYear}
-                  stroke="#FDB768"
+                  stroke="var(--orange-2)"
                   strokeWidth={1}
                   label={{
                     value: currentYear,
                     position: "top",
-                    fill: "#FDB768",
+                    fill: "var(--orange-2)",
                     fontSize: 12,
                     fontWeight: "normal",
                   }}
                 />
                 <Line
                   type="linear"
-                  dataKey="trendPast"
+                  dataKey="approximated"
                   data={trendData}
                   stroke="var(--grey)"
                   strokeWidth={1}
@@ -252,7 +261,7 @@ export default function EmissionsLineChart({
                 />
                 <Line
                   type="linear"
-                  dataKey="trendFuture"
+                  dataKey="trend"
                   data={trendData}
                   stroke="var(--pink-3)"
                   strokeWidth={1}
@@ -260,6 +269,17 @@ export default function EmissionsLineChart({
                   dot={false}
                   activeDot={false}
                   name={t("companies.emissionsHistory.trend")}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="carbonLaw"
+                  data={trendData}
+                  stroke="var(--green-3)"
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={false}
+                  activeDot={false}
+                  name={t("companies.emissionsHistory.carbonLaw")}
                 />
               </>
             )}

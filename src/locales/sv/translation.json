@@ -668,7 +668,8 @@
       "baseYearInfo": "Basår syftar på ett specifikt år som väljs som referenspunkt för att jämföra framtida utsläpp mot.",
       "total": "Totalt",
       "approximated": "Approximerat",
-      "trend": "Trend"
+      "trend": "Trend",
+      "carbonLaw": "Carbon law"
     },
     "list": {
       "error": {
