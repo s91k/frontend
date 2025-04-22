@@ -24,12 +24,10 @@ export function ContentCard({ item, basePath }: ContentCardProps) {
   const { currentLanguage } = useLanguage();
 
   const link = item.link || `/${currentLanguage}/${basePath}/${item.id}`;
+  const isExternalLink = !!item.link;
 
-  return (
-    <Link
-      to={link}
-      className="group bg-black-2 rounded-level-2 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(153,207,255,0.15)] hover:bg-[#1a1a1a]"
-    >
+  const cardContent = (
+    <>
       <div className="relative h-36 overflow-hidden">
         <img
           src={item.image}
@@ -78,6 +76,28 @@ export function ContentCard({ item, basePath }: ContentCardProps) {
           <ArrowUpRight className="w-4 h-4" />
         </div>
       </div>
+    </>
+  );
+
+  if (isExternalLink) {
+    return (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group bg-black-2 rounded-level-2 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(153,207,255,0.15)] hover:bg-[#1a1a1a]"
+      >
+        {cardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      to={link}
+      className="group bg-black-2 rounded-level-2 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(153,207,255,0.15)] hover:bg-[#1a1a1a]"
+    >
+      {cardContent}
     </Link>
   );
 }
