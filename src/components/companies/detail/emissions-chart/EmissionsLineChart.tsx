@@ -71,6 +71,7 @@ const generateTrendData = (
 
   const trendStartYear = data[0].year;
   const endYear = 2030;
+  const currentYear = new Date().getFullYear();
 
   const allYears = Array.from(
     { length: endYear - trendStartYear + 1 },
@@ -79,11 +80,14 @@ const generateTrendData = (
 
   return allYears.map((year) => {
     const shouldShowTrend = year >= lastReportedYear;
+    const trendValue = shouldShowTrend
+      ? regression.slope * year + regression.intercept
+      : null;
+
     return {
       year,
-      trend: shouldShowTrend
-        ? regression.slope * year + regression.intercept
-        : null,
+      trendPast: year <= currentYear ? trendValue : null,
+      trendFuture: year >= currentYear ? trendValue : null,
       total: data.find((d) => d.year === year)?.total,
     };
   });
@@ -157,6 +161,8 @@ export default function EmissionsLineChart({
     />
   );
 
+  const currentYear = new Date().getFullYear();
+
   const yAxis = (
     <YAxis
       stroke="var(--grey)"
@@ -220,17 +226,42 @@ export default function EmissionsLineChart({
               name={t("companies.emissionsHistory.title")}
             />
             {trendData && (
-              <Line
-                type="linear"
-                dataKey="trend"
-                data={trendData}
-                stroke="var(--pink-3)"
-                strokeWidth={1}
-                strokeDasharray="4 4"
-                dot={false}
-                activeDot={false}
-                name={t("companies.emissionsHistory.trend")}
-              />
+              <>
+                <ReferenceLine
+                  x={currentYear}
+                  stroke="#FDB768"
+                  strokeWidth={1}
+                  label={{
+                    value: currentYear,
+                    position: "top",
+                    fill: "#FDB768",
+                    fontSize: 12,
+                    fontWeight: "normal",
+                  }}
+                />
+                <Line
+                  type="linear"
+                  dataKey="trendPast"
+                  data={trendData}
+                  stroke="var(--grey)"
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={false}
+                  activeDot={false}
+                  name={t("companies.emissionsHistory.approximated")}
+                />
+                <Line
+                  type="linear"
+                  dataKey="trendFuture"
+                  data={trendData}
+                  stroke="var(--pink-3)"
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={false}
+                  activeDot={false}
+                  name={t("companies.emissionsHistory.trend")}
+                />
+              </>
             )}
           </>
         )}
