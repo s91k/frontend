@@ -305,7 +305,16 @@ export function EmissionsHistory({
                       dot={(props) => {
                         const { cx, cy, payload } = props;
 
-                        if (!payload) return undefined;
+                        if (!payload) {
+                          return (
+                            <circle
+                              cx={cx}
+                              cy={cy}
+                              r={0}
+                              className="stroke-2 cursor-pointer"
+                            />
+                          );
+                        }
 
                         const value = payload.originalValues?.[categoryKey];
 
@@ -314,7 +323,14 @@ export function EmissionsHistory({
                           value === undefined ||
                           isNaN(value)
                         ) {
-                          return undefined;
+                          return (
+                            <circle
+                              cx={cx}
+                              cy={cy}
+                              r={0}
+                              className="stroke-2 cursor-pointer"
+                            />
+                          );
                         }
 
                         return (
@@ -322,9 +338,11 @@ export function EmissionsHistory({
                             cx={cx}
                             cy={cy}
                             r={4}
-                            fill={getCategoryColor(categoryId)}
-                            stroke={getCategoryColor(categoryId)}
-                            strokeWidth={2}
+                            className="stroke-2 cursor-pointer"
+                            style={{
+                              fill: getCategoryColor(categoryId),
+                              stroke: getCategoryColor(categoryId),
+                            }}
                             cursor="pointer"
                             onClick={() => handleCategoryToggle(categoryId)}
                           />
@@ -334,7 +352,14 @@ export function EmissionsHistory({
                         const { cx, cy, payload } = props;
 
                         if (!payload) {
-                          return undefined;
+                          return (
+                            <circle
+                              cx={cx}
+                              cy={cy}
+                              r={0}
+                              className="stroke-2 cursor-pointer"
+                            />
+                          );
                         }
 
                         const value = payload.originalValues?.[categoryKey];
@@ -344,7 +369,14 @@ export function EmissionsHistory({
                           value === undefined ||
                           isNaN(value)
                         ) {
-                          return undefined;
+                          return (
+                            <circle
+                              cx={cx}
+                              cy={cy}
+                              r={0}
+                              className="stroke-2 cursor-pointer"
+                            />
+                          );
                         }
 
                         return (
@@ -352,9 +384,11 @@ export function EmissionsHistory({
                             cx={cx}
                             cy={cy}
                             r={6}
-                            fill={getCategoryColor(categoryId)}
-                            stroke={getCategoryColor(categoryId)}
-                            strokeWidth={2}
+                            className="stroke-2 cursor-pointer"
+                            style={{
+                              fill: getCategoryColor(categoryId),
+                              stroke: getCategoryColor(categoryId),
+                            }}
                             cursor="pointer"
                             onClick={() => handleCategoryToggle(categoryId)}
                           />
