@@ -8,7 +8,7 @@ import {
   Tooltip,
   ReferenceLine,
 } from "recharts";
-import { Info, X } from "lucide-react";
+import { Info } from "lucide-react";
 import {
   Tooltip as UITooltip,
   TooltipContent,
@@ -19,13 +19,14 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { interpolateScope3Categories } from "@/lib/calculations/emissions";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
-import { getChartData } from "../../../utils/getChartData";
-import { CustomTooltip } from "./CustomTooltip";
+import { getChartData } from "../../../../utils/getChartData";
+import { CustomTooltip } from "../CustomTooltip";
 import { DataViewSelector } from "./DataViewSelector";
 import { useTranslation } from "react-i18next";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
 import { formatEmissionsAbsolute } from "@/utils/localizeUnit";
+import { HiddenItemsBadges } from "../HiddenItemsBadges";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -401,44 +402,14 @@ export function EmissionsHistory({
           </LineChart>
         </ResponsiveContainer>
       </div>
-      {/* Moved badges below graph */}
-      {(hiddenScopes.length > 0 || hiddenCategories.length > 0) && (
-        <div className="flex gap-2 mt-4">
-          {hiddenScopes.map((scope) => (
-            <button
-              key={scope}
-              onClick={() => handleScopeToggle(scope)}
-              className="px-2 py-1 text-sm bg-black-1 rounded-md flex items-center gap-1 hover:bg-black-3 transition-colors"
-              style={{
-                color:
-                  scope === "scope1"
-                    ? "#F0759A"
-                    : scope === "scope2"
-                      ? "#E2FF8D"
-                      : "#99CFFF",
-              }}
-            >
-              {scope === "scope1"
-                ? "Scope 1"
-                : scope === "scope2"
-                  ? "Scope 2"
-                  : "Scope 3"}
-              <X className="w-3 h-3" />
-            </button>
-          ))}
-          {hiddenCategories.map((categoryId) => (
-            <button
-              key={categoryId}
-              onClick={() => handleCategoryToggle(categoryId)}
-              className="px-2 py-1 text-sm bg-black-1 rounded-md flex items-center gap-1 hover:bg-black-3 transition-colors"
-              style={{ color: getCategoryColor(categoryId) }}
-            >
-              {getCategoryName(categoryId)}
-              <X className="w-3 h-3" />
-            </button>
-          ))}
-        </div>
-      )}
+      <HiddenItemsBadges
+        hiddenScopes={hiddenScopes}
+        hiddenCategories={hiddenCategories}
+        onScopeToggle={handleScopeToggle}
+        onCategoryToggle={handleCategoryToggle}
+        getCategoryName={getCategoryName}
+        getCategoryColor={getCategoryColor}
+      />
     </div>
   );
 }
