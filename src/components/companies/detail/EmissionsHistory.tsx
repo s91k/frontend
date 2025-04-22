@@ -6,7 +6,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ReferenceLine
+  ReferenceLine,
 } from "recharts";
 import { Info, X } from "lucide-react";
 import {
@@ -119,7 +119,6 @@ export function EmissionsHistory({
     });
   };
 
-
   return (
     <div
       className={cn("bg-black-2 rounded-level-1 px-4 md:px-16 py-8", className)}
@@ -143,7 +142,6 @@ export function EmissionsHistory({
         </div>
         {/* Switch between Tabs and Dropdown based on screen size */}
         <DataViewSelector
-          isMobile={isMobile}
           dataView={dataView}
           setDataView={setDataView}
           hasScope3Categories={hasScope3Categories}
@@ -156,7 +154,7 @@ export function EmissionsHistory({
             margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
             onClick={handleClick}
           >
-            <ReferenceLine 
+            <ReferenceLine
               label={{
                 value: t("companies.emissionsHistory.baseYear"),
                 position: "top",
@@ -164,9 +162,9 @@ export function EmissionsHistory({
                 fontSize: 12,
                 fontWeight: "normal",
               }}
-              x={companyBaseYear} 
-              stroke="#878787" 
-              strokeDasharray="4 4" 
+              x={companyBaseYear}
+              stroke="#878787"
+              strokeDasharray="4 4"
             />
             <XAxis
               dataKey="year"
@@ -180,13 +178,12 @@ export function EmissionsHistory({
                     x={x - 15}
                     y={y + 10}
                     fontSize={12}
-                    fill={`${isBaseYear ? 'white' : '#878787' }`}
-                    fontWeight={`${isBaseYear ? 'bold' : 'normal' }`}
+                    fill={`${isBaseYear ? "white" : "#878787"}`}
+                    fontWeight={`${isBaseYear ? "bold" : "normal"}`}
                   >
                     {payload.value}
                   </text>
-                  
-                )
+                );
               }}
               padding={{ left: 0, right: 0 }}
             />
@@ -202,7 +199,9 @@ export function EmissionsHistory({
                 formatEmissionsAbsolute(value, currentLanguage)
               }
             />
-            <Tooltip content={<CustomTooltip companyBaseYear={companyBaseYear} />} />
+            <Tooltip
+              content={<CustomTooltip companyBaseYear={companyBaseYear} />}
+            />
 
             {dataView === "overview" && (
               <>
