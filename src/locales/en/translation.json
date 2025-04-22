@@ -568,7 +568,10 @@
       "totalEmissions": "Total Emissions",
       "baseYear": "Base year",
       "baseYearInfo": "The base year refers to a specific year chosen as a reference point against which future emissions are compared.",
-      "total": "Total"
+      "total": "Total",
+      "declineLine13Label": "13.85% reduction rate",
+      "declineLine17Label": "17.56% reduction rate",
+      "trendLineLabelPost2025": "Trend"
     },
     "list": {
       "error": {

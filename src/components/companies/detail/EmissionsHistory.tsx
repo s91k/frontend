@@ -7,6 +7,7 @@ import {
   YAxis,
   Tooltip,
   ReferenceLine,
+  Legend,
 } from "recharts";
 import { Info, X } from "lucide-react";
 import {
@@ -105,7 +106,7 @@ export function EmissionsHistory({
     const intercept = (sumY - slope * sumX) / n;
 
     const startYear = Math.max(...points.map((p) => p.year));
-    const endYear = 2030;
+    const endYear = 2050;
 
     const pre2025Data = [];
     const post2025Data = [];
@@ -146,23 +147,29 @@ export function EmissionsHistory({
 
   const declineLineData = useMemo(() => {
     const startYear = 2025;
-    const endYear = 2030;
-    const reductionRate = 0.139;
+    const endYear = 2050;
+    const reductionRate13 = 0.1385;
+    const reductionRate17 = 0.1756;
 
     const baseValue = trend2025;
-    if (!baseValue || chartData.length === 0) return [];
+    if (!baseValue || chartData.length === 0)
+      return { decline13: [], decline17: [] };
 
-    const data: Array<{ year: number; decline: number }> = [];
-    let currentValue = baseValue;
+    const data13: Array<{ year: number; decline13: number }> = [];
+    const data17: Array<{ year: number; decline17: number }> = [];
+    let currentValue13 = baseValue;
+    let currentValue17 = baseValue;
 
     for (let year = startYear; year <= endYear; year++) {
       if (year > startYear) {
-        currentValue *= 1 - reductionRate;
+        currentValue13 *= 1 - reductionRate13;
+        currentValue17 *= 1 - reductionRate17;
       }
-      data.push({ year, decline: currentValue });
+      data13.push({ year, decline13: currentValue13 });
+      data17.push({ year, decline17: currentValue17 });
     }
 
-    return data;
+    return { decline13: data13, decline17: data17 };
   }, [chartData, trend2025]);
 
   const handleClick = (data: any) => {
@@ -250,7 +257,7 @@ export function EmissionsHistory({
               tickLine={false}
               axisLine={true}
               type="number"
-              domain={[chartData[0]?.year || 2000, 2030]}
+              domain={[chartData[0]?.year || 2000, 2050]}
               tick={({ x, y, payload }) => {
                 const isBaseYear = payload.value === companyBaseYear;
                 return (
@@ -286,33 +293,46 @@ export function EmissionsHistory({
 
             {dataView === "overview" && (
               <>
+                <Legend
+                  verticalAlign="top"
+                  align="right"
+                  height={36}
+                  iconType="line"
+                  wrapperStyle={{ fontSize: "12px", color: "#878787" }}
+                />
                 <Line
                   type="monotone"
-                  data={declineLineData}
-                  dataKey="decline"
-                  stroke="#ff4d4d"
+                  data={declineLineData.decline13}
+                  dataKey="decline13"
+                  stroke="#6c9105"
                   strokeWidth={2}
                   strokeDasharray="6 3"
                   dot={false}
                   isAnimationActive={false}
-                  name={t("companies.emissionsHistory.declineLineLabel")}
+                  name={
+                    t("companies.emissionsHistory.declineLine13Label") ||
+                    "13% annual reduction"
+                  }
                 />
                 <Line
                   type="monotone"
-                  data={trendLineData.pre2025}
-                  dataKey="trend"
-                  stroke="#fff"
+                  data={declineLineData.decline17}
+                  dataKey="decline17"
+                  stroke="#354702"
                   strokeWidth={2}
-                  strokeDasharray="5 5"
+                  strokeDasharray="6 3"
                   dot={false}
                   isAnimationActive={false}
-                  name={t("companies.emissionsHistory.trendLineLabelPre2025")}
+                  name={
+                    t("companies.emissionsHistory.declineLine17Label") ||
+                    "17% annual reduction"
+                  }
                 />
                 <Line
                   type="monotone"
                   data={trendLineData.post2025}
                   dataKey="trend"
-                  stroke="#66FFB2"
+                  stroke="red"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   dot={false}
@@ -320,6 +340,17 @@ export function EmissionsHistory({
                   name={t("companies.emissionsHistory.trendLineLabelPost2025")}
                 />
 
+                <Line
+                  type="monotone"
+                  data={trendLineData.pre2025}
+                  dataKey="trend"
+                  stroke="#808080"
+                  strokeWidth={2}
+                  strokeDasharray="2 2"
+                  dot={false}
+                  isAnimationActive={false}
+                  name={"Estimated emissions"}
+                />
                 <Line
                   type="monotone"
                   dataKey="total"
