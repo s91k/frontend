@@ -46,6 +46,43 @@ export default function EmissionsLineChart({
   getCategoryColor,
   currentLanguage,
 }: EmissionsLineChartProps) {
+  const xAxis = (
+    <XAxis
+      dataKey="year"
+      stroke="var(--grey)"
+      tickLine={false}
+      axisLine={true}
+      tick={({ x, y, payload }) => {
+        const isBaseYear = payload.value === companyBaseYear;
+        return (
+          <text
+            x={x - 15}
+            y={y + 10}
+            fontSize={12}
+            fill={`${isBaseYear ? "white" : "var(--grey)"}`}
+            fontWeight={`${isBaseYear ? "bold" : "normal"}`}
+          >
+            {payload.value}
+          </text>
+        );
+      }}
+      padding={{ left: 0, right: 0 }}
+    />
+  );
+
+  const yAxis = (
+    <YAxis
+      stroke="var(--grey)"
+      tickLine={false}
+      axisLine={true}
+      tick={{ fontSize: 12 }}
+      width={80}
+      domain={[0, "auto"]}
+      padding={{ top: 0, bottom: 0 }}
+      tickFormatter={(value) => formatEmissionsAbsolute(value, currentLanguage)}
+    />
+  );
+
   return (
     <ResponsiveContainer width="100%" height="100%" className="w-full">
       <LineChart
@@ -65,56 +102,25 @@ export default function EmissionsLineChart({
           stroke="var(--grey)"
           strokeDasharray="4 4"
         />
-        <XAxis
-          dataKey="year"
-          stroke="var(--grey)"
-          tickLine={false}
-          axisLine={true}
-          tick={({ x, y, payload }) => {
-            const isBaseYear = payload.value === companyBaseYear;
-            return (
-              <text
-                x={x - 15}
-                y={y + 10}
-                fontSize={12}
-                fill={`${isBaseYear ? "white" : "var(--grey)"}`}
-                fontWeight={`${isBaseYear ? "bold" : "normal"}`}
-              >
-                {payload.value}
-              </text>
-            );
-          }}
-          padding={{ left: 0, right: 0 }}
-        />
-        <YAxis
-          stroke="#878787"
-          tickLine={false}
-          axisLine={true}
-          tick={{ fontSize: 12 }}
-          width={80}
-          domain={[0, "auto"]}
-          padding={{ top: 0, bottom: 0 }}
-          tickFormatter={(value) =>
-            formatEmissionsAbsolute(value, currentLanguage)
-          }
-        />
+
+        {xAxis}
+        {yAxis}
+
         <Tooltip
           content={<CustomTooltip companyBaseYear={companyBaseYear} />}
         />
 
         {dataView === "overview" && (
-          <>
-            <Line
-              type="monotone"
-              dataKey="total"
-              stroke="white"
-              strokeWidth={2}
-              dot={{ r: 4, fill: "white", cursor: "pointer" }}
-              activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
-              connectNulls
-              name={t("companies.emissionsHistory.Emissions")}
-            />
-          </>
+          <Line
+            type="monotone"
+            dataKey="total"
+            stroke="white"
+            strokeWidth={2}
+            dot={{ r: 4, fill: "white", cursor: "pointer" }}
+            activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
+            connectNulls
+            name={t("companies.emissionsHistory.Emissions")}
+          />
         )}
         {dataView === "scopes" && (
           <>
