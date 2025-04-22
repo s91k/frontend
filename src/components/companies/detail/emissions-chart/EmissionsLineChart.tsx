@@ -60,26 +60,32 @@ const calculateLinearRegression = (data: { x: number; y: number }[]) => {
   return { slope, intercept };
 };
 
-const generateTrendLineData = (
+const generateTrendData = (
   data: ChartData[],
   regression: { slope: number; intercept: number },
 ) => {
-  // Find the last year with reported total emissions
   const lastReportedYear = data
     .filter((d) => d.total !== undefined && d.total !== null)
     .reduce((lastYear, d) => Math.max(lastYear, d.year), 0);
-  const minYear = lastReportedYear;
+
+  const trendStartYear = data[0].year;
   const endYear = 2030;
 
   const allYears = Array.from(
-    { length: endYear - minYear + 1 },
-    (_, i) => minYear + i,
+    { length: endYear - trendStartYear + 1 },
+    (_, i) => trendStartYear + i,
   );
 
-  return allYears.map((year) => ({
-    year,
-    trendLine: regression.slope * year + regression.intercept,
-  }));
+  return allYears.map((year) => {
+    const shouldShowTrend = year >= lastReportedYear;
+    return {
+      year,
+      trend: shouldShowTrend
+        ? regression.slope * year + regression.intercept
+        : null,
+      total: data.find((d) => d.year === year)?.total,
+    };
+  });
 };
 
 export default function EmissionsLineChart({
@@ -95,12 +101,13 @@ export default function EmissionsLineChart({
   getCategoryColor,
   currentLanguage,
 }: EmissionsLineChartProps) {
-  const trendLineData = useMemo(() => {
+  const endYear = 2030;
+
+  const trendData = useMemo(() => {
     if (dataView !== "overview") {
       return null;
     }
 
-    // Filter out points with no total emissions
     const validPoints = data
       .filter(
         (d): d is ChartData & { total: number } =>
@@ -120,7 +127,7 @@ export default function EmissionsLineChart({
       return null;
     }
 
-    return generateTrendLineData(data, regression);
+    return generateTrendData(data, regression);
   }, [data, dataView]);
 
   const xAxis = (
@@ -129,6 +136,8 @@ export default function EmissionsLineChart({
       stroke="var(--grey)"
       tickLine={false}
       axisLine={true}
+      type="number"
+      domain={[data[0]?.year || 2000, endYear]}
       tick={({ x, y, payload }) => {
         const isBaseYear = payload.value === companyBaseYear;
         return (
@@ -178,6 +187,8 @@ export default function EmissionsLineChart({
           x={companyBaseYear}
           stroke="var(--grey)"
           strokeDasharray="4 4"
+          isFront={false}
+          ifOverflow="extendDomain"
         />
 
         {xAxis}
@@ -197,19 +208,19 @@ export default function EmissionsLineChart({
               dot={{ r: 4, fill: "white", cursor: "pointer" }}
               activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
               connectNulls
-              name={t("companies.emissionsHistory.Emissions")}
+              name={t("companies.emissionsHistory.title")}
             />
-            {trendLineData && (
+            {trendData && (
               <Line
                 type="linear"
-                dataKey="trendLine"
-                data={trendLineData}
+                dataKey="trend"
+                data={trendData}
                 stroke="var(--pink-3)"
                 strokeWidth={1}
                 strokeDasharray="4 4"
                 dot={false}
                 activeDot={false}
-                name={t("companies.emissionsHistory.trendLine")}
+                name={t("companies.emissionsHistory.trend")}
               />
             )}
           </>
