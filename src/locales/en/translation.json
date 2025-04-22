@@ -16,7 +16,8 @@
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
     "articles": "Articles",
-    "reports": "Reports"
+    "reports": "Reports",
+    "learnMore": "Learn More"
   },
   "footer": {
     "login": "Login",
@@ -210,7 +211,11 @@
   },
   "learnMoreOverview": {
     "title": "Learn More",
-    "description": "Find short info articles to help you understand more about climate actions and climate data."
+    "description": "Find pages below to help you learn more about climate actions and climate data.",
+    "reporting": {
+      "title": "Understanding Climate Reporting",
+      "excerpt": "Learn about the importance of climate reporting, its impact on businesses and communities, and how it drives climate action."
+    }
   },
   "reportsPage": {
     "title": "Reports",

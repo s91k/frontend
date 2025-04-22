@@ -16,7 +16,8 @@
     "openMenu": "Öppna meny",
     "closeMenu": "Stäng meny",
     "articles": "Artiklar",
-    "reports": "Rapporter"
+    "reports": "Rapporter",
+    "learnMore": "Läs mer"
   },
   "footer": {
     "login": "Logga in",
@@ -207,6 +208,14 @@
     "title": "Artiklar",
     "description": "Artiklar och uppdateringar om Klimatkollen och klimatomställningen.",
     "readMore": "Läs mer"
+  },
+  "learnMoreOverview": {
+    "title": "Lär dig mer",
+    "description": "Hitta sidor nedan för att lära dig mer om klimatåtgärder och klimatdata.",
+    "reporting": {
+      "title": "Förstå klimatrapportering",
+      "excerpt": "Lär dig om betydelsen av klimatrapportering, dess påverkan på företag och samhällen, och hur det driver klimatåtgärder."
+    }
   },
   "reportsPage": {
     "title": "Rapporter",
