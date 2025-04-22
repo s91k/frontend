@@ -1,32 +1,15 @@
 import { useState, useMemo } from "react";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ReferenceLine,
-} from "recharts";
-import { Info } from "lucide-react";
-import {
-  Tooltip as UITooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { interpolateScope3Categories } from "@/lib/calculations/emissions";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
 import { getChartData } from "../../../../utils/getChartData";
-import { CustomTooltip } from "../CustomTooltip";
-import { DataViewSelector } from "./DataViewSelector";
 import { useTranslation } from "react-i18next";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
-import { formatEmissionsAbsolute } from "@/utils/localizeUnit";
 import { HiddenItemsBadges } from "../HiddenItemsBadges";
+import ChartHeader from "./ChartHeader";
+import EmissionsLineChart from "./EmissionsLineChart";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -124,291 +107,28 @@ export function EmissionsHistory({
     <div
       className={cn("bg-black-2 rounded-level-1 px-4 md:px-16 py-8", className)}
     >
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-12 gap-4 md:gap-0">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Text variant="h3">{t("companies.emissionsHistory.title")}</Text>
-            <TooltipProvider>
-              <UITooltip>
-                <TooltipTrigger>
-                  <Info className="w-4 h-4 text-grey" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t("companies.emissionsHistory.tooltip")}</p>
-                </TooltipContent>
-              </UITooltip>
-            </TooltipProvider>
-          </div>
-          <Text variant="body">{t("companies.emissionsHistory.unit")}</Text>
-        </div>
-        {/* Switch between Tabs and Dropdown based on screen size */}
-        <DataViewSelector
-          dataView={dataView}
-          setDataView={setDataView}
-          hasScope3Categories={hasScope3Categories}
-        />
-      </div>
+      <ChartHeader
+        title={t("companies.emissionsHistory.title")}
+        tooltipContent={t("companies.emissionsHistory.tooltip")}
+        unit={t("companies.emissionsHistory.unit")}
+        dataView={dataView}
+        setDataView={setDataView}
+        hasScope3Categories={hasScope3Categories}
+      />
       <div className="h-[300px] md:h-[400px]">
-        <ResponsiveContainer width="100%" height="100%" className="w-full">
-          <LineChart
-            data={chartData}
-            margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
-            onClick={handleClick}
-          >
-            <ReferenceLine
-              label={{
-                value: t("companies.emissionsHistory.baseYear"),
-                position: "top",
-                fill: "white",
-                fontSize: 12,
-                fontWeight: "normal",
-              }}
-              x={companyBaseYear}
-              stroke="#878787"
-              strokeDasharray="4 4"
-            />
-            <XAxis
-              dataKey="year"
-              stroke="#878787"
-              tickLine={false}
-              axisLine={true}
-              tick={({ x, y, payload }) => {
-                const isBaseYear = payload.value === companyBaseYear;
-                return (
-                  <text
-                    x={x - 15}
-                    y={y + 10}
-                    fontSize={12}
-                    fill={`${isBaseYear ? "white" : "#878787"}`}
-                    fontWeight={`${isBaseYear ? "bold" : "normal"}`}
-                  >
-                    {payload.value}
-                  </text>
-                );
-              }}
-              padding={{ left: 0, right: 0 }}
-            />
-            <YAxis
-              stroke="#878787"
-              tickLine={false}
-              axisLine={true}
-              tick={{ fontSize: 12 }}
-              width={80}
-              domain={[0, "auto"]}
-              padding={{ top: 0, bottom: 0 }}
-              tickFormatter={(value) =>
-                formatEmissionsAbsolute(value, currentLanguage)
-              }
-            />
-            <Tooltip
-              content={<CustomTooltip companyBaseYear={companyBaseYear} />}
-            />
-
-            {dataView === "overview" && (
-              <>
-                <Line
-                  type="monotone"
-                  dataKey="total"
-                  stroke="white"
-                  strokeWidth={2}
-                  dot={{ r: 4, fill: "white", cursor: "pointer" }}
-                  activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
-                  connectNulls
-                  name={t("companies.emissionsHistory.totalEmissions")}
-                />
-              </>
-            )}
-            {dataView === "scopes" && (
-              <>
-                {!hiddenScopes.includes("scope1") && (
-                  <Line
-                    type="monotone"
-                    dataKey="scope1"
-                    stroke="var(--blue-5)"
-                    strokeWidth={2}
-                    dot={{
-                      r: 4,
-                      fill: "var(--blue-5)",
-                      cursor: "pointer",
-                      onClick: () => handleScopeToggle("scope1"),
-                    }}
-                    activeDot={{
-                      r: 6,
-                      fill: "var(--blue-5)",
-                      cursor: "pointer",
-                    }}
-                    name="Scope 1"
-                  />
-                )}
-                {!hiddenScopes.includes("scope2") && (
-                  <Line
-                    type="monotone"
-                    dataKey="scope2"
-                    stroke="var(--blue-3)"
-                    strokeWidth={2}
-                    dot={{
-                      r: 4,
-                      fill: "var(--blue-3)",
-                      cursor: "pointer",
-                      onClick: () => handleScopeToggle("scope2"),
-                    }}
-                    activeDot={{
-                      r: 6,
-                      fill: "var(--blue-3)",
-                      cursor: "pointer",
-                    }}
-                    name="Scope 2"
-                  />
-                )}
-                {!hiddenScopes.includes("scope3") && (
-                  <Line
-                    type="monotone"
-                    dataKey="scope3"
-                    stroke="var(--blue-1)"
-                    strokeWidth={2}
-                    dot={{
-                      r: 4,
-                      fill: "var(--blue-1)",
-                      cursor: "pointer",
-                      onClick: () => handleScopeToggle("scope3"),
-                    }}
-                    activeDot={{
-                      r: 6,
-                      fill: "var(--blue-1)",
-                      cursor: "pointer",
-                      onClick: () => handleScopeToggle("scope3"),
-                    }}
-                    name="Scope 3"
-                  />
-                )}
-              </>
-            )}
-
-            {dataView === "categories" &&
-              Object.keys(chartData[0])
-                .filter(
-                  (key) =>
-                    key.startsWith("cat") && !key.includes("Interpolated"),
-                )
-                .map((categoryKey) => {
-                  const categoryId = parseInt(categoryKey.replace("cat", ""));
-                  const isInterpolatedKey = `${categoryKey}Interpolated`;
-
-                  // Check if the category is hidden
-                  if (hiddenCategories.includes(categoryId)) {
-                    return null;
-                  }
-                  // Calculate strokeDasharray based on the first data point
-                  const strokeDasharray = chartData[0][isInterpolatedKey]
-                    ? "4 4"
-                    : "0";
-
-                  return (
-                    <Line
-                      key={categoryKey}
-                      type="monotone"
-                      dataKey={categoryKey}
-                      stroke={getCategoryColor(categoryId)}
-                      strokeWidth={2}
-                      strokeDasharray={strokeDasharray}
-                      dot={(props) => {
-                        const { cx, cy, payload } = props;
-
-                        if (!payload) {
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={0}
-                              className="stroke-2 cursor-pointer"
-                            />
-                          );
-                        }
-
-                        const value = payload.originalValues?.[categoryKey];
-
-                        if (
-                          value === null ||
-                          value === undefined ||
-                          isNaN(value)
-                        ) {
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={0}
-                              className="stroke-2 cursor-pointer"
-                            />
-                          );
-                        }
-
-                        return (
-                          <circle
-                            cx={cx}
-                            cy={cy}
-                            r={4}
-                            className="stroke-2 cursor-pointer"
-                            style={{
-                              fill: getCategoryColor(categoryId),
-                              stroke: getCategoryColor(categoryId),
-                            }}
-                            cursor="pointer"
-                            onClick={() => handleCategoryToggle(categoryId)}
-                          />
-                        );
-                      }}
-                      activeDot={(props) => {
-                        const { cx, cy, payload } = props;
-
-                        if (!payload) {
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={0}
-                              className="stroke-2 cursor-pointer"
-                            />
-                          );
-                        }
-
-                        const value = payload.originalValues?.[categoryKey];
-
-                        if (
-                          value === null ||
-                          value === undefined ||
-                          isNaN(value)
-                        ) {
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={0}
-                              className="stroke-2 cursor-pointer"
-                            />
-                          );
-                        }
-
-                        return (
-                          <circle
-                            cx={cx}
-                            cy={cy}
-                            r={6}
-                            className="stroke-2 cursor-pointer"
-                            style={{
-                              fill: getCategoryColor(categoryId),
-                              stroke: getCategoryColor(categoryId),
-                            }}
-                            cursor="pointer"
-                            onClick={() => handleCategoryToggle(categoryId)}
-                          />
-                        );
-                      }}
-                      name={getCategoryName(categoryId)}
-                    />
-                  );
-                })}
-          </LineChart>
-        </ResponsiveContainer>
+        <EmissionsLineChart
+          data={chartData}
+          companyBaseYear={companyBaseYear}
+          dataView={dataView}
+          hiddenScopes={hiddenScopes}
+          hiddenCategories={hiddenCategories}
+          handleClick={handleClick}
+          handleScopeToggle={handleScopeToggle}
+          handleCategoryToggle={handleCategoryToggle}
+          getCategoryName={getCategoryName}
+          getCategoryColor={getCategoryColor}
+          currentLanguage={currentLanguage}
+        />
       </div>
       <HiddenItemsBadges
         hiddenScopes={hiddenScopes}
