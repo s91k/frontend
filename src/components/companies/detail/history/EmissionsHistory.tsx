@@ -224,15 +224,19 @@ export function EmissionsHistory({
                   <Line
                     type="monotone"
                     dataKey="scope1"
-                    stroke="#F0759A"
+                    stroke="var(--blue-5)"
                     strokeWidth={2}
                     dot={{
                       r: 4,
-                      fill: "#F0759A",
+                      fill: "var(--blue-5)",
                       cursor: "pointer",
                       onClick: () => handleScopeToggle("scope1"),
                     }}
-                    activeDot={{ r: 6, fill: "#F0759A", cursor: "pointer" }}
+                    activeDot={{
+                      r: 6,
+                      fill: "var(--blue-5)",
+                      cursor: "pointer",
+                    }}
                     name="Scope 1"
                   />
                 )}
@@ -240,15 +244,19 @@ export function EmissionsHistory({
                   <Line
                     type="monotone"
                     dataKey="scope2"
-                    stroke="#E2FF8D"
+                    stroke="var(--blue-3)"
                     strokeWidth={2}
                     dot={{
                       r: 4,
-                      fill: "#E2FF8D",
+                      fill: "var(--blue-3)",
                       cursor: "pointer",
                       onClick: () => handleScopeToggle("scope2"),
                     }}
-                    activeDot={{ r: 6, fill: "#E2FF8D", cursor: "pointer" }}
+                    activeDot={{
+                      r: 6,
+                      fill: "var(--blue-3)",
+                      cursor: "pointer",
+                    }}
                     name="Scope 2"
                   />
                 )}
@@ -256,17 +264,17 @@ export function EmissionsHistory({
                   <Line
                     type="monotone"
                     dataKey="scope3"
-                    stroke="#99CFFF"
+                    stroke="var(--blue-1)"
                     strokeWidth={2}
                     dot={{
                       r: 4,
-                      fill: "#99CFFF",
+                      fill: "var(--blue-1)",
                       cursor: "pointer",
                       onClick: () => handleScopeToggle("scope3"),
                     }}
                     activeDot={{
                       r: 6,
-                      fill: "#99CFFF",
+                      fill: "var(--blue-1)",
                       cursor: "pointer",
                       onClick: () => handleScopeToggle("scope3"),
                     }}
