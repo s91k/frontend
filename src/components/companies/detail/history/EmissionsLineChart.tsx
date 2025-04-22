@@ -122,17 +122,17 @@ export default function EmissionsLineChart({
               <Line
                 type="monotone"
                 dataKey="scope1"
-                stroke="var(--blue-5)"
+                stroke="var(--pink-3)"
                 strokeWidth={2}
                 dot={{
                   r: 4,
-                  fill: "var(--blue-5)",
+                  fill: "var(--pink-3)",
                   cursor: "pointer",
                   onClick: () => handleScopeToggle("scope1"),
                 }}
                 activeDot={{
                   r: 6,
-                  fill: "var(--blue-5)",
+                  fill: "var(--pink-3)",
                   cursor: "pointer",
                 }}
                 name="Scope 1"
@@ -142,17 +142,17 @@ export default function EmissionsLineChart({
               <Line
                 type="monotone"
                 dataKey="scope2"
-                stroke="var(--blue-3)"
+                stroke="var(--green-2)"
                 strokeWidth={2}
                 dot={{
                   r: 4,
-                  fill: "var(--blue-3)",
+                  fill: "var(--green-2)",
                   cursor: "pointer",
                   onClick: () => handleScopeToggle("scope2"),
                 }}
                 activeDot={{
                   r: 6,
-                  fill: "var(--blue-3)",
+                  fill: "var(--green-2)",
                   cursor: "pointer",
                 }}
                 name="Scope 2"
@@ -162,17 +162,17 @@ export default function EmissionsLineChart({
               <Line
                 type="monotone"
                 dataKey="scope3"
-                stroke="var(--blue-1)"
+                stroke="var(--blue-2)"
                 strokeWidth={2}
                 dot={{
                   r: 4,
-                  fill: "var(--blue-1)",
+                  fill: "var(--blue-2)",
                   cursor: "pointer",
                   onClick: () => handleScopeToggle("scope3"),
                 }}
                 activeDot={{
                   r: 6,
-                  fill: "var(--blue-1)",
+                  fill: "var(--blue-2)",
                   cursor: "pointer",
                   onClick: () => handleScopeToggle("scope3"),
                 }}
