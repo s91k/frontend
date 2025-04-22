@@ -208,6 +208,10 @@
     "description": "Articles and updates about Klimatkollen and the climate transition.",
     "readMore": "Read more"
   },
+  "learnMoreOverview": {
+    "title": "Learn More",
+    "description": "Find short info articles to help you understand more about climate actions and climate data."
+  },
   "reportsPage": {
     "title": "Reports",
     "description": "In-depth analyses and reports on Sweden's climate transition.",

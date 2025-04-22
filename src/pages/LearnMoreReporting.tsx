@@ -18,7 +18,7 @@ import { SectionCard } from "@/components/learnMore/SectionCard";
 import { FeatureCard } from "@/components/learnMore/FeatureCard";
 import { SectionHeader } from "@/components/learnMore/SectionHeader";
 
-export function LearnMorePage() {
+export function LearnMoreReporting() {
   const { t } = useTranslation();
   const isMobile = useScreenSize();
 

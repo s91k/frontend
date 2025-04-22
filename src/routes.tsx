@@ -13,7 +13,8 @@ import DownloadsPage from "./pages/DownloadsPage";
 import { ErrorPage } from "./pages/ErrorPage";
 import { InsightsPage } from "./pages/InsightsPage";
 import { LandingPage } from "./pages/LandingPage";
-import { LearnMorePage } from "./pages/LearnMorePage";
+import { LearnMoreOverview } from "./pages/LearnMoreOverview";
+import { LearnMoreArticle } from "./pages/LearnMoreArticle";
 import { MethodsPage } from "./pages/MethodsPage";
 import { MunicipalitiesRankedPage } from "./pages/MunicipalitiesRankedPage";
 import { MunicipalitiesComparePage } from "./pages/MunicipalitiesComparePage";
@@ -85,7 +86,11 @@ export function AppRoutes() {
       <Route path={`${basePath}/articles`} element={<InsightsPage />} />
       <Route path={`${basePath}/reports`} element={<ReportsPage />} />
       <Route path={`${basePath}/insights/:id`} element={<BlogDetailPage />} />
-      <Route path={`${basePath}/learn-more`} element={<LearnMorePage />} />
+      <Route path={`${basePath}/learn-more`} element={<LearnMoreOverview />} />
+      <Route
+        path={`${basePath}/learn-more/:id`}
+        element={<LearnMoreArticle />}
+      />
       <Route path={`${basePath}/privacy`} element={<PrivacyPage />} />
       <Route path={`${basePath}/products`} element={<ProductsPage />} />
       <Route
