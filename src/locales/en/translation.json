@@ -159,14 +159,15 @@
       "title": "Request Access",
       "description": "Request access to the Klimatkollen API to get real-time access to our climate database through our documented REST API with comprehensive endpoints.",
       "emailLabel": "Email",
-      "reasonLabel": "Reason for access",
+      "reasonLabel": "Reason for data access",
       "submit": "Request Access",
       "cancel": "Cancel",
       "successMessage": "Access request sent successfully",
       "errorMessage": "Failed to send access request",
       "reasonWork": "Work",
       "reasonHobby": "Hobby",
-      "reasonCuriosity": "Curiosity"
+      "reasonCuriosity": "Curiosity",
+      "errorGeneric": "An error occurred. Please try again later."
     }
   },
   "downloadsPage": {
