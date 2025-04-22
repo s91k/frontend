@@ -161,8 +161,15 @@
       "title": "Begär åtkomst",
       "description": "Begär åtkomst till Klimatkollens API för att få realtidsåtkomst till vår klimatdatabas via vår dokumenterade REST API och endpoints.",
       "emailLabel": "E-post",
-      "formatLabel": "Anledning till åtkomst",
-      "submit": "Begär åtkomst"
+      "reasonLabel": "Anledning till datatillgång",
+      "submit": "Begär åtkomst",
+      "cancel": "Avbryt",
+      "successMessage": "Begäran skickades",
+      "errorMessage": "Kunde inte skicka begäran",
+      "reasonWork": "Arbete",
+      "reasonHobby": "Hobby",
+      "reasonCuriosity": "Nyfikenhet",
+      "errorGeneric": "Ett fel uppstod. Vänligen försök igen senare."
     }
   },
   "downloadsPage": {

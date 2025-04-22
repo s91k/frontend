@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { ProductCard } from "@/components/products/ProductCard";
 import { useState } from "react";
 import { RequestAccessModal } from "@/components/products/RequestAccessModal";
+import { PageSEO } from "@/components/SEO/PageSEO";
 
 interface DataCategoryProps {
   icon: React.ReactNode;
@@ -119,75 +120,99 @@ function ProductsPage() {
     </>
   );
 
+  // Prepare SEO data
+  const canonicalUrl = "https://klimatkollen.se/products";
+  const pageTitle = `${t("productsPage.title")} - Klimatkollen`;
+  const pageDescription = t("productsPage.description");
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: t("productsPage.title"),
+    description: pageDescription,
+    url: canonicalUrl,
+  };
+
   return (
-    <div className="max-w-[1200px] mx-auto space-y-20">
-      <PageHeader
-        title={t("productsPage.title")}
-        description={t("productsPage.description")}
+    <>
+      <PageSEO
+        title={pageTitle}
+        description={pageDescription}
+        canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
       />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-16">
-        <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
-          {/* Premium Version */}
-          <ProductCard
-            title={t("productsPage.apiAccess.title")}
-            description={t("productsPage.apiAccess.description")}
-            icon={<Server className="h-6 w-6 text-green-5" />}
-            features={apiFeatures}
-            actions={apiActions}
-            bgColor="bg-green-1"
-            borderColor="border-green-4"
-            hoverBorderColor="border-green-5"
-            textColor="text-green-5"
-            iconBgColor="bg-green-2"
-            iconColor="text-green-5"
-          />
+      <div className="max-w-[1200px] mx-auto space-y-20">
+        <PageHeader
+          title={t("productsPage.title")}
+          description={t("productsPage.description")}
+        />
 
-          {/* Free Version */}
-          <ProductCard
-            title={t("productsPage.freeAccess.title")}
-            description={t("productsPage.freeAccess.description")}
-            icon={<Database className="h-6 w-6 text-blue-5" />}
-            features={freeFeatures}
-            actions={freeActions}
-            bgColor="bg-blue-1"
-            borderColor="border-blue-4"
-            hoverBorderColor="border-blue-5"
-            textColor="text-blue-5"
-            iconBgColor="bg-blue-2"
-            iconColor="text-blue-5"
-          />
-        </div>
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-16">
+          <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
+            {/* Premium Version */}
+            <ProductCard
+              title={t("productsPage.apiAccess.title")}
+              description={t("productsPage.apiAccess.description")}
+              icon={<Server className="h-6 w-6 text-green-5" />}
+              features={apiFeatures}
+              actions={apiActions}
+              bgColor="bg-green-1"
+              borderColor="border-green-4"
+              hoverBorderColor="border-green-5"
+              textColor="text-green-5"
+              iconBgColor="bg-green-2"
+              iconColor="text-green-5"
+            />
 
-        {/* Data Overview Section */}
-        <div className="mx-auto max-w-7xl mt-16 mb-16">
-          <h2 className="text-2xl font-light text-white text-center mb-8">
-            {t("productsPage.dataOverview.title")}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-            <DataCategory
-              icon={<Building2 className="h-5 w-5 text-grey" />}
-              title={t("productsPage.dataOverview.corporate.title")}
-              description={t("productsPage.dataOverview.corporate.description")}
-              isFirst={true}
+            {/* Free Version */}
+            <ProductCard
+              title={t("productsPage.freeAccess.title")}
+              description={t("productsPage.freeAccess.description")}
+              icon={<Database className="h-6 w-6 text-blue-5" />}
+              features={freeFeatures}
+              actions={freeActions}
+              bgColor="bg-blue-1"
+              borderColor="border-blue-4"
+              hoverBorderColor="border-blue-5"
+              textColor="text-blue-5"
+              iconBgColor="bg-blue-2"
+              iconColor="text-blue-5"
             />
-            <DataCategory
-              icon={<FileText className="h-5 w-5 text-grey" />}
-              title={t("productsPage.dataOverview.reports.title")}
-              description={t("productsPage.dataOverview.reports.description")}
-            />
-            <DataCategory
-              icon={<MapPin className="h-5 w-5 text-grey" />}
-              title={t("productsPage.dataOverview.municipality.title")}
-              description={t(
-                "productsPage.dataOverview.municipality.description"
-              )}
-              isLast={true}
-            />
+          </div>
+
+          {/* Data Overview Section */}
+          <div className="mx-auto max-w-7xl mt-16 mb-16">
+            <h2 className="text-2xl font-light text-white text-center mb-8">
+              {t("productsPage.dataOverview.title")}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+              <DataCategory
+                icon={<Building2 className="h-5 w-5 text-grey" />}
+                title={t("productsPage.dataOverview.corporate.title")}
+                description={t(
+                  "productsPage.dataOverview.corporate.description",
+                )}
+                isFirst={true}
+              />
+              <DataCategory
+                icon={<FileText className="h-5 w-5 text-grey" />}
+                title={t("productsPage.dataOverview.reports.title")}
+                description={t("productsPage.dataOverview.reports.description")}
+              />
+              <DataCategory
+                icon={<MapPin className="h-5 w-5 text-grey" />}
+                title={t("productsPage.dataOverview.municipality.title")}
+                description={t(
+                  "productsPage.dataOverview.municipality.description",
+                )}
+                isLast={true}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
