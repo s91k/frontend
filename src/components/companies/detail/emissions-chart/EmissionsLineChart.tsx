@@ -193,7 +193,7 @@ export default function EmissionsLineChart({
         onClick={handleClick}
       >
         <Legend
-          verticalAlign="top"
+          verticalAlign="bottom"
           align="right"
           height={36}
           iconType="line"
