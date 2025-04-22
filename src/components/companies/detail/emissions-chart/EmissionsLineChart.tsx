@@ -112,7 +112,7 @@ export default function EmissionsLineChart({
               dot={{ r: 4, fill: "white", cursor: "pointer" }}
               activeDot={{ r: 6, fill: "white", cursor: "pointer" }}
               connectNulls
-              name={t("companies.emissionsHistory.totalEmissions")}
+              name={t("companies.emissionsHistory.Emissions")}
             />
           </>
         )}

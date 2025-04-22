@@ -1,4 +1,4 @@
-import { EmissionsHistory } from "./history/EmissionsHistory";
+import { EmissionsChart } from "./emissions-chart/EmissionsChart";
 import type { CompanyDetails } from "@/types/company";
 
 interface CompanyHistoryProps {
@@ -8,7 +8,7 @@ interface CompanyHistoryProps {
 export function CompanyHistory({ company }: CompanyHistoryProps) {
   return (
     <>
-      <EmissionsHistory
+      <EmissionsChart
         reportingPeriods={company.reportingPeriods}
         baseYear={company.baseYear}
       />

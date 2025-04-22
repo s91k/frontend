@@ -9,9 +9,9 @@ import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
 import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
-import EmissionsLineChart from "./EmissionsLineChart";
+import TotalEmissionsLineChart from "./TotalEmissionsLineChart";
 
-export function EmissionsHistory({
+export function EmissionsChart({
   reportingPeriods,
   onYearSelect,
   className,
@@ -116,7 +116,7 @@ export function EmissionsHistory({
         hasScope3Categories={hasScope3Categories}
       />
       <div className="h-[300px] md:h-[400px]">
-        <EmissionsLineChart
+        <TotalEmissionsLineChart
           data={chartData}
           companyBaseYear={companyBaseYear}
           dataView={dataView}
