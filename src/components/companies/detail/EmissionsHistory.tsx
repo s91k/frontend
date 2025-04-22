@@ -97,6 +97,7 @@ export function EmissionsHistory({
     const n = points.length;
     if (n < 2) return { pre2025: [], post2025: [] };
 
+    // Calculate the trend line parameters
     const sumX = points.reduce((sum, p) => sum + p.year, 0);
     const sumY = points.reduce((sum, p) => sum + p.total, 0);
     const sumXY = points.reduce((sum, p) => sum + p.year * p.total, 0);
@@ -105,13 +106,23 @@ export function EmissionsHistory({
     const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    const startYear = Math.max(...points.map((p) => p.year));
+    // Get the last actual data point
+    const lastPoint = points[points.length - 1];
+    const startYear = lastPoint.year;
     const endYear = 2050;
 
     const pre2025Data = [];
     const post2025Data = [];
+
+    // Start from the last actual point's value instead of calculating it
+    const startValue = lastPoint.total;
+
     for (let year = startYear; year <= endYear; year++) {
-      const trendValue = slope * year + intercept;
+      const trendValue =
+        year === startYear
+          ? startValue // Use exact last point value for start
+          : slope * year + intercept; // Use trend line calculation for subsequent points
+
       if (year < 2025) {
         pre2025Data.push({ year, trend: trendValue });
       } else if (year === 2025) {
