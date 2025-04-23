@@ -262,7 +262,7 @@ export function CompanyCard({
             </div>
           )}
         </div>
-        {/* Climate Plan */}
+        {/* Sustainability Report */}
         {latestPeriod?.reportURL && (
           <a
             href={latestPeriod.reportURL}
