@@ -18,11 +18,11 @@ export default function KPIDetailsPanel({
   nullValues,
 }: KPIDetailsPanelProps) {
   return (
-    <div className="p-6 space-y-4 bg-white/5 rounded-2xl shadow-lg">
+    <div className="p-6 space-y-4 bg-white/5 rounded-level-2 shadow-lg">
       <h2 className="text-2xl font-semibold tracking-tight mb-4">
         {t(`municipalities.list.kpis.${selectedKPI.key}.label`)}
       </h2>
-      <div className="mt-4 p-4 bg-white/10 rounded-md space-y-2">
+      <div className="mt-4 p-4 bg-white/10 rounded-level-2 space-y-2">
         <p className="flex items-center gap-2 text-lg">
           {t("municipalities.list.insights.keyStatistics.average")}{" "}
           <span className="text-orange-2 font-medium">
