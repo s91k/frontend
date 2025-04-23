@@ -73,6 +73,7 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
               : "municipalities.list.insights.topPerformers.titleBest",
           )}
           municipalities={topMunicipalities}
+          totalCount={municipalityData.length}
           dataPointKey={selectedKPI.key}
           unit={selectedKPI.unit}
           textColor="text-blue-3"
@@ -81,6 +82,8 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
         <InsightsList
           title={t("municipalities.list.insights.improvement.title")}
           municipalities={bottomMunicipalities}
+          totalCount={municipalityData.length}
+          isBottomRanking={true}
           dataPointKey={selectedKPI.key}
           unit={selectedKPI.unit}
           textColor="text-pink-3"
