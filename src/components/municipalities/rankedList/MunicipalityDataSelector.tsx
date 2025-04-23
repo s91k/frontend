@@ -34,9 +34,9 @@ const DataSelector = ({
   return (
     <div className="bg-black-2 rounded-2xl p-4 mb-6">
       <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <BarChart3 className="w-6 h-6" />
-          <label className="text-sm font-medium">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <BarChart3 className="w-4 h-4" />
+          <label className="font-medium">
             {t("municipalities.list.dataSelector.label")}
           </label>
         </div>
