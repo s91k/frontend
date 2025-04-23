@@ -81,6 +81,9 @@ const DataSelector = ({
             </div>
           )}
         </div>
+        <p className="leading-relaxed text-sm p-2 text-gray-400">
+          {t(`municipalities.list.kpis.${selectedKPI.key}.detailedDescription`)}
+        </p>
       </div>
     </div>
   );

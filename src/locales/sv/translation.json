@@ -834,8 +834,8 @@
         },
         "keyStatistics": {
           "average": "Genomsnitt:",
-          "distributionAbove": "kommuner över genomsnittet,",
-          "distributionBelow": "stycken under"
+          "distributionAbove": "kommuner över genomsnittet",
+          "distributionBelow": "kommuner under genomsnittet"
         },
         "topPerformers": {
           "titleBest": "Bästa kommuner",

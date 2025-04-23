@@ -57,7 +57,7 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
 
   return (
     <div className="flex-1 overflow-y-auto min-h-0 pr-2">
-      <div className="space-y-6">
+      <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
         <KPIDetailsPanel
           selectedKPI={selectedKPI}
           average={average}
