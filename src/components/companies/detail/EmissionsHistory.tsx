@@ -236,12 +236,6 @@ export function EmissionsHistory({
           <Text variant="body">{t("companies.emissionsHistory.unit")}</Text>
         </div>
         {/* Switch between Tabs and Dropdown based on screen size */}
-        <DataViewSelector
-          isMobile={isMobile}
-          dataView={dataView}
-          setDataView={setDataView}
-          hasScope3Categories={hasScope3Categories}
-        />
       </div>
       <div className="h-[300px] md:h-[400px]">
         <ResponsiveContainer width="100%" height="100%" className="w-full">
@@ -305,7 +299,7 @@ export function EmissionsHistory({
             {dataView === "overview" && (
               <>
                 <Legend
-                  verticalAlign="top"
+                  verticalAlign="bottom"
                   align="right"
                   height={36}
                   iconType="line"
@@ -329,7 +323,7 @@ export function EmissionsHistory({
                   type="monotone"
                   data={declineLineData.decline17}
                   dataKey="decline17"
-                  stroke="#354702"
+                  stroke="var(--blue-3)"
                   strokeWidth={2}
                   strokeDasharray="6 3"
                   dot={false}
