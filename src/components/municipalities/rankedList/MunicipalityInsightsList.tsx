@@ -22,7 +22,7 @@ function InsightsList({
 }: InsightsListProps) {
   return (
     <div className="bg-white/10 rounded-level-2 p-4 md:p-6">
-      <h3 className="text-white text-lg font-semibold mb-4">{title}</h3>
+      <h3 className="text-white text-lg font-semibold mb-2">{title}</h3>
       {municipalities.map((municipality, index) => {
         const position = isBottomRanking ? totalCount - index : index + 1;
 
