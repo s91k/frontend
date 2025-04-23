@@ -30,6 +30,7 @@ import {
   localizeUnit,
   formatPercentChange,
 } from "@/utils/localizeUnit";
+import { LinkCard } from "@/components/ui/link-card";
 
 type CompanyCardProps = Pick<
   RankedCompany,
@@ -264,30 +265,20 @@ export function CompanyCard({
         </div>
         {/* Sustainability Report */}
         {latestPeriod?.reportURL && (
-          <a
-            href={latestPeriod.reportURL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-black-1 rounded-level-2 p-4 hover:bg-black-1/80 transition-colors"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <Text
-                  variant="h6"
-                  className="flex items-center gap-2 text-white mb-2"
-                >
-                  <FileText className="w-6 h-6 text-white" />
-                  <span>{t("companies.card.companyReport")}</span>
-                </Text>
-                <Text variant="body" className=" text-grey">
-                  {latestPeriod.reportURL === "Saknar report"
-                    ? t("companies.card.missingReport")
-                    : ``}
-                </Text>
-              </div>
-              <ArrowUpRight className="w-6 h-6" />
-            </div>
-          </a>
+          <LinkCard
+            link={latestPeriod.reportURL ? latestPeriod.reportURL : undefined}
+            title={t("companies.card.companyReport")}
+            description={
+              latestPeriod.reportURL === "Saknar report"
+                ? t("companies.card.missingReport")
+                : ``
+            }
+            descriptionColor={
+              latestPeriod.reportURL === "Saknar report"
+                ? "text-pink-3"
+                : "text-green-3"
+            }
+          />
         )}
       </Link>
     </div>
