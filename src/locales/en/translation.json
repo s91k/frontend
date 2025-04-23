@@ -328,6 +328,8 @@
     }
   },
   "companyDetailPage": {
+    "metaTitle": "Data on emissions and transition",
+    "metaDescription": "Overview of emissions and transition",
     "errorTitle": "Unable to retrieve company information",
     "errorDescription": "Please try again later",
     "notFoundTitle": "Company not found",
@@ -459,6 +461,8 @@
     }
   },
   "municipalityDetailPage": {
+    "metaTitle": "Data on emissions and transition",
+    "metaDescription": "Overview of emissions and transition",
     "loading": "Loading...",
     "error": "Error loading data",
     "noData": "No data available",
