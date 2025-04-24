@@ -50,15 +50,15 @@
     },
     "typewriter": {
       "company": {
-        "reduceEmissions": "reducing emissions",
-        "scope3Emissions": "scope 3 emissions",
-        "meetParisAgreement": "meeting the Paris Agreement"
+        "reduceEmissions": "reducing emissions?",
+        "scope3Emissions": "scope 3 emissions?",
+        "meetParisAgreement": "meeting the Paris Agreement?"
       },
       "municipality": {
-        "reduceEmissions": "reducing emissions",
-        "meetParisAgreement": "meeting the Paris Agreement",
-        "climateActions": "the climate action",
-        "climatePlans": "the climate plans"
+        "reduceEmissions": "reducing emissions?",
+        "meetParisAgreement": "meeting the Paris Agreement?",
+        "climateActions": "the climate action?",
+        "climatePlans": "the climate plans?"
       }
     },
     "title": "How is it going with",
