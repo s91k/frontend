@@ -236,11 +236,13 @@ export function CompaniesPage() {
   const [filterOpen, setFilterOpen] = useState(false);
   const sortOptions = useSortOptions();
   const sectorNames = useSectorNames();
-  const [isDevEnvironment, setIsDevEnvironment] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
-  const view = params.get("view");
+  const viewParam = params.get("view");
+  const [view, setView] = useState<"graphs" | "list">(
+    viewParam === "graphs" || viewParam === "list" ? viewParam : "graphs",
+  );
 
   const {
     searchQuery,
@@ -252,24 +254,14 @@ export function CompaniesPage() {
     filteredCompanies,
   } = useCompanyFilters(companies);
 
-  // Detect environment on component mount
   useEffect(() => {
-    const hostname = window.location.hostname;
-    const isDev = hostname.includes("stage.") || hostname.includes("localhost");
-
-    setIsDevEnvironment(isDev);
-  }, []);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const view = params.get("view");
-
-    if (!view || (view !== "graphs" && view !== "list")) {
+    if (!viewParam || (viewParam !== "graphs" && viewParam !== "list")) {
       navigate({ search: "view=graphs" });
     }
-  }, [location.search]);
+  }, [location.search, navigate, viewParam]);
 
-  const setQueryParam = (URLparam: string) => {
+  const setQueryParam = (URLparam: "graphs" | "list") => {
+    setView(URLparam);
     navigate({ search: `view=${URLparam}` });
   };
 
@@ -282,16 +274,12 @@ export function CompaniesPage() {
           : sectorNames[sec as SectorCode] || sec,
       onRemove: () => setSectors((prev) => prev.filter((s) => s !== sec)),
     })),
-    ...(view === "list"
-      ? [
-          {
-            type: "sort" as const,
-            label: String(
-              sortOptions.find((s) => s.value === sortBy)?.label ?? sortBy,
-            ),
-          },
-        ]
-      : []),
+    {
+      type: "sort" as const,
+      label: String(
+        sortOptions.find((s) => s.value === sortBy)?.label ?? sortBy,
+      ),
+    },
   ];
 
   if (loading) {
@@ -333,46 +321,44 @@ export function CompaniesPage() {
 
         {/* Wrapper for View Toggle, Filters, Search, and Badges */}
         <div className={cn("flex flex-wrap items-start gap-4", "items-center")}>
-          {/* View Toggle - Only show in dev environments */}
-          {isDevEnvironment && (
-            <div className="flex bg-black-1 rounded-md overflow-hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "h-8 px-3 rounded-none",
-                  view === "graphs" ? "bg-blue-5/30 text-blue-2" : "text-grey",
-                )}
-                onClick={() => setQueryParam("graphs")}
-                title={t("companiesPage.viewModes.graphs")}
-              >
-                <BarChart className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "h-8 px-3 rounded-none",
-                  view === "list" ? "bg-blue-5/30 text-blue-2" : "text-grey",
-                )}
-                onClick={() => setQueryParam("list")}
-                title={t("companiesPage.viewModes.list")}
-              >
-                <List className="w-4 h-4" />
-              </Button>
-            </div>
-          )}
+          {/* View Toggle */}
+          <div className="flex bg-black-1 rounded-md overflow-hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-8 px-3 rounded-none",
+                view === "graphs" ? "bg-blue-5/30 text-blue-2" : "text-grey",
+              )}
+              onClick={() => setQueryParam("graphs")}
+              title={t("companiesPage.viewModes.graphs")}
+            >
+              <BarChart className="w-4 h-4 mr-2" />
+              {t("companiesPage.viewModes.graphs")}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-8 px-3 rounded-none",
+                view === "list" ? "bg-blue-5/30 text-blue-2" : "text-grey",
+              )}
+              onClick={() => setQueryParam("list")}
+              title={t("companiesPage.viewModes.list")}
+            >
+              <List className="w-4 h-4 mr-2" />
+              {t("companiesPage.viewModes.list")}
+            </Button>
+          </div>
 
-          {/* Search Input - Always show in production, only in list view for dev */}
-          {(!isDevEnvironment || view === "list") && (
-            <Input
-              type="text"
-              placeholder={t("companiesPage.searchPlaceholder")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-black-1 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-2 relative w-full md:w-[350px]"
-            />
-          )}
+          {/* Search Input */}
+          <Input
+            type="text"
+            placeholder={t("companiesPage.searchPlaceholder")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-black-1 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-2 relative w-full md:w-[350px]"
+          />
 
           {/* Filter Button */}
           <FilterPopover
@@ -382,7 +368,7 @@ export function CompaniesPage() {
             setSectors={setSectors}
             sortBy={sortBy}
             setSortBy={setSortBy}
-            viewMode={isDevEnvironment ? view : "list"}
+            viewMode={view}
           />
 
           {/* Badges */}
@@ -408,7 +394,7 @@ export function CompaniesPage() {
             {t("companiesPage.tryDifferentCriteria")}
           </p>
         </div>
-      ) : isDevEnvironment && view === "graphs" ? (
+      ) : view === "graphs" ? (
         <SectorGraphs
           companies={companies}
           selectedSectors={
@@ -417,8 +403,7 @@ export function CompaniesPage() {
               : Object.keys(sectorNames).filter((key) => key !== "all")
           }
         />
-      ) : // Always show list view in production
-      sectors.length === 0 && !searchQuery ? (
+      ) : sectors.length === 0 && !searchQuery ? (
         <CompanyList
           companies={filteredCompanies.map(({ ...rest }) => ({
             ...rest,
