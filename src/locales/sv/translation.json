@@ -326,6 +326,8 @@
     }
   },
   "companyDetailPage": {
+    "metaTitle": "Data om utsläpp och omställning",
+    "metaDescription": "Översikt över klimatpåverkan och hållbarhetsarbete",
     "errorTitle": "Det gick inte att hämta företagsinformation",
     "errorDescription": "Försök igen senare",
     "notFoundTitle": "Företaget kunde inte hittas",
@@ -538,6 +540,8 @@
     }
   },
   "municipalityDetailPage": {
+    "metaTitle": "Data om utsläpp och omställning",
+    "metaDescription": "Översikt över klimatpåverkan och hållbarhetsarbete",
     "loading": "Laddar...",
     "error": "Fel vid inläsning av data",
     "noData": "Ingen data tillgänglig",
@@ -918,8 +922,8 @@
         },
         "keyStatistics": {
           "average": "Genomsnitt:",
-          "distributionAbove": "kommuner över genomsnittet,",
-          "distributionBelow": "stycken under"
+          "distributionAbove": "kommuner över genomsnittet",
+          "distributionBelow": "kommuner under genomsnittet"
         },
         "topPerformers": {
           "titleBest": "Bästa kommuner",
