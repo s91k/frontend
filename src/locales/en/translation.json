@@ -344,6 +344,7 @@
     "accordion": {
       "parisAgreement": {
         "title": "Klimatkollen and the Paris Agreement",
+        "description": "Learn about how Klimatkollen aligns with the Paris Agreement's climate goals",
         "paragraph1": "The Paris Agreement is a legally binding international treaty between the world's nations, aimed at limiting global warming to well below 2°C, with a target of 1.5°C.",
         "paragraph2": "To meet this target, global greenhouse gas emissions must be halved by 2030 (compared to 1990 levels) and reduced to near-zero by 2050. However, emissions are <0>still increasing</0> worldwide.",
         "paragraph3": "Under the Paris Agreement, wealthier nations must take greater responsibility, as their historically high emissions mean they have already used a significant share of the remaining carbon budget needed to limit global warming. Sweden is among these countries and should lead the way in reducing emissions while also supporting more vulnerable nations in their transition.",
@@ -354,6 +355,7 @@
       },
       "sources": {
         "title": "Our Sources",
+        "description": "Explore the publicly available sources and verified data used by Klimatkollen",
         "paragraph1": "Klimatkollen is based on publicly available sources and verified data. We provide all sources so you can easily review and explore them further. If you notice any errors, please email us at hej@klimatkollen.se so we can make corrections.",
         "paragraph2": "Company data is sourced from their own annual reports and sustainability reports.",
         "links": {
@@ -401,11 +403,13 @@
       },
       "calculations": {
         "title": "Our Calculations",
+        "description": "Understand how we calculate and analyze climate data",
         "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
         "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
       },
       "companyDataCollection": {
         "title": "Company Data",
+        "description": "Learn about how we collect and process company emissions data",
         "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports (and combined annual and sustainability reports).",
         "paragraph2": "We publish an overview of the latest reported emissions here.",
         "link1": "Klimatkollens Company Data",
@@ -441,7 +445,7 @@
         "scope3": {
           "title": "Scope 3 emissions",
           "paragraph1": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
-          "paragraph2": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into “other”, or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
+          "paragraph2": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into \"other\", or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
           "paragraph3": "For property companies, Klimatkollen follows the matching as specified in the guide Reporting of Emissions in Scope 3 for Property Owners.",
           "link": "Reporting of Emissions in Scope 3 for Property Owners"
         },
@@ -468,6 +472,7 @@
       },
       "co2Budgets": {
         "title": "Carbon Budgets",
+        "description": "Understand how carbon budgets are calculated and allocated",
         "paragraph1": "A carbon budget represents the amount of carbon dioxide that can be emitted before atmospheric CO₂ levels rise high enough to exceed the Paris Agreement's 1.5°C target.",
         "paragraph2": "According to a <0>calculation</0> by researchers at Uppsala University and the Tyndall Centre in the UK, as of 2024, approximately 340 gigatonnes of CO₂ remain globally for a 50% chance of keeping temperature rise below 1.5°C. At the current rate of emissions, this global budget will be depleted in about eight years.",
         "paragraph3": "Using this global budget, the researchers have also estimated Sweden's national carbon budget for a fair climate transition.",
@@ -479,6 +484,7 @@
       },
       "emissionTypes": {
         "title": "Different Types of Emissions",
+        "description": "Learn about the various types of emissions and how they are measured",
         "paragraph1": "Klimatkollen is an independent fact-based platform that follows established standards for emissions reporting. The climate data we present reflects the boundaries and assumptions used in carbon budget calculations. For example, carbon budgets cannot be directly linked to all greenhouse gas emissions, as other gases like methane, nitrous oxide, and water vapour are also included in overall climate impact assessments.",
         "paragraph2": "Emissions from cement production are excluded from the IPCC's global carbon budget and, as a result, are also omitted from Sweden's carbon budget and emissions data. This specifically affects the municipalities of Gotland, Skövde, and Mörbylånga, where cement production is currently or has previously taken place.",
         "paragraph3": "Sweden also has a significant climate impact from goods imported from other countries, leading to emissions abroad. These consumption-based emissions are not included in the carbon budget.",

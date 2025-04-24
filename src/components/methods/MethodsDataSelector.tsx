@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import { DataSelector } from "@/components/layout/DataSelector";
+import { BookOpen } from "lucide-react";
 
 interface MethodsDataSelectorProps {
   selectedMethod: string;
@@ -20,13 +21,17 @@ const MethodsDataSelector = ({
   onMethodChange,
 }: MethodsDataSelectorProps) => {
   return (
-    <DataSelector
+    <DataSelector<string>
       label={t("methodsPage.dataSelector.label")}
       selectedItem={selectedMethod}
       items={methods}
       onItemChange={onMethodChange}
       getItemLabel={(method) => t(`methodsPage.accordion.${method}.title`)}
       getItemKey={(method) => method}
+      getItemDescription={(method) =>
+        t(`methodsPage.accordion.${method}.description`)
+      }
+      icon={<BookOpen className="w-4 h-4" />}
     />
   );
 };
