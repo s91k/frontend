@@ -6,7 +6,7 @@
     "companies": "Companies",
     "municipalities": "Municipalities",
     "municipalitiesRanked": "Ranked",
-    "municipalitiesCompare": "Comapre",
+    "municipalitiesCompare": "Compare",
     "about": "About",
     "aboutUs": "About Us",
     "products": "Products",
@@ -733,7 +733,8 @@
       "turnover": "Turnover",
       "employees": "Employees",
       "companyReport": "Sustainability Report",
-      "missingReport": "Missing Report"
+      "missingReport": "Missing Report",
+      "reportYear": "Report from {{year}}"
     },
     "dataView": {
       "overview": "Overview",

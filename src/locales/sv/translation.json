@@ -741,7 +741,8 @@
       "turnover": "Omsättning",
       "employees": "Anställda",
       "companyReport": "Hållbarhetsrapport",
-      "missingReport": "Saknar report"
+      "missingReport": "Saknar report",
+      "reportYear": "Rapporterat från {{year}}"
     },
     "dataView": {
       "overview": "Översikt",
