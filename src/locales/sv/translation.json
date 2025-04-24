@@ -334,7 +334,10 @@
   "methodsPage": {
     "header": {
       "title": "Källor och metod",
-      "description": "Vår utgångspunkt är Parisavtalets 1,5-gradersmål och våra datakällor är offentliga. Klicka på rubrikerna för att läsa mer."
+      "description": "Vår utgångspunkt är Parisavtalets 1,5-gradersmål och våra datakällor är offentliga. Klicka på dropdownmenyn för att läsa mer."
+    },
+    "dataSelector": {
+      "label": "Välj vad du vill lära dig"
     },
     "accordion": {
       "parisAgreement": {
@@ -441,7 +444,7 @@
         },
         "scope2": {
           "title": "Utsläpp i scope 2",
-          "paragraph1": "Utsläppen i scope 2 visas primärt enligt den marknadsbaserade beräkningsmetoden, som tar hänsyn till om företag köper förnybar elektricitet. Om sådan data saknas använder vi istället data från den platsbaserade beräkningsmetoden."   
+          "paragraph1": "Utsläppen i scope 2 visas primärt enligt den marknadsbaserade beräkningsmetoden, som tar hänsyn till om företag köper förnybar elektricitet. Om sådan data saknas använder vi istället data från den platsbaserade beräkningsmetoden."
         },
         "scope3": {
           "title": "Utsläpp i scope 3",

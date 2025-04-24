@@ -336,7 +336,10 @@
   "methodsPage": {
     "header": {
       "title": "Sources and Method",
-      "description": "Our starting point is the Paris Agreement's 1.5°C target, and all our data sources are publicly available. Click on the headings to learn more."
+      "description": "Our starting point is the Paris Agreement's 1.5°C target, and all our data sources are publicly available. Click on the dropdown to learn more."
+    },
+    "dataSelector": {
+      "label": "Select what you want to learn about"
     },
     "accordion": {
       "parisAgreement": {
@@ -350,7 +353,7 @@
         }
       },
       "sources": {
-        "title": "About Our Sources",
+        "title": "Our Sources",
         "paragraph1": "Klimatkollen is based on publicly available sources and verified data. We provide all sources so you can easily review and explore them further. If you notice any errors, please email us at hej@klimatkollen.se so we can make corrections.",
         "paragraph2": "Company data is sourced from their own annual reports and sustainability reports.",
         "links": {
@@ -397,12 +400,12 @@
         }
       },
       "calculations": {
-        "title": "About Our Calculations",
+        "title": "Our Calculations",
         "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
         "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
       },
       "companyDataCollection": {
-        "title": "About Company Data",
+        "title": "Company Data",
         "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports (and combined annual and sustainability reports).",
         "paragraph2": "We publish an overview of the latest reported emissions here.",
         "link1": "Klimatkollens Company Data",
@@ -433,7 +436,7 @@
         },
         "scope2": {
           "title": "Scope 2 emissions",
-          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."   
+          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."
         },
         "scope3": {
           "title": "Scope 3 emissions",
@@ -464,7 +467,7 @@
         }
       },
       "co2Budgets": {
-        "title": "About Carbon Budgets",
+        "title": "Carbon Budgets",
         "paragraph1": "A carbon budget represents the amount of carbon dioxide that can be emitted before atmospheric CO₂ levels rise high enough to exceed the Paris Agreement's 1.5°C target.",
         "paragraph2": "According to a <0>calculation</0> by researchers at Uppsala University and the Tyndall Centre in the UK, as of 2024, approximately 340 gigatonnes of CO₂ remain globally for a 50% chance of keeping temperature rise below 1.5°C. At the current rate of emissions, this global budget will be depleted in about eight years.",
         "paragraph3": "Using this global budget, the researchers have also estimated Sweden's national carbon budget for a fair climate transition.",
