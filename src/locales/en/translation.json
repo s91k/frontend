@@ -405,7 +405,7 @@
         "title": "About Company Data",
         "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports (and combined annual and sustainability reports).",
         "paragraph2": "We publish an overview of the latest reported emissions here.",
-        "link1": "Klimatkollens company data",
+        "link1": "Klimatkollens Company Data",
         "paragraph3": "The emissions data is divided into company-specific emissions (scope 1 & scope 2) and emissions from the value chain (scope 3), reported in tonnes of CO2e.",
         "paragraph4": "On each company's page on Klimatkollen, you can find more detailed information about the emissions; breakdown by scope and category in scope 3, as well as any biogenic emissions.",
         "paragraph5": "Klimatkollen uses the same structure as the GHG Protocol and follows its guidelines.",
@@ -439,8 +439,8 @@
           "title": "Scope 3 emissions",
           "paragraph1": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
           "paragraph2": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into “other”, or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
-          "paragraph3": "For property companies, Klimatkollen follows the matching as specified in the guide Reporting of emissions in Scope 3 for property owners.",
-          "link": "Reporting of emissions in Scope 3 for property owners"
+          "paragraph3": "For property companies, Klimatkollen follows the matching as specified in the guide Reporting of Emissions in Scope 3 for Property Owners.",
+          "link": "Reporting of Emissions in Scope 3 for Property Owners"
         },
         "financedEmissions": {
           "title": "Financed emissions (scope 3, category 15: Investments)",
@@ -452,7 +452,7 @@
         },
         "goals": {
           "title": "Goals and Initiatives",
-          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting, and presents these on the company's page on Klimatkollen. This data is not manually verified."
+          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting. This data is not manually verified."
         },
         "historicEmissions": {
           "title": "Historical emissions data",
