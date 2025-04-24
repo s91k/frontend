@@ -4,9 +4,7 @@ import {
   TrendingDown,
   Users,
   Wallet,
-  ArrowUpRight,
   Info,
-  FileText,
 } from "lucide-react";
 import {
   Tooltip,
@@ -82,6 +80,10 @@ export function CompanyCard({
     (max, current) => (current.total > (max?.total || 0) ? current : max),
     scope3Categories[0],
   );
+  const noSustainabilityReport =
+    latestPeriod?.reportURL === null ||
+    latestPeriod?.reportURL === "Saknar report" ||
+    latestPeriod?.reportURL === undefined;
 
   // Get the color for the largest category
   const categoryColor = largestCategory
@@ -264,22 +266,21 @@ export function CompanyCard({
           )}
         </div>
         {/* Sustainability Report */}
-        {latestPeriod?.reportURL && (
+        
           <LinkCard
             link={latestPeriod.reportURL ? latestPeriod.reportURL : undefined}
             title={t("companies.card.companyReport")}
             description={
-              latestPeriod.reportURL === "Saknar report"
+              noSustainabilityReport
                 ? t("companies.card.missingReport")
                 : ``
             }
             descriptionColor={
-              latestPeriod.reportURL === "Saknar report"
+              noSustainabilityReport
                 ? "text-pink-3"
                 : "text-green-3"
             }
-          />
-        )}
+        />
       </Link>
     </div>
   );
