@@ -266,7 +266,6 @@ export function CompanyCard({
           )}
         </div>
         {/* Sustainability Report */}
-        
           <LinkCard
             link={latestPeriod.reportURL ? latestPeriod.reportURL : undefined}
             title={t("companies.card.companyReport")}
