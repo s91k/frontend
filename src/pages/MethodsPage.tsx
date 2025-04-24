@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Trans, useTranslation } from "react-i18next";
 import { PageSEO } from "@/components/SEO/PageSEO";
 import { useEffect } from "react";
+import { Text } from "@/components/ui/text";
 
 export function MethodsPage() {
   const { t } = useTranslation();
@@ -133,6 +134,214 @@ export function MethodsPage() {
                   ]}
                 />
               </p>
+            </div>
+          </AccordionGroup>
+
+          <AccordionGroup
+            title={t("methodsPage.accordion.companyDataCollection.title")}
+            value="companyDataCollection"
+          >
+            <div className="prose prose-invert w-[90%] max-w-5xl mx-auto space-y-8">
+              <p>
+                {t("methodsPage.accordion.companyDataCollection.paragraph1")}
+              </p>
+              <div className="space-y-6 max-w-3xl">
+                  <LinkButton
+                    title={t(
+                      "methodsPage.accordion.companyDataCollection.link1",
+                    )}
+                    text={t("methodsPage.accordion.companyDataCollection.paragraph2")}
+                    link="/companies"
+                  />
+                </div>
+              <p>
+                {t("methodsPage.accordion.companyDataCollection.paragraph3")}
+              </p>
+              <p>
+                {t("methodsPage.accordion.companyDataCollection.paragraph4")}
+              </p>
+              <div className="space-y-6 max-w-3xl">
+                  <LinkButton
+                    title={t(
+                      "methodsPage.accordion.companyDataCollection.link2",
+                    )}
+                    text={t("methodsPage.accordion.companyDataCollection.paragraph5")}
+                    link="https://ghgprotocol.org/"
+                  />
+                </div>
+              <div className="space-y-4">
+                <Text className="text-blue-2 font-bold text-2xl">
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.companiesIncluded.title",
+                  )}
+                </Text>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph1",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph2",
+                  )}
+                </p>
+                <div className="space-y-6 max-w-3xl">
+                  <LinkButton
+                    title={t(
+                      "methodsPage.accordion.companyDataCollection.link2",
+                    )}
+                    text={t("methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph3")}
+                    link="https://www.msci.com/our-solutions/indexes/gics"
+                  />
+                </div>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph4",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph5",
+                  )}
+                </p>
+              </div>
+              <div className="space-y-4">
+                <Text className="text-blue-2 font-bold text-2xl">
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.dataPresented.title",
+                  )}
+                </Text>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.dataPresented.paragraph1",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.dataPresented.paragraph2",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.dataPresented.paragraph3",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.dataPresented.paragraph4",
+                  )}
+                </p>
+              </div>
+              <div className="space-y-4">
+                <Text className="text-blue-2 font-bold text-2xl">
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.fiscalYear.title",
+                  )}
+                </Text>
+                <p>
+                  {t(
+                    "methodsPage.accordion.companyDataCollection.fiscalYear.paragraph1",
+                  )}
+                </p>
+              </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.scope2.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.scope2.paragraph1",
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.scope3.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.scope3.paragraph1",
+                    )}
+                  </p>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.scope3.paragraph2",
+                    )}
+                  </p>
+                  <div className="space-y-6 max-w-3xl">
+                    <LinkButton
+                      title={t(
+                        "methodsPage.accordion.companyDataCollection.scope3.link",
+                      )}
+                      text={t("methodsPage.accordion.companyDataCollection.scope3.paragraph3")}
+                      link="https://www.fastighetsagarna.se/globalassets/broschyrer-och-faktablad/riktlinjer/vagledning-rapportering-av-utslapp-i-scope-3-for-fastighetsagare.pdf?bustCache=1739437148312"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.financedEmissions.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.financedEmissions.paragraph1",
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.biogenicEmissions.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.biogenicEmissions.paragraph1",
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.goals.title",
+                    )}
+                  </Text>   
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.goals.paragraph1",
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.historicEmissions.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.historicEmissions.paragraph1",
+                    )}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Text className="text-blue-2 font-bold text-2xl">
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.emissionOffsets.title",
+                    )}
+                  </Text>
+                  <p>
+                    {t(
+                      "methodsPage.accordion.companyDataCollection.emissionOffsets.paragraph1",
+                    )}
+                  </p>
+                </div>
             </div>
           </AccordionGroup>
 

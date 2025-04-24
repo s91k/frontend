@@ -401,6 +401,68 @@
         "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
         "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
       },
+      "companyDataCollection": {
+        "title": "About Company Data",
+        "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports (and combined annual and sustainability reports).",
+        "paragraph2": "We publish an overview of the latest reported emissions here.",
+        "link1": "Klimatkollens company data",
+        "paragraph3": "The emissions data is divided into company-specific emissions (scope 1 & scope 2) and emissions from the value chain (scope 3), reported in tonnes of CO2e.",
+        "paragraph4": "On each company's page on Klimatkollen, you can find more detailed information about the emissions; breakdown by scope and category in scope 3, as well as any biogenic emissions.",
+        "paragraph5": "Klimatkollen uses the same structure as the GHG Protocol and follows its guidelines.",
+        "link2": "GHG Protocol",
+        "companiesIncluded": {
+          "title": "Companies included",
+          "paragraph1": "Currently, Klimatkollen's database includes companies on the OMX Large Cap and Mid Cap lists of the Stockholm Stock Exchange. In addition, the 24 largest state-owned companies, the five largest economic associations, and unlisted companies IKEA and ICA Group are included.",
+          "paragraph2": "A total of 290 companies. The number of companies will be expanded.",
+          "paragraph3": "The companies are categorized by industry according to the Global Industry Classification Standard (GICS).",
+          "paragraph4": "Information about the number of employees and revenue is obtained from the latest sustainability reports, or combined annual and sustainability reports, and in some cases from other sources.",
+          "paragraph5": "The description of the company's activities is AI-generated.",
+          "link1": "Global Industry Classification Standard (GICS)",
+          "link2": "Klimatkollens company data"
+        },
+        "dataPresented": {
+          "title": "Data presented",
+          "paragraph1": "We present the companies' own greenhouse gas emissions as they are reported by the companies themselves.",
+          "paragraph2": "In some cases, the figures from Klimatkollen may be more up-to-date than in the companies' reports, as we sometimes contact the companies about errors or inconsistencies we have discovered, which in some cases has resulted in the companies providing us with corrected data.",
+          "paragraph3": "Klimatkollen does not take responsibility for the completeness or accuracy of the companies' reports.",
+          "paragraph4": "The emissions are rounded to the nearest whole number. This means that companies that report emissions more accurately than whole numbers will have a minor difference compared to their own reporting. When companies also round in their own reporting, there may be a difference of one ton or more between Klimatkollen and the companies' own summaries."
+        },
+        "fiscalYear": {
+          "title": "Fiscal year",
+          "paragraph1": "Some companies use a fiscal year. In these cases, the emissions are presented for the later of the two calendar years in the period, i.e. for companies that report 2022/2023, the data is presented for 2023."
+        },
+        "scope2": {
+          "title": "Scope 2 emissions",
+          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."   
+        },
+        "scope3": {
+          "title": "Scope 3 emissions",
+          "paragraph1": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
+          "paragraph2": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into “other”, or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
+          "paragraph3": "For property companies, Klimatkollen follows the matching as specified in the guide Reporting of emissions in Scope 3 for property owners.",
+          "link": "Reporting of emissions in Scope 3 for property owners"
+        },
+        "financedEmissions": {
+          "title": "Financed emissions (scope 3, category 15: Investments)",
+          "paragraph1": "Financed emissions are often reported with a delay since they can take longer to calculate. To provide a representative picture of a company's impact, in these cases the latest reported emissions are included."
+        },
+        "biogenicEmissions": {
+          "title": "Biogenic emissions",
+          "paragraph1": "Biogenic emissions are reported separately from scope 1, 2 and 3, in accordance with the GHG Protocol's instructions."
+        },
+        "goals": {
+          "title": "Goals and Initiatives",
+          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting, and presents these on the company's page on Klimatkollen. This data is not manually verified."
+        },
+        "historicEmissions": {
+          "title": "Historical emissions data",
+          "paragraph1": "Emissions data from previous years has been collected from the latest report, to the extent it is presented there. Where there are gaps in the reported emissions data, for example if there is missing information about emissions for years between the base year and the most recently reported year, Klimatkollen has sought to collect this by searching for older sustainability reports. The latest published information is always prioritized, so if a company has updated its calculations retroactively, but not published the adjustment, older data may be displayed."
+        },
+        "emissionOffsets": {
+          "title": "Avoided emissions or climate compensation",
+          "paragraph1": "These are not included, in line with what the GHG Protocol states."
+        }
+      },
       "co2Budgets": {
         "title": "About Carbon Budgets",
         "paragraph1": "A carbon budget represents the amount of carbon dioxide that can be emitted before atmospheric CO₂ levels rise high enough to exceed the Paris Agreement's 1.5°C target.",
