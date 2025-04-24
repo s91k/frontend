@@ -662,7 +662,8 @@
       "turnover": "Turnover",
       "employees": "Employees",
       "companyReport": "Sustainability Report",
-      "missingReport": "Missing Report"
+      "missingReport": "Missing Report",
+      "reportYear": "Report from {{year}}"
     },
     "dataView": {
       "overview": "Overview",

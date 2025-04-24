@@ -1,11 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  Building2,
-  TrendingDown,
-  Users,
-  Wallet,
-  Info,
-} from "lucide-react";
+import { Building2, TrendingDown, Users, Wallet, Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -266,19 +260,19 @@ export function CompanyCard({
           )}
         </div>
         {/* Sustainability Report */}
-          <LinkCard
-            link={latestPeriod.reportURL ? latestPeriod.reportURL : undefined}
-            title={t("companies.card.companyReport")}
-            description={
-              noSustainabilityReport
-                ? t("companies.card.missingReport")
-                : ``
-            }
-            descriptionColor={
-              noSustainabilityReport
-                ? "text-pink-3"
-                : "text-green-3"
-            }
+        <LinkCard
+          link={latestPeriod.reportURL ? latestPeriod.reportURL : undefined}
+          title={t("companies.card.companyReport")}
+          description={
+            noSustainabilityReport
+              ? t("companies.card.missingReport")
+              : t("companies.card.reportYear", {
+                  year: new Date(latestPeriod.endDate).getFullYear(),
+                })
+          }
+          descriptionColor={
+            noSustainabilityReport ? "text-pink-3" : "text-green-3"
+          }
         />
       </Link>
     </div>
