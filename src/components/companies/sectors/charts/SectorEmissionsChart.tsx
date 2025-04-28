@@ -108,8 +108,6 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     }
   };
 
-  const pieChartHeight = screenSize.isMobile ? 500 : 650;
-
   return (
     <div className="w-full space-y-6">
       <ChartHeader

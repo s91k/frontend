@@ -231,7 +231,7 @@ function FilterCommands({
 
 export function CompaniesPage() {
   const { t } = useTranslation();
-  const isMobile = useScreenSize();
+  const screenSize = useScreenSize();
   const { companies, loading, error } = useCompanies();
   const [filterOpen, setFilterOpen] = useState(false);
   const sortOptions = useSortOptions();
@@ -313,7 +313,7 @@ export function CompaniesPage() {
       {/* Filters & Sorting Section */}
       <div
         className={cn(
-          isMobile ? "relative" : "sticky top-0 z-10",
+          screenSize.isMobile ? "relative" : "sticky top-0 z-10",
           "bg-black px-4 pt-12 md:pt-16 pb-4 shadow-md",
         )}
       >
@@ -327,7 +327,7 @@ export function CompaniesPage() {
               variant="ghost"
               size="sm"
               className={cn(
-                "h-8 px-3 rounded-none",
+                "h-8 px-3 rounded-none font-medium text-sm",
                 view === "graphs" ? "bg-blue-5/30 text-blue-2" : "text-grey",
               )}
               onClick={() => setQueryParam("graphs")}
@@ -340,7 +340,7 @@ export function CompaniesPage() {
               variant="ghost"
               size="sm"
               className={cn(
-                "h-8 px-3 rounded-none",
+                "h-8 px-3 rounded-none font-medium text-sm",
                 view === "list" ? "bg-blue-5/30 text-blue-2" : "text-grey",
               )}
               onClick={() => setQueryParam("list")}
@@ -376,7 +376,7 @@ export function CompaniesPage() {
             <div
               className={cn(
                 "flex flex-wrap gap-2",
-                isMobile ? "w-full" : "flex-1",
+                screenSize.isMobile ? "w-full" : "flex-1",
               )}
             >
               <FilterBadges filters={activeFilters} />
