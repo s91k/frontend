@@ -72,7 +72,7 @@ function FilterPopover({
         <Button
           variant="outline"
           size="sm"
-          className="bg-black-1 border-black-1 text-grey hover:text-white hover:bg-black-1/80 hover:border-black-1"
+          className="bg-black-1 border-black-1 text-grey hover:text-white hover:bg-black-1/80 hover:border-black-1 font-medium text-sm"
         >
           <Filter className="mr-2 h-4 w-4" />
           {t("companiesPage.filter")}

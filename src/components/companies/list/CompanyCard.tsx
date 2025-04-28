@@ -42,7 +42,7 @@ export function CompanyCard({
   industry,
   reportingPeriods,
 }: CompanyCardProps) {
-  const isMobile = useScreenSize();
+  const { isMobile } = useScreenSize();
 
   const { t } = useTranslation();
   const { getCategoryColor } = useCategoryMetadata();

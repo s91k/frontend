@@ -16,7 +16,7 @@ export function MunicipalitiesComparePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("meets_paris");
   const [sortDirection, setSortDirection] = useState<"best" | "worst">("best");
-  const isMobile = useScreenSize();
+  const { isMobile } = useScreenSize();
 
   if (loading) {
     return (

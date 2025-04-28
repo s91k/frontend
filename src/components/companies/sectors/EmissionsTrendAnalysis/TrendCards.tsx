@@ -17,7 +17,7 @@ const TrendCards: React.FC<TrendCardsProps> = ({
   selectedCategory,
   onCategorySelect,
 }) => {
-  const isMobile = useScreenSize();
+  const { isMobile } = useScreenSize();
   const categoryInfo = useCategoryInfo();
   return (
     <div
