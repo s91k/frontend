@@ -220,7 +220,6 @@ export const getCompanyColors = (index: number) => {
 };
 
 export const useCompanyFilters = (companies: RankedCompany[]) => {
-  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [sectors, setSectors] = useState<CompanySector[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>("total_emissions");
