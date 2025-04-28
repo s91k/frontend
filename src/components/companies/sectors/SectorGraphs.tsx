@@ -5,8 +5,8 @@ import {
   useSectorNames,
 } from "@/hooks/companies/useCompanyFilters";
 import SectorEmissionsChart from "@/components/companies/sectors/charts/SectorEmissionsChart";
-import EmissionsSourcesAnalysis from "./EmissionsSourcesAnalysis/EmissionsSourcesAnlaysis";
-import EmissionsTrendAnalysis from "./EmissionsTrendAnalysis/EmissionsTrendAnalysis";
+import EmissionsSourcesAnalysis from "./scopes/EmissionsSourcesAnlaysis";
+import EmissionsTrendAnalysis from "./trends/EmissionsTrendAnalysis";
 
 interface SectorGraphsProps {
   companies: RankedCompany[];
