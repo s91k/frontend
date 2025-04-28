@@ -20,8 +20,8 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
   selectedSectors,
   selectedYear: initialYear = "2023",
 }) => {
-   const { t } = useTranslation();
-     const isMobile = useScreenSize();
+  const { t } = useTranslation();
+  const screenSize = useScreenSize();
   const sectorNames = useSectorNames();
 
   const [selectedYear, setSelectedYear] = useState<string>("2023");
@@ -43,12 +43,14 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
     <div className="mt-12 space-y-6">
       <div
         className={`${
-          isMobile ? "flex flex-col gap-1" : "flex items-center justify-between"
+          screenSize.isMobile
+            ? "flex flex-col gap-1"
+            : "flex items-center justify-between"
         }`}
       >
         <div
           className={`${
-            isMobile ? "flex flex-col gap-1" : "flex items-center gap-2"
+            screenSize.isMobile ? "flex flex-col gap-1" : "flex items-center gap-2"
           }`}
         >
           <h2 className="text-xl font-light text-white">
