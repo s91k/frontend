@@ -51,7 +51,7 @@ export function CompanyOverview({
   selectedYear,
 }: CompanyOverviewProps) {
   const { t } = useTranslation();
-  const screenSize = useScreenSize();
+  const { isMobile } = useScreenSize();
   const [showMore, setShowMore] = useState(false);
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -111,7 +111,7 @@ export function CompanyOverview({
               )}
             </div>
           </div>
-          {screenSize.isMobile ? (
+          {isMobile ? (
             <div>
               <button
                 className="bg-black-1 text-white px-3 py-1 rounded-md mt-1 text-sm"
