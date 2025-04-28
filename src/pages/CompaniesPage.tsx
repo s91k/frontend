@@ -351,14 +351,16 @@ export function CompaniesPage() {
             </Button>
           </div>
 
-          {/* Search Input */}
-          <Input
-            type="text"
-            placeholder={t("companiesPage.searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-black-1 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-2 relative w-full md:w-[350px]"
-          />
+          {/* Search Input - Only visible in list view */}
+          {view === "list" && (
+            <Input
+              type="text"
+              placeholder={t("companiesPage.searchPlaceholder")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-black-1 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-2 relative w-full md:w-[350px]"
+            />
+          )}
 
           {/* Filter Button */}
           <FilterPopover
@@ -379,7 +381,7 @@ export function CompaniesPage() {
                 screenSize.isMobile ? "w-full" : "flex-1",
               )}
             >
-              <FilterBadges filters={activeFilters} />
+              <FilterBadges filters={activeFilters} view={view} />
             </div>
           )}
         </div>
@@ -435,37 +437,48 @@ export function CompaniesPage() {
   );
 }
 
-function FilterBadges({ filters }: { filters: FilterBadge[] }) {
+function FilterBadges({
+  filters,
+  view,
+}: {
+  filters: FilterBadge[];
+  view: "graphs" | "list";
+}) {
   const { t } = useTranslation();
   return (
     <div className="flex flex-wrap gap-2">
-      {filters.map((filter, index) => (
-        <Badge
-          key={index}
-          variant="secondary"
-          className="bg-blue-5/30 text-blue-2 pl-2 pr-1 flex items-center gap-1"
-        >
-          <span className="text-grey text-xs mr-1">
-            {filter.type === "sort"
-              ? t("companiesPage.sorting")
-              : t("companiesPage.filtering")}
-          </span>
-          {filter.label}
-          {filter.type === "filter" && filter.onRemove && (
-            <button
-              type="button"
-              title={t("companiesPage.removeFilter")}
-              onClick={(e) => {
-                e.preventDefault();
-                filter.onRemove?.();
-              }}
-              className="hover:bg-blue-5/50 p-1 rounded-sm transition-colors"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
-        </Badge>
-      ))}
+      {filters.map((filter, index) => {
+        // Only show sorting badges in list view
+        if (filter.type === "sort" && view !== "list") return null;
+
+        return (
+          <Badge
+            key={index}
+            variant="secondary"
+            className="bg-blue-5/30 text-blue-2 pl-2 pr-1 flex items-center gap-1"
+          >
+            <span className="text-grey text-xs mr-1">
+              {filter.type === "sort"
+                ? t("companiesPage.sorting")
+                : t("companiesPage.filtering")}
+            </span>
+            {filter.label}
+            {filter.type === "filter" && filter.onRemove && (
+              <button
+                type="button"
+                title={t("companiesPage.removeFilter")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  filter.onRemove?.();
+                }}
+                className="hover:bg-blue-5/50 p-1 rounded-sm transition-colors"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </Badge>
+        );
+      })}
     </div>
   );
 }

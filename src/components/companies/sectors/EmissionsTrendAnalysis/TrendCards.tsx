@@ -21,7 +21,7 @@ const TrendCards: React.FC<TrendCardsProps> = ({
   const categoryInfo = useCategoryInfo();
   return (
     <div
-      className={`grid ${isMobile.isMobile ? "grid-cols-1" : "grid-cols-3"} gap-6`}
+      className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-3"} gap-6`}
     >
       {(Object.keys(trends) as Array<keyof TrendData>).map((category) => (
         <TrendCard
@@ -34,7 +34,7 @@ const TrendCards: React.FC<TrendCardsProps> = ({
           }
           onClose={() => onCategorySelect(null)}
           info={categoryInfo[category]}
-          isMobile={isMobile.isMobile}
+          isMobile={isMobile}
         />
       ))}
     </div>
