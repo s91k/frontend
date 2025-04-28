@@ -54,17 +54,28 @@ export const RequestAccessModal = ({
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to submit request");
+        throw new Error(data.error || "Failed to submit request");
       }
 
       setStatus("success");
       setEmail("");
       setReason("work");
+
+      // Auto close the modal after 3 seconds on success
+      setTimeout(() => {
+        onClose();
+      }, 3000);
     } catch (error) {
       console.error("Error submitting request:", error);
       setStatus("error");
-      setErrorMessage(t("productsPage.requestAccess.errorGeneric"));
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : t("productsPage.requestAccess.errorGeneric"),
+      );
     }
   };
 

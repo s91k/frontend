@@ -44,10 +44,10 @@ export const ProductCard = ({
   iconColor,
 }: ProductCardProps) => (
   <div
-    className={`${bgColor} border ${borderColor} p-8 shadow-lg hover:${hoverBorderColor} transition-colors first:rounded-t-2xl last:rounded-b-2xl lg:first:rounded-l-2xl lg:first:rounded-tr-none lg:last:rounded-r-2xl lg:last:rounded-bl-none`}
+    className={`${bgColor} p-8 shadow-lg hover:${hoverBorderColor} transition-colors rounded-2xl`}
   >
     <div className="flex items-center gap-4">
-      <div className={`rounded-lg ${iconBgColor} p-3 border ${borderColor}`}>
+      <div className={`rounded-full ${iconBgColor} p-3 border ${borderColor}`}>
         {icon}
       </div>
       <h2 className={`text-2xl font-light ${textColor}`}>{title}</h2>
