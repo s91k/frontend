@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, CheckCircle, AlertCircle } from "lucide-react";
-import MailchimpSubscribe from "react-mailchimp-subscribe";
 
 interface RequestAccessModalProps {
   isOpen: boolean;
@@ -25,12 +24,8 @@ export const RequestAccessModal = ({
   const [reason, setReason] = useState("Work");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const MAILCHIMP_URL = import.meta.env.VITE_MAILCHIMP_DATABASE_URL || "https://";
 
-  const handleFormSubmit = (
-    event: React.SyntheticEvent<HTMLFormElement>,
-    subscribe: (data: any) => void
-  ) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setStatus("idle");
     setErrorMessage("");
@@ -47,10 +42,30 @@ export const RequestAccessModal = ({
       return;
     }
 
-    subscribe({
-      EMAIL: email,
-      REASON: reason,
-    });
+    try {
+      const response = await fetch("/api/download-request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          reason,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit request");
+      }
+
+      setStatus("success");
+      setEmail("");
+      setReason("work");
+    } catch (error) {
+      console.error("Error submitting request:", error);
+      setStatus("error");
+      setErrorMessage(t("productsPage.requestAccess.errorGeneric"));
+    }
   };
 
   return (
@@ -87,129 +102,104 @@ export const RequestAccessModal = ({
                   {t("productsPage.requestAccess.title")}
                 </Dialog.Title>
 
-                <MailchimpSubscribe
-                  url={MAILCHIMP_URL}
-                  render={({ subscribe, status: mailchimpStatus, message }) => {
-                    if (mailchimpStatus === "success" && status !== "success") {
-                      setStatus("success");
-                      setEmail("");
-                      setReason("work");
-                    } else if (
-                      mailchimpStatus === "error" &&
-                      status !== "error"
-                    ) {
-                      setStatus("error");
-                      setErrorMessage(
-                        (message as string) ||
-                          t("productsPage.requestAccess.errorGeneric")
-                      );
-                    }
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-grey mb-2"
+                    >
+                      {t("productsPage.requestAccess.emailLabel")}
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3 py-2 bg-black-1 border border-black-1 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-4"
+                      required
+                      disabled={status === "success"}
+                    />
+                  </div>
 
-                    return (
-                      <form
-                        onSubmit={(event) => handleFormSubmit(event, subscribe)}
-                        className="space-y-4"
-                      >
-                        <div>
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-grey mb-2"
-                          >
-                            {t("productsPage.requestAccess.emailLabel")}
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 bg-black-1 border border-black-1 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-4"
-                            required
-                            disabled={status === "success"}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="reason"
-                            className="block text-sm font-medium text-grey mb-2"
-                          >
-                            {t("productsPage.requestAccess.reasonLabel")}
-                          </label>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger className="w-full px-3 py-2 bg-black-1 border border-black-1 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-4 flex justify-between items-center">
-                              {reason}
-                              <ChevronDown className="h-4 w-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-black-2 border border-black-1">
-                              <DropdownMenuRadioGroup
-                                value={reason}
-                                onValueChange={setReason}
-                              >
-                                <DropdownMenuRadioItem value="Work">
-                                  {t("productsPage.requestAccess.reasonWork")}
-                                </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem value="Hobby">
-                                  {t("productsPage.requestAccess.reasonHobby")}
-                                </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem value="Curiosity">
-                                  {t("productsPage.requestAccess.reasonCuriosity")}
-                                </DropdownMenuRadioItem>
-                              </DropdownMenuRadioGroup>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
+                  <div>
+                    <label
+                      htmlFor="reason"
+                      className="block text-sm font-medium text-grey mb-2"
+                    >
+                      {t("productsPage.requestAccess.reasonLabel")}
+                    </label>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="w-full px-3 py-2 bg-black-1 border border-black-1 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-4 flex justify-between items-center">
+                        {reason}
+                        <ChevronDown className="h-4 w-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-black-2 border border-black-1">
+                        <DropdownMenuRadioGroup
+                          value={reason}
+                          onValueChange={setReason}
+                        >
+                          <DropdownMenuRadioItem value="Work">
+                            {t("productsPage.requestAccess.reasonWork")}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="Hobby">
+                            {t("productsPage.requestAccess.reasonHobby")}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="Curiosity">
+                            {t("productsPage.requestAccess.reasonCuriosity")}
+                          </DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
 
-                        {/* Success Message */}
-                        {status === "success" && (
-                          <div className="mt-4 p-3 bg-green-4/30 border border-green-1 rounded flex items-center">
-                            <CheckCircle className="w-5 h-5 text-green-1 mr-2" />
-                            <p className="text-sm text-green-1">
-                              {t("productsPage.requestAccess.successMessage")}
-                            </p>
-                          </div>
-                        )}
+                  {/* Success Message */}
+                  {status === "success" && (
+                    <div className="mt-4 p-3 bg-green-4/30 border border-green-1 rounded flex items-center">
+                      <CheckCircle className="w-5 h-5 text-green-1 mr-2" />
+                      <p className="text-sm text-green-1">
+                        {t("productsPage.requestAccess.successMessage")}
+                      </p>
+                    </div>
+                  )}
 
-                        {/* Error Message */}
-                        {status === "error" && (
-                          <div className="mt-4 p-3 bg-red-900/30 border border-red-500 rounded flex items-center">
-                            <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
-                            <p className="text-sm text-red-300">
-                              {errorMessage}
-                            </p>
-                          </div>
-                        )}
+                  {/* Error Message */}
+                  {status === "error" && (
+                    <div className="mt-4 p-3 bg-red-900/30 border border-red-500 rounded flex items-center">
+                      <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
+                      <p className="text-sm text-red-300">{errorMessage}</p>
+                    </div>
+                  )}
 
-                        <p className="text-xs text-grey mt-2">
-                          {t("newsletter.privacyNotice")}{" "}
-                          <a
-                            href="/privacy"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="underline hover:text-white"
-                          >
-                            {t("newsletter.privacyLink")}
-                          </a>
-                        </p>
+                  <p className="text-xs text-grey mt-2">
+                    {t("newsletter.privacyNotice")}{" "}
+                    <a
+                      href="/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-white"
+                    >
+                      {t("newsletter.privacyLink")}
+                    </a>
+                  </p>
 
-                        <div className="flex justify-end gap-4 mt-6">
-                          <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-sm font-medium text-grey hover:text-white focus:outline-none"
-                          >
-                            {t("productsPage.requestAccess.cancel")}
-                          </button>
-                          <button
-                            type="submit"
-                            className="inline-flex justify-center rounded-md bg-blue-4 px-4 py-2 text-sm font-medium text-white hover:bg-blue-3 focus:outline-none focus:ring-2 focus:ring-blue-4"
-                            disabled={status === "success"}
-                          >
-                            {t("productsPage.requestAccess.submit")}
-                          </button>
-                        </div>
-                      </form>
-                    );
-                  }}
-                />
+                  <div className="flex justify-end gap-4 mt-6">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="px-4 py-2 text-sm font-medium text-grey hover:text-white focus:outline-none"
+                    >
+                      {t("productsPage.requestAccess.cancel")}
+                    </button>
+                    <button
+                      type="submit"
+                      className="inline-flex justify-center rounded-md bg-blue-4 px-4 py-2 text-sm font-medium text-white hover:bg-blue-3 focus:outline-none focus:ring-2 focus:ring-blue-4"
+                      disabled={status === "success"}
+                    >
+                      {t("productsPage.requestAccess.submit")}
+                    </button>
+                  </div>
+                </form>
               </Dialog.Panel>
             </Transition.Child>
           </div>
