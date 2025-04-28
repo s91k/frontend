@@ -67,7 +67,10 @@ const PieLegend: React.FC<PieLegendProps> = ({
         {payload.map((entry, index) => {
           const value = entry.payload?.value || entry.value;
           const total = entry.payload?.total || entry.total;
-          const percentage = formatPercent(value / total, currentLanguage);
+          const percentage =
+            value / total < 0.001
+              ? "<0.1%"
+              : formatPercent(value / total, currentLanguage);
 
           let color;
           if (selectedSector) {
