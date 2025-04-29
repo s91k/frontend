@@ -139,7 +139,7 @@
     "freeAccess": {
       "title": "Free Database Access",
       "description": "Access our comprehensive climate database through bi-yearly data dumps, perfect for research and analysis.",
-      "export": "Database export every 6 months",
+      "export": "Database exports are updated Feb 1 & Aug 1 each year",
       "data": "Corporate and municipality climate data",
       "license": "Free to use for both commerical and non-commercial purposes",
       "requestAccess": "Get Data"

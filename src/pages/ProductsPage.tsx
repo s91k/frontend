@@ -149,7 +149,7 @@ function ProductsPage() {
         />
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Premium Version */}
             <ProductCard
               title={t("productsPage.apiAccess.title")}
