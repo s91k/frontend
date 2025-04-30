@@ -85,7 +85,10 @@ export async function getMunicipalityDetails(name: string) {
   return data;
 }
 
-export async function updateReportingPeriods(wikidataId: string, body) {
+export async function updateReportingPeriods(
+  wikidataId: string,
+  body: paths["/companies/{wikidataId}/reporting-periods"]["post"]["requestBody"]["content"]["application/json"],
+) {
   const { data, error } = await client.POST(
     "/companies/{wikidataId}/reporting-periods",
     {
@@ -117,14 +120,13 @@ export async function downloadCompanies(
   return data;
 }
 
-export async function downloadMunicipalities(format: "csv" | "json" | "xlsx") {
-  const response = await fetch(
-    `${baseUrl}/municipalities/export/?type=${
-      format === "xlsx" ? "csv" : format
-    }`,
-  );
-  if (!response.ok) throw new Error("Failed to download");
-  return response.text();
+export async function downloadMunicipalities() {
+  const { data, error } = await client.GET("/municipalities/export", {
+    parseAs: "blob",
+  });
+
+  if (error) throw error;
+  return data;
 }
 
 let reportingYearsCache: string[] | null = null;
