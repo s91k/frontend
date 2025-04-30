@@ -410,7 +410,6 @@
             "title": "Greenpeace",
             "text": "Mapping of climate requirements in public procurement",
             "link": "https://docs.google.com/spreadsheets/d/1EdHUa49HJZn0rXqM-6tChdim4TJzXnwA/edit#gid=1040317160"
-
           }
         }
       },
@@ -986,6 +985,12 @@
     "success": {
       "title": "Changes have been saved!",
       "description": "Changes to the reporting period have been made successfully"
+    },
+    "unsavedChanges": {
+      "title": "Unsaved Changes",
+      "description": "You have unsaved changes. Are you sure you want to leave?",
+      "cancel": "Cancel",
+      "discard": "Discard Changes"
     }
   },
   "authCallbackPage": {

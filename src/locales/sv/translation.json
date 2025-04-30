@@ -969,23 +969,29 @@
   },
   "companyEditPage": {
     "error": {
-      "couldNotFetch": "Det gick inte att hämta företagsinformation",
-      "tryAgainLater": "Försök igen senare",
-      "couldNotFind": "Företaget kunde ej hittas",
+      "couldNotFetch": "Kunde inte hämta företagsdata",
+      "tryAgainLater": "Vänligen försök igen senare",
+      "couldNotFind": "Företaget kunde inte hittas",
       "checkId": "Kontrollera att företags-ID:t är korrekt"
     },
     "rowName": {
       "reportingTimespan": "Rapporteringsperiod",
       "reportingStart": "Start",
       "reportingEnd": "Slut",
-      "marketBased": "Marknadsbaserat",
-      "locationBased": "Platsbaserat",
-      "unknown": "Okänt"
+      "marketBased": "Marknadsbaserad",
+      "locationBased": "Platsbaserad",
+      "unknown": "Okänd"
     },
     "save": "Spara",
     "success": {
-      "title": "Ändringar sparade!",
-      "description": "Rapporteringsperioden har nu uppdaterats"
+      "title": "Ändringarna har sparats!",
+      "description": "Ändringar i rapporteringsperioden har gjorts framgångsrikt"
+    },
+    "unsavedChanges": {
+      "title": "Osparade ändringar",
+      "description": "Du har osparade ändringar. Är du säker på att du vill lämna?",
+      "cancel": "Avbryt",
+      "discard": "Kasta ändringar"
     }
   },
   "authCallbackPage": {
