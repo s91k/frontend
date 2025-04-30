@@ -259,6 +259,8 @@
     "sorting": "Sorterar:",
     "filtering": "Filter:",
     "allSectors": "Alla sektorer",
+    "sectionTitle": "Företag",
+    "noCompaniesInSection": "Inga företag i denna kategori",
     "sectorGraphs": {
       "yearRange": "Basår: {{baseYear}} → Nu: {{currentYear}}",
       "noCompaniesInSector": "Inga företag i denna kategori",
@@ -860,6 +862,7 @@
       "trend": "Trend",
       "parisAgreement": "Parisavtalet",
       "paris": "Parisavtalet",
+      "unit": "tons CO₂e",
       "total": "Totalt",
       "year": "År"
     },
@@ -1059,5 +1062,9 @@
       "2026: Börsnoterade SMF och andra företag",
       "Gradvis expansion för att täcka fler företag"
     ]
+  },
+  "common": {
+    "loading": "Laddar...",
+    "error": "Fel"
   }
 }
