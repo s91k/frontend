@@ -20,7 +20,7 @@ interface PieLegendProps {
   handlePieClick: (data: any) => void;
 }
 
-const PieLegend: React.FC<PieLegendProps> = ({
+const SectorPieLegend: React.FC<PieLegendProps> = ({
   payload,
   selectedLabel,
   handlePieClick,
@@ -125,4 +125,4 @@ const PieLegend: React.FC<PieLegendProps> = ({
   );
 };
 
-export default PieLegend;
+export default SectorPieLegend;

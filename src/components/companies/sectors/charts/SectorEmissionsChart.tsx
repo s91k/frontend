@@ -21,10 +21,10 @@ import { useChartData } from "@/hooks/companies/useChartData";
 import CustomTooltip from "./tooltips/CustomTooltip";
 import ChartHeader from "./ChartHeader";
 import { useTranslation } from "react-i18next";
-import PieChartView from "./PieChartView";
+import PieChartView from "../../CompanyPieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { cn } from "@/lib/utils";
-import PieLegend from "./PieLegend";
+import SectorPieLegend from "./SectorPieLegend";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -146,16 +146,18 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
             <div className="flex flex-col gap-4 mt-8 md:flex-row md:gap-8">
-              <PieChartView
-                pieChartData={pieChartDataWithColor}
-                selectedLabel={selectedSector}
-                size={size}
-                handlePieClick={handlePieClick}
-                handlePieMouseEnter={() => {}}
-                layout={screenSize.isMobile ? "mobile" : "desktop"}
-              />
+              <div className="md:w-2/3 md:h-full w-full">
+                <PieChartView
+                  pieChartData={pieChartDataWithColor}
+                  selectedLabel={selectedSector}
+                  size={size}
+                  handlePieClick={handlePieClick}
+                  handlePieMouseEnter={() => {}}
+                  layout={screenSize.isMobile ? "mobile" : "desktop"}
+                />
+              </div>
               <div className={"w-full md:w-1/3 flex md:items-center"}>
-                <PieLegend
+                <SectorPieLegend
                   payload={pieChartData}
                   selectedLabel={selectedSector}
                   handlePieClick={handlePieClick}

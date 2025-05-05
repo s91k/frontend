@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "react-i18next";
-import PieChartView from "../sectors/charts/PieChartView";
+import PieChartView from "../CompanyPieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
+import Scope3PieLegend from "./Scope3PieLegend";
 
 interface Scope3DataProps {
   emissions: {
@@ -118,19 +119,34 @@ export function Scope3Data({
         </div>
 
         <TabsContent value="chart">
-          <PieChartView
-            pieChartData={selectedCategories.map((cat) => ({
-              name: getCategoryName(cat.category),
-              value: cat.total,
-              color: getCategoryColor(cat.category),
-            }))}
-            selectedLabel={null}
-            size={size}
-            handlePieClick={() => {}}
-            handlePieMouseEnter={(data) =>
-              setHoveredCategory(Number(data.labelCode))
-            }
-          />
+          <div className="flex flex-col gap-4 mt-8 lg:flex-row lg:gap-8">
+            <div className="w-full lg:w-1/2 lg:h-full">
+              <PieChartView
+                pieChartData={selectedCategories.map((cat) => ({
+                  name: getCategoryName(cat.category),
+                  value: cat.total,
+                  color: getCategoryColor(cat.category),
+                }))}
+                selectedLabel={null}
+                size={size}
+                handlePieClick={() => {}}
+                handlePieMouseEnter={(data) =>
+                  setHoveredCategory(Number(data.sectorCode))
+                }
+              />
+            </div>
+            <div className={"w-full flex lg:w-1/2 lg:items-center"}>
+              <Scope3PieLegend
+                payload={selectedCategories.map((cat) => ({
+                  name: getCategoryName(cat.category),
+                  value: cat.total,
+                  total: emissions.scope3?.total ?? 0,
+                  color: getCategoryColor(cat.category),
+                }))}
+                selectedLabel={null}
+              />
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="data">
