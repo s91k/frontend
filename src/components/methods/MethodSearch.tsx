@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useRef } from "react";
 import { searchMethods } from "@/lib/methods/methodologyData";
 import { X } from "lucide-react";
+import { Input } from "../ui/input";
 
 interface MethodologySearchProps {
   searchQuery: string;
@@ -44,16 +45,16 @@ export function MethodologySearch({
   };
 
   return (
-    <div className="bg-black-2 rounded-level-2 p-2">
+    <div className="bg-black-2 rounded-md p-2">
       <div className="flex items-center gap-2">
-        <input
+        <Input
           id="methodology-search"
           ref={inputRef}
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={t("methodsPage.dataSelector.label")}
-          className="bg-black-2 w-full"
+          className="bg-black-1 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-2 relative"
           aria-label={t("methodsPage.dataSelector.label")}
         />
         <button

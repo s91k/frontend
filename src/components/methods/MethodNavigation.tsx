@@ -26,7 +26,7 @@ export function MethodologyNavigation({
   };
 
   return (
-    <nav aria-label="Methodology Navigation" className="bg-black-2 rounded-2xl p-2">
+    <nav aria-label="Methodology Navigation" className="bg-black-2 rounded-md p-2">
       <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
       
       <ul className="divide-y divide-black-1">
