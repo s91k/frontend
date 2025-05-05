@@ -55,7 +55,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
             <Cell
               key={entry.name}
               fill={entry.color}
-              stroke={hoveredCategory === index ? "white" : undefined}
+              stroke={hoveredCategory === index ? entry.color : undefined}
               strokeWidth={hoveredCategory === index ? 4 : 0}
               style={navigable ? { cursor: "pointer" } : undefined}
             />

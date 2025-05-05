@@ -136,7 +136,6 @@ export function Scope3Data({
                 handlePieMouseEnter={(data) =>
                   setHoveredCategory(Number(data.sectorCode))
                 }
-                handlePieMouseLeave={() => setHoveredCategory(null)}
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>
