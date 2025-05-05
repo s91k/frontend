@@ -56,7 +56,6 @@ export function Scope3Data({
 }: Scope3DataProps) {
   const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState<string>("latest");
-  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   const { size } = useResponsiveChartSize();
   const { getCategoryColor, getCategoryName } = useCategoryMetadata();
 
