@@ -23,7 +23,7 @@ export function SupportMethod({
     : Object.values(details);
 
   return (
-    <div className="card-dark">
+    <div className="bg-black-2 rounded-level-1 p-6">
       <div className="flex items-start gap-4">
         <div className="p-3 bg-black-1 rounded-full">{icon}</div>
         <div className="flex-1">
@@ -42,7 +42,7 @@ export function SupportMethod({
               href={action.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-black-1 hover:bg-black-2 text-white px-6 py-2 rounded-lg transition-colors duration-200"
+              className="inline-block bg-black-1 hover:bg-blue-5 text-white px-6 py-2 rounded-lg transition-colors duration-200"
             >
               {action.text}
             </a>
