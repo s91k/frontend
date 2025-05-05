@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { MethodologyNavigation } from "@/components/methods/MethodNavigation";
 import { MethodologyContent } from "@/components/methods/MethodContent";
 import { MethodologySearch } from "@/components/methods/MethodSearch";
-import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { Search } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PageSEO } from "@/components/SEO/PageSEO";
@@ -88,8 +87,6 @@ export function MethodsPage() {
             />
           </main>
         </div>
-
-        <ScrollToTop />
       </div>
     </>
   );
