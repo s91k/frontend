@@ -53,39 +53,26 @@ export function Scope3Data({
 }: Scope3DataProps) {
   const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState<string>("latest");
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
 
   if (!emissions?.scope3?.categories?.length) {
     return null;
   }
 
-  // Get available years from historical data
-  const availableYears = historicalData
-    ? [...new Set(historicalData.map((data) => data.year))].sort(
-        (a, b) => b - a,
-      )
-    : [];
+  const availableYears =
+    historicalData
+      ?.map((data) => data.year)
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .sort((a, b) => b - a) || [];
 
-  // Get the latest year from historical data or use current year as fallback
-  const latestYear =
-    availableYears.length > 0 ? availableYears[0] : new Date().getFullYear();
+  const latestYear = availableYears[0] ?? new Date().getFullYear();
 
-  // Get categories for selected year
   const selectedCategories =
     selectedYear === "latest"
       ? emissions.scope3.categories
-      : historicalData?.find((data) => data.year === parseInt(selectedYear))
-          ?.categories || emissions.scope3.categories;
+      : (historicalData?.find((data) => data.year === parseInt(selectedYear))
+          ?.categories ?? emissions.scope3.categories);
 
-  // Create emissions object for selected year
-  const selectedEmissions = {
-    ...emissions,
-    scope3: {
-      ...emissions.scope3,
-      categories: selectedCategories,
-    },
-  };
-
-  // Determine the year to display
   const displayYear =
     selectedYear === "latest" ? latestYear : parseInt(selectedYear);
 
@@ -105,7 +92,7 @@ export function Scope3Data({
             </TabsTrigger>
           </TabsList>
 
-          {historicalData && historicalData.length > 0 && (
+          {availableYears.length > 0 && (
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger className="w-full sm:w-[180px] bg-black-1">
                 <SelectValue
@@ -130,14 +117,16 @@ export function Scope3Data({
           <Scope3Chart
             categories={selectedCategories}
             className="bg-transparent p-0"
+            hoveredCategory={hoveredCategory}
+            setHoveredCategory={setHoveredCategory}
           />
         </TabsContent>
 
         <TabsContent value="data">
           <EmissionsBreakdown
             emissions={{
-              scope3: selectedEmissions.scope3,
-              calculatedTotalEmissions: selectedEmissions.scope3?.total || 0,
+              scope3: { ...emissions.scope3, categories: selectedCategories },
+              calculatedTotalEmissions: emissions.scope3?.total || 0,
             }}
             year={displayYear}
             className="bg-transparent p-0"
