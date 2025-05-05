@@ -81,7 +81,6 @@ export function MethodsPage() {
               />
             </div>
           </div>
-
           <main className="lg:w-3/4">
             <MethodologyContent
               method={selectedMethod}

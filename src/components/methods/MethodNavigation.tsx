@@ -53,7 +53,7 @@ export function MethodologyNavigation({
                       onClick={() => onMethodChange(method.id)}
                       className={`w-full p-2 text-left text-sm rounded-lg transition-colors duration-200 ${
                         selectedMethod === method.id
-                          ? "bg-black-1 text-white font-medium"
+                          ? "bg-black-1 text-blue-3 font-medium"
                           : "text-grey hover:bg-black-1 hover:text-white"
                       }`}
                       aria-current={selectedMethod === method.id ? "page" : undefined}

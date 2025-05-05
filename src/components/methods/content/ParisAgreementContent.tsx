@@ -4,7 +4,7 @@ import { LinkButton } from "@/components/layout/LinkButton";
 export const ParisAgreementContent = () => {
   const { t } = useTranslation();
   return (
-    <div className="prose prose-invert w-[90%] max-w-5xl mx-auto space-y-4">
+    <div className="prose prose-invert mx-auto space-y-4">
       <p>{t("methodsPage.accordion.parisAgreement.paragraph1")}</p>
       <p>
         <Trans

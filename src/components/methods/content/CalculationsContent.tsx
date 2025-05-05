@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "react-i18next";
 export const CalculationsContent = () => {
   const { t } = useTranslation();
   return (
-    <div className="prose prose-invert w-[90%] max-w-5xl mx-auto space-y-8">
+    <div className="prose prose-invert mx-auto space-y-8">
       <p>{t("methodsPage.accordion.calculations.paragraph1")}</p>
       <p>
         <Trans

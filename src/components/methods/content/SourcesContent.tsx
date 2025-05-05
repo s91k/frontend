@@ -4,7 +4,7 @@ import { LinkButton } from "@/components/layout/LinkButton";
 export const SourcesContent = () => {
   const { t } = useTranslation();
   return (
-    <div className="prose prose-invert w-[90%] max-w-5xl mx-auto space-y-8">
+    <div className="prose prose-invert mx-auto space-y-8">
       <p>{t("methodsPage.accordion.sources.paragraph1")}</p>
       <p>{t("methodsPage.accordion.sources.paragraph2")}</p>
       <div className="flex justify-center">
