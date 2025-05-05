@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  LegendProps,
 } from "recharts";
 import {
   sectorColors,
@@ -19,8 +20,9 @@ import { useChartData } from "@/hooks/companies/useChartData";
 import CustomTooltip from "./tooltips/CustomTooltip";
 import ChartHeader from "./ChartHeader";
 import { useTranslation } from "react-i18next";
-import MobilePieChartView from "./PieChartView";
+import PieChartView from "./PieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
+import { cn } from "@/lib/utils";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -35,6 +37,11 @@ export interface SectorPieChartData {
   sectorCode?: string;
 }
 
+type BarClickData = {
+  activePayload?: { dataKey: string }[];
+  activeLabel?: string;
+};
+
 const formatYAxisTick = (value: number): string => {
   if (value >= 1_000_000_000) {
     return `${(value / 1_000_000_000).toFixed(1)}B`;
@@ -46,15 +53,16 @@ const formatYAxisTick = (value: number): string => {
   return value.toString();
 };
 
-const StackedTotalLegend = ({ payload }: { payload: any[] }) => {
+const StackedTotalLegend = ({
+  payload,
+}: {
+  payload: LegendProps["payload"];
+}) => {
   return (
     <div className="flex flex-wrap justify-center gap-4 mt-4">
-      {payload.map((entry, index) => (
+      {payload?.map((entry, index) => (
         <div key={index} className="flex items-center gap-2">
-          <div
-            className="w-3 h-3 rounded"
-            style={{ backgroundColor: entry.color }}
-          />
+          <div className={cn("w-3 h-3 rounded", `bg-[${entry.color}]`)} />
           <span className="text-sm text-grey">{entry.value}</span>
         </div>
       ))}
@@ -83,37 +91,27 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     selectedYear,
   );
 
-  const [legendData, setLegendData] = useState<any[]>([]);
-
-  const handlePieMouseEnter = useCallback((data: any) => {
-    if (data && data.payload) {
-      setLegendData(data.payload);
-    }
-  }, []);
-
-  const handleBarClick = (data: any) => {
+  const handleBarClick = (data: BarClickData) => {
     if (chartType === "stacked-total") {
       return;
     }
-
     if (!data || !data.activePayload || !data.activePayload[0]) {
       return;
     }
-
     const [sector] = data.activePayload[0].dataKey.split("_scope");
     const sectorCode = Object.entries(sectorNames).find(
-      ([_, name]) => name === sector,
+      ([, name]) => name === sector,
     )?.[0];
 
     if (sectorCode) {
       setSelectedSector(sectorCode);
-      setSelectedYear(data.activeLabel);
+      setSelectedYear(data.activeLabel!);
     }
   };
 
-  const handlePieClick = (data: { payload: SectorPieChartData }) => {
-    if (!selectedSector && data?.payload?.sectorCode) {
-      setSelectedSector(data.payload.sectorCode);
+  const handlePieClick = (data: SectorPieChartData) => {
+    if (!selectedSector && data?.sectorCode) {
+      setSelectedSector(data.sectorCode);
     }
   };
 
@@ -134,12 +132,12 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
       <div>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
-            <MobilePieChartView
+            <PieChartView
               pieChartData={pieChartData}
               selectedSector={selectedSector}
               size={size}
-              handlePieMouseEnter={handlePieMouseEnter}
               handlePieClick={handlePieClick}
+              handlePieMouseEnter={() => {}}
               layout={screenSize.isMobile ? "mobile" : "desktop"}
             />
           ) : (

@@ -9,7 +9,7 @@ import CompanyTooltip from "./tooltips/CompanyTooltip";
 import PieLegend from "./PieLegend";
 import { SectorPieChartData } from "./SectorEmissionsChart";
 
-interface MobilePieChartViewProps {
+interface PieChartViewProps {
   pieChartData: SectorPieChartData[];
   selectedSector: string | null;
   size: { innerRadius: number; outerRadius: number };
@@ -18,7 +18,7 @@ interface MobilePieChartViewProps {
   layout?: "desktop" | "mobile";
 }
 
-const MobilePieChartView: React.FC<MobilePieChartViewProps> = ({
+const PieChartView: React.FC<PieChartViewProps> = ({
   pieChartData,
   selectedSector,
   size,
@@ -72,7 +72,7 @@ const MobilePieChartView: React.FC<MobilePieChartViewProps> = ({
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className={isDesktop ? "w-1/3 items-center" : "w-full"}>
+      <div className={isDesktop ? "w-1/3 flex items-center" : "w-full"}>
         <PieLegend
           payload={pieChartData}
           selectedSector={selectedSector}
@@ -83,4 +83,4 @@ const MobilePieChartView: React.FC<MobilePieChartViewProps> = ({
   );
 };
 
-export default MobilePieChartView;
+export default PieChartView;
