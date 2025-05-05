@@ -13,6 +13,7 @@ import {
 import {
   sectorColors,
   useSectorNames,
+  getCompanyColors,
 } from "@/hooks/companies/useCompanyFilters";
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { useScreenSize } from "@/hooks/useScreenSize";
@@ -139,6 +140,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
               handlePieClick={handlePieClick}
               handlePieMouseEnter={() => {}}
               layout={screenSize.isMobile ? "mobile" : "desktop"}
+              getColor={(index) => getCompanyColors(index)}
             />
           ) : (
             <BarChart

@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
-import type { TooltipProps } from "recharts";
 
 interface Scope3ChartProps {
   categories: Array<{
@@ -18,26 +17,9 @@ interface Scope3ChartProps {
     unit: string;
   }>;
   className?: string;
-  hoveredCategory: number | null;
-  setHoveredCategory: (category: number | null) => void;
 }
 
-type PieLabelRenderProps = {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  percent: number;
-  index: number;
-};
-
-export function Scope3Chart({
-  categories,
-  className,
-  hoveredCategory,
-  setHoveredCategory,
-}: Scope3ChartProps) {
+export function Scope3Chart({ categories, className }: Scope3ChartProps) {
   const [excludedCategories, setExcludedCategories] = useState<number[]>([]);
   const { getCategoryName, getCategoryColor, getCategoryFilterColors } =
     useCategoryMetadata();
@@ -73,7 +55,7 @@ export function Scope3Chart({
     setExcludedCategories([]);
   };
 
-  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -103,10 +85,11 @@ export function Scope3Chart({
     cx,
     cy,
     midAngle,
+    innerRadius,
     outerRadius,
     percent,
     index,
-  }: PieLabelRenderProps) => {
+  }: any) => {
     const radius = outerRadius * 1.35;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -144,7 +127,9 @@ export function Scope3Chart({
   };
 
   return (
-    <div className={cn("bg-black-2 rounded-level-1 p-4 md:p-8", className)}>
+    <div
+      className={cn("bg-black-2 rounded-level-1 p-4 md:p-8 lg:p-8", className)}
+    >
       {excludedCategories.length > 0 && (
         <div className="mb-2 p-4 bg-black-1 rounded-level-2">
           <Text variant="small" className="text-grey">
@@ -167,7 +152,6 @@ export function Scope3Chart({
                 >
                   <span>{getCategoryName(catId)}</span>
                   <button
-                    title={t("companies.scope3Chart.clickToFilter")}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleCategoryRestore(catId);
@@ -200,78 +184,38 @@ export function Scope3Chart({
         )}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 min-w-0 min-h-0">
-          <div
-            ref={containerRef}
-            className="w-full h-full min-h-[300px] min-w-[300px]"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={size.innerRadius}
-                  outerRadius={size.outerRadius}
-                  cornerRadius={8}
-                  paddingAngle={2}
-                  dataKey="value"
-                  nameKey="name"
-                  label={undefined}
-                  labelLine={false}
-                  onClick={(entry) => handleCategoryClick(entry.category)}
-                  className="cursor-pointer"
-                >
-                  {chartData.map((entry) => (
-                    <Cell
-                      onMouseEnter={() => setHoveredCategory(entry.category)}
-                      onMouseLeave={() => setHoveredCategory(null)}
-                      key={`cell-${entry.category}`}
-                      fill={entry.color}
-                      strokeWidth={hoveredCategory === entry.category ? 2 : 0}
-                    />
-                  ))}
-                </Pie>
-                {/* <Tooltip content={<CustomTooltip />} /> */}
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div
-          className="
-            w-full
-            md:w-1/4
-            flex flex-col gap-2 min-w-[200px]
-          "
-        >
-          {categories.map((category) => (
-            <div
-              key={category.category}
-              onMouseEnter={() => setHoveredCategory(category.category)}
-              onMouseLeave={() => setHoveredCategory(null)}
-              className={cn(
-                "p-2 rounded cursor-pointer flex items-center gap-2",
-                hoveredCategory === category.category && "font-bold bg-black-1",
-              )}
+      <div
+        ref={containerRef}
+        className="h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]"
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={size.innerRadius}
+              outerRadius={size.outerRadius}
+              cornerRadius={8}
+              paddingAngle={2}
+              dataKey="value"
+              nameKey="name"
+              label={size.showLabels ? renderCustomizedLabel : undefined}
+              labelLine={false}
+              onClick={(entry) => handleCategoryClick(entry.category)}
+              className="cursor-pointer"
             >
-              <span
-                style={{
-                  display: "inline-block",
-                  width: 12,
-                  height: 12,
-                  borderRadius: 4,
-                  background: getCategoryColor(category.category),
-                  marginRight: 8,
-                }}
-              />
-              <p className="text-white">{category.category}</p>
-              <p className="text-grey text-sm">
-                {category.total} {category.unit}
-              </p>
-            </div>
-          ))}
-        </div>
+              {chartData.map((entry) => (
+                <Cell
+                  key={`cell-${entry.category}`}
+                  fill={entry.color}
+                  strokeWidth={0}
+                />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

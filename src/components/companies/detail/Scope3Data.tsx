@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmissionsBreakdown } from "./EmissionsBreakdown";
-import { Scope3Chart } from "./Scope3Chart";
 import {
   Select,
   SelectContent,
@@ -11,6 +10,9 @@ import {
 } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "react-i18next";
+import PieChartView from "../sectors/charts/PieChartView";
+import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
+import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 
 interface Scope3DataProps {
   emissions: {
@@ -53,7 +55,9 @@ export function Scope3Data({
 }: Scope3DataProps) {
   const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState<string>("latest");
-  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+  const [, setHoveredCategory] = useState<number | null>(null);
+  const { size } = useResponsiveChartSize();
+  const { getCategoryColor, getCategoryName } = useCategoryMetadata();
 
   if (!emissions?.scope3?.categories?.length) {
     return null;
@@ -114,11 +118,24 @@ export function Scope3Data({
         </div>
 
         <TabsContent value="chart">
-          <Scope3Chart
+          {/* <Scope3Chart
             categories={selectedCategories}
             className="bg-transparent p-0"
             hoveredCategory={hoveredCategory}
             setHoveredCategory={setHoveredCategory}
+          /> */}
+          <PieChartView
+            pieChartData={selectedCategories.map((cat) => ({
+              name: getCategoryName(cat.category),
+              value: cat.total,
+            }))}
+            selectedSector={null}
+            size={size}
+            handlePieClick={() => {}}
+            handlePieMouseEnter={(data) =>
+              setHoveredCategory(Number(data.name))
+            }
+            getColor={(index) => ({ base: getCategoryColor(index) })}
           />
         </TabsContent>
 

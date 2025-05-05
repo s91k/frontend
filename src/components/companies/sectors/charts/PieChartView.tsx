@@ -16,6 +16,7 @@ interface PieChartViewProps {
   handlePieMouseEnter: (data: SectorPieChartData) => void;
   handlePieClick: (data: SectorPieChartData) => void;
   layout?: "desktop" | "mobile";
+  getColor: (index: number, entry: SectorPieChartData) => { base: string };
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
@@ -25,6 +26,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   handlePieMouseEnter,
   handlePieClick,
   layout,
+  getColor,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -53,12 +55,12 @@ const PieChartView: React.FC<PieChartViewProps> = ({
                   key={entry.name}
                   fill={
                     selectedSector
-                      ? getCompanyColors(index).base
+                      ? getColor(index, entry).base
                       : "sectorCode" in entry
                         ? sectorColors[
                             entry.sectorCode as keyof typeof sectorColors
-                          ]?.base || "#888888"
-                        : "#888888"
+                          ]?.base || "var(--grey)"
+                        : "var(--grey)"
                   }
                   strokeWidth={0}
                 />
