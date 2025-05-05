@@ -115,6 +115,8 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   const handlePieClick = (data: SectorPieChartData) => {
     if (!selectedSector && data?.sectorCode) {
       setSelectedSector(data.sectorCode);
+    } else if (selectedSector && data?.wikidataId) {
+      window.location.href = `/companies/${data.wikidataId}`;
     }
   };
 
@@ -154,6 +156,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   handlePieClick={handlePieClick}
                   handlePieMouseEnter={() => {}}
                   layout={screenSize.isMobile ? "mobile" : "desktop"}
+                  navigable={true}
                 />
               </div>
               <div className={"w-full md:w-1/3 flex md:items-center"}>

@@ -36,7 +36,9 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
   if (!payload) return null;
 
   const handleItemClick = (entry: any) => {
-    if (selectedLabel) {
+    const isCompanyView =
+      payload?.[0]?.wikidataId || payload?.[0]?.payload?.wikidataId;
+    if (isCompanyView) {
       // If we're viewing companies within a sector, navigate to company detail page
       const wikidataId = entry.wikidataId || entry.payload?.wikidataId;
       if (wikidataId) {

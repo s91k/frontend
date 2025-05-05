@@ -13,6 +13,7 @@ interface PieChartViewProps {
   layout?: "desktop" | "mobile";
   hoveredCategory?: number | null;
   setHoveredCategory?: (cat: number | null) => void;
+  navigable?: boolean;
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
@@ -24,6 +25,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   layout,
   hoveredCategory,
   setHoveredCategory,
+  navigable = false,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -55,6 +57,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
               fill={entry.color}
               stroke={hoveredCategory === index ? "white" : undefined}
               strokeWidth={hoveredCategory === index ? 4 : 0}
+              style={navigable ? { cursor: "pointer" } : undefined}
             />
           ))}
         </Pie>
