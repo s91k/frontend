@@ -201,10 +201,7 @@ export function Scope3Chart({
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        <div
-          onMouseLeave={() => setHoveredCategory(null)}
-          className="flex-1 min-w-0 min-h-0"
-        >
+        <div className="flex-1 min-w-0 min-h-0">
           <div
             ref={containerRef}
             className="w-full h-full min-h-[300px] min-w-[300px]"
@@ -228,9 +225,11 @@ export function Scope3Chart({
                 >
                   {chartData.map((entry) => (
                     <Cell
+                      onMouseEnter={() => setHoveredCategory(entry.category)}
+                      onMouseLeave={() => setHoveredCategory(null)}
                       key={`cell-${entry.category}`}
                       fill={entry.color}
-                      strokeWidth={0}
+                      strokeWidth={hoveredCategory === entry.category ? 2 : 0}
                     />
                   ))}
                 </Pie>
@@ -251,18 +250,25 @@ export function Scope3Chart({
               key={category.category}
               onMouseEnter={() => setHoveredCategory(category.category)}
               onMouseLeave={() => setHoveredCategory(null)}
-              style={{
-                fontWeight:
-                  hoveredCategory === category.category ? "bold" : "normal",
-                background:
-                  hoveredCategory === category.category
-                    ? "#eee"
-                    : "transparent",
-                cursor: "pointer",
-              }}
-              className="p-2 rounded"
+              className={cn(
+                "p-2 rounded cursor-pointer flex items-center gap-2",
+                hoveredCategory === category.category && "font-bold bg-black-1",
+              )}
             >
-              {category.category}: {category.total} {category.unit}
+              <span
+                style={{
+                  display: "inline-block",
+                  width: 12,
+                  height: 12,
+                  borderRadius: 4,
+                  background: getCategoryColor(category.category),
+                  marginRight: 8,
+                }}
+              />
+              <p className="text-white">{category.category}</p>
+              <p className="text-grey text-sm">
+                {category.total} {category.unit}
+              </p>
             </div>
           ))}
         </div>

@@ -7,26 +7,33 @@ import {
 import PieChartTooltip from "./tooltips/PieChartTooltip";
 import CompanyTooltip from "./tooltips/CompanyTooltip";
 import PieLegend from "./PieLegend";
+import { SectorPieChartData } from "./SectorEmissionsChart";
 
-interface DesktopPieChartViewProps {
-  pieChartData: any[];
+interface MobilePieChartViewProps {
+  pieChartData: SectorPieChartData[];
   selectedSector: string | null;
   size: { innerRadius: number; outerRadius: number };
-  handlePieMouseEnter: (data: any) => void;
-  handlePieClick: (data: any) => void;
+  handlePieMouseEnter: (data: SectorPieChartData) => void;
+  handlePieClick: (data: SectorPieChartData) => void;
+  layout?: "desktop" | "mobile";
 }
 
-const DesktopPieChartView: React.FC<DesktopPieChartViewProps> = ({
+const MobilePieChartView: React.FC<MobilePieChartViewProps> = ({
   pieChartData,
   selectedSector,
   size,
   handlePieMouseEnter,
   handlePieClick,
+  layout,
 }) => {
+  const isDesktop = layout === "desktop";
+  const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
+  const outerRadius = isDesktop ? size.outerRadius * 1.2 : size.outerRadius;
+
   return (
-    <div className="flex gap-8">
-      <div className="w-2/3 h-full">
-        <ResponsiveContainer width="100%" height={size.outerRadius * 2.5}>
+    <div className={isDesktop ? "flex gap-8" : "flex flex-col gap-4 mt-8"}>
+      <div className={isDesktop ? "w-2/3 h-full" : "w-full"}>
+        <ResponsiveContainer width="100%" height={outerRadius * 2.5}>
           <PieChart>
             <Pie
               data={pieChartData}
@@ -34,8 +41,8 @@ const DesktopPieChartView: React.FC<DesktopPieChartViewProps> = ({
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={size.innerRadius * 1.2}
-              outerRadius={size.outerRadius * 1.2}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
               onMouseEnter={handlePieMouseEnter}
               onClick={handlePieClick}
               cornerRadius={8}
@@ -65,7 +72,7 @@ const DesktopPieChartView: React.FC<DesktopPieChartViewProps> = ({
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className="w-1/3 flex items-center">
+      <div className={isDesktop ? "w-1/3 items-center" : "w-full"}>
         <PieLegend
           payload={pieChartData}
           selectedSector={selectedSector}
@@ -76,4 +83,4 @@ const DesktopPieChartView: React.FC<DesktopPieChartViewProps> = ({
   );
 };
 
-export default DesktopPieChartView;
+export default MobilePieChartView;

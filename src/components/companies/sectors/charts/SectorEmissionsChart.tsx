@@ -19,8 +19,7 @@ import { useChartData } from "@/hooks/companies/useChartData";
 import CustomTooltip from "./tooltips/CustomTooltip";
 import ChartHeader from "./ChartHeader";
 import { useTranslation } from "react-i18next";
-import MobilePieChartView from "./MobilePieChartView";
-import DesktopPieChartView from "./DesktopPieChartView";
+import MobilePieChartView from "./PieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 
 interface EmissionsChartProps {
@@ -29,6 +28,12 @@ interface EmissionsChartProps {
 }
 
 type ChartType = "stacked-total" | "pie";
+
+export interface SectorPieChartData {
+  name: string;
+  value: number;
+  sectorCode?: string;
+}
 
 const formatYAxisTick = (value: number): string => {
   if (value >= 1_000_000_000) {
@@ -87,9 +92,13 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   }, []);
 
   const handleBarClick = (data: any) => {
-    if (chartType === "stacked-total") return;
+    if (chartType === "stacked-total") {
+      return;
+    }
 
-    if (!data || !data.activePayload || !data.activePayload[0]) return;
+    if (!data || !data.activePayload || !data.activePayload[0]) {
+      return;
+    }
 
     const [sector] = data.activePayload[0].dataKey.split("_scope");
     const sectorCode = Object.entries(sectorNames).find(
@@ -102,7 +111,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     }
   };
 
-  const handlePieClick = (data: any) => {
+  const handlePieClick = (data: { payload: SectorPieChartData }) => {
     if (!selectedSector && data?.payload?.sectorCode) {
       setSelectedSector(data.payload.sectorCode);
     }
@@ -125,29 +134,14 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
       <div>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
-            screenSize.isMobile ? (
-              <MobilePieChartView
-                pieChartData={pieChartData}
-                selectedSector={selectedSector}
-                size={{
-                  innerRadius: size.innerRadius,
-                  outerRadius: size.outerRadius,
-                }}
-                handlePieMouseEnter={handlePieMouseEnter}
-                handlePieClick={handlePieClick}
-              />
-            ) : (
-              <DesktopPieChartView
-                pieChartData={pieChartData}
-                selectedSector={selectedSector}
-                size={{
-                  innerRadius: size.innerRadius,
-                  outerRadius: size.outerRadius,
-                }}
-                handlePieMouseEnter={handlePieMouseEnter}
-                handlePieClick={handlePieClick}
-              />
-            )
+            <MobilePieChartView
+              pieChartData={pieChartData}
+              selectedSector={selectedSector}
+              size={size}
+              handlePieMouseEnter={handlePieMouseEnter}
+              handlePieClick={handlePieClick}
+              layout={screenSize.isMobile ? "mobile" : "desktop"}
+            />
           ) : (
             <BarChart
               data={chartData}
