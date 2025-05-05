@@ -199,7 +199,7 @@ export function MunicipalityDetailPage() {
             {
               title: t("municipalityDetailPage.annualChangeSince2015"),
               value: `${formatPercentChange(
-                municipality.historicalEmissionChangePercent / 100,
+                municipality.historicalEmissionChangePercent,
                 currentLanguage,
               )}`,
               valueClassName: "text-orange-2",
@@ -208,7 +208,7 @@ export function MunicipalityDetailPage() {
               title: t("municipalityDetailPage.reductionToMeetParis"),
               value: municipality.neededEmissionChangePercent
                 ? `${formatPercentChange(
-                    -municipality.neededEmissionChangePercent / 100,
+                    -municipality.neededEmissionChangePercent,
                     currentLanguage,
                   )}`
                 : t("municipalityDetailPage.cannotReduceToParis"),
@@ -266,6 +266,7 @@ export function MunicipalityDetailPage() {
               value: `${formatPercent(
                 municipality.electricCarChangePercent,
                 currentLanguage,
+                true,
               )}`,
               valueClassName: "text-orange-2",
             },
