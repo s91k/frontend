@@ -2,14 +2,12 @@ import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import PieChartTooltip from "./sectors/charts/tooltips/PieChartTooltip";
 import CompanyTooltip from "./sectors/charts/tooltips/CompanyTooltip";
-import { SectorPieChartData } from "./sectors/charts/SectorEmissionsChart";
 
 interface PieChartViewProps {
-  pieChartData: SectorPieChartData[];
+  pieChartData: unknown[];
   selectedLabel: string | null;
   size: { innerRadius: number; outerRadius: number };
-  handlePieMouseEnter?: (data: SectorPieChartData) => void;
-  handlePieClick?: (data: SectorPieChartData) => void;
+  handlePieClick?: (data: unknown) => void;
   layout?: "desktop" | "mobile";
   navigable?: boolean;
 }
@@ -41,7 +39,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
           cornerRadius={8}
           paddingAngle={2}
         >
-          {pieChartData.map((entry) => (
+          {pieChartData.map((entry: any) => (
             <Cell
               key={entry.name}
               fill={entry.color}

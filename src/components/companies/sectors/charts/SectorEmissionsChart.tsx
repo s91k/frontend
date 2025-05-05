@@ -33,14 +33,6 @@ interface EmissionsChartProps {
 
 type ChartType = "stacked-total" | "pie";
 
-export interface SectorPieChartData {
-  name: string;
-  value: number;
-  sectorCode?: string;
-  wikidataId?: string;
-  color?: string;
-}
-
 type BarClickData = {
   activePayload?: { dataKey: string }[];
   activeLabel?: string;
@@ -113,7 +105,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     }
   };
 
-  const handlePieClick = (data: SectorPieChartData) => {
+  const handlePieClick = (data: any) => {
     if (!selectedSector && data?.sectorCode) {
       setSelectedSector(data.sectorCode);
     } else if (selectedSector && data?.wikidataId) {
@@ -155,14 +147,13 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   selectedLabel={selectedSector}
                   size={size}
                   handlePieClick={handlePieClick}
-                  handlePieMouseEnter={() => {}}
                   layout={screenSize.isMobile ? "mobile" : "desktop"}
                   navigable={true}
                 />
               </div>
               <div className={"w-full md:w-1/3 flex md:items-center"}>
                 <SectorPieLegend
-                  payload={pieChartData}
+                  payload={pieChartDataWithColor}
                   selectedLabel={selectedSector}
                   handlePieClick={handlePieClick}
                 />

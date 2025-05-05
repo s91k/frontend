@@ -33,11 +33,14 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
     window.location.href = `/companies/${wikidataId}`;
   };
 
-  if (!payload) return null;
+  if (!payload) {
+    return null;
+  }
 
   const handleItemClick = (entry: any) => {
     const isCompanyView =
       payload?.[0]?.wikidataId || payload?.[0]?.payload?.wikidataId;
+
     if (isCompanyView) {
       // If we're viewing companies within a sector, navigate to company detail page
       const wikidataId = entry.wikidataId || entry.payload?.wikidataId;
@@ -48,7 +51,7 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
       // If we're viewing sectors, handle the sector selection
       const sectorCode = entry.sectorCode || entry.payload?.sectorCode;
       if (sectorCode) {
-        handlePieClick({ payload: { sectorCode } });
+        handlePieClick({ sectorCode });
       }
     }
   };
