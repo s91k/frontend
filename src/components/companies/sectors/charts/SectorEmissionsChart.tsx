@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import PieChartView from "./PieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { cn } from "@/lib/utils";
+import PieLegend from "./PieLegend";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -31,6 +32,13 @@ interface EmissionsChartProps {
 }
 
 type ChartType = "stacked-total" | "pie";
+
+export interface SectorPieChartData {
+  name: string;
+  value: number;
+  sectorCode?: string;
+  color?: string;
+}
 
 type BarClickData = {
   activePayload?: { dataKey: string }[];
@@ -105,8 +113,8 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   };
 
   const handlePieClick = (data: SectorPieChartData) => {
-    if (!selectedSector && data?.labelCode) {
-      setSelectedSector(data.labelCode);
+    if (!selectedSector && data?.sectorCode) {
+      setSelectedSector(data.sectorCode);
     }
   };
 
@@ -137,14 +145,23 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
       <div>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
-            <PieChartView
-              pieChartData={pieChartDataWithColor}
-              selectedLabel={selectedSector}
-              size={size}
-              handlePieClick={handlePieClick}
-              handlePieMouseEnter={() => {}}
-              layout={screenSize.isMobile ? "mobile" : "desktop"}
-            />
+            <div className="flex flex-col gap-4 mt-8 md:flex-row md:gap-8">
+              <PieChartView
+                pieChartData={pieChartDataWithColor}
+                selectedLabel={selectedSector}
+                size={size}
+                handlePieClick={handlePieClick}
+                handlePieMouseEnter={() => {}}
+                layout={screenSize.isMobile ? "mobile" : "desktop"}
+              />
+              <div className={"w-full md:w-1/3 flex md:items-center"}>
+                <PieLegend
+                  payload={pieChartData}
+                  selectedLabel={selectedSector}
+                  handlePieClick={handlePieClick}
+                />
+              </div>
+            </div>
           ) : (
             <BarChart
               data={chartData}
