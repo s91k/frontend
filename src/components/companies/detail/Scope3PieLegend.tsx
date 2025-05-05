@@ -34,10 +34,16 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
     return null;
   }
 
+  const sortedPayload = [...payload].sort((a, b) => {
+    const aValue = a.value ?? 0;
+    const bValue = b.value ?? 0;
+    return bValue - aValue;
+  });
+
   return (
     <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-300px md:max-h-500px overflow-y-auto w-full pr-2 mt-2 md:mt-4">
-        {payload.map((entry, index) => {
+        {sortedPayload.map((entry, index) => {
           const { value, total } = entry;
           const percentage =
             value / total < 0.001

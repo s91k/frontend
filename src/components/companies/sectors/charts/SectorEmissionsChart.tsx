@@ -37,6 +37,7 @@ export interface SectorPieChartData {
   name: string;
   value: number;
   sectorCode?: string;
+  wikidataId?: string;
   color?: string;
 }
 
