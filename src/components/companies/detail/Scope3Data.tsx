@@ -56,7 +56,7 @@ export function Scope3Data({
 }: Scope3DataProps) {
   const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState<string>("latest");
-  const [, setHoveredCategory] = useState<number | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   const { size } = useResponsiveChartSize();
   const { getCategoryColor, getCategoryName } = useCategoryMetadata();
 
@@ -126,13 +126,17 @@ export function Scope3Data({
                   name: getCategoryName(cat.category),
                   value: cat.total,
                   color: getCategoryColor(cat.category),
+                  category: cat.category,
                 }))}
                 selectedLabel={null}
                 size={size}
+                hoveredCategory={hoveredCategory}
+                setHoveredCategory={setHoveredCategory}
                 handlePieClick={() => {}}
                 handlePieMouseEnter={(data) =>
                   setHoveredCategory(Number(data.sectorCode))
                 }
+                handlePieMouseLeave={() => setHoveredCategory(null)}
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>
@@ -142,8 +146,11 @@ export function Scope3Data({
                   value: cat.total,
                   total: emissions.scope3?.total ?? 0,
                   color: getCategoryColor(cat.category),
+                  category: cat.category,
                 }))}
                 selectedLabel={null}
+                hoveredCategory={hoveredCategory}
+                setHoveredCategory={setHoveredCategory}
               />
             </div>
           </div>

@@ -11,6 +11,8 @@ interface PieChartViewProps {
   handlePieMouseEnter: (data: SectorPieChartData) => void;
   handlePieClick?: (data: SectorPieChartData) => void;
   layout?: "desktop" | "mobile";
+  hoveredCategory?: number | null;
+  setHoveredCategory?: (cat: number | null) => void;
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
@@ -20,6 +22,8 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   handlePieMouseEnter,
   handlePieClick,
   layout,
+  hoveredCategory,
+  setHoveredCategory,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -36,13 +40,22 @@ const PieChartView: React.FC<PieChartViewProps> = ({
           cy="50%"
           innerRadius={innerRadius}
           outerRadius={outerRadius}
-          onMouseEnter={handlePieMouseEnter}
+          onMouseEnter={(_, index) => {
+            handlePieMouseEnter(pieChartData[index]);
+            setHoveredCategory?.(index);
+          }}
+          onMouseLeave={() => setHoveredCategory?.(null)}
           onClick={handlePieClick}
           cornerRadius={8}
           paddingAngle={2}
         >
-          {pieChartData.map((entry) => (
-            <Cell key={entry.name} fill={entry.color} strokeWidth={0} />
+          {pieChartData.map((entry, index) => (
+            <Cell
+              key={entry.name}
+              fill={entry.color}
+              stroke={hoveredCategory === index ? "white" : undefined}
+              strokeWidth={hoveredCategory === index ? 4 : 0}
+            />
           ))}
         </Pie>
         <Tooltip
