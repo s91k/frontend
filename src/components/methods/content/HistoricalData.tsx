@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { LinkButton } from "@/components/layout/LinkButton";
 import { Text } from "@/components/ui/text";
 
 interface SectionProps {

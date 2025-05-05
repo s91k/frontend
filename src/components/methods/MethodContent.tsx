@@ -1,11 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { getMethodById } from "@/lib/methods/methodologyData";
-import { Trans } from "react-i18next";
-import { LinkButton } from "@/components/layout/LinkButton";
 import { SourcesContent } from "./content/SourcesContent";
 import { CompanyDataOverviewContent } from "./content/CompanyDataOverview";
-import { CompanyDataCollectionContent } from "./content/CompanyDataCollectionContent";
 import { DataCollectionProcessContent } from "./content/DataCollectionProcess";
 import { EmissionsAndCategoriesContent } from "./content/Emissions and Categories";
 import { HistoricalDataContent } from "./content/HistoricalData";
@@ -13,36 +10,6 @@ import { ParisAgreementContent } from "./content/ParisAgreementContent";
 import { CO2BudgetsContent } from "./content/CO2BudgetsContent";
 import { EmissionTypesContent } from "./content/EmissionTypesContent";
 import { CalculationsContent } from "./content/CalculationsContent";
-
-interface MethodContent {
-  paragraph1?: string;
-  paragraph2?: string;
-  paragraph3?: string;
-  paragraph4?: string;
-  paragraph5?: string;
-  paragraph6?: string;
-  link1?: string;
-  link2?: string;
-  link?: {
-    title: string;
-    text: string;
-  };
-  [key: string]: any;
-}
-
-interface SectionProps {
-  title?: string;
-  children: React.ReactNode;
-}
-
-function Section({ title, children }: SectionProps) {
-  return (
-    <div className="space-y-4 mb-8">
-      {title && <h2 className="text-xl font-semibold text-white">{title}</h2>}
-      {children}
-    </div>
-  );
-}
 
 interface MethodologyContentProps {
   method: string;
@@ -71,10 +38,6 @@ export function MethodologyContent({ method }: MethodologyContentProps) {
   }
 
   const renderContent = () => {
-    const content = t(`methodsPage.accordion.${method}`, {
-      returnObjects: true,
-    }) as MethodContent;
-
     switch (method) {
       case "sources":
         return <SourcesContent />;
