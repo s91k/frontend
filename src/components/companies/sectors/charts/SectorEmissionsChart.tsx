@@ -116,6 +116,16 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     }
   };
 
+  const pieChartDataWithColor = pieChartData.map((entry, index) => ({
+    ...entry,
+    color: selectedSector
+      ? getCompanyColors(index).base
+      : "sectorCode" in entry
+        ? sectorColors[entry.sectorCode as keyof typeof sectorColors]?.base ||
+          "var(--grey)"
+        : "var(--grey)",
+  }));
+
   return (
     <div className="w-full space-y-6">
       <ChartHeader
@@ -134,13 +144,12 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
             <PieChartView
-              pieChartData={pieChartData}
-              selectedSector={selectedSector}
+              pieChartData={pieChartDataWithColor}
+              selectedLabel={selectedSector}
               size={size}
               handlePieClick={handlePieClick}
               handlePieMouseEnter={() => {}}
               layout={screenSize.isMobile ? "mobile" : "desktop"}
-              getColor={(index) => getCompanyColors(index)}
             />
           ) : (
             <BarChart

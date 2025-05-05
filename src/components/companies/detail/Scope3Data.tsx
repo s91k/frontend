@@ -118,24 +118,18 @@ export function Scope3Data({
         </div>
 
         <TabsContent value="chart">
-          {/* <Scope3Chart
-            categories={selectedCategories}
-            className="bg-transparent p-0"
-            hoveredCategory={hoveredCategory}
-            setHoveredCategory={setHoveredCategory}
-          /> */}
           <PieChartView
             pieChartData={selectedCategories.map((cat) => ({
               name: getCategoryName(cat.category),
               value: cat.total,
+              color: getCategoryColor(cat.category),
             }))}
-            selectedSector={null}
+            selectedLabel={null}
             size={size}
             handlePieClick={() => {}}
             handlePieMouseEnter={(data) =>
-              setHoveredCategory(Number(data.name))
+              setHoveredCategory(Number(data.sectorCode))
             }
-            getColor={(index) => ({ base: getCategoryColor(index) })}
           />
         </TabsContent>
 

@@ -1,9 +1,5 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-import {
-  sectorColors,
-  getCompanyColors,
-} from "@/hooks/companies/useCompanyFilters";
 import PieChartTooltip from "./tooltips/PieChartTooltip";
 import CompanyTooltip from "./tooltips/CompanyTooltip";
 import PieLegend from "./PieLegend";
@@ -11,22 +7,20 @@ import { SectorPieChartData } from "./SectorEmissionsChart";
 
 interface PieChartViewProps {
   pieChartData: SectorPieChartData[];
-  selectedSector: string | null;
+  selectedLabel: string | null;
   size: { innerRadius: number; outerRadius: number };
   handlePieMouseEnter: (data: SectorPieChartData) => void;
   handlePieClick: (data: SectorPieChartData) => void;
   layout?: "desktop" | "mobile";
-  getColor: (index: number, entry: SectorPieChartData) => { base: string };
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
   pieChartData,
-  selectedSector,
+  selectedLabel,
   size,
   handlePieMouseEnter,
   handlePieClick,
   layout,
-  getColor,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -50,26 +44,12 @@ const PieChartView: React.FC<PieChartViewProps> = ({
               cornerRadius={8}
               paddingAngle={2}
             >
-              {pieChartData.map((entry, index) => (
-                <Cell
-                  key={entry.name}
-                  fill={
-                    selectedSector
-                      ? getColor(index, entry).base
-                      : "sectorCode" in entry
-                        ? sectorColors[
-                            entry.sectorCode as keyof typeof sectorColors
-                          ]?.base || "var(--grey)"
-                        : "var(--grey)"
-                  }
-                  strokeWidth={0}
-                />
+              {pieChartData.map((entry) => (
+                <Cell key={entry.name} fill={entry.color} strokeWidth={0} />
               ))}
             </Pie>
             <Tooltip
-              content={
-                selectedSector ? <CompanyTooltip /> : <PieChartTooltip />
-              }
+              content={selectedLabel ? <CompanyTooltip /> : <PieChartTooltip />}
             />
           </PieChart>
         </ResponsiveContainer>
@@ -77,7 +57,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
       <div className={isDesktop ? "w-1/3 flex items-center" : "w-full"}>
         <PieLegend
           payload={pieChartData}
-          selectedSector={selectedSector}
+          selectedLabel={selectedLabel}
           handlePieClick={handlePieClick}
         />
       </div>
