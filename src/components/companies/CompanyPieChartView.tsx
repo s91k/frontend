@@ -8,11 +8,9 @@ interface PieChartViewProps {
   pieChartData: SectorPieChartData[];
   selectedLabel: string | null;
   size: { innerRadius: number; outerRadius: number };
-  handlePieMouseEnter: (data: SectorPieChartData) => void;
+  handlePieMouseEnter?: (data: SectorPieChartData) => void;
   handlePieClick?: (data: SectorPieChartData) => void;
   layout?: "desktop" | "mobile";
-  hoveredCategory?: number | null;
-  setHoveredCategory?: (cat: number | null) => void;
   navigable?: boolean;
 }
 
@@ -20,11 +18,8 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   pieChartData,
   selectedLabel,
   size,
-  handlePieMouseEnter,
   handlePieClick,
   layout,
-  hoveredCategory,
-  setHoveredCategory,
   navigable = false,
 }) => {
   const isDesktop = layout === "desktop";
@@ -42,21 +37,15 @@ const PieChartView: React.FC<PieChartViewProps> = ({
           cy="50%"
           innerRadius={innerRadius}
           outerRadius={outerRadius}
-          onMouseEnter={(_, index) => {
-            handlePieMouseEnter(pieChartData[index]);
-            setHoveredCategory?.(index);
-          }}
-          onMouseLeave={() => setHoveredCategory?.(null)}
           onClick={handlePieClick}
           cornerRadius={8}
           paddingAngle={2}
         >
-          {pieChartData.map((entry, index) => (
+          {pieChartData.map((entry) => (
             <Cell
               key={entry.name}
               fill={entry.color}
-              stroke={hoveredCategory === index ? entry.color : undefined}
-              strokeWidth={hoveredCategory === index ? 4 : 0}
+              stroke={entry.color}
               style={navigable ? { cursor: "pointer" } : undefined}
             />
           ))}

@@ -130,12 +130,6 @@ export function Scope3Data({
                 }))}
                 selectedLabel={null}
                 size={size}
-                hoveredCategory={hoveredCategory}
-                setHoveredCategory={setHoveredCategory}
-                handlePieClick={() => {}}
-                handlePieMouseEnter={(data) =>
-                  setHoveredCategory(Number(data.sectorCode))
-                }
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>
@@ -147,9 +141,6 @@ export function Scope3Data({
                   color: getCategoryColor(cat.category),
                   category: cat.category,
                 }))}
-                selectedLabel={null}
-                hoveredCategory={hoveredCategory}
-                setHoveredCategory={setHoveredCategory}
               />
             </div>
           </div>

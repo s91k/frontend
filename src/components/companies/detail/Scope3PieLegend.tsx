@@ -16,17 +16,9 @@ interface PieLegendProps {
     total: number;
     color: string;
   }[];
-  selectedLabel: string | null;
-  hoveredCategory: number | null;
-  setHoveredCategory: (cat: number | null) => void;
 }
 
-const Scope3PieLegend: React.FC<PieLegendProps> = ({
-  payload,
-  selectedLabel,
-  hoveredCategory,
-  setHoveredCategory,
-}) => {
+const Scope3PieLegend: React.FC<PieLegendProps> = ({ payload }) => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
 
@@ -51,16 +43,11 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
               : formatPercent(value / total, currentLanguage);
 
           const color = entry.color || "var(--grey)";
-          const isHovered = hoveredCategory === index;
 
           return (
             <Tooltip key={`legend-${index}`}>
               <TooltipTrigger asChild>
-                <div
-                  className={`flex items-center gap-2 p-2 rounded-md hover:bg-black-1 transition-colors${isHovered ? "  bg-black-1" : ""}`}
-                  onMouseEnter={() => setHoveredCategory(index)}
-                  onMouseLeave={() => setHoveredCategory(null)}
-                >
+                <div className="flex items-center gap-2 p-2 rounded-md hover:bg-black-1 transition-colors">
                   <div
                     className="w-3 h-3 rounded flex-shrink-0"
                     style={{ backgroundColor: color }}
@@ -83,9 +70,7 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
                 </div>
               </TooltipTrigger>
               <TooltipContent className="bg-black-1 text-white">
-                {selectedLabel
-                  ? t("companiesPage.sectorGraphs.pieLegendCompany")
-                  : t("companiesPage.sectorGraphs.pieLegendSector")}
+                {t("companiesPage.sectorGraphs.pieLegendSector")}
               </TooltipContent>
             </Tooltip>
           );
