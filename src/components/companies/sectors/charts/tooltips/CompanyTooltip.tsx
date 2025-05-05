@@ -7,11 +7,13 @@ const CompanyTooltip: React.FC<TooltipProps<number, string>> = ({
   active,
   payload,
 }) => {
-  if (!active || !payload || !payload.length) return null;
-
-  const { name, value, payload: data } = payload[0];
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
+  const { name, value, payload: data } = payload[0];
 
   // Extract company data
   const companyName =
