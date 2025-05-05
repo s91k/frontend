@@ -128,7 +128,7 @@ export function Scope3Data({
             size={size}
             handlePieClick={() => {}}
             handlePieMouseEnter={(data) =>
-              setHoveredCategory(Number(data.sectorCode))
+              setHoveredCategory(Number(data.labelCode))
             }
           />
         </TabsContent>

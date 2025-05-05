@@ -5,6 +5,13 @@ import CompanyTooltip from "./tooltips/CompanyTooltip";
 import PieLegend from "./PieLegend";
 import { SectorPieChartData } from "./SectorEmissionsChart";
 
+interface SectorPieChartData {
+  name: string;
+  value: number;
+  labelCode?: string;
+  color?: string;
+}
+
 interface PieChartViewProps {
   pieChartData: SectorPieChartData[];
   selectedLabel: string | null;
