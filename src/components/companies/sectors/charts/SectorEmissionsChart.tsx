@@ -177,7 +177,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
               barGap={0}
               barCategoryGap="30%"
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--black-1)" />
               <XAxis
                 dataKey="year"
                 tick={{ fill: "var(--grey)" }}
@@ -190,7 +190,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   value: t("emissionsUnit"),
                   angle: -90,
                   position: "insideLeft",
-                  fill: "#888888",
+                  fill: "var(--grey)",
                   style: { textAnchor: "middle" },
                   offset: -15,
                 }}
