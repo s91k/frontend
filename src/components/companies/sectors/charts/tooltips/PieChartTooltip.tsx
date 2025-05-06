@@ -16,8 +16,6 @@ const PieChartTooltip: React.FC<TooltipProps<number, string>> = ({
   }
 
   const { name, value, payload: data } = payload[0];
-  console.log("value ", value);
-  console.log("total ", data.total);
   const percentage = formatPercent(
     value ? value / data.total : 0,
     currentLanguage,
