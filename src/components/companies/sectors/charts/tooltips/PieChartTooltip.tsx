@@ -11,7 +11,9 @@ const PieChartTooltip: React.FC<TooltipProps<number, string>> = ({
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
 
-  if (!active || !payload || !payload.length) return null;
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
 
   const { name, value, payload: data } = payload[0];
   const percentage = formatPercent(

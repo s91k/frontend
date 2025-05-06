@@ -140,25 +140,33 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
       <div>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "pie" ? (
-            <div className="flex flex-col gap-4 mt-8 md:flex-row md:gap-8">
-              <div className="md:w-2/3 md:h-full w-full">
-                <PieChartView
-                  pieChartData={pieChartDataWithColor}
-                  selectedLabel={selectedSector}
-                  size={size}
-                  handlePieClick={handlePieClick}
-                  layout={screenSize.isMobile ? "mobile" : "desktop"}
-                  navigable={true}
-                />
+            totalEmissions > 0 ? (
+              <div className="flex flex-col gap-4 mt-8 md:flex-row md:gap-8">
+                <div className="md:w-2/3 md:h-full w-full">
+                  <PieChartView
+                    pieChartData={pieChartDataWithColor}
+                    selectedLabel={selectedSector}
+                    size={size}
+                    handlePieClick={handlePieClick}
+                    layout={screenSize.isMobile ? "mobile" : "desktop"}
+                    navigable={true}
+                  />
+                </div>
+                <div className={"w-full md:w-1/3 flex md:items-center"}>
+                  <SectorPieLegend
+                    payload={pieChartDataWithColor}
+                    selectedLabel={selectedSector}
+                    handlePieClick={handlePieClick}
+                  />
+                </div>
               </div>
-              <div className={"w-full md:w-1/3 flex md:items-center"}>
-                <SectorPieLegend
-                  payload={pieChartDataWithColor}
-                  selectedLabel={selectedSector}
-                  handlePieClick={handlePieClick}
-                />
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-grey">
+                  {t("companiesPage.sectorGraphs.noDataAvailablePieChart")}
+                </p>
               </div>
-            </div>
+            )
           ) : (
             <BarChart
               data={chartData}
