@@ -180,9 +180,9 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
               <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
               <XAxis
                 dataKey="year"
-                tick={{ fill: "#888888" }}
-                axisLine={{ stroke: "#2A2A2A" }}
-                tickLine={{ stroke: "#2A2A2A" }}
+                tick={{ fill: "var(--grey)" }}
+                axisLine={{ stroke: "var(--black-1)" }}
+                tickLine={{ stroke: "var(--black-1)" }}
                 padding={{ left: 10, right: 10 }}
               />
               <YAxis
@@ -194,9 +194,9 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   style: { textAnchor: "middle" },
                   offset: -15,
                 }}
-                tick={{ fill: "#888888" }}
-                axisLine={{ stroke: "#2A2A2A" }}
-                tickLine={{ stroke: "#2A2A2A" }}
+                tick={{ fill: "var(--grey)" }}
+                axisLine={{ stroke: "var(--black-1)" }}
+                tickLine={{ stroke: "var(--black-1)" }}
                 tickFormatter={formatYAxisTick}
                 width={60}
               />
