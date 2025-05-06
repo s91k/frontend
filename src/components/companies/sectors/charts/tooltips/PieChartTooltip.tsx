@@ -16,6 +16,8 @@ const PieChartTooltip: React.FC<TooltipProps<number, string>> = ({
   }
 
   const { name, value, payload: data } = payload[0];
+  console.log("value ", value);
+  console.log("total ", data.total);
   const percentage = formatPercent(
     value ? value / data.total : 0,
     currentLanguage,
@@ -29,9 +31,11 @@ const PieChartTooltip: React.FC<TooltipProps<number, string>> = ({
           {formatEmissionsAbsolute(Math.round(value || 0), currentLanguage)}{" "}
           {t("emissionsUnit")}
         </div>
-        <div>
-          {percentage} {t("companiesPage.sectorGraphs.ofTotal")}
-        </div>
+        {data.total && (
+          <div>
+            {percentage} {t("companiesPage.sectorGraphs.ofTotal")}
+          </div>
+        )}
       </div>
     </div>
   );
