@@ -7,18 +7,18 @@ import { PageSEO } from "@/components/SEO/PageSEO";
 export function SupportPage() {
   const { t } = useTranslation();
 
-    // Prepare SEO data
-    const canonicalUrl = "https://klimatkollen.se/support";
-    const pageTitle = `${t("supportPage.header.title")} - Klimatkollen`;
-    const pageDescription = t("supportPage.header.description");
-  
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: t("supportPage.header.title"),
-      description: pageDescription,
-      url: canonicalUrl,
-    };
+  // Prepare SEO data
+  const canonicalUrl = "https://klimatkollen.se/support";
+  const pageTitle = `${t("supportPage.header.title")} - Klimatkollen`;
+  const pageDescription = t("supportPage.header.description");
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: t("supportPage.header.title"),
+    description: pageDescription,
+    url: canonicalUrl,
+  };
 
   const partnerEmailLink = `mailto:partnerships@klimatkollen.se?subject=${encodeURIComponent(t("supportPage.partnerships.email.subject"))}&body=${encodeURIComponent(t("supportPage.partnerships.email.body"))}`;
 
@@ -86,6 +86,10 @@ export function SupportPage() {
             action={{
               text: t("supportPage.organizationSupport.action.text"),
               link: t("supportPage.organizationSupport.action.link"),
+            }}
+            readMore={{
+              text: t("supportPage.organizationSupport.readMore.text"),
+              content: t("supportPage.organizationSupport.readMore.content"),
             }}
           />
         </div>

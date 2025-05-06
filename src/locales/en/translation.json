@@ -132,7 +132,6 @@
       "description": "Real-time access to our climate database through our documented REST API with comprehensive endpoints.",
       "realtime": "Real-time data access",
       "documentation": "Full API documentation",
-      "secure": "Secure API endpoints",
       "support": "Priority support",
       "contactPricing": "Contact for Pricing",
       "viewDocs": "View API Documentation"
@@ -146,7 +145,7 @@
       "requestAccess": "Get Data"
     },
     "dataOverview": {
-      "title": "Available Data  ",
+      "title": "Available Data",
       "corporate": {
         "title": "Corporate Emissions Data",
         "description": "Access to detailed emissions data from Swedish companies, including scope 1, 2, and 3 emissions, as well as supply chain data."
@@ -172,7 +171,9 @@
       "reasonWork": "Work",
       "reasonHobby": "Hobby",
       "reasonCuriosity": "Curiosity",
-      "errorGeneric": "An error occurred. Please try again later."
+      "errorGeneric": "An error occurred. Please try again later.",
+      "errorEmptyEmail": "Please enter a valid email address.",
+      "errorInvalidEmail": "Please enter a valid email address."
     }
   },
   "downloadsPage": {
@@ -432,31 +433,38 @@
         "links": {
           "smhi": {
             "title": "National Emissions Database",
-            "text": "Greenhouse gas emissions in municipalities"
+            "text": "Greenhouse gas emissions in municipalities",
+            "link": "https://nationellaemissionsdatabasen.smhi.se/"
           },
           "skr": {
             "title": "Swedish Association of Local Authorities and Regions",
-            "text": "Political leadership in municipalities"
+            "text": "Political leadership in municipalities",
+            "link": "https://skr.se/skr/demokratiledningstyrning/valmaktfordelning/valresultatstyren/styrekommunereftervalet2022.69547.html"
           },
           "wikidata": {
             "title": "Wikidata",
-            "text": "Municipal coats of arms and population numbers"
+            "text": "Municipal coats of arms and population numbers",
+            "link": "https://www.wikidata.org/wiki/Wikidata:Country_subdivision_task_force/Sweden/Municipalities"
           },
           "trafikanalys": {
             "title": "Traffic Analysis",
-            "text": "Percentage of electric vehicles"
+            "text": "Percentage of electric vehicles",
+            "link": "https://www.trafa.se/vagtrafik/fordon/"
           },
           "nvdb": {
             "title": "National Road Database",
-            "text": "Cycling paths per municipality"
+            "text": "Cycling paths per municipality",
+            "link": "https://nvdb2012.trafikverket.se/SeTransportnatverket"
           },
           "sei": {
             "title": "Stockholm Environment Institute",
-            "text": "Household consumption-based emissions"
+            "text": "Household consumption-based emissions",
+            "link": "https://www.sei.org/tools/konsumtionskompassen/"
           },
           "powerCircles": {
             "title": "Power Circles database ELIS",
-            "text": "Charging infrastructure data from the industry organization"
+            "text": "Charging infrastructure data from the industry organization",
+            "link": "https://powercircle.org/elbilsstatistik/"
           },
           "klimatplaner": {
             "title": "Climate Plans",
@@ -464,11 +472,13 @@
           },
           "upphandlingsmyndigheten": {
             "title": "Procurement Authority",
-            "text": "Information on climate requirements in municipal procurements"
+            "text": "Information on climate requirements in municipal procurements",
+            "link": "https://www.klimatkollen.se/data/procurements/NUE2022_DATA_2023-12-20.xlsx"
           },
           "greenpeace": {
             "title": "Greenpeace",
-            "text": "Mapping of climate requirements in public procurement"
+            "text": "Mapping of climate requirements in public procurement",
+            "link": "https://docs.google.com/spreadsheets/d/1EdHUa49HJZn0rXqM-6tChdim4TJzXnwA/edit#gid=1040317160"
           }
         }
       },
@@ -576,7 +586,11 @@
       ],
       "action": {
         "text": "Make a Donation",
-        "link": "/donate"
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Donation Inquiry - Klimatkollen",
+        "body": "Hi,\n\nI would like to make a donation to Klimatkollen.\n\nAmount:\n\nLooking forward to helping with climate data transparency.\n\nBest regards,"
       }
     },
     "openSource": {
@@ -604,30 +618,38 @@
       ],
       "action": {
         "text": "Become a Partner",
-        "link": "mailto"
+        "link": "mailto:hej@klimatkollen.se"
       },
       "email": {
-        "subject": "Partnership Inquiry - Klimatkollen",
+        "subject": "Partnership Inquiry - [Organisation Name]",
         "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganization Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
       }
     },
     "organizationSupport": {
-      "title": "Organization Support",
+      "title": "Support Companies",
       "description": "Support as an organization of any size",
       "details": [
-        "Organizational sponsorship opportunities",
+        "Fixed fee sponsorship opportunities",
         "Data verification partnerships",
         "Technology and resource sharing",
-        "Collaborative climate initiatives"
+        "Support climate data transparency"
       ],
       "action": {
-        "text": "Organization Support",
-        "link": "/organization-support"
+        "text": "Support Companies",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Support Company Inquiry - [Company Name]",
+        "body": "Hi,\n\nI am interested in learning more about the company support opportunity with Klimatkollen.\n\nOrganization Name:\n\nLooking forward to discussing a collaboration.\n\nBest regards,"
+      },
+      "readMore": {
+        "text": "Read more",
+        "content": "We offer fixed fee sponsorship opportunities for companies that want to support Klimatkollen's mission to promote climate action in Sweden. These opportunities are designed to help companies align with our goals and contribute to our work."
       }
     },
     "contact": {
       "title": "Contact Us",
-      "description": "Have questions about supporting Klimatkollen? We'd love to hear from you.",
+      "description": "Have questions about supporting Klimatkollen, or want to find other ways to volunteer? We'd love to hear from you.",
       "action": {
         "text": "Email Us",
         "link": "mailto:hej@klimatkollen.se"
