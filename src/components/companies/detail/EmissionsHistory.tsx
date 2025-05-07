@@ -333,17 +333,6 @@ export function EmissionsHistory({
                     "17% annual reduction"
                   }
                 />
-                <Line
-                  type="monotone"
-                  data={trendLineData.post2025}
-                  dataKey="trend"
-                  stroke="red"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={false}
-                  isAnimationActive={false}
-                  name={t("companies.emissionsHistory.trendLineLabelPost2025")}
-                />
 
                 <Line
                   type="monotone"
