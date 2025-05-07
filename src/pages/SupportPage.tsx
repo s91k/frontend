@@ -20,7 +20,9 @@ export function SupportPage() {
     url: canonicalUrl,
   };
 
-  const partnerEmailLink = `mailto:partnerships@klimatkollen.se?subject=${encodeURIComponent(t("supportPage.partnerships.email.subject"))}&body=${encodeURIComponent(t("supportPage.partnerships.email.body"))}`;
+  const partnerEmailLink = `mailto:hej@klimatkollen.se?subject=${encodeURIComponent(t("supportPage.partnerships.email.subject"))}&body=${encodeURIComponent(t("supportPage.partnerships.email.body"))}`;
+  const donateEmailLink = `mailto:hej@klimatkollen.se?subject=${encodeURIComponent(t("supportPage.donations.email.subject"))}&body=${encodeURIComponent(t("supportPage.donations.email.body"))}`;
+  const organizationEmailLink = `mailto:hej@klimatkollen.se?subject=${encodeURIComponent(t("supportPage.organizationSupport.email.subject"))}&body=${encodeURIComponent(t("supportPage.organizationSupport.email.body"))}`;
 
   return (
     <>
@@ -46,7 +48,7 @@ export function SupportPage() {
             })}
             action={{
               text: t("supportPage.donations.action.text"),
-              link: t("supportPage.donations.action.link"),
+              link: donateEmailLink,
             }}
           />
 
@@ -85,7 +87,7 @@ export function SupportPage() {
             })}
             action={{
               text: t("supportPage.organizationSupport.action.text"),
-              link: t("supportPage.organizationSupport.action.link"),
+              link: organizationEmailLink,
             }}
             readMore={{
               text: t("supportPage.organizationSupport.readMore.text"),

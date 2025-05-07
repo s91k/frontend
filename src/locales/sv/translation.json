@@ -345,6 +345,12 @@
     "dataSelector": {
       "label": "Välj vad du vill lära dig om"
     },
+    "methodNotFound": "Metod hittades inte",
+    "categories": {
+      "general": "Allmän information",
+      "municipality": "Kommundata",
+      "company": "Företagsdata"
+    },
     "accordion": {
       "parisAgreement": {
         "title": "Klimatkollen och Parisavtalet",
