@@ -73,7 +73,7 @@ export function LandingPage() {
   // Get top 5 municipalities by emissions reduction
   const topMunicipalities = getTopMunicipalities(5).map((municipality) => ({
     name: municipality.name,
-    value: municipality.historicalEmissionChangePercent / 100,
+    value: municipality.historicalEmissionChangePercent,
     link: `/municipalities/${municipality.name}`,
   }));
 
