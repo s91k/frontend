@@ -88,7 +88,7 @@ export function LandingPage() {
 
   const renderMunicipalityChangeRate = (item: RankedListItem) => (
     <span className="text-base md:text-lg md:text-right text-green-3">
-      {formatPercentChange(item.value, currentLanguage)}
+      {formatPercentChange(item.value, currentLanguage, true)}
     </span>
   );
 
