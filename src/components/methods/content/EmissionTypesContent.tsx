@@ -6,7 +6,7 @@ export const EmissionTypesContent = () => {
     <div className="prose prose-invert mx-auto space-y-8">
       {[...Array(6).keys()].map((i) => (
         <p key={i}>
-          {t(`methodsPage.accordion.emissionTypes.paragraph${i + 1}`)}
+          {t(`methodsPage.general.emissionTypes.paragraph${i + 1}`)}
         </p>
       ))}
     </div>

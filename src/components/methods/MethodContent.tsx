@@ -75,10 +75,10 @@ export function MethodologyContent({ method }: MethodologyContentProps) {
       <div className="bg-black-2 rounded-level-1 p-16">
         <div className="border-b border-black-1 pb-6 mb-6">
           <h1 className="text-2xl font-bold text-white mb-2">
-            {t(`methodsPage.accordion.${method}.title`)}
+            {t(`methodsPage.${methodData.category}.${method}.title`)}
           </h1>
           <p className="text-grey">
-            {t(`methodsPage.accordion.${method}.description`)}
+            {t(`methodsPage.${methodData.category}.${method}.description`)}
           </p>
         </div>
         <div className="prose prose-invert max-w-none">{renderContent()}</div>

@@ -8,27 +8,30 @@ interface MethodologyNavigationProps {
   onMethodChange: (method: string) => void;
 }
 
-export function MethodologyNavigation({ 
-  selectedMethod, 
-  onMethodChange 
+export function MethodologyNavigation({
+  selectedMethod,
+  onMethodChange,
 }: MethodologyNavigationProps) {
   const { t } = useTranslation();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(
-    Object.keys(methodologySections)
+    Object.keys(methodologySections),
   );
 
   const toggleCategory = (category: string) => {
-    setExpandedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(cat => cat !== category)
-        : [...prev, category]
+    setExpandedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((cat) => cat !== category)
+        : [...prev, category],
     );
   };
 
   return (
-    <nav aria-label="Methodology Navigation" className="bg-black-2 rounded-md p-2">
+    <nav
+      aria-label="Methodology Navigation"
+      className="bg-black-2 rounded-md p-2"
+    >
       <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
-      
+
       <ul className="divide-y divide-black-1">
         {Object.entries(methodologySections).map(([category, methods]) => (
           <li key={category}>
@@ -44,10 +47,10 @@ export function MethodologyNavigation({
                 <ChevronDown size={18} className="text-grey" />
               )}
             </button>
-            
+
             {expandedCategories.includes(category) && (
               <ul className="pl-4 pb-2 animate-slideDown">
-                {methods.map(method => (
+                {methods.map((method) => (
                   <li key={method.id}>
                     <button
                       onClick={() => onMethodChange(method.id)}
@@ -56,9 +59,11 @@ export function MethodologyNavigation({
                           ? "bg-black-1 text-blue-3 font-medium"
                           : "text-grey hover:bg-black-1 hover:text-white"
                       }`}
-                      aria-current={selectedMethod === method.id ? "page" : undefined}
+                      aria-current={
+                        selectedMethod === method.id ? "page" : undefined
+                      }
                     >
-                      {t(`methodsPage.accordion.${method.id}.title`)}
+                      {t(`methodsPage.${category}.${method.id}.title`)}
                     </button>
                   </li>
                 ))}

@@ -18,23 +18,23 @@ export const CompanyDataOverviewContent = () => {
   const { t } = useTranslation();
   return (
     <div className="prose prose-invert mx-auto space-y-8">
-      <p>{t("methodsPage.accordion.companyDataCollection.paragraph1")}</p>
+      <p>{t("methodsPage.company.companyDataCollection.paragraph1")}</p>
       <div className="flex justify-center">
         <div className="w-full space-y-6">
           <LinkButton
-            title={t("methodsPage.accordion.companyDataCollection.link1")}
-            text={t("methodsPage.accordion.companyDataCollection.paragraph2")}
+            title={t("methodsPage.company.companyDataCollection.link1")}
+            text={t("methodsPage.company.companyDataCollection.paragraph2")}
             link="/companies"
           />
         </div>
       </div>
-      <p>{t("methodsPage.accordion.companyDataCollection.paragraph3")}</p>
-      <p>{t("methodsPage.accordion.companyDataCollection.paragraph4")}</p>
+      <p>{t("methodsPage.company.companyDataCollection.paragraph3")}</p>
+      <p>{t("methodsPage.company.companyDataCollection.paragraph4")}</p>
       <div className="flex justify-center">
         <div className="w-full space-y-6">
           <LinkButton
-            title={t("methodsPage.accordion.companyDataCollection.link2")}
-            text={t("methodsPage.accordion.companyDataCollection.paragraph5")}
+            title={t("methodsPage.company.companyDataCollection.link2")}
+            text={t("methodsPage.company.companyDataCollection.paragraph5")}
             link="https://ghgprotocol.org/"
           />
         </div>
@@ -42,25 +42,25 @@ export const CompanyDataOverviewContent = () => {
 
       <Section
         title={t(
-          "methodsPage.accordion.companyDataCollection.companiesIncluded.title",
+          "methodsPage.company.companyDataCollection.companiesIncluded.title",
         )}
       >
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph1",
+            "methodsPage.company.companyDataCollection.companiesIncluded.paragraph1",
           )}
         </p>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph2",
+            "methodsPage.company.companyDataCollection.companiesIncluded.paragraph2",
           )}
         </p>
         <div className="flex justify-center">
           <div className="w-full space-y-6">
             <LinkButton
-              title={t("methodsPage.accordion.companyDataCollection.link2")}
+              title={t("methodsPage.company.companyDataCollection.link2")}
               text={t(
-                "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph3",
+                "methodsPage.company.companyDataCollection.companiesIncluded.paragraph3",
               )}
               link="https://www.msci.com/our-solutions/indexes/gics"
             />
@@ -68,12 +68,12 @@ export const CompanyDataOverviewContent = () => {
         </div>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph4",
+            "methodsPage.company.companyDataCollection.companiesIncluded.paragraph4",
           )}
         </p>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.companiesIncluded.paragraph5",
+            "methodsPage.company.companyDataCollection.companiesIncluded.paragraph5",
           )}
         </p>
       </Section>
