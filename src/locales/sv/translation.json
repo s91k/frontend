@@ -628,7 +628,23 @@
       },
       "readMore": {
         "text": "Läs mer",
-        "content": "Vi erbjuder sponsormöjligheter med fast avgift för företag som vill stödja Klimatkollens mål att främja klimatåtgärder i Sverige. Dessa möjligheter är utformade för att hjälpa företag att stämma överens med våra mål och bidra till vårt arbete."
+        "content": {
+          "header": "Bli stödföretag – ta ställning för öppen klimatdata",
+          "intro": [
+            "Genom att publicera öppna klimatdata bidrar Klimatkollen till transparens och ett ökat stöd för Parisavtalet i politik och näringsliv. För om vi inte vet hur det går med utsläppen – och hur det borde gå – kommer vi inte kunna göra det som krävs för att minska dem i linje med Parisavtalet.",
+            "Klimatkollen är en data-driven ideell förening som bygger en rörelse kring öppna klimatdata.", 
+            "Vi samverkar med näringsliv, akademi och civilsamhälle för ökad slagkraft. För oss står AI, öppna data, bred kommunikation och medborgarengagemang i centrum.",
+            "Var en del av rörelsen för öppna klimatdata – bli stödföretag i dag!"
+          ],
+          "benefitsHeader": "Som stödföretag får du:",
+          "benefits": [
+            "Vår logotyp på er webbplats, visar ert engagemang för öppen klimatdata",
+            "Er logotyp på vår webbplats, syns bland andra företagsgivare",
+            "Notifiering när vi publicerar ny data om ditt företag",
+            "Automatisk uppdatering av er klimatdata till företagets Wikipedia-sida"
+          ],
+          "cost": "25 000 kronor / år (inkl moms)"
+        }
       }
     },
     "contact": {

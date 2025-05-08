@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface SupportMethodProps {
@@ -13,7 +12,13 @@ interface SupportMethodProps {
   };
   readMore?: {
     text: string;
-    content: string;
+    content: {
+      header: string;
+      intro: string[];
+      benefitsHeader: string;
+      benefits: string[];
+      cost: string;
+    };
   };
 }
 
@@ -71,11 +76,31 @@ export function SupportMethod({
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="bg-black-2">
+        <DialogContent className="bg-black-2 max-h-[80vh] overflow-y-auto">
           <DialogTitle className="text-white">{title}</DialogTitle>
-          <div className="text-grey whitespace-pre-wrap">
-            {readMore?.content}
-          </div>
+          {readMore?.content ? (
+            <div className="text-grey mt-2">
+              <h3 className="text-xl font-bold text-white mb-4">
+                {readMore.content.header}
+              </h3>
+              {readMore.content.intro.map((para, i) => (
+                <p className="mb-3" key={i}>
+                  {para}
+                </p>
+              ))}
+              <div className="font-semibold text-white mb-2">
+                {readMore.content.benefitsHeader}
+              </div>
+              <ul className="list-disc pl-6 mb-3">
+                {readMore.content.benefits.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
+              <p className="mt-4 font-bold text-white">
+                {readMore.content.cost}
+              </p>
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
     </>

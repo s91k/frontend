@@ -4,6 +4,14 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { SupportMethod } from "@/components/support/SupportMethod";
 import { PageSEO } from "@/components/SEO/PageSEO";
 
+type SupportReadMoreContent = {
+  header: string;
+  intro: string[];
+  benefitsHeader: string;
+  benefits: string[];
+  cost: string;
+};
+
 export function SupportPage() {
   const { t } = useTranslation();
 
@@ -104,7 +112,9 @@ export function SupportPage() {
             }}
             readMore={{
               text: t("supportPage.organizationSupport.readMore.text"),
-              content: t("supportPage.organizationSupport.readMore.content"),
+              content: t("supportPage.organizationSupport.readMore.content", {
+                returnObjects: true,
+              }) as SupportReadMoreContent,
             }}
           />
         </div>

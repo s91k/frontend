@@ -609,7 +609,7 @@
         "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganisation Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
       }
     },
-    "organisationSupport": {
+    "organizationSupport": {
       "title": "Support Companies",
       "description": "Support as an organisation of any size",
       "details": [
@@ -628,7 +628,23 @@
       },
       "readMore": {
         "text": "Read more",
-        "content": "We offer fixed fee sponsorship opportunities for companies that want to support Klimatkollen's mission to promote climate action in Sweden. These opportunities are designed to help companies align with our goals and contribute to our work."
+        "content": {
+          "header": "Become a Supporting Company – Take a Stand for Open Climate Data",
+          "intro": [
+            "By publishing open climate data, Klimatkollen contributes to transparency and increased support for the Paris Agreement in politics and business. Because if we don’t know how emissions are progressing – and how they should be progressing – we won’t be able to do what’s necessary to reduce them in line with the Paris Agreement.",
+            "Klimatkollen is a data-driven nonprofit building a movement around open climate data. We collaborate with businesses, academia, and civil society to increase impact. For us, AI, open data, broad communication, and civic engagement are key.",
+            "Be part of the open climate data movement – become a supporting company today!"
+          ],
+          "benefitsHeader": "As a supporting company, you get:",
+          "benefits": [
+            "Our logo on your website, showing your commitment to open climate data",
+            "Your logo on our website, visible among other corporate supporters",
+            "Notifications when we publish new data about your company",
+            "The opportunity to comment on your company’s climate data on our website",
+            "Automatic updating of your climate data to your company’s Wikipedia page"
+          ],
+          "cost": "SEK 25,000 / year (including VAT)"
+        }
       }
     },
     "contact": {
