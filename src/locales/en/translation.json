@@ -28,7 +28,7 @@
     "description": "Klimatkollen is a citizen platform that provides climate data and is developed with open <0>source code</0>.",
     "privacyTerms": "Privacy & Terms",
     "supporters": "Supporters and Partners",
-    "internationalLicense": "International License",
+    "internationalLicense": "International Licence",
     "ccBySa": "CC BY-SA - Attribution-ShareAlike 4.0"
   },
   "newsletter": {
@@ -70,7 +70,7 @@
     "largestEmittor": "Company with the largest emissions",
     "companiesDescription": "Emissions from the most recently reported year",
     "aboutUsTitle": "Who are we?",
-    "aboutUsContent": "Klimatkollen is a citizen platform that provides climate data and builds support for reducing emissions in line with the Paris Agreement. We believe in the power of simple, engaging data visualization to enhance knowledge and drive participation in the climate conversation.",
+    "aboutUsContent": "Klimatkollen is a citizen platform that provides climate data and builds support for reducing emissions in line with the Paris Agreement. We believe in the power of simple, engaging data visualisation to enhance knowledge and drive participation in the climate conversation.",
     "tabName": {
       "companies": "the companies",
       "municipalities": "the municipalities"
@@ -83,7 +83,7 @@
     },
     "mainContent": {
       "title": "What is Klimatkollen?",
-      "paragraph1": "Klimatkollen (eng, Climate Checker) is an open-source citizen platform that helps individuals, businesses and organisations track the climate transition by using Al to collect, analyze and spread key climate data.",
+      "paragraph1": "Klimatkollen (eng, Climate Checker) is an open-source citizen platform that helps individuals, businesses and organisations track the climate transition by using Al to collect, analyse and spread key climate data.",
       "paragraph2": "We provide a clear picture of how emissions are progressing compared to where they need to be. By making this information accessible, we empower the public, contribute to fact-based discussions, and strengthen support for climate action.",
       "paragraph3": "Our vision is for decision-makers in politics and business to be guided by an informed and engaged public, leading to actions that reduce emissions in line with the Paris Agreement.",
       "paragraph4": "Launched in March 2022, Klimatkollen is operated by the non-profit association Klimatbyrån. It was founded by Ola Spännar and Frida Berry Eklund. Initially focused on local climate data for Swedish municipalities, the platform expanded in 2024 to include corporate climate data."
@@ -141,7 +141,7 @@
       "description": "Access our comprehensive climate database through bi-yearly data dumps, perfect for research and analysis.",
       "export": "Database exports are updated Feb 1 & Aug 1 each year",
       "data": "Corporate and municipality climate data",
-      "license": "Free to use for both commerical and non-commercial purposes",
+      "license": "Free to use for both commercial and non-commercial purposes",
       "requestAccess": "Get Data"
     },
     "dataOverview": {
@@ -201,8 +201,8 @@
       "excel": "Excel: XLSX format with multiple sheets. Slightly larger than CSV due to built-in formatting. Best for users who want a clean, structured spreadsheet view right away in Excel or Google Sheets.",
       "json": "JSON: UTF-8 encoded structured data. Tends to be the largest file due to detailed key-value formatting. Best for developers or analysts working with code, APIs, or automation in tools like Python or JavaScript."
     },
-    "usageLicense": "Usage License",
-    "usageLicenseDescription": "The downloaded data is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). You are free to use, modify, and share the data for both commercial and non-commercial purposes, as long as you credit Klimatkollen and include a link to the license.",
+    "usageLicense": "Usage Licence",
+    "usageLicenseDescription": "The downloaded data is licenced under the Creative Commons Attribution 4.0 International Licence (CC BY 4.0). You are free to use, modify, and share the data for both commercial and non-commercial purposes, as long as you credit Klimatkollen and include a link to the licence.",
     "loading": "Loading...",
     "downloadCompanies": "Download Company Data",
     "downloadMunicipalities": "Download Municipality Data"
@@ -513,7 +513,7 @@
           },
           "powerCircles": {
             "title": "Power Circles database ELIS",
-            "text": "Charging infrastructure data from the industry organization",
+            "text": "Charging infrastructure data from the industry organisation",
             "link": "https://powercircle.org/elbilsstatistik/"
           },
           "klimatplaner": {
@@ -534,7 +534,7 @@
       },
       "calculations": {
         "title": "Our Calculations",
-        "description": "Understand how we calculate and analyze climate data",
+        "description": "Understand how we calculate and analyse climate data",
         "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
         "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
       }
@@ -551,7 +551,7 @@
       "details": [
         "Bankgiro: 5793-3178",
         "Swish: 123 384 67 48",
-        "IBAN: SE45 5000 0000 0583 9825 7466",
+        "IBAN: SEXX",
         "Your donation helps maintain our infrastructure and data collection"
       ],
       "action": {
@@ -606,12 +606,12 @@
       },
       "email": {
         "subject": "Partnership Inquiry - [Organisation Name]",
-        "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganization Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
+        "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganisation Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
       }
     },
-    "organizationSupport": {
+    "organisationSupport": {
       "title": "Support Companies",
-      "description": "Support as an organization of any size",
+      "description": "Support as an organisation of any size",
       "details": [
         "Fixed fee sponsorship opportunities",
         "Data verification partnerships",
@@ -624,7 +624,7 @@
       },
       "email": {
         "subject": "Support Company Inquiry - [Company Name]",
-        "body": "Hi,\n\nI am interested in learning more about the company support opportunity with Klimatkollen.\n\nOrganization Name:\n\nLooking forward to discussing a collaboration.\n\nBest regards,"
+        "body": "Hi,\n\nI am interested in learning more about the company support opportunity with Klimatkollen.\n\nOrganisation Name:\n\nLooking forward to discussing a collaboration.\n\nBest regards,"
       },
       "readMore": {
         "text": "Read more",
@@ -709,7 +709,7 @@
     "electricCarChange": "Increase in electric car share",
     "electricCarsPerChargePoint": "Electric cars per charging point",
     "noChargePoints": "No charging points",
-    "bicycleMetrePerCapita": "Bicycle path meters per capita"
+    "bicycleMetrePerCapita": "Bicycle path metres per capita"
   },
   "sector": {
     "energy": "Energy",
@@ -803,27 +803,27 @@
     "categories": {
       "1": {
         "name": "Purchased goods and services",
-        "description": "Emissions from the production of goods and services purchased by the organization."
+        "description": "Emissions from the production of goods and services purchased by the organisation."
       },
       "2": {
         "name": "Capital goods",
-        "description": "Emissions from the production of capital goods purchased by the organization."
+        "description": "Emissions from the production of capital goods purchased by the organisation."
       },
       "3": {
         "name": "Fuel- and energy-related activities",
-        "description": "Emissions from the production of fuels and energy purchased by the organization, including transport and distribution, not included in scope 2."
+        "description": "Emissions from the production of fuels and energy purchased by the organisation, including transport and distribution, not included in scope 2."
       },
       "4": {
         "name": "Upstream transportation and distribution",
-        "description": "Emissions from the transport and distribution of purchased goods between suppliers and/or within the organization."
+        "description": "Emissions from the transport and distribution of purchased goods between suppliers and/or within the organisation."
       },
       "5": {
         "name": "Waste generated in operations",
-        "description": "Emissions from the treatment of waste generated by the organization."
+        "description": "Emissions from the treatment of waste generated by the organisation."
       },
       "6": {
         "name": "Business travel",
-        "description": "Emissions from business travel using vehicles not owned by the organization."
+        "description": "Emissions from business travel using vehicles not owned by the organisation."
       },
       "7": {
         "name": "Employee commuting",
@@ -835,7 +835,7 @@
       },
       "9": {
         "name": "Downstream transportation and distribution",
-        "description": "Emissions from the transport and distribution of sold goods between the organization and the customer."
+        "description": "Emissions from the transport and distribution of sold goods between the organisation and the customer."
       },
       "10": {
         "name": "Processing of sold products",
@@ -859,7 +859,7 @@
       },
       "15": {
         "name": "Investments",
-        "description": "Emissions from the organization's investments in other companies, as well as other financed emissions."
+        "description": "Emissions from the organisation's investments in other companies, as well as other financed emissions."
       },
       "16": {
         "name": "Other",
@@ -953,7 +953,7 @@
       "categories": "Scope 3 Categories",
       "selectYear": "Select Year",
       "latestYear": "Latest Year",
-      "visualization": "Visualization",
+      "visualisation": "Visualisation",
       "data": "Data",
       "historicalDevelopment": "Historical Development"
     },
@@ -1048,8 +1048,8 @@
         },
         "bicycleMetrePerCapita": {
           "label": "Bicycle Infrastructure",
-          "description": "Bicycle path meters per capita",
-          "detailedDescription": "Number of meters of bicycle paths per inhabitant per municipality in 2023. Longer is better, as good infrastructure promotes increased cycling",
+          "description": "Bicycle path metres per capita",
+          "detailedDescription": "Number of metres of bicycle paths per inhabitant per municipality in 2023. Longer is better, as good infrastructure promotes increased cycling",
           "source": "<0>National Road Database</0>, <1>Swedish Transport Administration</1>"
         }
       },
@@ -1142,11 +1142,11 @@
     "title": "How Klimatkollen Processes Personal Data",
     "lastUpdated": "Last updated: {{date}}",
     "responsibilityTitle": "Data Controller",
-    "responsibilityText": "Klimatbyrån with organization number 802537-8814 is the data controller when the organization processes personal data.",
+    "responsibilityText": "Klimatbyrån with organisation number 802537-8814 is the data controller when the organisation processes personal data.",
     "dataCollectionTitle": "What data do we process?",
     "dataCollectionText": "The personal data we collect is primarily information that you provide yourself (name, address, mobile number, etc.) when, for example, you sign up for our newsletter or become a member. You may also be employed by a partner or other contact of Klimatbyrån, in which case the personal data is your contact information at work.",
     "whyTitle": "Why do we process personal data?",
-    "whyText1": "We process the data to fulfill the commitments associated with the purpose stated at the time of collection or for the collaboration. Otherwise, we use your information only for purposes related to Klimatbyrån's own activities. We do not share your information with third parties.",
+    "whyText1": "We process the data to fulfil the commitments associated with the purpose stated at the time of collection or for the collaboration. Otherwise, we use your information only for purposes related to Klimatbyrån's own activities. We do not share your information with third parties.",
     "whyText2": "Klimatbyrån values personal integrity. Handling personal data correctly and securely is a priority for us. Those who entrust us with their information should feel secure.",
     "whyText3": "We comply with the General Data Protection Regulation and other laws and regulations in the data protection area. You always have the right to request correction or deletion of your personal data.",
     "contactTitle": "Contact Us",
