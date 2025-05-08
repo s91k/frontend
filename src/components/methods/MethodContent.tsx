@@ -4,7 +4,7 @@ import { getMethodById } from "@/lib/methods/methodologyData";
 import { SourcesContent } from "./content/SourcesContent";
 import { CompanyDataOverviewContent } from "./content/CompanyDataOverview";
 import { DataCollectionProcessContent } from "./content/DataCollectionProcess";
-import { EmissionsAndCategoriesContent } from "./content/Emissions and Categories";
+import { EmissionsAndCategoriesContent } from "./content/EmissionsCategories";
 import { HistoricalDataContent } from "./content/HistoricalData";
 import { ParisAgreementContent } from "./content/ParisAgreementContent";
 import { CO2BudgetsContent } from "./content/CO2BudgetsContent";

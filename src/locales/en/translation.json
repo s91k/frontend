@@ -443,7 +443,7 @@
         }
       },
       "emissionCategories": {
-        "title": "Emission Categories",
+        "title": "Emissions and Categories",
         "description": "Understanding different types of emissions and how they are categorized",
         "paragraph1": "Companies report their emissions according to the GHG Protocol's three scopes:",
         "scope2": {
