@@ -66,7 +66,7 @@ export function SupportPage() {
           />
 
           <SupportMethod
-            icon={<Users className="w-6 h-6 text-blue-3" />}
+            icon={<Users className="w-6 h-6 text-orange-1" />}
             title={t("supportPage.volunteer.title")}
             description={t("supportPage.volunteer.description")}
             details={t("supportPage.volunteer.details", {
