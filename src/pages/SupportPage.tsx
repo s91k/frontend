@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Heart, Code, Handshake, Building } from "lucide-react";
+import { Heart, Code, Handshake, Building, Users } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { SupportMethod } from "@/components/support/SupportMethod";
 import { PageSEO } from "@/components/SEO/PageSEO";
@@ -62,6 +62,19 @@ export function SupportPage() {
             action={{
               text: t("supportPage.openSource.action.text"),
               link: t("supportPage.openSource.action.link"),
+            }}
+          />
+
+          <SupportMethod
+            icon={<Users className="w-6 h-6 text-blue-3" />}
+            title={t("supportPage.volunteer.title")}
+            description={t("supportPage.volunteer.description")}
+            details={t("supportPage.volunteer.details", {
+              returnObjects: true,
+            })}
+            action={{
+              text: t("supportPage.volunteer.action.text"),
+              link: t("supportPage.volunteer.action.link"),
             }}
           />
 

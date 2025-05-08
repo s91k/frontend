@@ -577,6 +577,20 @@
         "link": "https://github.com/klimatkollen"
       }
     },
+    "volunteer": {
+      "title": "Volunteer",
+      "description": "Join our community and contribute your skills",
+      "details": [
+        "Help with data verification and analysis",
+        "Assist with translations and content",
+        "Support community engagement",
+        "Participate in climate awareness initiatives"
+      ],
+      "action": {
+        "text": "Join our Discord",
+        "link": "https://discord.gg/N5P64QPQ6v"
+      }
+    },
     "partnerships": {
       "title": "Partnerships",
       "description": "Collaborate with us to expand our impact",

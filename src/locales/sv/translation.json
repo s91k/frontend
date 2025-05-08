@@ -540,6 +540,106 @@
       }
     }
   },
+  "supportPage": {
+    "header": {
+      "title": "Stöd Klimatkollen",
+      "description": "Hjälp oss att fortsätta vårt arbete att spåra och främja klimatåtaganden i Sverige. Det finns flera sätt du kan stödja vårt arbete."
+    },
+    "donations": {
+      "title": "Direkta donationer",
+      "description": "Stöd vårt arbete genom ekonomiskt bidrag",
+      "details": [
+        "Bankgiro: 5793-3178",
+        "Swish: 123 384 67 48",
+        "IBAN: SE45 5000 0000 0583 9825 7466",
+        "Din donation bidrar till att upprätthålla vår infrastruktur och datainsamlingsarbete"
+      ],
+      "action": {
+        "text": "Gör en donation",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Donationsförfrågan - Klimatkollen",
+        "body": "Hej,\n\nJag vill göra en donation till Klimatkollen.\n\nSumma:\n\nVänligen hjälp oss att fortsätta vårt arbete med klimatdata.\n\nMed vänliga hälsningar,"
+      }
+    },
+    "openSource": {
+      "title": "Bidrag till öppen källkod",
+      "description": "Hjälp oss att utveckla Klimatkollen genom att bidra med kod",
+      "details": [
+        "Källkoden är öppen och tillgänglig på GitHub",
+        "Bidra till dataanalysverktyg",
+        "Hjälp till att förbättra användargränssnittet",
+        "Lägg till nya funktioner och funktionalitet"
+      ],
+      "action": {
+        "text": "Se på GitHub",
+        "link": "https://github.com/klimatkollen"
+      }
+    },
+    "volunteer": {
+      "title": "Bli volontär",
+      "description": "Gå med i vår gemenskap och bidra med dina färdigheter",
+      "details": [
+        "Hjälp till med att verifiera och analysera data",
+        "Hjälp till med översättningar och innehåll",
+        "Stöd gemenskapsengagemang",
+        "Delta i klimatmedvetna initiativ"
+      ],
+      "action": {
+        "text": "Gå med i vår Discord",
+        "link": "https://discord.gg/N5P64QPQ6v"
+      }
+    },
+    "partnerships": {
+      "title": "Partnerskap",
+      "description": "Samarbeta med oss för att expandera vår påverkan",
+      "details": [
+        "Partnerskap för datadelning",
+        "Forskningssamarbeten",
+        "Gemensamma klimatinitiativ",
+        "Kunskapsutbytesprogram"
+      ],
+      "action": {
+        "text": "Bli partner",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Partnerskapsförfrågan - [Organisationsnamn]",
+        "body": "Hej,\n\nJag är intresserad av att bli partner med Klimatkollen.\n\nOrganisationsnamn:\nIntresseområde:\nFöreslaget samarbete:\n\nSer fram emot att diskutera potentiella partnerskapsmöjligheter.\n\nMed vänliga hälsningar,"
+      }
+    },
+    "organizationSupport": {
+      "title": "Stöd företag",
+      "description": "Stöd som organisation av alla storlekar",
+      "details": [
+        "Sponsormöjligheter med fast avgift",
+        "Partnerskap för dataverifiering",
+        "Teknologi- och resursdelning",
+        "Stöd klimatdatatransparens"
+      ],
+      "action": {
+        "text": "Stöd företag",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Stöd företagsförfrågan - [Företagsnamn]",
+        "body": "Hej,\n\nJag är intresserad av att få veta mer om möjligheten till företagsstöd hos Klimatkollen.\n\nOrganisationsnamn:\n\nSer fram emot att diskutera ett samarbete.\n\nMed vänliga hälsningar,"
+      },
+      "readMore": {
+        "text": "Läs mer",
+        "content": "Vi erbjuder sponsormöjligheter med fast avgift för företag som vill stödja Klimatkollens mål att främja klimatåtgärder i Sverige. Dessa möjligheter är utformade för att hjälpa företag att stämma överens med våra mål och bidra till vårt arbete."
+      }
+    },
+    "contact": {
+      "title": "Kontakta oss",
+      "description": "Har du frågor om stöd till Klimatkollen, eller vill hitta andra sätt att bidra? Vi skulle gärna höra från dig.",
+      "action": {
+        "text": "Skicka ett mejl",
+        "link": "mailto:hej@klimatkollen.se"
+      }
+    }
+  },
   "municipalitiesRankedPage": {
     "errorTitle": "Det gick inte att hämta kommuninformation",
     "errorDescription": "Försök igen senare",
