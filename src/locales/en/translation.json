@@ -392,122 +392,85 @@
         "title": "Company Data Overview",
         "description": "Overview of how we collect and present company emissions data",
         "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports and combined annual reports.",
-        "paragraph2": "Currently, our database includes companies on the OMX Large Cap and Mid Cap lists of the Stockholm Stock Exchange, along with the 24 largest state-owned companies, five largest economic associations, and unlisted companies IKEA and ICA Group.",
-        "paragraph3": "The companies are categorized by industry according to the Global Industry Classification Standard (GICS), with a total of 290 companies currently tracked.",
+        "paragraph2": "The emissions data is divided into company-specific emissions (scope 1 & scope 2) and emissions from the value chain (scope 3), reported in tonnes of CO2e.",
+        "paragraph3": "On each company's page on Klimatkollen, you can find more detailed information about the emissions; breakdown by scope and category in scope 3, as well as any biogenic emissions.",
         "link1": {
-          "title": "Company Database",
-          "text": "View our complete company emissions database"
+          "title": "Klimatkollen's Company Data",
+          "text": "View our latest company emissions data here"
         },
         "link2": {
           "title": "GHG Protocol",
-          "text": "Read more about the GHG Protocol"
-        }
+          "text": "Klimatkollen uses the same structure as the GHG Protocol and follows its guidelines."
+        },
+        "companiesIncluded": {
+          "title": "Companies Included",
+          "paragraph1": "Currently, our database includes companies on the OMX Large Cap and Mid Cap lists of the Stockholm Stock Exchange, along with the 24 largest state-owned companies, five largest economic associations, and unlisted companies IKEA and ICA Group.",
+          "paragraph2": "The companies are categorized by industry according to the Global Industry Classification Standard (GICS), with a total of 290 companies currently tracked.",
+          "link": {
+            "title": "GICS",
+            "text": "Read more about the Global Industry Classification Standard (GICS)"
+          }
+        },
+        "paragraph4": "Information about the number of employees and revenue is obtained from the latest sustainability reports, or combined annual and sustainability reports, and in some cases from other sources."
       },
       "companyDataCollection": {
         "title": "Data Collection Process",
         "description": "Learn about our methodology for collecting and verifying company data",
         "paragraph1": "We present companies' greenhouse gas emissions as they report them, with data divided into company-specific emissions (scope 1 & 2) and value chain emissions (scope 3).",
-        "paragraph2": "In some cases, our figures may be more up-to-date than company reports due to our direct communication with companies about data corrections.",
+        "paragraph2": "In some cases, our figures may be more up-to-date than company reports due to direct communication with companies about data corrections.",
         "paragraph3": "While we strive for accuracy, Klimatkollen does not take responsibility for the completeness or accuracy of company reports.",
         "paragraph4": "Emissions are rounded to the nearest whole number, which may cause minor variations from company reports.",
-        "link": "GHG Protocol",
-        "companiesIncluded": {
-          "title": "Companies Included",
-          "paragraph1": "Our database covers companies listed on OMX Large Cap and Mid Cap, major state-owned companies, and selected unlisted companies."
-        },
+        "paragraph5": "The description of the company's activities is AI-generated.",
         "dataPresented": {
           "title": "Data Presentation",
           "paragraph1": "Emissions data is presented as reported by companies, with clear categorization of different emission scopes."
         },
         "fiscalYear": {
           "title": "Fiscal Year Reporting",
-          "paragraph1": "Data is aligned with companies' fiscal years to ensure consistency in reporting periods."
-        },
-        "scope2": {
-          "title": "Scope 2 Emissions",
-          "paragraph1": "Primarily calculated using the market-based method, considering companies' renewable electricity purchases."
-        },
-        "scope3": {
-          "title": "Scope 3 Emissions",
-          "paragraph1": "Value chain emissions are reported according to GHG Protocol categories when available."
-        },
-        "financedEmissions": {
-          "title": "Financed Emissions",
-          "paragraph1": "For financial institutions, we track and report financed emissions separately."
-        },
-        "biogenicEmissions": {
-          "title": "Biogenic Emissions",
-          "paragraph1": "Biogenic CO2 emissions are reported separately from scopes 1, 2, and 3."
-        },
-        "goals": {
-          "title": "Climate Goals",
-          "paragraph1": "We track and present companies' stated emission reduction targets and initiatives."
-        },
-        "historicEmissions": {
-          "title": "Historical Emissions",
-          "paragraph1": "Historical data is collected from company reports and verified where possible."
-        },
-        "emissionOffsets": {
-          "title": "Emission Offsets",
-          "paragraph1": "Carbon offsets are tracked but not included in the main emission figures."
+          "paragraph1": "Some companies use a fiscal year. In these cases, the emissions are presented for the later of the two calendar years in the period, i.e. for companies that report 2022/2023, the data is presented for 2023."
         }
       },
       "historicalData": {
         "title": "Historical Data and Goals",
-        "description": "Track companies' emission history and climate commitments",
-        "emissionHistory": {
-          "title": "Historical Emissions Data",
-          "paragraph1": "We collect and verify historical emissions data from:",
-          "paragraph2": "• Company sustainability reports",
-          "paragraph3": "• Annual reports",
-          "paragraph4": "• Direct company communications",
-          "paragraph5": "When companies update their historical calculations, we use the most recent data available."
+        "description": "Tracking companies' emission history and climate commitments",
+        "historicEmissions": {
+          "title": "Historical Emissions",
+          "paragraph1": "Emissions data from previous years has been collected from the latest report, to the extent it is presented there. Where there are gaps in the reported emissions data, for example if there is missing information about emissions for years between the base year and the most recently reported year, Klimatkollen has sought to collect this by searching for older sustainability reports. The latest published information is always prioritized, so if a company has updated its calculations retroactively, but not published the adjustment, older data may be displayed."
         },
-        "climateTargets": {
-          "title": "Climate Targets",
-          "paragraph1": "We track various types of climate commitments:",
-          "paragraph2": "• Science Based Targets (SBTi)",
-          "paragraph3": "• Net-zero commitments",
-          "paragraph4": "• Interim reduction targets",
-          "paragraph5": "Goals are verified against company reports and public commitments."
-        },
-        "progressTracking": {
-          "title": "Progress Tracking",
-          "paragraph1": "For each company, we monitor:",
-          "paragraph2": "• Progress against stated targets",
-          "paragraph3": "• Year-over-year emission changes",
-          "paragraph4": "• Implementation of reduction initiatives",
-          "paragraph5": "This allows stakeholders to assess companies' climate action effectiveness."
+        "goals": {
+          "title": "Climate Goals",
+          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting. This data is not manually verified."
         }
       },
       "emissionCategories": {
         "title": "Emission Categories",
         "description": "Understanding different types of emissions and how they are categorized",
         "paragraph1": "Companies report their emissions according to the GHG Protocol's three scopes:",
-        "scope1": {
-          "title": "Scope 1: Direct Emissions",
-          "paragraph1": "These are direct emissions from owned or controlled sources, including:",
-          "paragraph2": "• Company vehicles and machinery",
-          "paragraph3": "• On-site fuel combustion",
-          "paragraph4": "• Process emissions from manufacturing"
-        },
         "scope2": {
           "title": "Scope 2: Indirect Energy Emissions",
-          "paragraph1": "These cover indirect emissions from purchased electricity, heating, and cooling:",
-          "paragraph2": "• Electricity consumption",
-          "paragraph3": "• District heating and cooling",
-          "paragraph4": "• Steam consumption"
+          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."
         },
         "scope3": {
           "title": "Scope 3: Value Chain Emissions",
-          "paragraph1": "These include all other indirect emissions in a company's value chain:",
-          "paragraph2": "• Purchased goods and services",
-          "paragraph3": "• Business travel",
-          "paragraph4": "• Employee commuting",
-          "paragraph5": "• Transportation and distribution",
-          "paragraph6": "• Use of sold products",
-          "paragraph7": "• End-of-life treatment",
-          "paragraph8": "• Investments (for financial institutions)"
+          "paragraph1": "Value chain emissions are reported according to GHG Protocol categories when available.",
+          "paragraph2": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
+          "paragraph3": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into 'other', or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
+          "link": {
+            "title": "Reporting of Emissions in Scope 3 for Property Owners",
+            "text": "For property owners, Klimatkollen follows the matching as specified in the guied Reporting of Emissions in Scope 3 for Property Owners."
+          }
+        },
+        "financedEmissions": {
+          "title": "Financed Emissions: Scope 3 Category 15: Investments",
+          "paragraph1": "Financed emissions are often reported with a delay since they can take longer to calculate. To provide a representative picture of a company's impact, in these cases the latest reported emissions are included."
+        },
+        "biogenicEmissions": {
+          "title": "Biogenic Emissions",
+          "paragraph1": "Biogenic emissions are reported separately from scope 1, 2 and 3, in accordance with the GHG Protocol's instructions."
+        },
+        "emissionOffsets": {
+          "title": "Emission Offsets",
+          "paragraph1": "These are not included, in line with what the GHG Protocol states."
         }
       }
     },

@@ -19,39 +19,44 @@ export const DataCollectionProcessContent = () => {
     <div className="prose prose-invert mx-auto space-y-8">
       <Section
         title={t(
-          "methodsPage.accordion.companyDataCollection.dataPresented.title",
+          "methodsPage.company.companyDataCollection.dataPresented.title",
         )}
       >
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.dataPresented.paragraph1",
+            "methodsPage.company.companyDataCollection.paragraph1",
           )}
         </p>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.dataPresented.paragraph2",
+            "methodsPage.company.companyDataCollection.paragraph2",
           )}
         </p>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.dataPresented.paragraph3",
+            "methodsPage.company.companyDataCollection.paragraph3",
           )}
         </p>
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.dataPresented.paragraph4",
+            "methodsPage.company.companyDataCollection.paragraph4",
+          )}
+        </p>
+        <p>
+          {t(
+            "methodsPage.company.companyDataCollection.paragraph5",
           )}
         </p>
       </Section>
 
       <Section
         title={t(
-          "methodsPage.accordion.companyDataCollection.fiscalYear.title",
+          "methodsPage.company.companyDataCollection.fiscalYear.title",
         )}
       >
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.fiscalYear.paragraph1",
+            "methodsPage.company.companyDataCollection.fiscalYear.paragraph1",
           )}
         </p>
       </Section>

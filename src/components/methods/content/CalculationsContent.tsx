@@ -4,10 +4,10 @@ export const CalculationsContent = () => {
   const { t } = useTranslation();
   return (
     <div className="prose prose-invert mx-auto space-y-8">
-      <p>{t("methodsPage.accordion.calculations.paragraph1")}</p>
+      <p>{t("methodsPage.municipality.calculations.paragraph1")}</p>
       <p>
         <Trans
-          i18nKey="methodsPage.accordion.calculations.paragraph2"
+          i18nKey="methodsPage.municipality.calculations.paragraph2"
           components={[
             <a
               title="Här"

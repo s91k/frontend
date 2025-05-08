@@ -18,21 +18,21 @@ export const HistoricalDataContent = () => {
   return (
     <div className="prose prose-invert mx-auto space-y-8">
       <Section
-        title={t("methodsPage.accordion.companyDataCollection.goals.title")}
+        title={t("methodsPage.company.historicalData.goals.title")}
       >
         <p>
-          {t("methodsPage.accordion.companyDataCollection.goals.paragraph1")}
+          {t("methodsPage.company.historicalData.goals.paragraph1")}
         </p>
       </Section>
 
       <Section
         title={t(
-          "methodsPage.accordion.companyDataCollection.historicEmissions.title",
+          "methodsPage.company.historicalData.historicEmissions.title",
         )}
       >
         <p>
           {t(
-            "methodsPage.accordion.companyDataCollection.historicEmissions.paragraph1",
+            "methodsPage.company.historicalData.historicEmissions.paragraph1",
           )}
         </p>
       </Section>
