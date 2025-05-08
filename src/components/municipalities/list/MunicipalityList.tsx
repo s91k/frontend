@@ -1,7 +1,6 @@
+import { CardGrid } from "@/components/CardGrid";
 import { MunicipalityCard } from "./MunicipalityCard";
 import type { Municipality } from "@/types/municipality";
-import { forwardRef } from "react";
-import { VirtuosoGrid } from "react-virtuoso";
 
 interface MunicipalityListProps {
   municipalities: Municipality[];
@@ -10,22 +9,6 @@ interface MunicipalityListProps {
   sortBy: "meets_paris" | "name";
   sortDirection: "best" | "worst";
 }
-
-const gridComponents = {
-  List: forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ style, children }, ref) => (
-      <div
-        ref={ref}
-        style={style}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        {children}
-      </div>
-    ),
-  ),
-  Item: ({ children }: React.HTMLAttributes<HTMLDivElement>) => children,
-};
-
 export function MunicipalityList({
   municipalities,
   selectedRegion,
@@ -87,12 +70,9 @@ export function MunicipalityList({
 
   return (
     <div className="space-y-8">
-      <VirtuosoGrid
-        totalCount={sortedMunicipalities.length}
-        data={sortedMunicipalities}
-        components={gridComponents}
-        useWindowScroll
-        itemContent={(_index, municipality) => {
+      <CardGrid
+        items={sortedMunicipalities}
+        itemContent={(municipality) => {
           return (
             <MunicipalityCard
               key={municipality.name}
