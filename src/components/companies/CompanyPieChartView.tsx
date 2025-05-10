@@ -14,7 +14,6 @@ interface PieChartViewProps {
   size: { innerRadius: number; outerRadius: number };
   handlePieClick?: (data: PieChartData) => void;
   layout?: "desktop" | "mobile";
-  navigable?: boolean;
   filterable?: boolean;
   filteredCategories?: Set<string>;
   onFilteredCategoriesChange?: (categories: Set<string>) => void;
@@ -26,7 +25,6 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   size,
   handlePieClick,
   layout,
-  navigable = false,
   filterable = false,
   filteredCategories = new Set(),
   onFilteredCategoriesChange,
@@ -79,7 +77,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
               key={entry.name}
               fill={entry.color}
               stroke={entry.color}
-              style={navigable ? { cursor: "pointer" } : undefined}
+              style={{ cursor: "pointer" }}
             />
           ))}
         </Pie>
