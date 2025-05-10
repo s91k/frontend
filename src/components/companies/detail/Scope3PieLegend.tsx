@@ -4,7 +4,6 @@ import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
