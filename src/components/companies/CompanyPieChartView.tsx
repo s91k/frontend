@@ -12,23 +12,25 @@ interface PieChartData {
 interface PieChartViewProps {
   pieChartData: PieChartData[];
   size: { innerRadius: number; outerRadius: number };
+  customActionLabel?: string;
   handlePieClick?: (data: PieChartData) => void;
   layout?: "desktop" | "mobile";
   filterable?: boolean;
   filteredCategories?: Set<string>;
   onFilteredCategoriesChange?: (categories: Set<string>) => void;
-  tooltipPercentageLabel?: string;
+  percentageLabel?: string;
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
   pieChartData,
   size,
+  customActionLabel,
   handlePieClick,
   layout,
   filterable = false,
   filteredCategories = new Set(),
   onFilteredCategoriesChange,
-  tooltipPercentageLabel,
+  percentageLabel: percentageLabel,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -46,13 +48,11 @@ const PieChartView: React.FC<PieChartViewProps> = ({
       onFilteredCategoriesChange(newFiltered);
     }
 
-    // Call the original handlePieClick if it exists
     if (handlePieClick) {
       handlePieClick(data);
     }
   };
 
-  // Filter out the categories that are in filteredCategories
   const filteredData = pieChartData.filter(
     (entry) => !filteredCategories.has(entry.name),
   );
@@ -83,7 +83,10 @@ const PieChartView: React.FC<PieChartViewProps> = ({
         </Pie>
         <Tooltip
           content={
-            <CompanyPieTooltip percentageLabel={tooltipPercentageLabel} />
+            <CompanyPieTooltip
+              percentageLabel={percentageLabel}
+              customActionLabel={customActionLabel}
+            />
           }
         />
       </PieChart>

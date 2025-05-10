@@ -823,7 +823,7 @@
       "visualization": "Visualization",
       "data": "Data",
       "historicalDevelopment": "Historical Development",
-      "hide": "Click to hide",
+      "hide": "Click to filter out",
       "show": "Click to show"
     },
     "scopeReportingList": {

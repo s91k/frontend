@@ -134,7 +134,7 @@ export function Scope3Data({
                 filterable={true}
                 filteredCategories={filteredCategories}
                 onFilteredCategoriesChange={setFilteredCategories}
-                tooltipPercentageLabel={t("companies.scope3Data.ofTotal")}
+                percentageLabel={t("companies.scope3Data.ofTotal")}
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>

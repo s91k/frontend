@@ -5,6 +5,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
 
 interface CompanyPieTooltipProps extends TooltipProps<number, string> {
+  customActionLabel?: string;
   showPercentage?: boolean;
   percentageLabel?: string;
 }
@@ -12,6 +13,7 @@ interface CompanyPieTooltipProps extends TooltipProps<number, string> {
 const CompanyPieTooltip: React.FC<CompanyPieTooltipProps> = ({
   active,
   payload,
+  customActionLabel,
   showPercentage = true,
   percentageLabel,
 }) => {
@@ -42,6 +44,11 @@ const CompanyPieTooltip: React.FC<CompanyPieTooltipProps> = ({
             {percentageLabel || t("companiesPage.sectorGraphs.ofTotal")}
           </div>
         )}
+        <p className="text-xs italic mt-2">
+          {customActionLabel
+            ? customActionLabel
+            : t("companies.scope3Data.hide")}
+        </p>
       </div>
     </div>
   );

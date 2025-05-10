@@ -146,6 +146,9 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   <PieChartView
                     pieChartData={pieChartDataWithColor}
                     size={size}
+                    customActionLabel={t(
+                      `companiesPage.sectorGraphs.${selectedSector ? "pieLegendCompany" : "pieLegendSector"}`,
+                    )}
                     handlePieClick={handlePieClick}
                     layout={screenSize.isMobile ? "mobile" : "desktop"}
                   />
