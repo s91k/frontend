@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
 import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
 
-interface UnifiedPieTooltipProps extends TooltipProps<number, string> {
+interface CompanyPieTooltipProps extends TooltipProps<number, string> {
   showPercentage?: boolean;
   percentageLabel?: string;
 }
 
-const UnifiedPieTooltip: React.FC<UnifiedPieTooltipProps> = ({
+const CompanyPieTooltip: React.FC<CompanyPieTooltipProps> = ({
   active,
   payload,
   showPercentage = true,
@@ -47,4 +47,4 @@ const UnifiedPieTooltip: React.FC<UnifiedPieTooltipProps> = ({
   );
 };
 
-export default UnifiedPieTooltip;
+export default CompanyPieTooltip;

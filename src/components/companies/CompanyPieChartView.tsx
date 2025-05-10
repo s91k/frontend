@@ -1,6 +1,6 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-import UnifiedPieTooltip from "./tooltips/CompanyPieTooltip";
+import CompanyPieTooltip from "./tooltips/CompanyPieTooltip";
 
 interface PieChartData {
   name: string;
@@ -85,7 +85,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
         </Pie>
         <Tooltip
           content={
-            <UnifiedPieTooltip percentageLabel={tooltipPercentageLabel} />
+            <CompanyPieTooltip percentageLabel={tooltipPercentageLabel} />
           }
         />
       </PieChart>
