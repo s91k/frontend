@@ -1,4 +1,4 @@
-import { Building2, ArrowUpRight } from "lucide-react";
+import { Building2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -24,7 +24,6 @@ import {
   formatEmissionsAbsolute,
   formatEmployeeCount,
   formatPercentChange,
-  localizeUnit,
 } from "@/utils/localizeUnit";
 import { cn } from "@/lib/utils";
 import { OverviewStatistics } from "./OverviewStatistics";
@@ -89,7 +88,7 @@ export function CompanyOverview({
       <div className="flex items-start justify-between mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
-            <Text className=" text-4xl lg:text-6xl">{company.name}</Text>
+            <Text className="text-4xl lg:text-6xl">{company.name}</Text>
             <div className="flex flex-col h-full justify-around">
               {token && (
                 <Button
@@ -119,7 +118,7 @@ export function CompanyOverview({
               {showMore && (
                 <Text
                   variant="body"
-                  className="text-lg md:text-base sm:text-sm max-w-3xl mt-2"
+                  className="text-sm md:text-base lg:text-lg max-w-3xl mt-2"
                 >
                   {company.description}
                 </Text>
@@ -128,15 +127,15 @@ export function CompanyOverview({
           ) : (
             <Text
               variant="body"
-              className="text-lg md:text-base sm:text-sm max-w-3xl"
+              className="text-sm md:text-base lg:text-lg max-w-3xl"
             >
               {company.description}
             </Text>
           )}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-4">
+          <div className="flex flex-row items-center gap-2 mt-4">
             <Text
               variant="body"
-              className="text-grey text-lg md:text-base sm:text-sm"
+              className="text-grey text-sm md:text-base lg:text-lg"
             >
               {t("companies.overview.sector")}:
             </Text>
@@ -168,22 +167,19 @@ export function CompanyOverview({
           </div>
         </div>
         <div className="hidden md:flex w-16 h-16 rounded-full bg-blue-5/30 items-center justify-center">
-          <Building2 className="w-8 h-8 sm:w-6 sm:h-6 text-blue-2" />
+          <Building2 className="w-8 h-8 text-blue-2" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
         <div>
-          <Text
-            variant="body"
-            className="mb-2 lg:text-lg md:text-base sm:text-sm"
-          >
+          <Text variant="body" className="mb-2 lg:text-lg md:text-base text-sm">
             {t("companies.overview.totalEmissions")} {periodYear}
           </Text>
           <div className="flex items-baseline gap-4">
             <Text
               className={cn(
-                "text-3xl lg:text-6xl md:text-4xl sm:text-3xl font-light tracking-tighter leading-none",
+                "text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none",
                 selectedPeriod.emissions?.calculatedTotalEmissions === 0
                   ? "text-grey"
                   : "text-orange-2",
@@ -196,7 +192,7 @@ export function CompanyOverview({
                     selectedPeriod.emissions.calculatedTotalEmissions,
                     currentLanguage,
                   )}
-              <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
+              <span className="text-sm md:text-lg lg:text-2xl ml-2 text-grey">
                 {t(
                   selectedPeriod.emissions?.calculatedTotalEmissions === 0
                     ? " "
@@ -214,7 +210,7 @@ export function CompanyOverview({
             </Text>
             <CompanyOverviewTooltip yearOverYearChange={yearOverYearChange} />
           </div>
-          <Text className="text-3xl lg:text-6xl md:text-4xl sm:text-3xl font-light tracking-tighter leading-none">
+          <Text className="text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none">
             {yearOverYearChange !== null ? (
               <span
                 className={
