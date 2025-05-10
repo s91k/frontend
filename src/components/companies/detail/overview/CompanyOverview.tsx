@@ -27,13 +27,8 @@ import {
   localizeUnit,
 } from "@/utils/localizeUnit";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
+import { OverviewStatistics } from "./OverviewStatistics";
+import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -90,7 +85,7 @@ export function CompanyOverview({
     : t("companies.overview.notReported");
 
   return (
-    <div className="bg-black-2 rounded-level-1 p-16">
+    <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
       <div className="flex items-start justify-between mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
@@ -217,29 +212,7 @@ export function CompanyOverview({
             <Text className="mb-2 lg:text-lg md:text-base sm:text-sm">
               {t("companies.overview.changeSinceLastYear")}
             </Text>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="w-4 h-4 mb-2" />
-                </TooltipTrigger>
-                <TooltipContent className="max-w-80">
-                  {yearOverYearChange !== null ? (
-                    yearOverYearChange <= -80 || yearOverYearChange >= 80 ? (
-                      <>
-                        <p>{t("companies.card.emissionsChangeRateInfo")}</p>
-                        <p className="my-2">
-                          {t("companies.card.emissionsChangeRateInfoExtended")}
-                        </p>
-                      </>
-                    ) : (
-                      <p>{t("companies.card.emissionsChangeRateInfo")}</p>
-                    )
-                  ) : (
-                    <p>{t("companies.card.noData")}</p>
-                  )}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <CompanyOverviewTooltip yearOverYearChange={yearOverYearChange} />
           </div>
           <Text className="text-3xl lg:text-6xl md:text-4xl sm:text-3xl font-light tracking-tighter leading-none">
             {yearOverYearChange !== null ? (
@@ -262,46 +235,11 @@ export function CompanyOverview({
         </div>
       </div>
 
-      <div className="mt-12 bg-black-1 rounded-level-2 p-8 md:p-6 sm:p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <Text className="mb-2 text-base md:text-base sm:text-sm">
-              {t("companies.overview.turnover")} ({periodYear})
-            </Text>
-            <Text className="text-base md:text-base sm:text-sm">
-              {selectedPeriod.economy?.turnover?.value
-                ? `${localizeUnit(
-                    selectedPeriod.economy.turnover.value / 1e9,
-                    currentLanguage,
-                  )} mdr ${selectedPeriod.economy.turnover.currency}`
-                : t("companies.overview.notReported")}
-            </Text>
-          </div>
-
-          <div>
-            <Text className="text-base md:text-base sm:text-sm mb-2">
-              {t("companies.overview.employees")} ({periodYear})
-            </Text>
-            <Text className="text-base md:text-base sm:text-sm">
-              {formattedEmployeeCount}
-            </Text>
-          </div>
-
-          {selectedPeriod?.reportURL && (
-            <div className="flex items-end">
-              <a
-                href={selectedPeriod.reportURL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-2 hover:text-blue-1 transition-colors"
-              >
-                {t("companies.overview.readAnnualReport")}
-                <ArrowUpRight className="w-4 h-4 sm:w-3 sm:h-3" />
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
+      <OverviewStatistics
+        selectedPeriod={selectedPeriod}
+        currentLanguage={currentLanguage}
+        formattedEmployeeCount={formattedEmployeeCount}
+      />
     </div>
   );
 }
