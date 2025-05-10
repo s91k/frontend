@@ -24,6 +24,7 @@ import PieChartView from "../../CompanyPieChartView";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { cn } from "@/lib/utils";
 import SectorPieLegend from "./SectorPieLegend";
+import CustomTooltip from "../../tooltips/CustomTooltip";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -144,7 +145,6 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                 <div className="md:w-2/3 md:h-full w-full">
                   <PieChartView
                     pieChartData={pieChartDataWithColor}
-                    selectedLabel={selectedSector}
                     size={size}
                     handlePieClick={handlePieClick}
                     layout={screenSize.isMobile ? "mobile" : "desktop"}
