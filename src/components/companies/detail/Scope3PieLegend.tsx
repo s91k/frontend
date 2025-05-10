@@ -69,9 +69,6 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({ payload }) => {
                   </div>
                 </div>
               </TooltipTrigger>
-              <TooltipContent className="bg-black-1 text-white">
-                {t("companiesPage.sectorGraphs.pieLegendSector")}
-              </TooltipContent>
             </Tooltip>
           );
         })}
