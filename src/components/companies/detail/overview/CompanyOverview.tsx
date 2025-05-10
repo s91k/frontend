@@ -9,8 +9,6 @@ import {
 import { Text } from "@/components/ui/text";
 import type { CompanyDetails, ReportingPeriod } from "@/types/company";
 import { useTranslation } from "react-i18next";
-import { useScreenSize } from "@/hooks/useScreenSize";
-import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +82,7 @@ export function CompanyOverview({
 
   return (
     <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
-      <div className="flex items-start justify-between mb-12">
+      <div className="flex items-start justify-between mb-4 md:mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Text className="text-4xl lg:text-6xl">{company.name}</Text>
@@ -105,18 +103,18 @@ export function CompanyOverview({
             </div>
           </div>
           <CompanyDescription description={company.description} />
-          <div className="flex flex-row items-center gap-2 mt-4">
+          <div className="flex flex-row items-center gap-2 my-4">
             <Text
               variant="body"
               className="text-grey text-sm md:text-base lg:text-lg"
             >
               {t("companies.overview.sector")}:
             </Text>
-            <Text variant="body" className="text-lg md:text-base sm:text-sm">
+            <Text variant="body" className="text-sm md:text-base lg:text-lg">
               {sectorName}
             </Text>
           </div>
-          <div className="mt-4 w-full max-w-[180px]">
+          <div className="my-4 w-full max-w-[180px]">
             <Select value={selectedYear} onValueChange={onYearSelect}>
               <SelectTrigger className="w-full bg-black-1 text-white px-3 py-2 rounded-md">
                 <SelectValue placeholder={t("companies.overview.selectYear")} />
@@ -144,7 +142,7 @@ export function CompanyOverview({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16">
         <div>
           <Text variant="body" className="mb-2 lg:text-lg md:text-base text-sm">
             {t("companies.overview.totalEmissions")} {periodYear}
