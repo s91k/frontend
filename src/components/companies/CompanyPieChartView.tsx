@@ -1,7 +1,6 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-import PieChartTooltip from "./sectors/charts/tooltips/PieChartTooltip";
-import CompanyTooltip from "./sectors/charts/tooltips/CompanyTooltip";
+import UnifiedPieTooltip from "./tooltips/CompanyPieTooltip";
 
 interface PieChartData {
   name: string;
@@ -12,7 +11,6 @@ interface PieChartData {
 
 interface PieChartViewProps {
   pieChartData: PieChartData[];
-  selectedLabel: string | null;
   size: { innerRadius: number; outerRadius: number };
   handlePieClick?: (data: PieChartData) => void;
   layout?: "desktop" | "mobile";
@@ -20,11 +18,11 @@ interface PieChartViewProps {
   filterable?: boolean;
   filteredCategories?: Set<string>;
   onFilteredCategoriesChange?: (categories: Set<string>) => void;
+  tooltipPercentageLabel?: string;
 }
 
 const PieChartView: React.FC<PieChartViewProps> = ({
   pieChartData,
-  selectedLabel,
   size,
   handlePieClick,
   layout,
@@ -32,6 +30,7 @@ const PieChartView: React.FC<PieChartViewProps> = ({
   filterable = false,
   filteredCategories = new Set(),
   onFilteredCategoriesChange,
+  tooltipPercentageLabel,
 }) => {
   const isDesktop = layout === "desktop";
   const innerRadius = isDesktop ? size.innerRadius * 1.2 : size.innerRadius;
@@ -85,7 +84,9 @@ const PieChartView: React.FC<PieChartViewProps> = ({
           ))}
         </Pie>
         <Tooltip
-          content={selectedLabel ? <CompanyTooltip /> : <PieChartTooltip />}
+          content={
+            <UnifiedPieTooltip percentageLabel={tooltipPercentageLabel} />
+          }
         />
       </PieChart>
     </ResponsiveContainer>

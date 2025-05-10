@@ -18,7 +18,7 @@ import {
 import { RankedCompany } from "@/hooks/companies/useCompanies";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useChartData } from "@/hooks/companies/useChartData";
-import CustomTooltip from "./tooltips/CustomTooltip";
+import CustomTooltip from "../../tooltips/CustomTooltip";
 import ChartHeader from "./ChartHeader";
 import { useTranslation } from "react-i18next";
 import PieChartView from "../../CompanyPieChartView";

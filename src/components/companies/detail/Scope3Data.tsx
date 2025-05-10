@@ -130,11 +130,11 @@ export function Scope3Data({
                   color: getCategoryColor(cat.category),
                   category: cat.category,
                 }))}
-                selectedLabel={null}
                 size={size}
                 filterable={true}
                 filteredCategories={filteredCategories}
                 onFilteredCategoriesChange={setFilteredCategories}
+                tooltipPercentageLabel={t("companies.scope3Data.ofTotal")}
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>
