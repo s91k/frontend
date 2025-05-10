@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
+import { CompanyDescription } from "./CompanyDescription";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -45,8 +46,6 @@ export function CompanyOverview({
   selectedYear,
 }: CompanyOverviewProps) {
   const { t } = useTranslation();
-  const { isMobile } = useScreenSize();
-  const [showMore, setShowMore] = useState(false);
   const { token } = useAuth();
   const navigate = useNavigate();
   const sectorNames = useSectorNames();
@@ -105,33 +104,7 @@ export function CompanyOverview({
               )}
             </div>
           </div>
-          {isMobile ? (
-            <div>
-              <button
-                className="bg-black-1 text-white px-3 py-1 rounded-md mt-1 text-sm"
-                onClick={() => setShowMore(!showMore)}
-              >
-                {showMore
-                  ? t("companies.overview.readLess")
-                  : t("companies.overview.readMore")}
-              </button>
-              {showMore && (
-                <Text
-                  variant="body"
-                  className="text-sm md:text-base lg:text-lg max-w-3xl mt-2"
-                >
-                  {company.description}
-                </Text>
-              )}
-            </div>
-          ) : (
-            <Text
-              variant="body"
-              className="text-sm md:text-base lg:text-lg max-w-3xl"
-            >
-              {company.description}
-            </Text>
-          )}
+          <CompanyDescription description={company.description} />
           <div className="flex flex-row items-center gap-2 mt-4">
             <Text
               variant="body"
