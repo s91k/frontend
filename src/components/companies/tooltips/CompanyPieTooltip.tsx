@@ -44,10 +44,10 @@ const CompanyPieTooltip: React.FC<CompanyPieTooltipProps> = ({
             {percentageLabel || t("companiesPage.sectorGraphs.ofTotal")}
           </div>
         )}
-        <p className="text-xs italic mt-2">
+        <p className="text-xs italic text-blue-2 mt-2">
           {customActionLabel
             ? customActionLabel
-            : t("companies.scope3Data.hide")}
+            : t("companies.scope3Chart.clickToFilter")}
         </p>
       </div>
     </div>

@@ -96,7 +96,9 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
               </TooltipTrigger>
 
               <TooltipContent className="bg-black-1 text-white">
-                {t(`companies.scope3Data.${isFiltered ? "show" : "hide"}`)}
+                {t(
+                  `companies.scope3Chart.${isFiltered ? "clickToShow" : "clickToFilter"}`,
+                )}
               </TooltipContent>
             </Tooltip>
           );

@@ -814,6 +814,7 @@
       "category": "Kategori",
       "tonsCO2e": "ton CO₂e",
       "clickToFilter": "Klicka för att filtrera bort",
+      "clickToShow": "Klicka för att visa",
       "resetAll": "Återställ alla",
       "showingCategories": "Visar {{shown}} av {{total}} kategorier. Gömda kategorier:"
     },
@@ -823,9 +824,7 @@
       "latestYear": "Senaste året",
       "visualization": "Visualisering",
       "data": "Data",
-      "historicalDevelopment": "Historisk utveckling",
-      "hide": "Klicka för att dölja",
-      "show": "Klicka för att visa"
+      "historicalDevelopment": "Historisk utveckling"
     },
     "scopeReportingList": {
       "category": "Kategori"
