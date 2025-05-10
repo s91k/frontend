@@ -4,26 +4,46 @@ import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import {
   Tooltip,
+  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
 interface PieLegendProps {
-  payload: {
+  payload: Array<{
     name: string;
     value: number;
     total: number;
     color: string;
-  }[];
+    category: number;
+  }>;
+  filteredCategories?: Set<string>;
+  onFilteredCategoriesChange?: (categories: Set<string>) => void;
 }
 
-const Scope3PieLegend: React.FC<PieLegendProps> = ({ payload }) => {
+const Scope3PieLegend: React.FC<PieLegendProps> = ({
+  payload,
+  filteredCategories = new Set(),
+  onFilteredCategoriesChange,
+}) => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
 
   if (!payload) {
     return null;
   }
+
+  const handleLegendItemClick = (name: string) => {
+    if (onFilteredCategoriesChange) {
+      const newFiltered = new Set(filteredCategories);
+      if (newFiltered.has(name)) {
+        newFiltered.delete(name);
+      } else {
+        newFiltered.add(name);
+      }
+      onFilteredCategoriesChange(newFiltered);
+    }
+  };
 
   const sortedPayload = [...payload].sort((a, b) => {
     const aValue = a.value ?? 0;
@@ -42,11 +62,17 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({ payload }) => {
               : formatPercent(value / total, currentLanguage);
 
           const color = entry.color || "var(--grey)";
+          const isFiltered = filteredCategories.has(entry.name);
 
           return (
             <Tooltip key={`legend-${index}`}>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 p-2 rounded-md hover:bg-black-1 transition-colors">
+                <div
+                  className={`flex items-center gap-2 p-2 rounded-md hover:bg-black-1 transition-colors cursor-pointer ${
+                    isFiltered ? "opacity-50" : ""
+                  }`}
+                  onClick={() => handleLegendItemClick(entry.name)}
+                >
                   <div
                     className="w-3 h-3 rounded flex-shrink-0"
                     style={{ backgroundColor: color }}
@@ -68,6 +94,10 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({ payload }) => {
                   </div>
                 </div>
               </TooltipTrigger>
+
+              <TooltipContent className="bg-black-1 text-white">
+                {t(`companies.scope3Data.${isFiltered ? "show" : "hide"}`)}
+              </TooltipContent>
             </Tooltip>
           );
         })}

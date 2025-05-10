@@ -58,6 +58,9 @@ export function Scope3Data({
   const [selectedYear, setSelectedYear] = useState<string>("latest");
   const { size } = useResponsiveChartSize();
   const { getCategoryColor, getCategoryName } = useCategoryMetadata();
+  const [filteredCategories, setFilteredCategories] = useState<Set<string>>(
+    new Set(),
+  );
 
   if (!emissions?.scope3?.categories?.length) {
     return null;
@@ -129,6 +132,9 @@ export function Scope3Data({
                 }))}
                 selectedLabel={null}
                 size={size}
+                filterable={true}
+                filteredCategories={filteredCategories}
+                onFilteredCategoriesChange={setFilteredCategories}
               />
             </div>
             <div className={"w-full flex lg:w-1/2 lg:items-center"}>
@@ -140,6 +146,8 @@ export function Scope3Data({
                   color: getCategoryColor(cat.category),
                   category: cat.category,
                 }))}
+                filteredCategories={filteredCategories}
+                onFilteredCategoriesChange={setFilteredCategories}
               />
             </div>
           </div>

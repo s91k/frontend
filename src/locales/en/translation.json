@@ -822,7 +822,9 @@
       "latestYear": "Latest Year",
       "visualization": "Visualization",
       "data": "Data",
-      "historicalDevelopment": "Historical Development"
+      "historicalDevelopment": "Historical Development",
+      "hide": "Click to hide",
+      "show": "Click to show"
     },
     "scopeReportingList": {
       "category": "Category"
