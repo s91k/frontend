@@ -185,6 +185,10 @@ export function CompanyDetailPage() {
             )
             .map((period) => ({
               year: new Date(period.endDate).getFullYear(),
+              total: period.emissions!.scope3!.calculatedTotalEmissions!,
+              unit:
+                period.emissions!.scope3!.statedTotalEmissions?.unit ||
+                t("emissionsUnit"),
               categories: period.emissions!.scope3!.categories!,
             }))
             .sort((a, b) => a.year - b.year)}

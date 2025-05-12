@@ -41,6 +41,8 @@ interface Scope3DataProps {
   isRealEstate?: boolean;
   historicalData?: Array<{
     year: number;
+    total: number;
+    unit: string;
     categories: Array<{
       category: number;
       total: number;
@@ -82,6 +84,14 @@ export function Scope3Data({
 
   const displayYear =
     selectedYear === "latest" ? latestYear : parseInt(selectedYear);
+
+  const selectedScope3Total =
+    selectedYear === "latest"
+      ? (emissions.scope3?.total ?? 0)
+      : (historicalData?.find((data) => data.year === parseInt(selectedYear))
+          ?.total ??
+        emissions.scope3?.total ??
+        0);
 
   return (
     <div className={className}>
@@ -142,7 +152,7 @@ export function Scope3Data({
                 payload={selectedCategories.map((cat) => ({
                   name: getCategoryName(cat.category),
                   value: cat.total,
-                  total: emissions.scope3?.total ?? 0,
+                  total: selectedScope3Total,
                   color: getCategoryColor(cat.category),
                   category: cat.category,
                 }))}
