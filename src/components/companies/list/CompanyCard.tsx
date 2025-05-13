@@ -156,7 +156,7 @@ export function CompanyCard({
             </div>
             <div className="text-3xl font-light">
               {currentEmissions ? (
-                <span className="text-orange-3">
+                <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
                     {t("emissionsUnit")}
@@ -199,11 +199,7 @@ export function CompanyCard({
             </div>
             <div className="text-3xl font-light">
               {emissionsChange !== null ? (
-                <span
-                  className={
-                    emissionsChange < 0 ? "text-green-3" : "text-pink-3"
-                  }
-                >
+                <span className="text-orange-2">
                   {formatPercentChange(
                     Math.ceil(emissionsChange) / 100,
                     currentLanguage,
