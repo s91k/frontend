@@ -4,7 +4,6 @@ import {
   sectorColors,
   getCompanyColors,
 } from "@/hooks/companies/useCompanyFilters";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import {
@@ -25,7 +24,6 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
   selectedLabel,
   handlePieClick,
 }) => {
-  const screenSize = useScreenSize();
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
 
@@ -57,11 +55,8 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
   };
 
   return (
-    <div style={{ width: "100%", minWidth: 0, flex: 1 }}>
-      <div
-        className="container-type-inline-size"
-        style={{ width: "100%", minWidth: 0, flex: 1 }}
-      >
+    <div className="w-full min-w-0 flex-1">
+      <div className="container-type-inline-size w-full m-w-0 flex-1">
         <TooltipProvider>
           <div className="legend-list">
             {payload.map((entry, index) => {
