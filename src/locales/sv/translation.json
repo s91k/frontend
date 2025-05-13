@@ -5,7 +5,7 @@
   "header": {
     "companies": "Företag",
     "municipalities": "Kommuner",
-    "municipalitiesRanked": "Rankings",
+    "municipalitiesRanked": "Topplistor",
     "municipalitiesCompare": "Jämför",
     "about": "Om",
     "aboutUs": "Om oss",
@@ -660,8 +660,8 @@
   "municipalitiesRankedPage": {
     "errorTitle": "Det gick inte att hämta kommuninformation",
     "errorDescription": "Försök igen senare",
-    "title": "Kommunrankings",
-    "description": "Översikt över klimatpåverkan och omställning i kommunerna"
+    "title": "Kommuntopplistor",
+    "description": "Data om utsläpp och klimatomställning i kommunerna"
   },
   "municipalitiesComparePage": {
     "errorTitle": "Det gick inte att hämta kommuninformation",
@@ -1034,32 +1034,32 @@
       },
       "kpis": {
         "historicalEmissionChangePercent": {
-          "label": "Historisk utsläppsförändring",
+          "label": "Utsläppen",
           "description": "Historisk förändring av utsläpp",
           "detailedDescription": "Genomsnittlig årlig förändring av koldioxidutsläppen i Sveriges kommuner sedan Parisavtalet 2015",
           "source": "<0>Nationella emissionsdatabasen</0>"
         },
         "electricCarChangePercent": {
-          "label": "Tillväxt av elbilar",
+          "label": "Elbilarna",
           "description": "Förändring i andel elbilar",
           "detailedDescription": "Ökningstakten i kommunerna för andel nyregistrerade laddbara bilar 2015–2022, angivet i procentenheter per år",
           "source": "<0>Trafikanalys</0>"
         },
         "totalConsumptionEmission": {
-          "label": "Totala konsumtionsutsläpp",
+          "label": "Konsumtionen",
           "description": "Totala utsläpp från konsumtion",
           "detailedDescription": "Hushållens konsumtionsutsläpp (CO₂e) i ton per invånare och kommun år 2019. År 2050 ska utsläppen vara högst 1 ton per person och år för att ligga i linje med Parisavtalet",
           "source": "<0>Stockholm Environment Institute</0>"
         },
         "electricVehiclePerChargePoints": {
-          "label": "Elbilar per laddpunkt",
+          "label": "Laddarna",
           "description": "Antal elbilar per laddningspunkt",
           "detailedDescription": "Antal elbilar per publik laddningspunkt per kommun år 2024. Ju färre bilar per laddningspunkt desto bättre, god infrastruktur gynnar ökad elbilskonsumtion",
           "source": "<0>Power Circle</0>",
           "nullValues": "saknar laddpunkter"
         },
         "bicycleMetrePerCapita": {
-          "label": "Cykelinfrastruktur",
+          "label": "Cyklarna",
           "description": "Meter cykelväg per invånare",
           "detailedDescription": "Antal meter cykelväg per invånare per kommun år 2023. Ju längre desto bättre, god infrastruktur gynnar ökad cykling",
           "source": "<0>Nationella Vägdatabasen</0>, <1>Trafikverket</1>"
@@ -1076,11 +1076,11 @@
           "distributionBelow": "kommuner under genomsnittet"
         },
         "topPerformers": {
-          "titleBest": "Bästa kommuner",
+          "titleBest": "Topp fem kommuner",
           "titleTop": "Toppresterande kommuner"
         },
         "improvement": {
-          "title": "Sämsta kommuner"
+          "title": "Botten fem kommuner"
         }
       },
       "viewToggle": {
