@@ -13,10 +13,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+interface PieLegendEntry {
+  name: string;
+  value: number;
+  total: number;
+  sectorCode?: string;
+  wikidataId?: string;
+}
+
 interface PieLegendProps {
-  payload: any[];
+  payload: PieLegendEntry[];
   selectedLabel: string | null;
-  handlePieClick: (data: any) => void;
+  handlePieClick: (data: { sectorCode: string }) => void;
 }
 
 const SectorPieLegend: React.FC<PieLegendProps> = ({
@@ -35,19 +43,18 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
     return null;
   }
 
-  const handleItemClick = (entry: any) => {
-    const isCompanyView =
-      payload?.[0]?.wikidataId || payload?.[0]?.payload?.wikidataId;
+  const handleItemClick = (entry: PieLegendEntry) => {
+    const isCompanyView = entry.wikidataId || entry.wikidataId;
 
     if (isCompanyView) {
       // If we're viewing companies within a sector, navigate to company detail page
-      const wikidataId = entry.wikidataId || entry.payload?.wikidataId;
+      const wikidataId = entry.wikidataId || entry.wikidataId;
       if (wikidataId) {
         navigateToCompany(wikidataId);
       }
     } else {
       // If we're viewing sectors, handle the sector selection
-      const sectorCode = entry.sectorCode || entry.payload?.sectorCode;
+      const sectorCode = entry.sectorCode || entry.sectorCode;
       if (sectorCode) {
         handlePieClick({ sectorCode });
       }
@@ -60,8 +67,8 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
         <TooltipProvider>
           <div className="legend-list">
             {payload.map((entry, index) => {
-              const value = entry.payload?.value || entry.value;
-              const total = entry.payload?.total || entry.total;
+              const value = entry.value || entry.value;
+              const total = entry.total || entry.total;
               const percentage =
                 value / total < 0.001
                   ? "<0.1%"
@@ -70,9 +77,8 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
               let color;
               if (selectedLabel) {
                 color = getCompanyColors(index).base;
-              } else if (entry.payload?.sectorCode || entry.sectorCode) {
-                const sectorCode =
-                  entry.payload?.sectorCode || entry.sectorCode;
+              } else if (entry.sectorCode || entry.sectorCode) {
+                const sectorCode = entry.sectorCode || entry.sectorCode;
                 color =
                   sectorColors[sectorCode as keyof typeof sectorColors]?.base;
               } else {
@@ -89,7 +95,7 @@ const SectorPieLegend: React.FC<PieLegendProps> = ({
                       onClick={() => handleItemClick(entry)}
                     >
                       <div
-                        className="w-3 h-3 rounded flex-shrink-0"
+                        className="w-3 h-3 rounded-md flex-shrink-0"
                         style={{ backgroundColor: color }}
                       />
                       <div className="min-w-0 flex-1">
