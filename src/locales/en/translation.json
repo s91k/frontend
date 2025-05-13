@@ -5,13 +5,14 @@
   "header": {
     "companies": "Companies",
     "municipalities": "Municipalities",
-    "municipalitiesRanked": "Ranked",
+    "municipalitiesRanked": "Top Lists",
     "municipalitiesCompare": "Compare",
     "about": "About",
     "aboutUs": "About Us",
     "products": "Products",
     "insights": "Insights",
     "methodology": "Sources and Method",
+    "support": "Support Us",
     "newsletter": "Newsletter",
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
@@ -27,7 +28,7 @@
     "description": "Klimatkollen is a citizen platform that provides climate data and is developed with open <0>source code</0>.",
     "privacyTerms": "Privacy & Terms",
     "supporters": "Supporters and Partners",
-    "internationalLicense": "International License",
+    "internationalLicense": "International Licence",
     "ccBySa": "CC BY-SA - Attribution-ShareAlike 4.0"
   },
   "newsletter": {
@@ -69,7 +70,7 @@
     "largestEmittor": "Company with the largest emissions",
     "companiesDescription": "Emissions from the most recently reported year",
     "aboutUsTitle": "Who are we?",
-    "aboutUsContent": "Klimatkollen is a citizen platform that provides climate data and builds support for reducing emissions in line with the Paris Agreement. We believe in the power of simple, engaging data visualization to enhance knowledge and drive participation in the climate conversation.",
+    "aboutUsContent": "Klimatkollen is a citizen platform that provides climate data and builds support for reducing emissions in line with the Paris Agreement. We believe in the power of simple, engaging data visualisation to enhance knowledge and drive participation in the climate conversation.",
     "tabName": {
       "companies": "the companies",
       "municipalities": "the municipalities"
@@ -82,7 +83,7 @@
     },
     "mainContent": {
       "title": "What is Klimatkollen?",
-      "paragraph1": "Klimatkollen (eng, Climate Checker) is an open-source citizen platform that helps individuals, businesses and organisations track the climate transition by using Al to collect, analyze and spread key climate data.",
+      "paragraph1": "Klimatkollen (eng, Climate Checker) is an open-source citizen platform that helps individuals, businesses and organisations track the climate transition by using Al to collect, analyse and spread key climate data.",
       "paragraph2": "We provide a clear picture of how emissions are progressing compared to where they need to be. By making this information accessible, we empower the public, contribute to fact-based discussions, and strengthen support for climate action.",
       "paragraph3": "Our vision is for decision-makers in politics and business to be guided by an informed and engaged public, leading to actions that reduce emissions in line with the Paris Agreement.",
       "paragraph4": "Launched in March 2022, Klimatkollen is operated by the non-profit association Klimatbyrån. It was founded by Ola Spännar and Frida Berry Eklund. Initially focused on local climate data for Swedish municipalities, the platform expanded in 2024 to include corporate climate data."
@@ -107,7 +108,8 @@
       "paragraph3": "Much of our work relies on voluntary efforts, and we welcome new partners and financial support to help us scale up!",
       "donate": "Would you like to support our work?",
       "donateDescription": "Every donation helps us expand and share more data.",
-      "bankgiro": "Bankgiro: 5793-3178"
+      "bankgiro": "Bankgiro: 5793-3178",
+      "swish": "Swish: 123 384 67 48"
     },
     "previousProjectsSection": {
       "title": "Previous Projects",
@@ -130,7 +132,6 @@
       "description": "Real-time access to our climate database through our documented REST API with comprehensive endpoints.",
       "realtime": "Real-time data access",
       "documentation": "Full API documentation",
-      "secure": "Secure API endpoints",
       "support": "Priority support",
       "contactPricing": "Contact for Pricing",
       "viewDocs": "View API Documentation"
@@ -138,13 +139,13 @@
     "freeAccess": {
       "title": "Free Database Access",
       "description": "Access our comprehensive climate database through bi-yearly data dumps, perfect for research and analysis.",
-      "export": "Database export every 6 months",
+      "export": "Database exports are updated Feb 1 & Aug 1 each year",
       "data": "Corporate and municipality climate data",
-      "license": "Free to use for both commerical and non-commercial purposes",
+      "license": "Free to use for both commercial and non-commercial purposes",
       "requestAccess": "Get Data"
     },
     "dataOverview": {
-      "title": "Available Data  ",
+      "title": "Available Data",
       "corporate": {
         "title": "Corporate Emissions Data",
         "description": "Access to detailed emissions data from Swedish companies, including scope 1, 2, and 3 emissions, as well as supply chain data."
@@ -170,7 +171,9 @@
       "reasonWork": "Work",
       "reasonHobby": "Hobby",
       "reasonCuriosity": "Curiosity",
-      "errorGeneric": "An error occurred. Please try again later."
+      "errorGeneric": "An error occurred. Please try again later.",
+      "errorEmptyEmail": "Please enter a valid email address.",
+      "errorInvalidEmail": "Please enter a valid email address."
     }
   },
   "downloadsPage": {
@@ -198,8 +201,8 @@
       "excel": "Excel: XLSX format with multiple sheets. Slightly larger than CSV due to built-in formatting. Best for users who want a clean, structured spreadsheet view right away in Excel or Google Sheets.",
       "json": "JSON: UTF-8 encoded structured data. Tends to be the largest file due to detailed key-value formatting. Best for developers or analysts working with code, APIs, or automation in tools like Python or JavaScript."
     },
-    "usageLicense": "Usage License",
-    "usageLicenseDescription": "The downloaded data is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). You are free to use, modify, and share the data for both commercial and non-commercial purposes, as long as you credit Klimatkollen and include a link to the license.",
+    "usageLicense": "Usage Licence",
+    "usageLicenseDescription": "The downloaded data is licenced under the Creative Commons Attribution 4.0 International Licence (CC BY 4.0). You are free to use, modify, and share the data for both commercial and non-commercial purposes, as long as you credit Klimatkollen and include a link to the licence.",
     "loading": "Loading...",
     "downloadCompanies": "Download Company Data",
     "downloadMunicipalities": "Download Municipality Data"
@@ -273,6 +276,7 @@
       "back": "Back",
       "sectorTotal": "Sector Total Emissions",
       "total": "Total Emissions",
+      "noDataAvailablePieChart": "No data available for this year",
       "pieLegendCompany": "View company details",
       "pieLegendSector": "View sector details",
       "unknownCompany": "Unknown Company",
@@ -343,7 +347,13 @@
     "dataSelector": {
       "label": "Select what you want to learn about"
     },
-    "accordion": {
+    "methodNotFound": "Method not found",
+    "categories": {
+      "general": "General Information",
+      "municipality": "Municipality Data",
+      "company": "Company Data"
+    },
+    "general": {
       "parisAgreement": {
         "title": "Klimatkollen and the Paris Agreement",
         "description": "Learn about how Klimatkollen aligns with the Paris Agreement's climate goals",
@@ -353,123 +363,6 @@
         "link": {
           "title": "Paris Agreement",
           "text": "Read more about the Paris Agreement on the Swedish Environmental Protection Agency's website."
-        }
-      },
-      "sources": {
-        "title": "Our Sources",
-        "description": "Explore the publicly available sources and verified data used by Klimatkollen",
-        "paragraph1": "Klimatkollen is based on publicly available sources and verified data. We provide all sources so you can easily review and explore them further. If you notice any errors, please email us at hej@klimatkollen.se so we can make corrections.",
-        "paragraph2": "Company data is sourced from their own annual reports and sustainability reports.",
-        "links": {
-          "smhi": {
-            "title": "National Emissions Database",
-            "text": "Greenhouse gas emissions in municipalities"
-          },
-          "skr": {
-            "title": "Swedish Association of Local Authorities and Regions",
-            "text": "Political leadership in municipalities"
-          },
-          "wikidata": {
-            "title": "Wikidata",
-            "text": "Municipal coats of arms and population numbers"
-          },
-          "trafikanalys": {
-            "title": "Traffic Analysis",
-            "text": "Percentage of electric vehicles"
-          },
-          "nvdb": {
-            "title": "National Road Database",
-            "text": "Cycling paths per municipality"
-          },
-          "sei": {
-            "title": "Stockholm Environment Institute",
-            "text": "Household consumption-based emissions"
-          },
-          "powerCircles": {
-            "title": "Power Circles database ELIS",
-            "text": "Charging infrastructure data from the industry organization"
-          },
-          "klimatplaner": {
-            "title": "Climate Plans",
-            "text": "Collected by members of Klimatklubben and the Swedish Society for Nature Conservation"
-          },
-          "upphandlingsmyndigheten": {
-            "title": "Procurement Authority",
-            "text": "Information on climate requirements in municipal procurements"
-          },
-          "greenpeace": {
-            "title": "Greenpeace",
-            "text": "Mapping of climate requirements in public procurement"
-          }
-        }
-      },
-      "calculations": {
-        "title": "Our Calculations",
-        "description": "Understand how we calculate and analyze climate data",
-        "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
-        "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
-      },
-      "companyDataCollection": {
-        "title": "Company Data",
-        "description": "Learn about how we collect and process company emissions data",
-        "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports (and combined annual and sustainability reports).",
-        "paragraph2": "We publish an overview of the latest reported emissions here.",
-        "link1": "Klimatkollens Company Data",
-        "paragraph3": "The emissions data is divided into company-specific emissions (scope 1 & scope 2) and emissions from the value chain (scope 3), reported in tonnes of CO2e.",
-        "paragraph4": "On each company's page on Klimatkollen, you can find more detailed information about the emissions; breakdown by scope and category in scope 3, as well as any biogenic emissions.",
-        "paragraph5": "Klimatkollen uses the same structure as the GHG Protocol and follows its guidelines.",
-        "link2": "GHG Protocol",
-        "companiesIncluded": {
-          "title": "Companies included",
-          "paragraph1": "Currently, Klimatkollen's database includes companies on the OMX Large Cap and Mid Cap lists of the Stockholm Stock Exchange. In addition, the 24 largest state-owned companies, the five largest economic associations, and unlisted companies IKEA and ICA Group are included.",
-          "paragraph2": "A total of 290 companies. The number of companies will be expanded.",
-          "paragraph3": "The companies are categorized by industry according to the Global Industry Classification Standard (GICS).",
-          "paragraph4": "Information about the number of employees and revenue is obtained from the latest sustainability reports, or combined annual and sustainability reports, and in some cases from other sources.",
-          "paragraph5": "The description of the company's activities is AI-generated.",
-          "link1": "Global Industry Classification Standard (GICS)",
-          "link2": "Klimatkollens company data"
-        },
-        "dataPresented": {
-          "title": "Data presented",
-          "paragraph1": "We present the companies' own greenhouse gas emissions as they are reported by the companies themselves.",
-          "paragraph2": "In some cases, the figures from Klimatkollen may be more up-to-date than in the companies' reports, as we sometimes contact the companies about errors or inconsistencies we have discovered, which in some cases has resulted in the companies providing us with corrected data.",
-          "paragraph3": "Klimatkollen does not take responsibility for the completeness or accuracy of the companies' reports.",
-          "paragraph4": "The emissions are rounded to the nearest whole number. This means that companies that report emissions more accurately than whole numbers will have a minor difference compared to their own reporting. When companies also round in their own reporting, there may be a difference of one ton or more between Klimatkollen and the companies' own summaries."
-        },
-        "fiscalYear": {
-          "title": "Fiscal year",
-          "paragraph1": "Some companies use a fiscal year. In these cases, the emissions are presented for the later of the two calendar years in the period, i.e. for companies that report 2022/2023, the data is presented for 2023."
-        },
-        "scope2": {
-          "title": "Scope 2 emissions",
-          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."
-        },
-        "scope3": {
-          "title": "Scope 3 emissions",
-          "paragraph1": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
-          "paragraph2": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into \"other\", or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
-          "paragraph3": "For property companies, Klimatkollen follows the matching as specified in the guide Reporting of Emissions in Scope 3 for Property Owners.",
-          "link": "Reporting of Emissions in Scope 3 for Property Owners"
-        },
-        "financedEmissions": {
-          "title": "Financed emissions (scope 3, category 15: Investments)",
-          "paragraph1": "Financed emissions are often reported with a delay since they can take longer to calculate. To provide a representative picture of a company's impact, in these cases the latest reported emissions are included."
-        },
-        "biogenicEmissions": {
-          "title": "Biogenic emissions",
-          "paragraph1": "Biogenic emissions are reported separately from scope 1, 2 and 3, in accordance with the GHG Protocol's instructions."
-        },
-        "goals": {
-          "title": "Goals and Initiatives",
-          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting. This data is not manually verified."
-        },
-        "historicEmissions": {
-          "title": "Historical emissions data",
-          "paragraph1": "Emissions data from previous years has been collected from the latest report, to the extent it is presented there. Where there are gaps in the reported emissions data, for example if there is missing information about emissions for years between the base year and the most recently reported year, Klimatkollen has sought to collect this by searching for older sustainability reports. The latest published information is always prioritized, so if a company has updated its calculations retroactively, but not published the adjustment, older data may be displayed."
-        },
-        "emissionOffsets": {
-          "title": "Avoided emissions or climate compensation",
-          "paragraph1": "These are not included, in line with what the GHG Protocol states."
         }
       },
       "co2Budgets": {
@@ -494,13 +387,280 @@
         "paragraph5": "In reality, climate-impacting emissions are much higher than the territorial fossil carbon emissions typically reported by authorities and the media. The data currently displayed on Klimatkollen reflects these territorial emissions.",
         "paragraph6": "Klimatkollen is actively exploring how to incorporate other greenhouse gas emissions on the website in the future, while maintaining the ability to compare current emissions with carbon budgets."
       }
+    },
+    "company": {
+      "companyDataOverview": {
+        "title": "Company Data Overview",
+        "description": "Overview of how we collect and present company emissions data",
+        "paragraph1": "Klimatkollen collects data on greenhouse gas emissions that companies report in their sustainability reports and combined annual reports.",
+        "paragraph2": "The emissions data is divided into company-specific emissions (scope 1 & scope 2) and emissions from the value chain (scope 3), reported in tonnes of CO2e.",
+        "paragraph3": "On each company's page on Klimatkollen, you can find more detailed information about the emissions; breakdown by scope and category in scope 3, as well as any biogenic emissions.",
+        "link1": {
+          "title": "Klimatkollen's Company Data",
+          "text": "View our latest company emissions data here"
+        },
+        "link2": {
+          "title": "GHG Protocol",
+          "text": "Klimatkollen uses the same structure as the GHG Protocol and follows its guidelines."
+        },
+        "companiesIncluded": {
+          "title": "Companies Included",
+          "paragraph1": "Currently, our database includes companies on the OMX Large Cap and Mid Cap lists of the Stockholm Stock Exchange, along with the 24 largest state-owned companies, five largest economic associations, and unlisted companies IKEA and ICA Group.",
+          "paragraph2": "The companies are categorized by industry according to the Global Industry Classification Standard (GICS), with a total of 290 companies currently tracked.",
+          "link": {
+            "title": "GICS",
+            "text": "Read more about the Global Industry Classification Standard (GICS)"
+          }
+        },
+        "paragraph4": "Information about the number of employees and revenue is obtained from the latest sustainability reports, or combined annual and sustainability reports, and in some cases from other sources."
+      },
+      "companyDataCollection": {
+        "title": "Data Collection Process",
+        "description": "Learn about our methodology for collecting and verifying company data",
+        "paragraph1": "We present companies' greenhouse gas emissions as they report them, with data divided into company-specific emissions (scope 1 & 2) and value chain emissions (scope 3).",
+        "paragraph2": "In some cases, our figures may be more up-to-date than company reports due to direct communication with companies about data corrections.",
+        "paragraph3": "While we strive for accuracy, Klimatkollen does not take responsibility for the completeness or accuracy of company reports.",
+        "paragraph4": "Emissions are rounded to the nearest whole number, which may cause minor variations from company reports.",
+        "paragraph5": "The description of the company's activities is AI-generated.",
+        "dataPresented": {
+          "title": "Data Presentation",
+          "paragraph1": "Emissions data is presented as reported by companies, with clear categorization of different emission scopes."
+        },
+        "fiscalYear": {
+          "title": "Fiscal Year Reporting",
+          "paragraph1": "Some companies use a fiscal year. In these cases, the emissions are presented for the later of the two calendar years in the period, i.e. for companies that report 2022/2023, the data is presented for 2023."
+        }
+      },
+      "historicalData": {
+        "title": "Historical Data and Goals",
+        "description": "Tracking companies' emission history and climate commitments",
+        "historicEmissions": {
+          "title": "Historical Emissions",
+          "paragraph1": "Emissions data from previous years has been collected from the latest report, to the extent it is presented there. Where there are gaps in the reported emissions data, for example if there is missing information about emissions for years between the base year and the most recently reported year, Klimatkollen has sought to collect this by searching for older sustainability reports. The latest published information is always prioritized, so if a company has updated its calculations retroactively, but not published the adjustment, older data may be displayed."
+        },
+        "goals": {
+          "title": "Climate Goals",
+          "paragraph1": "AI-tool Garbo identifies and extracts goals and initiatives for emission reductions that companies describe in their reporting. This data is not manually verified."
+        }
+      },
+      "emissionCategories": {
+        "title": "Emissions and Categories",
+        "description": "Understanding different types of emissions and how they are categorized",
+        "paragraph1": "Companies report their emissions according to the GHG Protocol's three scopes:",
+        "scope2": {
+          "title": "Scope 2: Indirect Energy Emissions",
+          "paragraph1": "Scope 2 emissions are primarily calculated using the market-based method, which takes into account whether companies purchase renewable electricity. If such data is missing, we use data from the location-based method instead."
+        },
+        "scope3": {
+          "title": "Scope 3: Value Chain Emissions",
+          "paragraph1": "Value chain emissions are reported according to GHG Protocol categories when available.",
+          "paragraph2": "When a total value is missing for scope 3, we sum the figures for the disclosed scope 3 categories.",
+          "paragraph3": "When companies report emissions per category in line with the GHG Protocol, the data is presented directly on the company's page. For companies that use other breakdowns, Klimatkollen makes a judgment about the match with the GHG Protocol. Companies that, for example, combine several categories into 'other', or report upstream and downstream transport as a single category, do not have their scope 3 emissions broken down per category.",
+          "link": {
+            "title": "Reporting of Emissions in Scope 3 for Property Owners",
+            "text": "For property owners, Klimatkollen follows the matching as specified in the guied Reporting of Emissions in Scope 3 for Property Owners."
+          }
+        },
+        "financedEmissions": {
+          "title": "Financed Emissions: Scope 3 Category 15: Investments",
+          "paragraph1": "Financed emissions are often reported with a delay since they can take longer to calculate. To provide a representative picture of a company's impact, in these cases the latest reported emissions are included."
+        },
+        "biogenicEmissions": {
+          "title": "Biogenic Emissions",
+          "paragraph1": "Biogenic emissions are reported separately from scope 1, 2 and 3, in accordance with the GHG Protocol's instructions."
+        },
+        "emissionOffsets": {
+          "title": "Emission Offsets",
+          "paragraph1": "These are not included, in line with what the GHG Protocol states."
+        }
+      }
+    },
+    "municipality": {
+      "sources": {
+        "title": "Our Sources",
+        "description": "Explore the publicly available sources and verified data used by Klimatkollen",
+        "paragraph1": "Klimatkollen is based on publicly available sources and verified data. We provide all sources so you can easily review and explore them further. If you notice any errors, please email us at hej@klimatkollen.se so we can make corrections.",
+        "paragraph2": "Company data is sourced from their own annual reports and sustainability reports.",
+        "links": {
+          "smhi": {
+            "title": "National Emissions Database",
+            "text": "Greenhouse gas emissions in municipalities",
+            "link": "https://nationellaemissionsdatabasen.smhi.se/"
+          },
+          "skr": {
+            "title": "Swedish Association of Local Authorities and Regions",
+            "text": "Political leadership in municipalities",
+            "link": "https://skr.se/skr/demokratiledningstyrning/valmaktfordelning/valresultatstyren/styrekommunereftervalet2022.69547.html"
+          },
+          "wikidata": {
+            "title": "Wikidata",
+            "text": "Municipal coats of arms and population numbers",
+            "link": "https://www.wikidata.org/wiki/Wikidata:Country_subdivision_task_force/Sweden/Municipalities"
+          },
+          "trafikanalys": {
+            "title": "Traffic Analysis",
+            "text": "Percentage of electric vehicles",
+            "link": "https://www.trafa.se/vagtrafik/fordon/"
+          },
+          "nvdb": {
+            "title": "National Road Database",
+            "text": "Cycling paths per municipality",
+            "link": "https://nvdb2012.trafikverket.se/SeTransportnatverket"
+          },
+          "sei": {
+            "title": "Stockholm Environment Institute",
+            "text": "Household consumption-based emissions",
+            "link": "https://www.sei.org/tools/konsumtionskompassen/"
+          },
+          "powerCircles": {
+            "title": "Power Circles database ELIS",
+            "text": "Charging infrastructure data from the industry organisation",
+            "link": "https://powercircle.org/elbilsstatistik/"
+          },
+          "klimatplaner": {
+            "title": "Climate Plans",
+            "text": "Collected by members of Klimatklubben and the Swedish Society for Nature Conservation"
+          },
+          "upphandlingsmyndigheten": {
+            "title": "Procurement Authority",
+            "text": "Information on climate requirements in municipal procurements",
+            "link": "https://www.klimatkollen.se/data/procurements/NUE2022_DATA_2023-12-20.xlsx"
+          },
+          "greenpeace": {
+            "title": "Greenpeace",
+            "text": "Mapping of climate requirements in public procurement",
+            "link": "https://docs.google.com/spreadsheets/d/1EdHUa49HJZn0rXqM-6tChdim4TJzXnwA/edit#gid=1040317160"
+          }
+        }
+      },
+      "calculations": {
+        "title": "Our Calculations",
+        "description": "Understand how we calculate and analyse climate data",
+        "paragraph1": "The emissions data for municipalities is based on SMHI's national emissions database for the years 1990–2022. For 2022–2024, emissions have been approximated based on historical trends to provide data up to the present day.",
+        "paragraph2": "<0>Here</0> you can read an example of how we calculate key figures for municipal emissions (link in Swedish)."
+      }
+    }
+  },
+  "supportPage": {
+    "header": {
+      "title": "Support Klimatkollen",
+      "description": "Help us continue our mission of tracking and promoting climate action in Sweden. There are several ways you can support our work."
+    },
+    "donations": {
+      "title": "Direct Donations",
+      "description": "Support our work through financial contributions",
+      "details": [
+        "Bankgiro: 5793-3178",
+        "Swish: 123 384 67 48",
+        "Your donation helps maintain our infrastructure and data collection"
+      ],
+      "action": {
+        "text": "Make a Donation",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Donation Inquiry - Klimatkollen",
+        "body": "Hi,\n\nI would like to make a donation to Klimatkollen.\n\nAmount:\n\nLooking forward to helping with climate data transparency.\n\nBest regards,"
+      }
+    },
+    "openSource": {
+      "title": "Open Source Contributions",
+      "description": "Help improve our platform through code contributions",
+      "details": [
+        "Our codebase is open source on GitHub",
+        "Contribute to data analysis tools",
+        "Help improve user interface and experience",
+        "Add new features and functionality"
+      ],
+      "action": {
+        "text": "View on GitHub",
+        "link": "https://github.com/klimatbyran"
+      }
+    },
+    "volunteer": {
+      "title": "Volunteer",
+      "description": "Join our community and contribute your skills",
+      "details": [
+        "Help with data verification and analysis",
+        "Assist with translations and content",
+        "Support community engagement",
+        "Participate in climate awareness initiatives"
+      ],
+      "action": {
+        "text": "Join our Discord",
+        "link": "https://discord.gg/N5P64QPQ6v"
+      }
+    },
+    "partnerships": {
+      "title": "Partnerships",
+      "description": "Collaborate with us to expand our impact",
+      "details": [
+        "Data sharing partnerships",
+        "Research collaborations",
+        "Joint climate initiatives",
+        "Knowledge exchange programs"
+      ],
+      "action": {
+        "text": "Become a Partner",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Partnership Inquiry - [Organisation Name]",
+        "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganisation Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
+      }
+    },
+    "organizationSupport": {
+      "title": "Support Companies",
+      "description": "Support as an organisation of any size",
+      "details": [
+        "Fixed fee sponsorship opportunities",
+        "Data verification partnerships",
+        "Technology and resource sharing",
+        "Support climate data transparency"
+      ],
+      "action": {
+        "text": "Support Companies",
+        "link": "mailto:hej@klimatkollen.se"
+      },
+      "email": {
+        "subject": "Support Company Inquiry - [Company Name]",
+        "body": "Hi,\n\nI am interested in learning more about the company support opportunity with Klimatkollen.\n\nOrganisation Name:\n\nLooking forward to discussing a collaboration.\n\nBest regards,"
+      },
+      "readMore": {
+        "text": "Read more",
+        "content": {
+          "header": "Become a Supporting Company – Take a Stand for Open Climate Data",
+          "intro": [
+            "By publishing open climate data, Klimatkollen contributes to transparency and increased support for the Paris Agreement in politics and business. Because if we don’t know how emissions are progressing – and how they should be progressing – we won’t be able to do what’s necessary to reduce them in line with the Paris Agreement.",
+            "Klimatkollen is a data-driven nonprofit building a movement around open climate data. We collaborate with businesses, academia, and civil society to increase impact. For us, AI, open data, broad communication, and civic engagement are key.",
+            "Be part of the open climate data movement – become a supporting company today!"
+          ],
+          "benefitsHeader": "As a supporting company, you get:",
+          "benefits": [
+            "Our logo on your website, showing your commitment to open climate data",
+            "Your logo on our website, visible among other corporate supporters",
+            "Notifications when we publish new data about your company",
+            "The opportunity to comment on your company’s climate data on our website",
+            "Automatic updating of your climate data to your company’s Wikipedia page"
+          ],
+          "cost": "SEK 25,000 / year (including VAT)"
+        }
+      }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Have questions about supporting Klimatkollen, or want to find other ways to volunteer? We'd love to hear from you.",
+      "action": {
+        "text": "Email Us",
+        "link": "mailto:hej@klimatkollen.se"
+      }
     }
   },
   "municipalitiesRankedPage": {
     "errorTitle": "Failed to retrieve municipality information",
     "errorDescription": "Please try again later",
-    "title": "Municipality Rankings",
-    "description": "Overview of emissions and transition in municipalities"
+    "title": "Municipality Top Lists",
+    "description": "Data on emissions and climate transition in municipalities"
   },
   "municipalitiesComparePage": {
     "errorTitle": "Failed to retrieve municipality information",
@@ -544,6 +704,7 @@
     },
     "totalEmissions": "Total emissions {{year}}",
     "budgetRunsOut": "Carbon budget expected to run out by",
+    "budgetRanOut": "Carbon budget ran out",
     "budgetKept": "Carbon budget expected to",
     "budgetHolds": "Stay within limits",
     "hitNetZero": "Predicted to hit net zero",
@@ -565,7 +726,7 @@
     "electricCarChange": "Increase in electric car share",
     "electricCarsPerChargePoint": "Electric cars per charging point",
     "noChargePoints": "No charging points",
-    "bicycleMetrePerCapita": "Bicycle path meters per capita"
+    "bicycleMetrePerCapita": "Bicycle path metres per capita"
   },
   "sector": {
     "energy": "Energy",
@@ -659,27 +820,27 @@
     "categories": {
       "1": {
         "name": "Purchased goods and services",
-        "description": "Emissions from the production of goods and services purchased by the organization."
+        "description": "Emissions from the production of goods and services purchased by the organisation."
       },
       "2": {
         "name": "Capital goods",
-        "description": "Emissions from the production of capital goods purchased by the organization."
+        "description": "Emissions from the production of capital goods purchased by the organisation."
       },
       "3": {
         "name": "Fuel- and energy-related activities",
-        "description": "Emissions from the production of fuels and energy purchased by the organization, including transport and distribution, not included in scope 2."
+        "description": "Emissions from the production of fuels and energy purchased by the organisation, including transport and distribution, not included in scope 2."
       },
       "4": {
         "name": "Upstream transportation and distribution",
-        "description": "Emissions from the transport and distribution of purchased goods between suppliers and/or within the organization."
+        "description": "Emissions from the transport and distribution of purchased goods between suppliers and/or within the organisation."
       },
       "5": {
         "name": "Waste generated in operations",
-        "description": "Emissions from the treatment of waste generated by the organization."
+        "description": "Emissions from the treatment of waste generated by the organisation."
       },
       "6": {
         "name": "Business travel",
-        "description": "Emissions from business travel using vehicles not owned by the organization."
+        "description": "Emissions from business travel using vehicles not owned by the organisation."
       },
       "7": {
         "name": "Employee commuting",
@@ -691,7 +852,7 @@
       },
       "9": {
         "name": "Downstream transportation and distribution",
-        "description": "Emissions from the transport and distribution of sold goods between the organization and the customer."
+        "description": "Emissions from the transport and distribution of sold goods between the organisation and the customer."
       },
       "10": {
         "name": "Processing of sold products",
@@ -715,7 +876,7 @@
       },
       "15": {
         "name": "Investments",
-        "description": "Emissions from the organization's investments in other companies, as well as other financed emissions."
+        "description": "Emissions from the organisation's investments in other companies, as well as other financed emissions."
       },
       "16": {
         "name": "Other",
@@ -803,14 +964,15 @@
       "category": "Category",
       "tonsCO2e": "tons CO₂e",
       "clickToFilter": "Click to filter out",
+      "clickToShow": "Click to show",
       "resetAll": "Reset All",
-      "showingCategories": "Showing {{shown}} of {{total}} categories. Filtered categories:"
+      "showingCategories": "Showing {{shown}} of {{total}} categories. Hidden categories:"
     },
     "scope3Data": {
       "categories": "Scope 3 Categories",
       "selectYear": "Select Year",
       "latestYear": "Latest Year",
-      "visualization": "Visualization",
+      "visualisation": "Visualisation",
       "data": "Data",
       "historicalDevelopment": "Historical Development"
     },
@@ -872,41 +1034,34 @@
       },
       "kpis": {
         "historicalEmissionChangePercent": {
-          "label": "Historical Emission Change",
+          "label": "Emissions",
           "description": "Historical change in emissions",
           "detailedDescription": "Average annual change in carbon dioxide emissions in Swedish municipalities since the Paris Agreement in 2015",
           "source": "<0>National Emissions Database</0>"
         },
-        "neededEmissionChangePercent": {
-          "label": "Required Emission Change",
-          "description": "Required change in emissions to meet climate goals",
-          "detailedDescription": "The emission reduction required to meet the Paris Agreement. Lower values are better",
-          "source": "<0>National Emissions Database</0>, <1>Uppsala University</1>",
-          "nullValues": "cannot reach Paris Agreement"
-        },
         "electricCarChangePercent": {
-          "label": "Electric Car Growth",
+          "label": "Electric Cars",
           "description": "Change in electric car adoption",
           "detailedDescription": "The growth rate in municipalities for the share of newly registered rechargeable cars 2015-2022, stated in percentage points per year",
           "source": "<0>Transport Analysis</0>"
         },
         "totalConsumptionEmission": {
-          "label": "Total Consumption Emission",
+          "label": "Consumption",
           "description": "Total emissions from consumption",
           "detailedDescription": "Household consumption emissions (CO₂e) in tonnes per inhabitant and municipality in 2019. By 2050, emissions should be at most 1 tonne per person per year to be in line with the Paris Agreement",
           "source": "<0>Stockholm Environment Institute</0>"
         },
         "electricVehiclePerChargePoints": {
-          "label": "EVs per Charge Point",
+          "label": "Charging Stations",
           "description": "Number of electric vehicles per charging point",
           "detailedDescription": "Number of electric vehicles per public charging point, per municipality in 2024. Lower numbers are better, as good infrastructure promotes increased electric vehicle adoption",
           "source": "<0>Power Circle</0>",
           "nullValues": "no charging points"
         },
         "bicycleMetrePerCapita": {
-          "label": "Bicycle Infrastructure",
-          "description": "Bicycle path meters per capita",
-          "detailedDescription": "Number of meters of bicycle paths per inhabitant per municipality in 2023. Longer is better, as good infrastructure promotes increased cycling",
+          "label": "Bicycles",
+          "description": "Bicycle path metres per capita",
+          "detailedDescription": "Number of metres of bicycle paths per inhabitant per municipality in 2023. Longer is better, as good infrastructure promotes increased cycling",
           "source": "<0>National Road Database</0>, <1>Swedish Transport Administration</1>"
         }
       },
@@ -921,11 +1076,11 @@
           "distributionBelow": "municipalities below average"
         },
         "topPerformers": {
-          "titleBest": "Best Performing Municipalities",
+          "titleBest": "Top Five Municipalities",
           "titleTop": "Top Performing Municipalities"
         },
         "improvement": {
-          "title": "Worst Performing Municipalities"
+          "title": "Bottom Five Municipalities"
         }
       },
       "viewToggle": {
@@ -976,6 +1131,12 @@
     "success": {
       "title": "Changes have been saved!",
       "description": "Changes to the reporting period have been made successfully"
+    },
+    "unsavedChanges": {
+      "title": "Unsaved Changes",
+      "description": "You have unsaved changes. Are you sure you want to leave?",
+      "cancel": "Cancel",
+      "discard": "Discard Changes"
     }
   },
   "authCallbackPage": {
@@ -993,11 +1154,11 @@
     "title": "How Klimatkollen Processes Personal Data",
     "lastUpdated": "Last updated: {{date}}",
     "responsibilityTitle": "Data Controller",
-    "responsibilityText": "Klimatbyrån with organization number 802537-8814 is the data controller when the organization processes personal data.",
+    "responsibilityText": "Klimatbyrån with organisation number 802537-8814 is the data controller when the organisation processes personal data.",
     "dataCollectionTitle": "What data do we process?",
     "dataCollectionText": "The personal data we collect is primarily information that you provide yourself (name, address, mobile number, etc.) when, for example, you sign up for our newsletter or become a member. You may also be employed by a partner or other contact of Klimatbyrån, in which case the personal data is your contact information at work.",
     "whyTitle": "Why do we process personal data?",
-    "whyText1": "We process the data to fulfill the commitments associated with the purpose stated at the time of collection or for the collaboration. Otherwise, we use your information only for purposes related to Klimatbyrån's own activities. We do not share your information with third parties.",
+    "whyText1": "We process the data to fulfil the commitments associated with the purpose stated at the time of collection or for the collaboration. Otherwise, we use your information only for purposes related to Klimatbyrån's own activities. We do not share your information with third parties.",
     "whyText2": "Klimatbyrån values personal integrity. Handling personal data correctly and securely is a priority for us. Those who entrust us with their information should feel secure.",
     "whyText3": "We comply with the General Data Protection Regulation and other laws and regulations in the data protection area. You always have the right to request correction or deletion of your personal data.",
     "contactTitle": "Contact Us",

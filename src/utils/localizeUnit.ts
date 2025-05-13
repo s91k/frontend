@@ -42,25 +42,37 @@ export function formatEmissionsAbsolute(
   return localizeNumber(count, currentLanguage, { maximumFractionDigits: 0 });
 }
 
+export function formatEmissionsAbsoluteCompact(
+  count: number,
+  currentLanguage: SupportedLanguage,
+) {
+  return localizeNumber(count, currentLanguage, {
+    notation: "compact",
+    maximumFractionDigits: 0,
+  });
+}
+
 export function formatPercentChange(
   value: number,
   currentLanguage: SupportedLanguage,
+  isAlreadyPercentage: boolean = false,
 ) {
   return new Intl.NumberFormat(currentLanguage, {
     style: "percent",
     minimumFractionDigits: 0,
     maximumFractionDigits: 1,
     signDisplay: "exceptZero",
-  }).format(value);
+  }).format(isAlreadyPercentage ? value : value / 100);
 }
 
 export function formatPercent(
   value: number,
   currentLanguage: SupportedLanguage,
+  isAlreadyPercentage: boolean = false,
 ) {
   return new Intl.NumberFormat(currentLanguage, {
     style: "percent",
     minimumFractionDigits: 0,
     maximumFractionDigits: 1,
-  }).format(value);
+  }).format(isAlreadyPercentage ? value / 100 : value);
 }

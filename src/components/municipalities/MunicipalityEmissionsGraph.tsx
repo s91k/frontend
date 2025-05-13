@@ -13,7 +13,10 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../LanguageProvider";
-import { formatEmissionsAbsolute } from "@/utils/localizeUnit";
+import {
+  formatEmissionsAbsolute,
+  formatEmissionsAbsoluteCompact,
+} from "@/utils/localizeUnit";
 
 interface DataPoint {
   year: number;
@@ -77,7 +80,7 @@ export const MunicipalityEmissionsGraph: FC<
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={projectedData}>
           <Legend
-            verticalAlign="top"
+            verticalAlign="bottom"
             align="right"
             height={36}
             iconType="line"
@@ -101,7 +104,7 @@ export const MunicipalityEmissionsGraph: FC<
             axisLine={false}
             tick={{ fontSize: 12 }}
             tickFormatter={(value) =>
-              formatEmissionsAbsolute(value, currentLanguage)
+              formatEmissionsAbsoluteCompact(value, currentLanguage)
             }
             width={80}
             domain={[0, "auto"]}

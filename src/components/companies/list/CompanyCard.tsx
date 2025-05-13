@@ -12,7 +12,6 @@ import {
 } from "@/hooks/companies/useCompanyFilters";
 import type { RankedCompany } from "@/types/company";
 import { Text } from "@/components/ui/text";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { useTranslation } from "react-i18next";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -23,6 +22,7 @@ import {
   formatPercentChange,
 } from "@/utils/localizeUnit";
 import { LinkCard } from "@/components/ui/link-card";
+import { cn } from "@/lib/utils";
 
 type CompanyCardProps = Pick<
   RankedCompany,
@@ -42,8 +42,6 @@ export function CompanyCard({
   industry,
   reportingPeriods,
 }: CompanyCardProps) {
-  const isMobile = useScreenSize();
-
   const { t } = useTranslation();
   const { getCategoryColor } = useCategoryMetadata();
   const sectorNames = useSectorNames();
@@ -85,7 +83,7 @@ export function CompanyCard({
     : "var(--blue-2)";
 
   return (
-    <div className="relative rounded-level-2">
+    <div className="relative rounded-level-2 @container">
       <Link
         to={`/companies/${wikidataId}`}
         className="block bg-black-2 rounded-level-2 p-8 space-y-8 transition-all duration-300 hover:shadow-[0_0_10px_rgba(153,207,255,0.15)] hover:bg-[#1a1a1a]"
@@ -141,11 +139,7 @@ export function CompanyCard({
             <Building2 className="w-6 h-6" />
           </div>
         </div>
-        <div
-          className={
-            isMobile ? "flex flex-col gap-4" : "grid grid-cols-2 gap-4"
-          }
-        >
+        <div className="flex flex-col gap-4 @xl:grid grid-cols-2">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-grey mb-2 text-lg">
               <TrendingDown className="w-4 h-4" />
@@ -163,7 +157,7 @@ export function CompanyCard({
             </div>
             <div className="text-3xl font-light">
               {currentEmissions ? (
-                <span className="text-orange-3">
+                <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
                     {t("emissionsUnit")}
@@ -207,9 +201,9 @@ export function CompanyCard({
             <div className="text-3xl font-light">
               {emissionsChange !== null ? (
                 <span
-                  className={
-                    emissionsChange < 0 ? "text-green-3" : "text-pink-3"
-                  }
+                  className={cn(
+                    emissionsChange < 0 ? "text-orange-2" : "text-pink-3",
+                  )}
                 >
                   {formatPercentChange(
                     Math.ceil(emissionsChange) / 100,
@@ -246,18 +240,19 @@ export function CompanyCard({
               </Text>
             </div>
           )}
-          {latestPeriod?.economy?.employees && (
-            <div>
-              <Text
-                variant="body"
-                className="flex items-center gap-2 text-grey mb-2 text-lg"
-              >
-                <Users className="w-4 h-4" />{" "}
-                <span>{t("companies.card.employees")}</span>
-              </Text>
+
+          <div>
+            <Text
+              variant="body"
+              className="flex items-center gap-2 text-grey mb-2 text-lg"
+            >
+              <Users className="w-4 h-4" />{" "}
+              <span>{t("companies.card.employees")}</span>
+            </Text>
+            {latestPeriod?.economy && (
               <Text variant="h6">{formattedEmployeeCount}</Text>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         {/* Sustainability Report */}
         <LinkCard

@@ -41,7 +41,7 @@ export function AboutPage() {
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
-      <div className="max-w-[1200px] mx-auto space-y-20">
+      <div className="max-w-[1200px] mx-auto">
         <PageHeader
           title={t("aboutPage.header.title")}
           description={t("aboutPage.header.description")}
@@ -148,6 +148,10 @@ export function AboutPage() {
                 </Text>
                 <Text variant="body" className="text-blue-2 mt-2">
                   {t("aboutPage.financingSection.bankgiro")}
+                </Text>
+
+                <Text variant="body" className="text-blue-2 mt-2">
+                  {t("aboutPage.financingSection.swish")}
                 </Text>
               </div>
             </div>
