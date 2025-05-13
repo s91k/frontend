@@ -185,7 +185,7 @@ export function CompanyOverview({
             {yearOverYearChange !== null ? (
               <span
                 className={
-                  yearOverYearChange < 0 ? "text-green-3" : "text-pink-3"
+                  yearOverYearChange < 0 ? "text-orange-2" : "text-pink-3"
                 }
               >
                 {formatPercentChange(
