@@ -71,6 +71,8 @@ export function MunicipalityDetailPage() {
     },
   };
 
+  const evcp = municipality.electricVehiclePerChargePoints;
+
   return (
     <>
       <PageSEO
@@ -275,15 +277,11 @@ export function MunicipalityDetailPage() {
             },
             {
               title: t("municipalityDetailPage.electricCarsPerChargePoint"),
-              value: municipality.electricVehiclePerChargePoints
-                ? localizeUnit(
-                    municipality.electricVehiclePerChargePoints,
-                    currentLanguage,
-                  )
+              value: evcp
+                ? localizeUnit(evcp, currentLanguage)
                 : t("municipalityDetailPage.noChargePoints"),
-              valueClassName: municipality.electricVehiclePerChargePoints
-                ? "text-green-3"
-                : "text-pink-3",
+              valueClassName:
+                evcp && evcp > 10 ? "text-pink-3" : "text-green-3",
             },
             {
               title: t("municipalityDetailPage.bicycleMetrePerCapita"),
