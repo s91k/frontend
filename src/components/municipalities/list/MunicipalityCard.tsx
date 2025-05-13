@@ -104,7 +104,9 @@ export function MunicipalityCard({ municipality }: MunicipalityCardProps) {
           title={t("municipalities.card.changeRate")}
           tooltip={t("municipalities.card.changeRateInfo")}
           value={emissionsChange}
-          textColor="text-orange-2"
+          textColor={cn(
+            emissionsChangeExists > 0 ? "text-pink-3" : "text-orange-2",
+          )}
         />
       </div>
       <LinkCard
