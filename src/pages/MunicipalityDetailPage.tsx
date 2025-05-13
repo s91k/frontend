@@ -201,7 +201,11 @@ export function MunicipalityDetailPage() {
                 municipality.historicalEmissionChangePercent,
                 currentLanguage,
               )}`,
-              valueClassName: "text-orange-2",
+              valueClassName: cn(
+                municipality.historicalEmissionChangePercent > 0
+                  ? "text-pink-3"
+                  : "text-orange-2",
+              ),
             },
             {
               title: t("municipalityDetailPage.reductionToMeetParis"),
