@@ -22,6 +22,7 @@ import {
   formatPercentChange,
 } from "@/utils/localizeUnit";
 import { LinkCard } from "@/components/ui/link-card";
+import { cn } from "@/lib/utils";
 
 type CompanyCardProps = Pick<
   RankedCompany,
@@ -199,7 +200,11 @@ export function CompanyCard({
             </div>
             <div className="text-3xl font-light">
               {emissionsChange !== null ? (
-                <span className="text-orange-2">
+                <span
+                  className={cn(
+                    emissionsChange < 0 ? "text-orange-2" : "text-pink-3",
+                  )}
+                >
                   {formatPercentChange(
                     Math.ceil(emissionsChange) / 100,
                     currentLanguage,
