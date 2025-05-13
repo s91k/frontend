@@ -552,7 +552,6 @@
       "details": [
         "Bankgiro: 5793-3178",
         "Swish: 123 384 67 48",
-        "IBAN: SE-XX",
         "Your donation helps maintain our infrastructure and data collection"
       ],
       "action": {
@@ -575,7 +574,7 @@
       ],
       "action": {
         "text": "View on GitHub",
-        "link": "https://github.com/klimatkollen"
+        "link": "https://github.com/klimatbyran"
       }
     },
     "volunteer": {
