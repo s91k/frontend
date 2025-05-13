@@ -30,10 +30,7 @@ export function MunicipalityCard({ municipality }: MunicipalityCardProps) {
 
   const emissionsChangeExists = municipality.historicalEmissionChangePercent;
   const emissionsChange = emissionsChangeExists
-    ? formatPercentChange(
-        Math.ceil(emissionsChangeExists) / 100,
-        currentLanguage,
-      )
+    ? formatPercentChange(Math.ceil(emissionsChangeExists), currentLanguage)
     : t("municipalities.card.noData");
 
   const noClimatePlan = !municipality.climatePlanLink;
