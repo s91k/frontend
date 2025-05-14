@@ -50,17 +50,17 @@ export function CompanyOverview({
   const navigate = useNavigate();
   const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
-  const { isAIGenerated, isAnyEmissionsAIGenerated } = useVerificationStatus();
+  const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
 
   const periodYear = new Date(selectedPeriod.endDate).getFullYear();
 
   // Check if any emissions data is AI-generated
-  const totalEmissionsAIGenerated = isAnyEmissionsAIGenerated(selectedPeriod);
+  const totalEmissionsAIGenerated = isEmissionsAIGenerated(selectedPeriod);
 
   // For year-over-year change, check both current and previous periods
   const yearOverYearAIGenerated =
-    isAnyEmissionsAIGenerated(selectedPeriod) ||
-    (previousPeriod && isAnyEmissionsAIGenerated(previousPeriod));
+    isEmissionsAIGenerated(selectedPeriod) ||
+    (previousPeriod && isEmissionsAIGenerated(previousPeriod));
 
   // Get the translated sector name using the sector code
   const sectorCode = company.industry?.industryGics?.sectorCode as

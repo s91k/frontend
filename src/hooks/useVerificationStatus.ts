@@ -42,7 +42,7 @@ export function useVerificationStatus() {
   /**
    * Check if any emissions data in a ReportingPeriod is AI-generated
    */
-  function isAnyEmissionsAIGenerated(period: ReportingPeriod): boolean {
+  function isEmissionsAIGenerated(period: ReportingPeriod): boolean {
     if (!period || !period.emissions) return false;
 
     // Check main emissions object
@@ -55,16 +55,9 @@ export function useVerificationStatus() {
     // Check individual scope emissions
     if (isAIGenerated(period.emissions.scope1)) return true;
     if (isAIGenerated(period.emissions.scope2)) return true;
-
-    // Check scope 3 categories if they exist
-    if (period.emissions.scope3?.categories) {
-      for (const category of period.emissions.scope3.categories) {
-        if ("metadata" in category && isAIGenerated(category as any))
-          return true;
-      }
-    }
+    if (isAIGenerated(period.emissions.scope3)) return true;
     return false;
   }
 
-  return { isAIGenerated, isAnyEmissionsAIGenerated };
+  return { isAIGenerated, isEmissionsAIGenerated };
 }
