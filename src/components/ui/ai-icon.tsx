@@ -29,12 +29,12 @@ export const AiIcon = ({
   const iconElement = (
     <div
       className={cn(
-        "flex items-center justify-center overflow-hidden bg-green-2",
+        "flex items-center justify-center overflow-hidden border-2 border-green-3",
         sizeClasses[size],
-        className
+        className,
       )}
     >
-      <img src="/icons/AI.png" alt="AI Icon" className="object-cover" />
+      <img src="/icons/ai-inverse.svg" alt="AI Icon" className="object-cover" />
     </div>
   );
 

@@ -38,41 +38,6 @@ interface CompanyOverviewProps {
   selectedYear: string;
 }
 
-// Add this function to check if any emissions data is AI-generated
-const isAnyEmissionsAIGenerated = (
-  period: ReportingPeriod,
-  isAIGenerated: <
-    T extends {
-      metadata?: {
-        verifiedBy?: { name: string } | null;
-        user?: { name?: string } | null;
-      };
-    },
-  >(
-    data: T | undefined | null,
-  ) => boolean,
-): boolean => {
-  if (!period || !period.emissions) return false;
-
-  // Check main emissions object only if it has metadata
-  if ("metadata" in period.emissions && isAIGenerated(period.emissions))
-    return true;
-
-  // Check individual scope emissions
-  if (isAIGenerated(period.emissions.scope1)) return true;
-  if (isAIGenerated(period.emissions.scope2)) return true;
-
-  // Check scope 3 categories if they exist
-  if (period.emissions.scope3?.categories) {
-    for (const category of period.emissions.scope3.categories) {
-      // Only check categories that have metadata
-      if ("metadata" in category && isAIGenerated(category)) return true;
-    }
-  }
-
-  return false;
-};
-
 export function CompanyOverview({
   company,
   selectedPeriod,
@@ -85,21 +50,17 @@ export function CompanyOverview({
   const navigate = useNavigate();
   const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
-  const { isAIGenerated } = useVerificationStatus();
+  const { isAIGenerated, isAnyEmissionsAIGenerated } = useVerificationStatus();
 
   const periodYear = new Date(selectedPeriod.endDate).getFullYear();
 
   // Check if any emissions data is AI-generated
-  const totalEmissionsAIGenerated = isAnyEmissionsAIGenerated(
-    selectedPeriod,
-    isAIGenerated,
-  );
+  const totalEmissionsAIGenerated = isAnyEmissionsAIGenerated(selectedPeriod);
 
   // For year-over-year change, check both current and previous periods
   const yearOverYearAIGenerated =
-    isAnyEmissionsAIGenerated(selectedPeriod, isAIGenerated) ||
-    (previousPeriod &&
-      isAnyEmissionsAIGenerated(previousPeriod, isAIGenerated));
+    isAnyEmissionsAIGenerated(selectedPeriod) ||
+    (previousPeriod && isAnyEmissionsAIGenerated(previousPeriod));
 
   // Get the translated sector name using the sector code
   const sectorCode = company.industry?.industryGics?.sectorCode as
@@ -129,15 +90,17 @@ export function CompanyOverview({
         currentLanguage,
       )
     : t("companies.overview.notReported");
-  const turnoverAIGenerated =
+  const turnoverAIGenerated = !!(
     selectedPeriod.economy?.turnover &&
     "metadata" in selectedPeriod.economy.turnover &&
-    isAIGenerated(selectedPeriod.economy.turnover);
+    isAIGenerated(selectedPeriod.economy.turnover)
+  );
 
-  const employeesAIGenerated =
+  const employeesAIGenerated = !!(
     selectedPeriod.economy?.employees &&
     "metadata" in selectedPeriod.economy.employees &&
-    isAIGenerated(selectedPeriod.economy.employees);
+    isAIGenerated(selectedPeriod.economy.employees)
+  );
 
   return (
     <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
@@ -222,76 +185,59 @@ export function CompanyOverview({
                     selectedPeriod.emissions.calculatedTotalEmissions,
                     currentLanguage,
                   )}
-              <span className="text-sm md:text-lg lg:text-2xl ml-2 text-grey">
+              <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
                 {t(
                   selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                    ? "text-grey"
-                    : "text-orange-2",
+                    ? " "
+                    : "emissionsUnit",
                 )}
               </span>
-                {!selectedPeriod.emissions ||
-                selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                  ? t("companies.overview.noData")
-                  : formatEmissionsAbsolute(
-                      selectedPeriod.emissions.calculatedTotalEmissions,
-                      currentLanguage,
-                    )}
-                <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
-                  {t(
-                    selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                      ? " "
-                      : "emissionsUnit",
-                  )}
-                </span>
-              </Text>
-
-              {/* Add AI icon for AI-generated data */}
-              {totalEmissionsAIGenerated && (
-                <span className="ml-2">
-                  <AiIcon size="lg" />
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center gap-2">
-            <Text className="mb-2 lg:text-lg md:text-base sm:text-sm">
-              {t("companies.overview.changeSinceLastYear")}
             </Text>
-            <CompanyOverviewTooltip yearOverYearChange={yearOverYearChange} />
-          </div>
-          <Text className="text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none">
-            {yearOverYearChange !== null ? (
-              <span
-                className={
-                  yearOverYearChange < 0 ? "text-orange-2" : "text-pink-3"
-                }
-              >
-                {formatPercentChange(
-                  Math.ceil(yearOverYearChange) / 100,
-                  currentLanguage,
-                )}
-              </span>
-            ) : (
-              <span className="text-grey">
-                {t("companies.overview.noData")}
-              </span>
-            )}
-            {yearOverYearChange !== null && yearOverYearAIGenerated && (
+            {totalEmissionsAIGenerated && (
               <span className="ml-2">
-                <AiIcon size="lg" />
+                <AiIcon size="md" />
               </span>
             )}
-          </Text>
+          </div>
         </div>
-     
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2">
+          <Text className="mb-2 lg:text-lg md:text-base sm:text-sm">
+            {t("companies.overview.changeSinceLastYear")}
+          </Text>
+          <CompanyOverviewTooltip yearOverYearChange={yearOverYearChange} />
+        </div>
+        <Text className="text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none">
+          {yearOverYearChange !== null ? (
+            <span
+              className={
+                yearOverYearChange < 0 ? "text-orange-2" : "text-pink-3"
+              }
+            >
+              {formatPercentChange(
+                Math.ceil(yearOverYearChange) / 100,
+                currentLanguage,
+              )}
+            </span>
+          ) : (
+            <span className="text-grey">{t("companies.overview.noData")}</span>
+          )}
+          {yearOverYearAIGenerated && (
+            <span className="ml-2">
+            <AiIcon size="md" />
+             </span>
+          )}
+        </Text>
+      </div>
 
       <OverviewStatistics
         selectedPeriod={selectedPeriod}
         currentLanguage={currentLanguage}
         formattedEmployeeCount={formattedEmployeeCount}
+        turnoverAIGenerated={turnoverAIGenerated}
+        employeesAIGenerated={employeesAIGenerated}
       />
     </div>
   );

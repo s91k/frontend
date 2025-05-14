@@ -8,9 +8,11 @@
  * @param data - Any object with metadata containing verifiedBy and user properties
  * @returns boolean - true if data is AI-generated, false if manually verified
  */
+import type { ReportingPeriod } from "@/types/company";
+
 export function useVerificationStatus() {
   /**
-   * Check if data is AI-generated
+   * Check if data is AI-generated (generic for any data with metadata)
    */
   const isAIGenerated = <
     T extends {
@@ -18,9 +20,9 @@ export function useVerificationStatus() {
         verifiedBy?: { name: string } | null;
         user?: { name?: string } | null;
       };
-    }
+    },
   >(
-    data: T | undefined | null
+    data: T | undefined | null,
   ): boolean => {
     if (!data) return false;
 
@@ -37,5 +39,32 @@ export function useVerificationStatus() {
     return noVerifier || isGarbo;
   };
 
-  return { isAIGenerated };
+  /**
+   * Check if any emissions data in a ReportingPeriod is AI-generated
+   */
+  function isAnyEmissionsAIGenerated(period: ReportingPeriod): boolean {
+    if (!period || !period.emissions) return false;
+
+    // Check main emissions object
+    if (
+      "metadata" in period.emissions &&
+      isAIGenerated(period.emissions as any)
+    )
+      return true;
+
+    // Check individual scope emissions
+    if (isAIGenerated(period.emissions.scope1)) return true;
+    if (isAIGenerated(period.emissions.scope2)) return true;
+
+    // Check scope 3 categories if they exist
+    if (period.emissions.scope3?.categories) {
+      for (const category of period.emissions.scope3.categories) {
+        if ("metadata" in category && isAIGenerated(category as any))
+          return true;
+      }
+    }
+    return false;
+  }
+
+  return { isAIGenerated, isAnyEmissionsAIGenerated };
 }
