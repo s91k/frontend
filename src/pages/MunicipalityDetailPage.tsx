@@ -32,6 +32,8 @@ export function MunicipalityDetailPage() {
   if (error) return <Text>{t("municipalityDetailPage.error")}</Text>;
   if (!municipality) return <Text>{t("municipalityDetailPage.noData")}</Text>;
 
+  const meetsParis = !municipality.budgetRunsOut && municipality.budget;
+
   const requirementsInProcurement =
     municipality.procurementScore === "2"
       ? t("municipalityDetailPage.procurementScore.high")
@@ -70,6 +72,8 @@ export function MunicipalityDetailPage() {
       addressCountry: "SE",
     },
   };
+
+  const evcp = municipality.electricVehiclePerChargePoints;
 
   return (
     <>
@@ -215,9 +219,7 @@ export function MunicipalityDetailPage() {
                     currentLanguage,
                   )}`
                 : t("municipalityDetailPage.cannotReduceToParis"),
-              valueClassName: municipality.neededEmissionChangePercent
-                ? "text-green-3"
-                : "text-pink-3",
+              valueClassName: meetsParis ? "text-green-3" : "text-pink-3",
             },
             {
               title: t("municipalityDetailPage.consumptionEmissionsPerCapita"),
@@ -275,15 +277,11 @@ export function MunicipalityDetailPage() {
             },
             {
               title: t("municipalityDetailPage.electricCarsPerChargePoint"),
-              value: municipality.electricVehiclePerChargePoints
-                ? localizeUnit(
-                    municipality.electricVehiclePerChargePoints,
-                    currentLanguage,
-                  )
+              value: evcp
+                ? localizeUnit(evcp, currentLanguage)
                 : t("municipalityDetailPage.noChargePoints"),
-              valueClassName: municipality.electricVehiclePerChargePoints
-                ? "text-green-3"
-                : "text-pink-3",
+              valueClassName:
+                evcp && evcp > 10 ? "text-pink-3" : "text-green-3",
             },
             {
               title: t("municipalityDetailPage.bicycleMetrePerCapita"),
