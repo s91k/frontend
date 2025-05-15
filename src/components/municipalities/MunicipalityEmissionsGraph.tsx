@@ -157,7 +157,7 @@ export const MunicipalityEmissionsGraph: FC<
             strokeDasharray="4 4"
             dot={false}
             connectNulls
-            name={t("municipalities.graph.approximated")}
+            name={t("municipalities.graph.estimated")}
           />
           <Line
             type="monotone"
