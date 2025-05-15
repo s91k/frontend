@@ -6,7 +6,7 @@
     "companies": "Företag",
     "municipalities": "Kommuner",
     "municipalitiesRanked": "Topplistor",
-    "municipalitiesCompare": "Jämför",
+    "municipalitiesExplore": "Utforska",
     "about": "Om",
     "aboutUs": "Om oss",
     "products": "Produkter",
@@ -632,7 +632,7 @@
           "header": "Bli stödföretag – ta ställning för öppen klimatdata",
           "intro": [
             "Genom att publicera öppna klimatdata bidrar Klimatkollen till transparens och ett ökat stöd för Parisavtalet i politik och näringsliv. För om vi inte vet hur det går med utsläppen – och hur det borde gå – kommer vi inte kunna göra det som krävs för att minska dem i linje med Parisavtalet.",
-            "Klimatkollen är en data-driven ideell förening som bygger en rörelse kring öppna klimatdata.", 
+            "Klimatkollen är en data-driven ideell förening som bygger en rörelse kring öppna klimatdata.",
             "Vi samverkar med näringsliv, akademi och civilsamhälle för ökad slagkraft. För oss står AI, öppna data, bred kommunikation och medborgarengagemang i centrum.",
             "Var en del av rörelsen för öppna klimatdata – bli stödföretag i dag!"
           ],
@@ -665,7 +665,7 @@
   "municipalitiesComparePage": {
     "errorTitle": "Det gick inte att hämta kommuninformation",
     "errorDescription": "Försök igen senare",
-    "title": "Kommunrapporter",
+    "title": "Kommuners klimatdata",
     "description": "Översikt över utsläpp och omställning i kommunerna",
     "filter": {
       "searchPlaceholder": "Sök kommun (flera: separera med komma)",
@@ -703,6 +703,7 @@
       "low": "Nej"
     },
     "totalEmissions": "Totala utsläpp {{year}}",
+    "totalEmissionsTooltip": "Detta är de senast rapporterade utsläppen. För beräknade uppskattningar för innevarande år, se grafen Utsläppsutveckling nedan.",
     "budgetRunsOut": "Koldioxidbudgeten tar slut",
     "budgetRanOut": "Koldioxidbudgeten tog slut",
     "budgetKept": "Koldioxidbudgeten tar slut",
@@ -1011,12 +1012,15 @@
       "noData": "Inga data tillgängliga",
       "gap": "Gap",
       "historical": "Historiskt",
+      "approximated": "Uppskattat totalt",
+      "estimated": "Uppskattat",
       "trend": "Trend",
       "parisAgreement": "Parisavtalet",
       "paris": "Parisavtalet",
       "unit": "tons CO₂e",
       "total": "Totalt",
-      "year": "År"
+      "year": "År",
+      "estimatedValue": "Utsläppsvärdet är uppskattat"
     },
     "map": {
       "legend": {
@@ -1042,7 +1046,7 @@
         "electricCarChangePercent": {
           "label": "Elbilarna",
           "description": "Förändring i andel elbilar",
-          "detailedDescription": "Ökningstakten i kommunerna för andel nyregistrerade laddbara bilar 2015–2022, angivet i procentenheter per år",
+          "detailedDescription": "Ökningstakten i kommunerna för andel nyregistrerade laddbara bilar 2015–2024, angivet i procentenheter per år.",
           "source": "<0>Trafikanalys</0>"
         },
         "totalConsumptionEmission": {
@@ -1061,7 +1065,7 @@
         "bicycleMetrePerCapita": {
           "label": "Cyklarna",
           "description": "Meter cykelväg per invånare",
-          "detailedDescription": "Antal meter cykelväg per invånare per kommun år 2023. Ju längre desto bättre, god infrastruktur gynnar ökad cykling",
+          "detailedDescription": "Antal meter cykelväg per invånare per kommun år 2024. Ju längre desto bättre, god infrastruktur gynnar ökad cykling",
           "source": "<0>Nationella Vägdatabasen</0>, <1>Trafikverket</1>"
         }
       },

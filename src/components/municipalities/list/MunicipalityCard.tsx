@@ -21,7 +21,7 @@ export function MunicipalityCard({ municipality }: MunicipalityCardProps) {
   const meetsParis = !municipality.budgetRunsOut && municipality.budget;
   const { currentLanguage } = useLanguage();
 
-  const lastYearEmission = municipality.approximatedHistoricalEmission.at(-1);
+  const lastYearEmission = municipality.emissions.at(-1);
   const lastYearEmissions = lastYearEmission
     ? formatEmissionsAbsolute(lastYearEmission.value, currentLanguage)
     : t("municipalities.card.noData");
