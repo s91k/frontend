@@ -24,6 +24,7 @@ interface DataPoint {
   trend?: number;
   paris?: number;
   gap?: number;
+  approximated?: number;
 }
 
 interface MunicipalityEmissionsGraphProps {
@@ -47,10 +48,20 @@ export const MunicipalityEmissionsGraph: FC<
     label,
   }) => {
     if (active && payload && payload.length) {
+      const hasActual = payload.some(
+        (entry) => entry.dataKey === "total" && entry.value != null,
+      );
+      // Filter out approximated if actual exists for this year
+      const filteredPayload = hasActual
+        ? payload.filter((entry) => entry.dataKey !== "approximated")
+        : payload;
+      const isApproximated = filteredPayload.some(
+        (entry) => entry.dataKey === "approximated" && entry.value != null,
+      );
       return (
         <div className="bg-black-1 px-4 py-3 rounded-level-2">
           <div className="text-sm font-medium mb-2">{label}</div>
-          {payload.map((entry) => {
+          {filteredPayload.map((entry) => {
             if (entry.dataKey === "gap") {
               return null;
             }
@@ -69,6 +80,11 @@ export const MunicipalityEmissionsGraph: FC<
               </div>
             );
           })}
+          {isApproximated && (
+            <div className="text-xs text-blue-2 mt-2">
+              {t("municipalities.graph.estimatedValue")}
+            </div>
+          )}
         </div>
       );
     }
@@ -95,7 +111,8 @@ export const MunicipalityEmissionsGraph: FC<
             tick={{ fontSize: 12 }}
             padding={{ left: 0, right: 0 }}
             domain={[1990, 2050]}
-            ticks={[1990, 2015, 2020, 2030, 2040, 2050]}
+            allowDuplicatedCategory={true}
+            ticks={[1990, 2015, 2020, currentYear, 2030, 2040, 2050]}
             tickFormatter={(year) => year}
           />
           <YAxis
@@ -127,6 +144,16 @@ export const MunicipalityEmissionsGraph: FC<
             dot={false}
             connectNulls
             name={t("municipalities.graph.historical")}
+          />
+          <Line
+            type="monotone"
+            dataKey="approximated"
+            stroke="white"
+            strokeWidth={2}
+            strokeDasharray="4 4"
+            dot={false}
+            connectNulls
+            name={t("municipalities.graph.approximated")}
           />
           <Line
             type="monotone"

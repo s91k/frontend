@@ -6,7 +6,7 @@
     "companies": "Companies",
     "municipalities": "Municipalities",
     "municipalitiesRanked": "Top Lists",
-    "municipalitiesCompare": "Compare",
+    "municipalitiesExplore": "Explore",
     "about": "About",
     "aboutUs": "About Us",
     "products": "Products",
@@ -703,6 +703,7 @@
       "low": "No"
     },
     "totalEmissions": "Total emissions {{year}}",
+    "totalEmissionsTooltip": "This is the latest reported emissions. For calculated estimates on the current year, please see the Historical Emissions graph below.",
     "budgetRunsOut": "Carbon budget expected to run out by",
     "budgetRanOut": "Carbon budget ran out",
     "budgetKept": "Carbon budget expected to",
@@ -1010,12 +1011,14 @@
       "noData": "No data available",
       "gap": "Gap",
       "historical": "Historical",
+      "approximated": "Calculated Total",
       "trend": "Trend",
       "parisAgreement": "Paris Agreement",
       "paris": "Paris Agreement",
       "unit": "tons CO₂e",
       "total": "Total",
-      "year": "Year"
+      "year": "Year",
+      "estimatedValue": "Emissions value is estimated"
     },
     "map": {
       "legend": {

@@ -43,7 +43,7 @@ export function MunicipalityDetailPage() {
 
   const emissionsData = transformEmissionsData(municipality);
 
-  const lastYearEmissions = municipality.approximatedHistoricalEmission.at(-1);
+  const lastYearEmissions = municipality.emissions.at(-1);
   const lastYear = lastYearEmissions?.year;
   const lastYearEmissionsTon = lastYearEmissions
     ? formatEmissionsAbsolute(lastYearEmissions.value, currentLanguage)
@@ -141,6 +141,8 @@ export function MunicipalityDetailPage() {
               value={lastYearEmissionsTon}
               unit={t("emissionsUnit")}
               valueClassName="text-orange-2"
+              info={true}
+              infoText={t("municipalityDetailPage.totalEmissionsTooltip")}
             />
             <MunicipalityStatCard
               title={
