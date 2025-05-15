@@ -1010,12 +1010,14 @@
       "noData": "No data available",
       "gap": "Gap",
       "historical": "Historical",
+      "approximated": "Calculated Total",
       "trend": "Trend",
       "parisAgreement": "Paris Agreement",
       "paris": "Paris Agreement",
       "unit": "tons CO₂e",
       "total": "Total",
-      "year": "Year"
+      "year": "Year",
+      "estimatedValue": "Emissions value is estimated"
     },
     "map": {
       "legend": {
