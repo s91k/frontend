@@ -55,6 +55,10 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
     return bValue - aValue;
   });
 
+  const isAIGenerated = (payload: any) => {
+    return payload.isAIGenerated;
+  };
+
   return (
     <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-300px md:max-h-500px overflow-y-auto w-full pr-2 mt-2 md:mt-4">
@@ -92,6 +96,11 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
                           currentLanguage,
                         )}{" "}
                         {t("emissionsUnit")}
+                        {isAIGenerated(entry) && (
+                          <span className="ml-2">
+                            <AiIcon size="sm" />
+                          </span>
+                        )}
                       </span>
                       <span>{percentage}</span>
                     </div>

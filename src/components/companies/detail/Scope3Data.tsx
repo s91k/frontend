@@ -101,9 +101,6 @@ export function Scope3Data({
     return null;
   }
 
-  console.log("emissions", emissions);
-  console.log("historicalData", historicalData);
-
   const availableYears =
     historicalData
       ?.map((data) => data.year)
