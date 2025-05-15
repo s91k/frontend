@@ -1041,7 +1041,7 @@
         "electricCarChangePercent": {
           "label": "Elbilarna",
           "description": "Förändring i andel elbilar",
-          "detailedDescription": "Ökningstakten i kommunerna för andel nyregistrerade laddbara bilar 2015–2022, angivet i procentenheter per år",
+          "detailedDescription": "Ökningstakten i kommunerna för andel nyregistrerade laddbara bilar 2015–2024, angivet i procentenheter per år.",
           "source": "<0>Trafikanalys</0>"
         },
         "totalConsumptionEmission": {
@@ -1060,7 +1060,7 @@
         "bicycleMetrePerCapita": {
           "label": "Cyklarna",
           "description": "Meter cykelväg per invånare",
-          "detailedDescription": "Antal meter cykelväg per invånare per kommun år 2023. Ju längre desto bättre, god infrastruktur gynnar ökad cykling",
+          "detailedDescription": "Antal meter cykelväg per invånare per kommun år 2024. Ju längre desto bättre, god infrastruktur gynnar ökad cykling",
           "source": "<0>Nationella Vägdatabasen</0>, <1>Trafikverket</1>"
         }
       },
