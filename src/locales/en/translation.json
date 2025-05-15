@@ -665,7 +665,7 @@
   "municipalitiesComparePage": {
     "errorTitle": "Failed to retrieve municipality information",
     "errorDescription": "Please try again later",
-    "title": "Municipality Reports",
+    "title": "Municipality Climate Data",
     "description": "Overview of emissions and transition in municipalities",
     "filter": {
       "searchPlaceholder": "Search for municipalities (separate w/ commas)",
@@ -1012,6 +1012,7 @@
       "gap": "Gap",
       "historical": "Historical",
       "approximated": "Calculated Total",
+      "estimated": "Calculated",
       "trend": "Trend",
       "parisAgreement": "Paris Agreement",
       "paris": "Paris Agreement",

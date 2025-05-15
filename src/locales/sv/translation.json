@@ -665,7 +665,7 @@
   "municipalitiesComparePage": {
     "errorTitle": "Det gick inte att hämta kommuninformation",
     "errorDescription": "Försök igen senare",
-    "title": "Kommunrapporter",
+    "title": "Kommuners klimatdata",
     "description": "Översikt över utsläpp och omställning i kommunerna",
     "filter": {
       "searchPlaceholder": "Sök kommun (flera: separera med komma)",
@@ -1012,6 +1012,7 @@
       "gap": "Gap",
       "historical": "Historiskt",
       "approximated": "Uppskattat totalt",
+      "estimated": "Uppskattat",
       "trend": "Trend",
       "parisAgreement": "Parisavtalet",
       "paris": "Parisavtalet",
