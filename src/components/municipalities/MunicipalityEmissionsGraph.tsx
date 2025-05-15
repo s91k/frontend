@@ -58,10 +58,14 @@ export const MunicipalityEmissionsGraph: FC<
       const isApproximated = filteredPayload.some(
         (entry) => entry.dataKey === "approximated" && entry.value != null,
       );
+      // If approximated is present, only show that value (hide trend and paris)
+      const displayPayload = isApproximated
+        ? filteredPayload.filter((entry) => entry.dataKey === "approximated")
+        : filteredPayload;
       return (
         <div className="bg-black-1 px-4 py-3 rounded-level-2">
           <div className="text-sm font-medium mb-2">{label}</div>
-          {filteredPayload.map((entry) => {
+          {displayPayload.map((entry) => {
             if (entry.dataKey === "gap") {
               return null;
             }
