@@ -63,7 +63,7 @@ export function MethodologyNavigation({
           <li key={category}>
             <button
               onClick={() => toggleCategory(category)}
-              className="flex justify-between items-center w-full p-4 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
+              className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
               aria-expanded={expandedCategories.includes(category)}
             >
               <span>{t(`methodsPage.categories.${category}`)}</span>
