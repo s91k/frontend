@@ -26,7 +26,6 @@ export function CompanyScope3({
           unit:
             emissions.scope3.statedTotalEmissions?.unit || t("emissionsUnit"),
           categories: emissions.scope3.categories,
-          metadata: emissions.scope3.metadata,
         }
       : null,
   };

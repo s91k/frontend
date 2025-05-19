@@ -45,10 +45,6 @@ interface Scope3DataProps {
     scope3?: {
       total: number;
       unit: string;
-      metadata?: {
-        verifiedBy?: { name: string } | null;
-        user?: { name?: string } | null;
-      };
       categories?: Array<{
         category: number;
         total: number;

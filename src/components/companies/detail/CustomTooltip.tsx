@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { formatEmissionsAbsolute, localizeUnit } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { AiIcon } from "@/components/ui/ai-icon";
 
 interface CustomTooltipProps {
@@ -23,7 +22,6 @@ export const CustomTooltip = ({
   const { getCategoryName } = useCategoryMetadata();
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
-  const { isAIGenerated } = useVerificationStatus();
 
   if (active && payload && payload.length) {
     if (payload.length === 3) {
