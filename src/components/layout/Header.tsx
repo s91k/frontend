@@ -92,7 +92,7 @@ export function Header() {
           label: t("header.methodology"),
           path: `${currentLanguage}/methodology`,
         },
-        {label: t("header.support"), path: `${currentLanguage}/support`},
+        { label: t("header.support"), path: `${currentLanguage}/support` },
       ],
     },
     {
@@ -129,7 +129,7 @@ export function Header() {
                 <MenubarMenu key={item.label}>
                   <MenubarTrigger
                     className={cn(
-                      "flex items-center gap-2 px-3 py-3 h-full transition-all text-sm",
+                      "flex items-center gap-2 px-3 py-3 h-full transition-all text-sm cursor-pointer",
                       location.pathname.startsWith(item.path)
                         ? "bg-black-1 text-white"
                         : "text-grey hover:text-white",
@@ -194,7 +194,7 @@ export function Header() {
                   <Link
                     to={link.path}
                     onClick={toggleMenu}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                   >
                     {link.icon}
                     {link.label}
