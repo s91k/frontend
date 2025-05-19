@@ -80,7 +80,7 @@ export function MethodologyNavigation({
                   <li key={method.id}>
                     <button
                       onClick={() => handleMethodChange(method.id)}
-                      className={`w-full p-2 text-left text-sm rounded-lg transition-colors duration-200 ${
+                      className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
                         selectedMethod === method.id
                           ? "bg-black-1 text-blue-3 font-medium"
                           : "text-grey hover:bg-black-1 hover:text-white"
