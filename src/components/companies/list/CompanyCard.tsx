@@ -23,6 +23,8 @@ import {
 } from "@/utils/localizeUnit";
 import { LinkCard } from "@/components/ui/link-card";
 import { cn } from "@/lib/utils";
+import { AiIcon } from "@/components/ui/ai-icon";
+import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 
 type CompanyCardProps = Pick<
   RankedCompany,
@@ -81,6 +83,8 @@ export function CompanyCard({
   const categoryColor = largestCategory
     ? getCategoryColor(largestCategory.category)
     : "var(--blue-2)";
+
+  const { isAIGenerated } = useVerificationStatus();
 
   return (
     <div className="relative rounded-level-2 @container">
@@ -162,6 +166,11 @@ export function CompanyCard({
                   <span className="text-lg text-grey ml-1">
                     {t("emissionsUnit")}
                   </span>
+                  {isAIGenerated(latestPeriod?.emissions) && (
+                    <span className="ml-2">
+                      <AiIcon size="sm" />
+                    </span>
+                  )}
                 </span>
               ) : (
                 <span className="text-grey">{t("companies.card.noData")}</span>
