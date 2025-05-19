@@ -54,13 +54,13 @@ export function CompanyOverview({
 
   const periodYear = new Date(selectedPeriod.endDate).getFullYear();
 
-  // Check if any emissions data is AI-generated
+  // Check if any data is AI-generated
   const totalEmissionsAIGenerated = isEmissionsAIGenerated(selectedPeriod);
-
-  // For year-over-year change, check both current and previous periods
   const yearOverYearAIGenerated =
     isEmissionsAIGenerated(selectedPeriod) ||
     (previousPeriod && isEmissionsAIGenerated(previousPeriod));
+  const turnoverAIGenerated = isAIGenerated(selectedPeriod.economy?.turnover);
+  const employeesAIGenerated = isAIGenerated(selectedPeriod.economy?.employees);
 
   // Get the translated sector name using the sector code
   const sectorCode = company.industry?.industryGics?.sectorCode as
@@ -90,17 +90,6 @@ export function CompanyOverview({
         currentLanguage,
       )
     : t("companies.overview.notReported");
-  const turnoverAIGenerated = !!(
-    selectedPeriod.economy?.turnover &&
-    "metadata" in selectedPeriod.economy.turnover &&
-    isAIGenerated(selectedPeriod.economy.turnover)
-  );
-
-  const employeesAIGenerated = !!(
-    selectedPeriod.economy?.employees &&
-    "metadata" in selectedPeriod.economy.employees &&
-    isAIGenerated(selectedPeriod.economy.employees)
-  );
 
   return (
     <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
@@ -226,8 +215,8 @@ export function CompanyOverview({
           )}
           {yearOverYearAIGenerated && (
             <span className="ml-2">
-            <AiIcon size="md" />
-             </span>
+              <AiIcon size="md" />
+            </span>
           )}
         </Text>
       </div>
