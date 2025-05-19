@@ -18,30 +18,6 @@ import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 
 interface Scope3DataProps {
   emissions: {
-    scope1And2?: {
-      total: number;
-      unit: string;
-      metadata?: {
-        verifiedBy?: { name: string } | null;
-        user?: { name?: string } | null;
-      };
-    } | null;
-    scope1?: { total: number; unit: string, metadata?: {
-      verifiedBy?: { name: string } | null;
-      user?: { name?: string } | null;
-    };
-    } | null;
-    scope2?: {
-      mb?: number | null;
-      lb?: number | null;
-      unknown?: number | null;
-      unit: string;
-      calculatedTotalEmissions: number;
-      metadata?: {
-        verifiedBy?: { name: string } | null;
-        user?: { name?: string } | null;
-      };
-    } | null;
     scope3?: {
       total: number;
       unit: string;
@@ -55,14 +31,8 @@ interface Scope3DataProps {
         };
       }>;
     } | null;
-    biogenicEmissions?: { total: number; unit: string, metadata?: {
-      verifiedBy?: { name: string } | null;
-      user?: { name?: string } | null;
-    };
-    } | null;
   } | null;
   className?: string;
-  isRealEstate?: boolean;
   historicalData?: Array<{
     year: number;
     total: number;
