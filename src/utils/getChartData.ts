@@ -79,9 +79,6 @@ export function getChartData(
     };
   });
 
-  console.log("historicalData", historicalData);
-  console.log("processedPeriods", processedPeriods);
-
   // Add empty future years
   const futureData = futureYears.map((year) => ({
     year,

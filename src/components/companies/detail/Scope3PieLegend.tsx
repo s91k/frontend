@@ -36,7 +36,6 @@ const Scope3PieLegend: React.FC<PieLegendProps> = ({
   if (!payload) {
     return null;
   }
-  console.log("scope3PieLegend", payload);
 
   const handleLegendItemClick = (name: string) => {
     if (onFilteredCategoriesChange) {

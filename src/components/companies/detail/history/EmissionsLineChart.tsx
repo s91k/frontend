@@ -46,7 +46,6 @@ export default function EmissionsLineChart({
   getCategoryColor,
   currentLanguage,
 }: EmissionsLineChartProps) {
-  console.log(data);
   return (
     <ResponsiveContainer width="100%" height="100%" className="w-full">
       <LineChart
