@@ -348,6 +348,7 @@
       "label": "Välj vad du vill lära dig om"
     },
     "methodNotFound": "Metod hittades inte",
+    "noResultsFound": "Inga resultat hittades",
     "categories": {
       "general": "Allmän information",
       "municipality": "Kommundata",

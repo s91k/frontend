@@ -15,7 +15,7 @@ export function MethodologySearch({
   searchQuery,
   setSearchQuery,
   onSelectMethod,
-  onClose
+  onClose,
 }: MethodologySearchProps) {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +33,7 @@ export function MethodologySearch({
         onClose();
       }
     };
-    
+
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [onClose]);
@@ -77,7 +77,13 @@ export function MethodologySearch({
                     className="w-full p-3 text-left hover:bg-black-1 transition-colors flex items-center gap-2 rounded-lg group"
                   >
                     <span className="font-medium text-white">
-                      {t(`methodsPage.accordion.${method.id}.title`)}
+                      {(() => {
+                        const key = `methodsPage.${method.category}.${method.id}.title`;
+                        const translated = t(key);
+                        return translated && translated !== key
+                          ? translated
+                          : method.id;
+                      })()}
                     </span>
                     <span className="text-sm text-grey group-hover:text-white">
                       {t(`methodsPage.categories.${method.category}`)}
@@ -87,9 +93,7 @@ export function MethodologySearch({
               ))}
             </ul>
           ) : (
-            <p className="p-3 text-grey">
-              No results found
-            </p>
+            <p className="p-3 text-grey">{t("methodsPage.noResultsFound")}</p>
           )}
         </div>
       )}
