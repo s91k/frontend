@@ -4,6 +4,7 @@ import type { EmissionPeriod } from "@/lib/calculations/emissions";
 export function getChartData(
   processedPeriods: EmissionPeriod[],
   isAIGenerated: (data: any) => boolean,
+  isEmissionsAIGenerated: (period: any) => boolean,
 ): ChartData[] {
   if (!processedPeriods || processedPeriods.length === 0) return [];
 
@@ -41,24 +42,18 @@ export function getChartData(
           isAIGenerated: isAIGenerated(scope2),
         }
       : undefined;
-    const scope3Data = scope3
-      ? {
-          value: scope3.calculatedTotalEmissions ?? 0,
-          isAIGenerated: isAIGenerated(scope3),
-        }
-      : undefined;
     const scope3Categories =
       scope3?.categories?.map((cat) => ({
         category: cat.category,
         value: cat.total ?? 0,
         isAIGenerated: isAIGenerated(cat),
       })) ?? [];
-    const isAnyAI = [
-      scope1Data?.isAIGenerated,
-      scope2Data?.isAIGenerated,
-      scope3Data?.isAIGenerated,
-      ...scope3Categories.map((cat) => cat.isAIGenerated),
-    ].some(Boolean);
+    const scope3Data = scope3
+      ? {
+          value: scope3.calculatedTotalEmissions ?? 0,
+          isAIGenerated: scope3Categories.some((cat) => cat.isAIGenerated),
+        }
+      : undefined;
     // Capture original values before overriding with 0 for graph continuity
     const categoryData = [...categoryKeys].reduce<
       Record<string, number | null>
@@ -72,7 +67,7 @@ export function getChartData(
     return {
       year,
       total: period.emissions?.calculatedTotalEmissions ?? 0,
-      isAIGenerated: isAnyAI,
+      isAIGenerated: isEmissionsAIGenerated(period),
       scope1: scope1Data,
       scope2: scope2Data,
       scope3: scope3Data,

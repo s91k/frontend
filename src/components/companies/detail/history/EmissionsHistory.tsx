@@ -27,7 +27,7 @@ export function EmissionsHistory({
   const { t } = useTranslation();
   const { getCategoryName, getCategoryColor } = useCategoryMetadata();
   const { currentLanguage } = useLanguage();
-  const { isAIGenerated } = useVerificationStatus();
+  const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
 
   const hasScope3Categories = useMemo(
     () =>
@@ -57,8 +57,8 @@ export function EmissionsHistory({
 
   // Process data based on view
   const chartData = useMemo(
-    () => getChartData(processedPeriods, isAIGenerated),
-    [processedPeriods, isAIGenerated],
+    () => getChartData(processedPeriods, isAIGenerated, isEmissionsAIGenerated),
+    [processedPeriods, isAIGenerated, isEmissionsAIGenerated],
   );
 
   const handleClick = (data: {

@@ -234,15 +234,15 @@ export function CompanyCard({
                     Math.ceil(emissionsChange) / 100,
                     currentLanguage,
                   )}
+                  {yearOverYearAIGenerated && (
+                    <span className="ml-2">
+                      <AiIcon size="sm" />
+                    </span>
+                  )}
                 </span>
               ) : (
                 <span className="text-grey">{t("companies.card.noData")}</span>
               )}
-              {yearOverYearAIGenerated && (
-              <span className="ml-2">
-                <AiIcon size="sm" />
-              </span>
-            )}
             </div>
           </div>
         </div>
@@ -285,12 +285,14 @@ export function CompanyCard({
               <span>{t("companies.card.employees")}</span>
             </Text>
             {latestPeriod?.economy && (
-              <Text variant="h6">{formattedEmployeeCount}</Text>
-            )}
-            {employeesAIGenerated && (
-              <span className="ml-2">
-                <AiIcon size="sm" />
-              </span>
+              <Text variant="h6">
+                {formattedEmployeeCount}
+                {employeesAIGenerated && (
+                  <span className="ml-2">
+                    <AiIcon size="sm" />
+                  </span>
+                )}
+              </Text>
             )}
           </div>
         </div>
