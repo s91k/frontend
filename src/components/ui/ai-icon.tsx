@@ -29,7 +29,7 @@ export const AiIcon = ({
   const iconElement = (
     <div
       className={cn(
-        "flex items-center justify-center overflow-hidden border-2 border-green-3",
+        "flex items-center justify-center overflow-hidden border-2 border-grey",
         sizeClasses[size],
         className,
       )}
