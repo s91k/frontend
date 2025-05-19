@@ -348,6 +348,7 @@
       "label": "Select what you want to learn about"
     },
     "methodNotFound": "Method not found",
+    "noResultsFound": "No results found",
     "categories": {
       "general": "General Information",
       "municipality": "Municipality Data",
