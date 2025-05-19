@@ -84,7 +84,23 @@ export function CompanyCard({
     ? getCategoryColor(largestCategory.category)
     : "var(--blue-2)";
 
-  const { isAIGenerated } = useVerificationStatus();
+  const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
+  const totalEmissionsAIGenerated = isEmissionsAIGenerated(latestPeriod);
+  const turnoverAIGenerated = !!(
+    latestPeriod.economy?.turnover &&
+    "metadata" in latestPeriod.economy.turnover &&
+    isAIGenerated(latestPeriod.economy.turnover)
+  );
+
+  const employeesAIGenerated = !!(
+    latestPeriod.economy?.employees &&
+    "metadata" in latestPeriod.economy.employees &&
+    isAIGenerated(latestPeriod.economy.employees)
+  );
+
+  const yearOverYearAIGenerated =
+    isEmissionsAIGenerated(latestPeriod) ||
+    (previousPeriod && isEmissionsAIGenerated(previousPeriod));
 
   return (
     <div className="relative rounded-level-2 @container">
@@ -166,7 +182,7 @@ export function CompanyCard({
                   <span className="text-lg text-grey ml-1">
                     {t("emissionsUnit")}
                   </span>
-                  {isAIGenerated(latestPeriod?.emissions) && (
+                  {totalEmissionsAIGenerated && (
                     <span className="ml-2">
                       <AiIcon size="sm" />
                     </span>
@@ -222,6 +238,11 @@ export function CompanyCard({
               ) : (
                 <span className="text-grey">{t("companies.card.noData")}</span>
               )}
+              {yearOverYearAIGenerated && (
+              <span className="ml-2">
+                <AiIcon size="sm" />
+              </span>
+            )}
             </div>
           </div>
         </div>
@@ -246,6 +267,11 @@ export function CompanyCard({
                 <span className="text-lg text-grey ml-1">
                   {latestPeriod.economy.turnover.currency}
                 </span>
+                {turnoverAIGenerated && (
+                  <span className="ml-2">
+                    <AiIcon size="sm" />
+                  </span>
+                )}
               </Text>
             </div>
           )}
@@ -260,6 +286,11 @@ export function CompanyCard({
             </Text>
             {latestPeriod?.economy && (
               <Text variant="h6">{formattedEmployeeCount}</Text>
+            )}
+            {employeesAIGenerated && (
+              <span className="ml-2">
+                <AiIcon size="sm" />
+              </span>
             )}
           </div>
         </div>
