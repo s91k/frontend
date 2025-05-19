@@ -48,6 +48,7 @@ export function CompanyCard({
   const { getCategoryColor } = useCategoryMetadata();
   const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
+  const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
 
   const latestPeriod = reportingPeriods[0];
   const previousPeriod = reportingPeriods[1];
@@ -84,20 +85,9 @@ export function CompanyCard({
     ? getCategoryColor(largestCategory.category)
     : "var(--blue-2)";
 
-  const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
   const totalEmissionsAIGenerated = isEmissionsAIGenerated(latestPeriod);
-  const turnoverAIGenerated = !!(
-    latestPeriod.economy?.turnover &&
-    "metadata" in latestPeriod.economy.turnover &&
-    isAIGenerated(latestPeriod.economy.turnover)
-  );
-
-  const employeesAIGenerated = !!(
-    latestPeriod.economy?.employees &&
-    "metadata" in latestPeriod.economy.employees &&
-    isAIGenerated(latestPeriod.economy.employees)
-  );
-
+  const turnoverAIGenerated = isAIGenerated(latestPeriod.economy?.turnover);
+  const employeesAIGenerated = isAIGenerated(latestPeriod.economy?.employees);
   const yearOverYearAIGenerated =
     isEmissionsAIGenerated(latestPeriod) ||
     (previousPeriod && isEmissionsAIGenerated(previousPeriod));
