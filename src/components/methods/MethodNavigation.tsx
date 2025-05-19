@@ -1,21 +1,33 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { methodologySections } from "@/lib/methods/methodologyData";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 interface MethodologyNavigationProps {
   selectedMethod: string;
   onMethodChange: (method: string) => void;
+  contentRef: React.RefObject<HTMLDivElement>;
 }
 
 export function MethodologyNavigation({
   selectedMethod,
   onMethodChange,
+  contentRef,
 }: MethodologyNavigationProps) {
   const { t } = useTranslation();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(
     Object.keys(methodologySections),
   );
+  const { isMobile } = useScreenSize();
+
+  useEffect(() => {
+    if (isMobile) {
+      setExpandedCategories([]);
+    } else {
+      setExpandedCategories(Object.keys(methodologySections));
+    }
+  }, [isMobile]);
 
   const toggleCategory = (category: string) => {
     setExpandedCategories((prev) =>
@@ -23,6 +35,20 @@ export function MethodologyNavigation({
         ? prev.filter((cat) => cat !== category)
         : [...prev, category],
     );
+  };
+
+  // Scroll to MethodContent on mobile when a method is selected
+  const handleMethodChange = (method: string) => {
+    onMethodChange(method);
+    if (isMobile && contentRef?.current) {
+      setTimeout(() => {
+        if (!contentRef.current) return;
+        const headerHeight = window.innerWidth >= 1024 ? 48 : 40; // 48px for lg, 40px for mobile
+        const rect = contentRef.current.getBoundingClientRect();
+        const scrollTo = rect.top + window.scrollY - headerHeight;
+        window.scrollTo({ top: scrollTo, behavior: "smooth" });
+      }, 350);
+    }
   };
 
   return (
@@ -53,7 +79,7 @@ export function MethodologyNavigation({
                 {methods.map((method) => (
                   <li key={method.id}>
                     <button
-                      onClick={() => onMethodChange(method.id)}
+                      onClick={() => handleMethodChange(method.id)}
                       className={`w-full p-2 text-left text-sm rounded-lg transition-colors duration-200 ${
                         selectedMethod === method.id
                           ? "bg-black-1 text-blue-3 font-medium"
