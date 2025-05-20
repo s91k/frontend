@@ -41,8 +41,10 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
     }
   };
 
-  // Sort the data by value in descending order
-  const sortedData = [...data].sort((a, b) => b.value - a.value);
+  // Filter out zero values and sort the data by value in descending order
+  const sortedData = [...data]
+    .filter((item) => item.value > 0)
+    .sort((a, b) => b.value - a.value);
 
   return (
     <TooltipProvider>
