@@ -1,6 +1,4 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-import { useTranslation } from "react-i18next";
-import { useLanguage } from "@/components/LanguageProvider";
 import { SectorEmissions } from "@/types/municipality";
 import { SECTOR_COLORS } from "@/constants/colors";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";

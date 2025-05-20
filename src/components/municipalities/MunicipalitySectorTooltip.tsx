@@ -44,13 +44,11 @@ export const MunicipalitySectorTooltip: React.FC<
           </button>
         )}
       </div>
-      <div className="text-sm font-medium mb-2">{data.name}</div>
-      <div className="text-sm">
-        <span className="text-grey mr-2">{t("emissions.total")}:</span>
-        <span style={{ color: data.color }}>
-          {formatEmissionsAbsolute(data.value, currentLanguage)}{" "}
-          {t("emissionsUnit")}
-        </span>
+
+      <p className="text-sm font-medium mb-1">{data.name}</p>
+      <div className="text-sm text-grey">
+        {formatEmissionsAbsolute(data.value, currentLanguage)}{" "}
+        {t("emissionsUnit")}
       </div>
       <div className="text-xs italic text-blue-2 mt-2">
         {t(
