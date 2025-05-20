@@ -1,5 +1,7 @@
+import type { ReportingPeriod } from "@/types/company";
+
 export function mapCompanyEditFormToRequestBody(
-  selectedPeriods,
+  selectedPeriods: ReportingPeriod[],
   formData: Map<string, string>,
 ) {
   const formKeys = Array.from(formData.keys());
@@ -78,22 +80,37 @@ export function mapCompanyEditFormToRequestBody(
         });
       }
     }
+    // Add statedTotalEmissions for scope 3
+    if (formData.has(`scope-3-statedTotalEmissions-${period.id}`)) {
+      if (periodUpdate.emissions.scope3 === undefined) {
+        periodUpdate.emissions.scope3 = {};
+      }
+      periodUpdate.emissions.scope3.statedTotalEmissions = {
+        total:
+          parseInt(
+            formData.get(`scope-3-statedTotalEmissions-${period.id}`) || "0",
+          ) ?? 0,
+        verified:
+          formData.get(`scope-3-statedTotalEmissions-${period.id}-checkbox`) ===
+          "true",
+      };
+    }
     periodsUpdate.push(periodUpdate);
-}
-    const metadata: {
-        comment?: string,
-        source?: string
-    } = {};
+  }
+  const metadata: {
+    comment?: string;
+    source?: string;
+  } = {};
 
-    if(formData.get('comment')) {
-        metadata.comment = formData.get('comment');
-    }
+  if (formData.get("comment")) {
+    metadata.comment = formData.get("comment");
+  }
 
-    if(formData.get('source')) {
-        metadata.source = formData.get('source');
-    }
-    return {
-        reportingPeriods: periodsUpdate,
-        metadata
-    };
+  if (formData.get("source")) {
+    metadata.source = formData.get("source");
+  }
+  return {
+    reportingPeriods: periodsUpdate,
+    metadata,
+  };
 }

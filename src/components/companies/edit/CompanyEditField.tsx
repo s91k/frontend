@@ -22,7 +22,7 @@ export function CompanyEditInputField({
   onInputChange,
   formData
 }: CompanyEditInputFieldProps) {
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onInputChange(name, event.target.value, value);
   }
 

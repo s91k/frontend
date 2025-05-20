@@ -873,7 +873,8 @@
       "16": {
         "name": "Övrigt",
         "description": "Utsläpp som inte är kopplade till de 15 Scope 3-kategorierna."
-      }
+      },
+      "statedTotal": "Redovisad total"
     },
     "card": {
       "noData": "Ingen data",
