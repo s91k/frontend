@@ -1,6 +1,5 @@
 import {
   createMarkdownHelpItem,
-  createTextHelpItem,
   defineHelpItems,
   HelpItemWithId,
 } from "./guide-item-helpers";
@@ -10,32 +9,32 @@ export const dataGuideHelpItems = defineHelpItems({
   tco2e: {
     id: "tco2e",
     title: "tCO2e",
-    component: createMarkdownHelpItem("dataGuide.items.tco2eMarkdown"),
+    component: createMarkdownHelpItem("dataGuide.items.tco2e"),
   },
   companySector: {
     id: "companySector",
     title: "Company Sectors",
-    component: createMarkdownHelpItem("dataGuide.items.companySectorsMarkdown"),
+    component: createMarkdownHelpItem("dataGuide.items.companySectors"),
   },
   scopes: {
     id: "scopes",
     title: "Scopes",
-    component: createMarkdownHelpItem("dataGuide.items.scopesMarkdown"),
+    component: createMarkdownHelpItem("dataGuide.items.scopes"),
   },
   baseYear: {
     id: "baseYear",
     title: "Base year",
-    component: createTextHelpItem("dataGuide.items.baseYear"),
+    component: createMarkdownHelpItem("dataGuide.items.baseYear"),
   },
   changeRate: {
     id: "changeRate",
     title: "Change rate",
-    component: createTextHelpItem("dataGuide.items.changeRate"),
+    component: createMarkdownHelpItem("dataGuide.items.changeRate"),
   },
   companyTurnover: {
     id: "companyTurnover",
     title: "Turnover",
-    component: createTextHelpItem("dataGuide.items.companyTurnover"),
+    component: createMarkdownHelpItem("dataGuide.items.companyTurnover"),
   },
 });
 

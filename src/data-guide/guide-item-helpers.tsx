@@ -2,12 +2,6 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 
-export const createTextHelpItem = (textKey: string) => () => {
-  const { t } = useTranslation();
-
-  return <p>{t(textKey)}</p>;
-};
-
 export const createMarkdownHelpItem = (textKey: string) => () => {
   const { t } = useTranslation();
 
