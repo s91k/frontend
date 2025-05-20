@@ -2,13 +2,20 @@ import { CompanyEditRow } from "./CompanyEditRow";
 import { CompanyEditInputField, CompanyEmptyField } from "./CompanyEditField";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import type { ReportingPeriod } from "@/types/company";
-import type { CompanyEditInputFieldProps } from "./CompanyEditField";
 import { useTranslation } from "react-i18next";
 
 interface CompanyEditScope3Props {
   periods: ReportingPeriod[];
   onInputChange: (name: string, value: string) => void;
   formData: Map<string, string>;
+}
+
+// Add a type for category with optional metadata
+interface Scope3CategoryWithMetadata {
+  category: number;
+  total: number;
+  unit: string;
+  metadata?: { verifiedBy?: { name: string } | null };
 }
 
 export function CompanyEditScope3({
@@ -29,7 +36,7 @@ export function CompanyEditScope3({
 
   const getCategoryValue = (
     index: number,
-    categories: { category: number; total: number; unit: string }[] = [],
+    categories: Scope3CategoryWithMetadata[] = [],
   ): number | string => {
     const category = categories.find(
       (category) => category.category - 1 === index,
@@ -39,14 +46,13 @@ export function CompanyEditScope3({
 
   const getCategoryVerified = (
     index: number,
-    categories: { category: number; total: number; unit: string }[] = [],
+    categories: Scope3CategoryWithMetadata[] = [],
   ): boolean => {
-    // @ts-ignore: metadata may not exist on category, but keep for compatibility
     const category = categories.find(
       (category) => category.category - 1 === index,
     );
-    // @ts-ignore: metadata may not exist on category, but keep for compatibility
-    return category !== undefined ? category.metadata?.verifiedBy : false;
+    // metadata may not exist, so coerce to boolean
+    return !!category?.metadata?.verifiedBy;
   };
 
   // Instead of a static list, use categoryMetadata for all 16 categories
