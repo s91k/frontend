@@ -1222,25 +1222,24 @@
     "title": "Data Guide",
     "buttonTitle": "Data Guide",
     "items": {
-      "baseYear": "The base year is a specific year used as a reference point to compare future emissions",
-      "changeRate": "The emission change rate compared to previous year",
+      "baseYear": "Basåret är ett specifikt år som används som en referenspunkt för att jämföra framtida utsläpp.",
+      "changeRate": "Förändringstakten i utsläpp jämfört med föregående år.",
       "companySectors": [
-        "We have diveded companies into different sectors to make it easier to compare companies against each other",
-        "The available sectors are:",
-        "- Industrials",
-        "- Energy",
-        "- Consumer Discretionary",
+        "Vi har delat upp företag i olika sektorer för att göra det enklare att jämföra dem med varandra",
+        "Exempel på sektorer är:",
+        "- Industri",
+        "- Energi",
+        "- Konsumentprodukter",
         "- ..."
       ],
-      "companyTurnover": "The company turnover is their total revenue or sales. It is important not to confuse this with the profit.",
+      "companyTurnover": "Företagets omsättning är deras totala intäkter eller försäljning. Det är viktigt att inte förväxla detta med vinsten.",
       "scopes": [
-        "GHG-protokollet, i EU-direktivet Corporate Sustainability Reporting Directive, är den etablerade standarden för rapportering av växthusgasutsläpp.",
-        "Dessa utsläpp delas upp i tre scope:",
-        "1. **Scope 1** – direkta utsläpp från den egna verksamheten",
-        "2. **Scope 2** – indirekta utsläpp från inköpt energi",
-        "3. **Scope 3** – alla utsläpp i värdekedjan, som i sin tur delas upp i 15 kategorier`,"
+        "Scope 1, 2 och 3-utsläpp kommer från Greenhouse Gas Protocol, en global standard för att mäta företags utsläpp:",
+        "1. **Scope 1** - Direkta utsläpp från källor som ägs eller kontrolleras av företaget (t.ex. förbränning av bränsle).",
+        "2. **Scope 2** - Indirekta utsläpp från köpt energi.",
+        "3. **Scope 3** - Andra indirekta utsläpp från värdekedjan, såsom leverantörer, produktanvändning och avfall."
       ],
-      "tco2e": "tCO2e stands for *\"tonnes of carbon dioxide equivalent\"*. It's a standardized measure that converts the impact of various greenhouse gases into the equivalent amount of CO2."
+      "tco2e": "tCO2e står för \"ton koldioxidekvivalenter\". Det är ett standardiserat mått som omvandlar påverkan från olika växthusgaser till motsvarande mängd koldioxid."
     }
   }
 }
