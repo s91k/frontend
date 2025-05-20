@@ -66,7 +66,7 @@ export const partners = [
     alt: "ClimateAiNordics logo",
   },
   {
-    href: "https://berget.ai//",
+    href: "https://berget.ai/",
     src: "/logos/partners/berget-logo-white.svg",
     alt: "Berget logo",
   },
