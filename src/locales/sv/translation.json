@@ -719,7 +719,7 @@
     "electricCarsPerChargePoint": "Elbilar per laddpunkt",
     "noChargePoints": "Saknar laddpunkter",
     "bicycleMetrePerCapita": "Cykelvägsmeter per invånare",
-    "sectorEmissions": "Sektorsutsläpp",
+    "sectorEmissions": "Utsläppskällor",
     "sectorEmissionsYear": "Utsläpp per sektor år {{year}}",
     "sectors": {
       "industry": "Industri (energi + processer)",
