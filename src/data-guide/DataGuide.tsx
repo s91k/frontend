@@ -3,7 +3,6 @@ import { useScreenSize } from "@/hooks/useScreenSize";
 import { cn } from "@/lib/utils";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
 import { GuideSheet } from "./GuideSheet";
 import { GuideSidebar } from "./GuideSidebar";
 import { DataGuideContext, useTrackGuideItems } from "./internal";
@@ -14,11 +13,10 @@ export const DataGuideProvider = ({
   children: React.ReactNode;
 }) => {
   const { t } = useTranslation();
-  const location = useLocation();
   const { isMobile } = useScreenSize();
 
-  const dataGuideEnabled = new URLSearchParams(location.search).has(
-    "enableDataGuide",
+  const dataGuideEnabled = ["localhost", "stage"].some((enabledHost) =>
+    window.location.hostname.includes(enabledHost),
   );
 
   const [open, setOpen] = useState(false);

@@ -23,7 +23,6 @@ export const useTrackGuideItems = () => {
 
   const items = useMemo(() => itemsToShow(itemRefCount), [itemRefCount]);
 
-  // This provides a way for
   const pushItems = useCallback(
     (items: HelpItemId[]) => {
       setItemRefCount((oldRefCount) =>
