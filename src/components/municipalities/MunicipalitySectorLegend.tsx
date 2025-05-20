@@ -48,7 +48,7 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
 
   return (
     <TooltipProvider>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-300px md:max-h-500px overflow-y-auto w-full pr-2 mt-2 md:mt-4">
+      <div className="grid grid-cols-1 gap-2 w-full pr-2 mt-2 md:mt-4">
         {sortedData.map((entry, index) => {
           const percentage = formatPercent(
             entry.value / total,
@@ -70,7 +70,9 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
                     style={{ backgroundColor: entry.color }}
                   />
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-white">{entry.name}</div>
+                    <div className="text-sm text-white break-words">
+                      {entry.name}
+                    </div>
                     <div className="text-xs text-grey flex justify-between">
                       <span>
                         {formatEmissionsAbsolute(
