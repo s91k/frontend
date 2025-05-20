@@ -22,6 +22,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const user: Token | null = token ? jwtDecode(token) : null;
 
   const login = () => {
+    localStorage.setItem(
+      "postLoginRedirect",
+      window.location.pathname + window.location.search,
+    );
     window.location.href = baseUrl + "/auth/github";
   };
 

@@ -20,11 +20,12 @@ export const AuthCallback = () => {
     const code = params.get("code");
     const error = params.get("error");
 
+    if (!code) return;
     authenticate(code);
 
     if (error) {
       console.error("Authentication error:", error);
-      navigate("/", { state: { error: t("authCallbackpage.failed") } });
+      navigate("/", { state: { error: t("authCallbackPage.failed") } });
     }
   }, [location, navigate]);
 
@@ -34,7 +35,13 @@ export const AuthCallback = () => {
         t("authCallbackPage.success.title"),
         t("authCallbackPage.success.description"),
       );
-      navigate("/");
+      const redirectPath = localStorage.getItem("postLoginRedirect");
+      if (redirectPath) {
+        localStorage.removeItem("postLoginRedirect");
+        navigate(redirectPath, { replace: true });
+      } else {
+        navigate("/");
+      }
     }
   }, [token]);
 
