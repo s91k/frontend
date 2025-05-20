@@ -41,10 +41,13 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
     }
   };
 
+  // Sort the data by value in descending order
+  const sortedData = [...data].sort((a, b) => b.value - a.value);
+
   return (
     <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-300px md:max-h-500px overflow-y-auto w-full pr-2 mt-2 md:mt-4">
-        {data.map((entry, index) => {
+        {sortedData.map((entry, index) => {
           const percentage = formatPercent(
             entry.value / total,
             currentLanguage,
