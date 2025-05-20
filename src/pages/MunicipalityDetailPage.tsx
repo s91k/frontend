@@ -20,7 +20,6 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { SectorEmissions } from "@/types/municipality";
 import MunicipalitySectorPieChart from "@/components/municipalities/MunicipalitySectorPieChart";
 import MunicipalitySectorLegend from "@/components/municipalities/MunicipalitySectorLegend";
-import { SECTOR_COLORS } from "@/constants/colors";
 
 export function MunicipalityDetailPage() {
   const { t } = useTranslation();
@@ -244,9 +243,7 @@ export function MunicipalityDetailPage() {
                       ([sector, value]) => ({
                         name: sector,
                         value,
-                        color:
-                          SECTOR_COLORS[sector as keyof typeof SECTOR_COLORS] ||
-                          "",
+                        color: "",
                       }),
                     )}
                     total={Object.values(sectorEmissions.sectors[2023]).reduce(

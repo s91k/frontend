@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMunicipalitySectors } from "@/hooks/useMunicipalitySectors";
 
 interface LegendProps {
   data: Array<{
@@ -28,6 +29,7 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
 }) => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+  const { getSectorInfo } = useMunicipalitySectors();
 
   const handleLegendItemClick = (name: string) => {
     if (onFilteredSectorsChange) {
@@ -44,6 +46,14 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
   // Filter out zero values and sort the data by value in descending order
   const sortedData = [...data]
     .filter((item) => item.value > 0)
+    .map((item) => {
+      const { color, translatedName } = getSectorInfo(item.name);
+      return {
+        ...item,
+        color,
+        translatedName,
+      };
+    })
     .sort((a, b) => b.value - a.value);
 
   return (
@@ -71,7 +81,7 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
                   />
                   <div className="min-w-0 flex-1">
                     <div className="text-sm text-white break-words">
-                      {entry.name}
+                      {entry.translatedName}
                     </div>
                     <div className="text-xs text-grey flex justify-between">
                       <span>

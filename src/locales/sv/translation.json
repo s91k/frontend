@@ -720,7 +720,18 @@
     "noChargePoints": "Saknar laddpunkter",
     "bicycleMetrePerCapita": "Cykelvägsmeter per invånare",
     "sectorEmissions": "Sektorsutsläpp",
-    "sectorEmissionsYear": "Utsläpp per sektor år {{year}}"
+    "sectorEmissionsYear": "Utsläpp per sektor år {{year}}",
+    "sectors": {
+      "industry": "Industri (energi + processer)",
+      "productUse": "Produktanvändning (inkl. lösningsmedel)",
+      "internationalTransport": "Utrikes transporter",
+      "agriculture": "Jordbruk",
+      "electricityAndHeating": "El och fjärrvärme",
+      "workingMachines": "Arbetsmaskiner",
+      "waste": "Avfall (inkl.avlopp)",
+      "ownHeating": "Egen uppvärmning av bostäder och lokaler",
+      "transport": "Transporter"
+    }
   },
   "sector": {
     "energy": "Energi",

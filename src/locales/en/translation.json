@@ -721,7 +721,18 @@
     "bicycleMetrePerCapita": "Bicycle path metres per capita",
     "sectorEmissions": "Sector Emissions",
     "sectorEmissionsYear": "Emissions by sector in {{year}}",
-    "filteredSectors": "Filtered Sectors"
+    "filteredSectors": "Filtered Sectors",
+    "sectors": {
+      "industry": "Industry (energy + processes)",
+      "productUse": "Product use (incl. solvents)",
+      "internationalTransport": "International transport",
+      "agriculture": "Agriculture",
+      "electricityAndHeating": "Electricity and district heating",
+      "workingMachines": "Working machines",
+      "waste": "Waste (incl. sewage)",
+      "ownHeating": "Own heating of homes and premises",
+      "transport": "Transport"
+    }
   },
   "sector": {
     "energy": "Energy",

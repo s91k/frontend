@@ -1,8 +1,8 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { SectorEmissions } from "@/types/municipality";
-import { SECTOR_COLORS } from "@/constants/colors";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 import { MunicipalitySectorTooltip } from "./MunicipalitySectorTooltip";
+import { useMunicipalitySectors } from "@/hooks/useMunicipalitySectors";
 
 interface MunicipalitySectorPieChartProps {
   sectorEmissions: SectorEmissions;
@@ -15,6 +15,7 @@ interface SectorData {
   name: string;
   value: number;
   color: string;
+  translatedName: string;
 }
 
 const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
@@ -24,16 +25,20 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
   onFilteredSectorsChange,
 }) => {
   const { size } = useResponsiveChartSize();
+  const { getSectorInfo } = useMunicipalitySectors();
 
   const yearData = sectorEmissions.sectors[year] || {};
 
   const pieData = Object.entries(yearData)
-    .map(([sector, value]) => ({
-      name: sector,
-      value,
-      color:
-        SECTOR_COLORS[sector as keyof typeof SECTOR_COLORS] || "var(--grey)",
-    }))
+    .map(([sector, value]) => {
+      const { color, translatedName } = getSectorInfo(sector);
+      return {
+        name: sector,
+        value,
+        color,
+        translatedName,
+      };
+    })
     .filter((item) => (item.value as number) > 0)
     .filter((item) => !filteredSectors.has(item.name))
     .sort((a, b) => (b.value as number) - (a.value as number));
@@ -58,7 +63,7 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
           <Pie
             data={pieData}
             dataKey="value"
-            nameKey="name"
+            nameKey="translatedName"
             cx="50%"
             cy="50%"
             innerRadius={size.innerRadius}
