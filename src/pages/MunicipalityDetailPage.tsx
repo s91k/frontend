@@ -9,7 +9,7 @@ import { MunicipalityStatCard } from "@/components/municipalities/MunicipalitySt
 import { MunicipalityLinkCard } from "@/components/municipalities/MunicipalityLinkCard";
 import { useTranslation } from "react-i18next";
 import { PageSEO } from "@/components/SEO/PageSEO";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   formatEmissionsAbsolute,
   formatPercent,
@@ -17,9 +17,9 @@ import {
   localizeUnit,
 } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
-import { SectorEmissions } from "@/types/municipality";
 import MunicipalitySectorPieChart from "@/components/municipalities/MunicipalitySectorPieChart";
 import MunicipalitySectorLegend from "@/components/municipalities/MunicipalitySectorLegend";
+import { useMunicipalitySectorEmissions } from "@/hooks/useMunicipalitySectorEmissions";
 
 export function MunicipalityDetailPage() {
   const { t } = useTranslation();
@@ -27,24 +27,11 @@ export function MunicipalityDetailPage() {
   const { municipality, loading, error } = useMunicipalityDetails(id || "");
   const { currentLanguage } = useLanguage();
 
-  const [sectorEmissions, setSectorEmissions] =
-    useState<SectorEmissions | null>(null);
+  const { sectorEmissions, loading: _loadingSectors } =
+    useMunicipalitySectorEmissions(id);
   const [filteredSectors, setFilteredSectors] = useState<Set<string>>(
     new Set(),
   );
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (id) {
-      fetch(`/api/municipalities/${id}/sector-emissions`)
-        .then((res) => res.json())
-        .then((data) => setSectorEmissions(data))
-        .catch((error) =>
-          console.error("Error fetching sector emissions:", error),
-        );
-    }
-  }, [id]);
 
   if (loading) return <Text>{t("municipalityDetailPage.loading")}</Text>;
   if (error) return <Text>{t("municipalityDetailPage.error")}</Text>;
