@@ -720,7 +720,8 @@
     "noChargePoints": "No charging points",
     "bicycleMetrePerCapita": "Bicycle path metres per capita",
     "sectorEmissions": "Sector Emissions",
-    "sectorEmissionsYear": "Emissions by sector in {{year}}"
+    "sectorEmissionsYear": "Emissions by sector in {{year}}",
+    "filteredSectors": "Filtered Sectors"
   },
   "sector": {
     "energy": "Energy",
@@ -998,7 +999,11 @@
       "changeRateInfo": "Change rate of emissions since the Paris Agreement was signed in 2015.",
       "climatePlan": "Climate Plan",
       "noPlan": "No Plan",
-      "adopted": "Adopted {{year}}"
+      "adopted": "Adopted {{year}}",
+      "sectorChart": {
+        "clickToFilter": "Click to filter out",
+        "clickToShow": "Click to show"
+      }
     },
     "graph": {
       "noData": "No data available",

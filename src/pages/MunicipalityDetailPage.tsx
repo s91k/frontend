@@ -30,6 +30,9 @@ export function MunicipalityDetailPage() {
 
   const [sectorEmissions, setSectorEmissions] =
     useState<SectorEmissions | null>(null);
+  const [filteredSectors, setFilteredSectors] = useState<Set<string>>(
+    new Set(),
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -232,6 +235,8 @@ export function MunicipalityDetailPage() {
                 <MunicipalitySectorPieChart
                   sectorEmissions={sectorEmissions}
                   year={2023}
+                  filteredSectors={filteredSectors}
+                  onFilteredSectorsChange={setFilteredSectors}
                 />
                 {Object.keys(sectorEmissions.sectors[2023]).length > 0 && (
                   <MunicipalitySectorLegend
@@ -248,6 +253,8 @@ export function MunicipalityDetailPage() {
                       (sum, value) => sum + value,
                       0,
                     )}
+                    filteredSectors={filteredSectors}
+                    onFilteredSectorsChange={setFilteredSectors}
                   />
                 )}
               </div>

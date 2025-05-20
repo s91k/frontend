@@ -17,11 +17,15 @@ import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
 interface MunicipalitySectorPieChartProps {
   sectorEmissions: SectorEmissions;
   year: number;
+  filteredSectors?: Set<string>;
+  onFilteredSectorsChange?: (sectors: Set<string>) => void;
 }
 
 const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
   sectorEmissions,
   year,
+  filteredSectors = new Set(),
+  onFilteredSectorsChange,
 }) => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
@@ -41,7 +45,21 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
         SECTOR_COLORS[sector as keyof typeof SECTOR_COLORS] || "var(--grey)",
     }))
     .filter((item) => (item.value as number) > 0)
+    .filter((item) => !filteredSectors.has(item.name))
     .sort((a, b) => (b.value as number) - (a.value as number));
+
+  const handleSectorClick = (data: any) => {
+    if (onFilteredSectorsChange) {
+      const sectorName = data.name;
+      const newFiltered = new Set(filteredSectors);
+      if (newFiltered.has(sectorName)) {
+        newFiltered.delete(sectorName);
+      } else {
+        newFiltered.add(sectorName);
+      }
+      onFilteredSectorsChange(newFiltered);
+    }
+  };
 
   const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
     active,
@@ -65,6 +83,13 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
               {formatPercent(data.value / total, currentLanguage)}
             </span>
           </div>
+          <div className="text-xs text-grey mt-2">
+            {t(
+              `municipalities.sectorChart.${
+                filteredSectors.has(data.name) ? "clickToShow" : "clickToFilter"
+              }`,
+            )}
+          </div>
         </div>
       );
     }
@@ -85,6 +110,7 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
             outerRadius={size.outerRadius}
             cornerRadius={8}
             paddingAngle={2}
+            onClick={handleSectorClick}
           >
             {pieData.map((entry) => (
               <Cell

@@ -1089,6 +1089,10 @@
         },
         "rank": "Placering: {{rank}} av {{total}}"
       }
+    },
+    "sectorChart": {
+      "clickToFilter": "Klicka för att filtrera bort",
+      "clickToShow": "Klicka för att visa"
     }
   },
   "errorPage": {
