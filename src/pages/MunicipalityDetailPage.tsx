@@ -9,7 +9,7 @@ import { MunicipalityStatCard } from "@/components/municipalities/MunicipalitySt
 import { MunicipalityLinkCard } from "@/components/municipalities/MunicipalityLinkCard";
 import { useTranslation } from "react-i18next";
 import { PageSEO } from "@/components/SEO/PageSEO";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   formatEmissionsAbsolute,
   formatPercent,
@@ -17,6 +17,10 @@ import {
   localizeUnit,
 } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
+import { SectorEmissions } from "@/types/municipality";
+import MunicipalitySectorPieChart from "@/components/municipalities/MunicipalitySectorPieChart";
+import MunicipalitySectorLegend from "@/components/municipalities/MunicipalitySectorLegend";
+import { SECTOR_COLORS } from "@/constants/colors";
 
 export function MunicipalityDetailPage() {
   const { t } = useTranslation();
@@ -24,9 +28,21 @@ export function MunicipalityDetailPage() {
   const { municipality, loading, error } = useMunicipalityDetails(id || "");
   const { currentLanguage } = useLanguage();
 
+  const [sectorEmissions, setSectorEmissions] =
+    useState<SectorEmissions | null>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    if (id) {
+      fetch(`/api/municipalities/${id}/sector-emissions`)
+        .then((res) => res.json())
+        .then((data) => setSectorEmissions(data))
+        .catch((error) =>
+          console.error("Error fetching sector emissions:", error),
+        );
+    }
+  }, [id]);
 
   if (loading) return <Text>{t("municipalityDetailPage.loading")}</Text>;
   if (error) return <Text>{t("municipalityDetailPage.error")}</Text>;
@@ -194,9 +210,50 @@ export function MunicipalityDetailPage() {
             )}
           </div>
           <div className="mt-8 mr-8">
-            <MunicipalityEmissionsGraph projectedData={emissionsData} />
+            <MunicipalityEmissionsGraph
+              projectedData={emissionsData}
+              sectorEmissions={sectorEmissions || undefined}
+            />
           </div>
         </div>
+
+        {sectorEmissions?.sectors && sectorEmissions.sectors[2023] && (
+          <div className={cn("bg-black-2 rounded-level-1 py-8 md:py-16")}>
+            <div className="px-8 md:px-16">
+              <Text className="text-2xl md:text-4xl">
+                {t("municipalityDetailPage.sectorEmissions")}
+              </Text>
+              <Text className="text-grey">
+                {t("municipalityDetailPage.sectorEmissionsYear", {
+                  year: 2023,
+                })}
+              </Text>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <MunicipalitySectorPieChart
+                  sectorEmissions={sectorEmissions}
+                  year={2023}
+                />
+                {Object.keys(sectorEmissions.sectors[2023]).length > 0 && (
+                  <MunicipalitySectorLegend
+                    data={Object.entries(sectorEmissions.sectors[2023]).map(
+                      ([sector, value]) => ({
+                        name: sector,
+                        value,
+                        color:
+                          SECTOR_COLORS[sector as keyof typeof SECTOR_COLORS] ||
+                          "",
+                      }),
+                    )}
+                    total={Object.values(sectorEmissions.sectors[2023]).reduce(
+                      (sum, value) => sum + value,
+                      0,
+                    )}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         <MunicipalitySection
           title={t("municipalityDetailPage.futureEmissions")}

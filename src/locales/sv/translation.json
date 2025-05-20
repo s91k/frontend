@@ -718,7 +718,9 @@
     "electricCarChange": "Ökning av andel elbilar",
     "electricCarsPerChargePoint": "Elbilar per laddpunkt",
     "noChargePoints": "Saknar laddpunkter",
-    "bicycleMetrePerCapita": "Cykelvägsmeter per invånare"
+    "bicycleMetrePerCapita": "Cykelvägsmeter per invånare",
+    "sectorEmissions": "Sektorsutsläpp",
+    "sectorEmissionsYear": "Utsläpp per sektor år {{year}}"
   },
   "sector": {
     "energy": "Energi",
