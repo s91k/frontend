@@ -52,7 +52,7 @@ export const MunicipalitySectorTooltip: React.FC<
       </div>
       <div className="text-xs italic text-blue-2 mt-2">
         {t(
-          `municipalities.card.sectorChart.${
+          `municipalityDetailPage.sectorChart.${
             filteredSectors.has(data.name) ? "clickToShow" : "clickToFilter"
           }`,
         )}

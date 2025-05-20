@@ -721,6 +721,10 @@
     "bicycleMetrePerCapita": "Cykelvägsmeter per invånare",
     "sectorEmissions": "Utsläppskällor",
     "sectorEmissionsYear": "Utsläpp per sektor år {{year}}",
+    "sectorChart": {
+      "clickToFilter": "Klicka för att filtrera bort",
+      "clickToShow": "Klicka för att visa"
+    },
     "sectors": {
       "industry": "Industri (energi + processer)",
       "productUse": "Produktanvändning (inkl. lösningsmedel)",
@@ -1100,10 +1104,6 @@
         },
         "rank": "Placering: {{rank}} av {{total}}"
       }
-    },
-    "sectorChart": {
-      "clickToFilter": "Klicka för att filtrera bort",
-      "clickToShow": "Klicka för att visa"
     }
   },
   "errorPage": {

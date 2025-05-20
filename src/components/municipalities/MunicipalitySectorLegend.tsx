@@ -99,7 +99,7 @@ const MunicipalitySectorLegend: React.FC<LegendProps> = ({
 
               <TooltipContent className="bg-black-1 text-white">
                 {t(
-                  `municipalities.sectorChart.${
+                  `municipalityDetailPage.sectorChart.${
                     isFiltered ? "clickToShow" : "clickToFilter"
                   }`,
                 )}

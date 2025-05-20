@@ -722,6 +722,10 @@
     "sectorEmissions": "Emission sources",
     "sectorEmissionsYear": "Emissions by sector in {{year}}",
     "filteredSectors": "Filtered Sectors",
+    "sectorChart": {
+      "clickToFilter": "Click to filter out",
+      "clickToShow": "Click to show"
+    },
     "sectors": {
       "industry": "Industry (energy + processes)",
       "productUse": "Product use (incl. solvents)",
@@ -1010,11 +1014,7 @@
       "changeRateInfo": "Change rate of emissions since the Paris Agreement was signed in 2015.",
       "climatePlan": "Climate Plan",
       "noPlan": "No Plan",
-      "adopted": "Adopted {{year}}",
-      "sectorChart": {
-        "clickToFilter": "Click to filter out",
-        "clickToShow": "Click to show"
-      }
+      "adopted": "Adopted {{year}}"
     },
     "graph": {
       "noData": "No data available",
