@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   PieChart,
@@ -9,10 +9,12 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
-import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
+import { formatEmissionsAbsolute } from "@/utils/localizeUnit";
 import { SectorEmissions } from "@/types/municipality";
 import { SECTOR_COLORS } from "@/constants/colors";
 import { useResponsiveChartSize } from "@/hooks/useResponsiveChartSize";
+import { X } from "lucide-react";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 interface MunicipalitySectorPieChartProps {
   sectorEmissions: SectorEmissions;
@@ -38,10 +40,6 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
   const { size } = useResponsiveChartSize();
 
   const yearData = sectorEmissions.sectors[year] || {};
-  const total = Object.values(yearData).reduce<number>(
-    (sum, value) => sum + (value as number),
-    0,
-  );
 
   const pieData = Object.entries(yearData)
     .map(([sector, value]) => ({
@@ -71,10 +69,36 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
     active,
     payload,
   }) => {
+    const [closed, setClosed] = useState(false);
+    const { isMobile } = useScreenSize();
+
+    // Reset closed state when tooltip is re-activated or payload changes
+    useEffect(() => {
+      if (active) {
+        setClosed(false);
+      }
+    }, []);
+
+    if (!active || !payload || !payload.length || closed) {
+      return null;
+    }
+
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-black-1 px-4 py-3 rounded-level-2">
+        <div className="bg-black-2 border border-black-1 rounded-lg shadow-xl p-4 text-white">
+          <div className="flex justify-end items-center relative z-30">
+            {isMobile && (
+              <button
+                title="Close"
+                className="flex"
+                style={{ pointerEvents: "auto" }}
+                onClick={() => setClosed(true)}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
           <div className="text-sm font-medium mb-2">{data.name}</div>
           <div className="text-sm">
             <span className="text-grey mr-2">{t("emissions.total")}:</span>
@@ -83,13 +107,7 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
               {t("emissionsUnit")}
             </span>
           </div>
-          <div className="text-sm">
-            <span className="text-grey mr-2">{t("percentage")}:</span>
-            <span style={{ color: data.color }}>
-              {formatPercent(data.value / total, currentLanguage)}
-            </span>
-          </div>
-          <div className="text-xs text-grey mt-2">
+          <div className="text-xs italic text-blue-2 mt-2">
             {t(
               `municipalities.sectorChart.${
                 filteredSectors.has(data.name) ? "clickToShow" : "clickToFilter"
