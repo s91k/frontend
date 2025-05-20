@@ -9,12 +9,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+interface SectorData {
+  name: string;
+  value: number;
+  color: string;
+}
+
 interface LegendProps {
-  data: Array<{
-    name: string;
-    value: number;
-    color: string;
-  }>;
+  data: Array<SectorData>;
   total: number;
   filteredSectors?: Set<string>;
   onFilteredSectorsChange?: (sectors: Set<string>) => void;

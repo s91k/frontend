@@ -21,6 +21,12 @@ interface MunicipalitySectorPieChartProps {
   onFilteredSectorsChange?: (sectors: Set<string>) => void;
 }
 
+interface SectorData {
+  name: string;
+  value: number;
+  color: string;
+}
+
 const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
   sectorEmissions,
   year,
@@ -48,7 +54,7 @@ const MunicipalitySectorPieChart: React.FC<MunicipalitySectorPieChartProps> = ({
     .filter((item) => !filteredSectors.has(item.name))
     .sort((a, b) => (b.value as number) - (a.value as number));
 
-  const handleSectorClick = (data: any) => {
+  const handleSectorClick = (data: SectorData) => {
     if (onFilteredSectorsChange) {
       const sectorName = data.name;
       const newFiltered = new Set(filteredSectors);
