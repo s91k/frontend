@@ -12,6 +12,8 @@ import { mapCompanyEditFormToRequestBody } from "@/lib/company-edit";
 import { updateReportingPeriods } from "@/lib/api";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
+import { CompanyAuthExpiredModal } from "@/components/companies/edit/CompanyAuthExpiredModal";
 
 export function CompanyEditPage() {
   const { t } = useTranslation();
@@ -24,6 +26,8 @@ export function CompanyEditPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const { showToast } = useToast();
+  const { login } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const selectedPeriods =
     company !== undefined
@@ -89,6 +93,10 @@ export function CompanyEditPage() {
     setFormData(updateFormData);
   };
 
+  const onInputChange = (name: string, value: string) => {
+    handleInputChange(name, value, value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsUpdating(true);
     event.preventDefault();
@@ -114,18 +122,32 @@ export function CompanyEditPage() {
       }
     }
     if (id !== undefined) {
-      await updateReportingPeriods(
-        id,
-        mapCompanyEditFormToRequestBody(selectedPeriods, formData),
-      );
-      await refetch();
-      setSelectedYears(selectedYears);
-      setFormData(new Map());
+      try {
+        await updateReportingPeriods(
+          id,
+          mapCompanyEditFormToRequestBody(selectedPeriods, formData),
+        );
+        await refetch();
+        setSelectedYears(selectedYears);
+        setFormData(new Map());
+        showToast(
+          t("companyEditPage.success.title"),
+          t("companyEditPage.success.description"),
+        );
+      } catch (error: any) {
+        if (error?.status === 401) {
+          setShowAuthModal(true);
+        } else {
+          showToast(
+            t("companyEditPage.error.couldNotSave"),
+            t("companyEditPage.error.tryAgainLater"),
+          );
+        }
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
       setIsUpdating(false);
-      showToast(
-        t("companyEditPage.success.title"),
-        t("companyEditPage.success.description"),
-      );
     }
   };
 
@@ -151,23 +173,23 @@ export function CompanyEditPage() {
           <form onSubmit={handleSubmit} ref={formRef}>
             <CompanyEditPeriod
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
               resetPeriod={resetPeriod}
             ></CompanyEditPeriod>
             <CompanyEditScope1
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope1>
             <CompanyEditScope2
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope2>
             <CompanyEditScope3
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope3>
             <div className="w-full ps-4 pe-2 mt-6">
@@ -194,6 +216,11 @@ export function CompanyEditPage() {
           </form>
         )}
       </div>
+      <CompanyAuthExpiredModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onLogin={login}
+      />
     </div>
   );
 }

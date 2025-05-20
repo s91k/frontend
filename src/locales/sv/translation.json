@@ -1133,6 +1133,12 @@
       "description": "Du har osparade ändringar. Är du säker på att du vill lämna?",
       "cancel": "Avbryt",
       "discard": "Kasta ändringar"
+    },
+    "authExpired": {
+      "title": "Sessionen har gått ut",
+      "message": "Din session har gått ut. Logga in igen för att fortsätta redigera.",
+      "cancel": "Avbryt",
+      "login": "Logga in"
     }
   },
   "authCallbackPage": {
