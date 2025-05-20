@@ -44,7 +44,7 @@ export default function ChartHeader({
                 <TooltipTrigger>
                   <Info className="w-4 h-4 text-grey" />
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className="max-w-96">
                   <p>{tooltipContent}</p>
                 </TooltipContent>
               </UITooltip>
