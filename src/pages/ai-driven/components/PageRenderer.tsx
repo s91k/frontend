@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentConfig } from "../mocks/aiResponseMock";
 import { TextSection } from "./TextSection";
 import { ImageSection } from "./ImageSection";
@@ -35,7 +34,10 @@ export function PageRenderer({ components }: PageRendererProps) {
             return <DonutChart key={index} data={component.props.data} />;
           default:
             return (
-              <div key={index} className="p-4 bg-black-2 rounded-level-2 text-grey">
+              <div
+                key={index}
+                className="p-4 bg-black-2 rounded-level-2 text-grey"
+              >
                 Unknown component type: {component.type}
               </div>
             );

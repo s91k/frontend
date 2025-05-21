@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -8,15 +6,33 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { AIResponseType, aiResponseMock } from "../mocks/aiResponseMock";
-import { CommandLoading } from "cmdk";
-import { TvIcon } from "lucide-react";
+import { useCompanies } from "@/hooks/companies/useCompanies";
+import { useMunicipalities } from "@/hooks/useMunicipalities";
+import { useEffect, useState } from "react";
+import { aiResponseMock } from "../mocks/aiResponseMock";
 
 interface AICommandPaletteProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSelectResponse: (response: AIResponseType) => void;
+  onSelectResponse: (response: AICommandResult) => void;
 }
+
+type ResultType = {
+  companies: { type: "story"; name: string; wikidataId: string }[];
+  municipalities: { type: "municipality"; name: string }[];
+  aiStories: { type: "aiStory"; suggestion: string; id: string }[];
+};
+
+export type AICommandResult =
+  | { type: "story"; name: string; wikidataId: string }
+  | { type: "municipality"; name: string }
+  | { type: "aiStory"; suggestion: string; id: string };
+
+const emptyResult = {
+  companies: [],
+  municipalities: [],
+  aiStories: [],
+};
 
 export function AICommandPalette({
   open,
@@ -24,49 +40,76 @@ export function AICommandPalette({
   onSelectResponse,
 }: AICommandPaletteProps) {
   const [inputValue, setInputValue] = useState("");
+  const [results, setResults] = useState<ResultType>(emptyResult);
+
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<AIResponseType[]>([]);
+  const { companies: allCompanies } = useCompanies();
+  const { municipalities: allMunicipalities } = useMunicipalities();
 
   useEffect(() => {
     if (open) {
       console.log("Open changed");
       setInputValue("");
-      setResults([]);
+      setResults(emptyResult);
     }
   }, [open]);
 
-  console.log("Result:", results);
   const handleInputChange = (value: string) => {
     setInputValue(value);
 
     if (value.length > 2) {
-      setLoading(true);
+      setLoading(loading);
 
       // Simulate API call with a delay
       setTimeout(() => {
-        // Filter mock results based on input
-        const filteredResults = aiResponseMock.filter(
-          (item) =>
-            item.title.toLowerCase().includes(value.toLowerCase()) ||
-            item.description.toLowerCase().includes(value.toLowerCase()),
-        );
+        const lcInput = value.toLowerCase();
 
-        setResults(filteredResults);
+        const companies = allCompanies
+          .filter((company) => company.name.toLowerCase().includes(lcInput))
+          .map((c) => ({
+            type: "story" as const,
+            name: c.name,
+            wikidataId: c.wikidataId,
+          }));
+
+        const municipalities = allMunicipalities
+          .filter((municipality) =>
+            municipality.name.toLowerCase().includes(lcInput),
+          )
+          .map((m) => ({
+            type: "municipality" as const,
+            name: m.name,
+          }));
+
+        const aiStories = aiResponseMock
+          .filter(
+            (item) =>
+              item.title.toLowerCase().includes(lcInput) ||
+              item.description.toLowerCase().includes(lcInput),
+          )
+          .map((story) => ({
+            type: "aiStory" as const,
+            suggestion: story.title,
+            id: story.id,
+          }));
+
+        const r = {
+          companies,
+          municipalities,
+          aiStories,
+        };
+
+        console.log("Result:", r, "companies:", allCompanies, lcInput);
+
+        setResults(r);
+
         setLoading(false);
       }, 500);
     } else {
-      setResults([]);
+      setResults(emptyResult);
     }
   };
 
-  console.log(
-    "COmmand list with",
-    results.length,
-    "items. Open:",
-    open,
-    ", loading:",
-    loading,
-  );
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput
@@ -75,7 +118,6 @@ export function AICommandPalette({
         onValueChange={handleInputChange}
       />
       <CommandList>
-        {loading && <CommandLoading></CommandLoading>}
         <CommandEmpty>
           {loading ? (
             <div className="py-6 text-center flex items-center justify-center">
@@ -104,17 +146,46 @@ export function AICommandPalette({
           )}
         </CommandEmpty>
 
-        {results.map((item) => (
-          <CommandItem
-            key={item.id}
-            onSelect={() => {
-              onSelectResponse(item);
-              setOpen(false);
-            }}
-          >
-            {item.title}
-          </CommandItem>
-        ))}
+        <CommandGroup heading="Companies">
+          {results.companies.map((item) => (
+            <CommandItem
+              key={item.wikidataId}
+              onSelect={() => {
+                onSelectResponse(item);
+                setOpen(false);
+              }}
+            >
+              {item.name}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+
+        <CommandGroup heading="Municipalities">
+          {results.municipalities.map((item) => (
+            <CommandItem
+              key={item.name}
+              onSelect={() => {
+                onSelectResponse(item);
+                setOpen(false);
+              }}
+            >
+              {item.name}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        <CommandGroup heading="Stories">
+          {results.aiStories.map((item) => (
+            <CommandItem
+              key={item.id}
+              onSelect={() => {
+                onSelectResponse(item);
+                setOpen(false);
+              }}
+            >
+              {item.suggestion}
+            </CommandItem>
+          ))}
+        </CommandGroup>
       </CommandList>
     </CommandDialog>
   );

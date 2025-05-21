@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 interface TextSectionProps {
   title: string;
+  introText?: string;
   content: string;
   imageSrc?: string;
   imagePosition?: "left" | "right";
@@ -10,6 +11,7 @@ interface TextSectionProps {
 
 export function TextSection({
   title,
+  introText,
   content,
   imageSrc,
   imagePosition = "right",
@@ -26,6 +28,7 @@ export function TextSection({
   return (
     <div className="mb-8">
       <h2 className="text-xl md:text-2xl font-medium text-white mb-4">{title}</h2>
+      {introText && <p className="text-gray-400 mb-4">{introText}</p>}
       <div
         className={`flex flex-col ${
           imageSrc ? "md:flex-row" : ""

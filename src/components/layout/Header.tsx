@@ -1,5 +1,12 @@
-import { BarChart3, ChevronDown, Menu, X, Mail } from "lucide-react";
-import { Link, useLocation, matchPath } from "react-router-dom";
+import {
+  BarChart3,
+  ChevronDown,
+  Menu,
+  X,
+  Mail,
+  SearchIcon,
+} from "lucide-react";
+import { Link, useLocation, matchPath, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,6 +21,10 @@ import {
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
 import { AiIcon } from "../ui/ai-icon";
+import {
+  AICommandPalette,
+  AICommandResult,
+} from "@/pages/ai-driven/components/AICommandPalette";
 
 export function Header() {
   const { t } = useTranslation();
@@ -22,6 +33,37 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+  const [commandOpen, setCommandOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Open command palette with CMD+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setCommandOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleSelectResponse = (response: AICommandResult) => {
+    console.log("Selected:", response);
+
+    switch (response.type) {
+      case "story":
+        navigate(`/companies/${response.wikidataId}`);
+        return;
+      case "municipality":
+        navigate(`/municipalities/${response.name}`);
+        return;
+      case "aiStory":
+        navigate(`/ai-driven/${response.id}`);
+        return;
+    }
+  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -117,152 +159,175 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed w-screen overflow-x-hidden overflow-y-hidden top-0 left-0 right-0 z-50 bg-black-2 h-10 lg:h-12">
-      <div className="container mx-auto px-4 flex items-center justify-between pt-2 lg:pt-0">
-        <Link to="/" className="flex items-center gap-2 text-base font-medium">
-          Klimatkollen
-        </Link>
+    <>
+      <header className="fixed w-screen overflow-x-hidden overflow-y-hidden top-0 left-0 right-0 z-50 bg-black-2 h-10 lg:h-12">
+        <div className="container mx-auto px-4 flex items-center justify-between pt-2 lg:pt-0">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-base font-medium"
+          >
+            Klimatkollen
+          </Link>
 
-        <button
-          className="lg:hidden text-white"
-          onClick={toggleMenu}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-        >
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          <button
+            className="lg:hidden text-white"
+            onClick={toggleMenu}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            {menuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 ml-auto">
-          <Menubar className="border-none bg-transparent h-full">
-            {NAV_LINKS.map((item) =>
-              item.sublinks ? (
-                <MenubarMenu key={item.label}>
-                  <MenubarTrigger
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-6 ml-auto">
+            <Menubar className="border-none bg-transparent h-full">
+              <button
+                onClick={() => setCommandOpen(true)}
+                className="px-2 py-1 bg-black-1 min-w-36 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <SearchIcon />
+                <span className="text-xs text-grey/60 border border-grey/20 rounded px-1">
+                  ⌘K
+                </span>
+              </button>
+              {NAV_LINKS.map((item) =>
+                item.sublinks ? (
+                  <MenubarMenu key={item.label}>
+                    <MenubarTrigger
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-3 h-full transition-all text-sm cursor-pointer",
+                        location.pathname.startsWith(item.path)
+                          ? "bg-black-1 text-white"
+                          : "text-grey hover:text-white",
+                      )}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </MenubarTrigger>
+                    <MenubarContent>
+                      {item.sublinks.map((sublink) => (
+                        <MenubarItem key={sublink.path}>
+                          {sublink.path.startsWith("https://") ? (
+                            <a
+                              href={sublink.path}
+                              className="flex justify-between w-full"
+                              target="_blank"
+                              key={sublink.path}
+                            >
+                              {sublink.label}
+                            </a>
+                          ) : (
+                            <Link
+                              to={sublink.path}
+                              className="flex justify-between w-full"
+                            >
+                              {sublink.label}
+                              {sublink.shortcut && (
+                                <MenubarShortcut>
+                                  {sublink.shortcut}
+                                </MenubarShortcut>
+                              )}
+                            </Link>
+                          )}
+                        </MenubarItem>
+                      ))}
+                    </MenubarContent>
+                  </MenubarMenu>
+                ) : (
+                  <Link
+                    key={item.path}
+                    to={item.path}
                     className={cn(
-                      "flex items-center gap-2 px-3 py-3 h-full transition-all text-sm cursor-pointer",
-                      location.pathname.startsWith(item.path)
+                      "flex items-center gap-2 px-3 py-3 h-full text-sm",
+                      matchPath(item.path, location.pathname)
                         ? "bg-black-1 text-white"
                         : "text-grey hover:text-white",
                     )}
                   >
                     {item.icon}
                     <span>{item.label}</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </MenubarTrigger>
-                  <MenubarContent>
-                    {item.sublinks.map((sublink) => (
-                      <MenubarItem key={sublink.path}>
-                        {sublink.path.startsWith("https://") ? (
-                          <a
-                            href={sublink.path}
-                            className="flex justify-between w-full"
-                            target="_blank"
-                            key={sublink.path}
-                          >
-                            {sublink.label}
-                          </a>
-                        ) : (
-                          <Link
-                            to={sublink.path}
-                            className="flex justify-between w-full"
-                          >
-                            {sublink.label}
-                            {sublink.shortcut && (
-                              <MenubarShortcut>
-                                {sublink.shortcut}
-                              </MenubarShortcut>
-                            )}
-                          </Link>
-                        )}
-                      </MenubarItem>
-                    ))}
-                  </MenubarContent>
-                </MenubarMenu>
-              ) : (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-3 h-full text-sm",
-                    matchPath(item.path, location.pathname)
-                      ? "bg-black-1 text-white"
-                      : "text-grey hover:text-white",
-                  )}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </Link>
-              ),
-            )}
-            <div className="ml-4 h-full flex items-center">
-              <LanguageButtons className={"hidden md:flex mx-4 "} />
-              <NewsletterPopover
-                isOpen={isSignUpOpen}
-                onOpenChange={setIsSignUpOpen}
-                buttonText={t("header.newsletter")}
-              />
-            </div>
-          </Menubar>
-        </nav>
-
-        {/* Mobile Fullscreen Menu */}
-        {menuOpen && (
-          <div className="fixed inset-0 w-full h-full z-100 flex p-8 mt-10 bg-black-2">
-            <div className="flex flex-col gap-6 text-lg">
-              <LanguageButtons />
-              {NAV_LINKS.map((link) => (
-                <div key={link.path} className="flex flex-col">
-                  <Link
-                    to={link.path}
-                    onClick={toggleMenu}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    {link.icon}
-                    {link.label}
                   </Link>
-                  {link.sublinks && (
-                    <div className="flex flex-col gap-2 pl-4 mt-2">
-                      {link.sublinks.map((sublink) =>
-                        sublink.path.startsWith("https://") ? (
-                          <a
-                            href={sublink.path}
-                            className="flex items-center gap-2 text-sm text-gray-400"
-                            target="_blank"
-                            key={sublink.path}
-                            onClick={toggleMenu}
-                          >
-                            {sublink.label}
-                          </a>
-                        ) : (
-                          <Link
-                            key={sublink.path}
-                            to={sublink.path}
-                            onClick={toggleMenu}
-                            className="flex items-center gap-2 text-sm text-gray-400"
-                          >
-                            {sublink.label}
-                          </Link>
-                        ),
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-              {/* Newsletter button in mobile menu */}
-              <button
-                onClick={() => {
-                  setMenuOpen(false); // Close the menu
-                  setIsSignUpOpen(true); // Open the newsletter popover
-                }}
-                className="flex items-center gap-2 text-blue-3"
-              >
-                <Mail className="w-4 h-4" />
-                {t("header.newsletter")}
-              </button>
+                ),
+              )}
+              <div className="ml-4 h-full flex items-center">
+                <LanguageButtons className={"hidden md:flex mx-4 "} />
+                <NewsletterPopover
+                  isOpen={isSignUpOpen}
+                  onOpenChange={setIsSignUpOpen}
+                  buttonText={t("header.newsletter")}
+                />
+              </div>
+            </Menubar>
+          </nav>
+
+          {/* Mobile Fullscreen Menu */}
+          {menuOpen && (
+            <div className="fixed inset-0 w-full h-full z-100 flex p-8 mt-10 bg-black-2">
+              <div className="flex flex-col gap-6 text-lg">
+                <LanguageButtons />
+                {NAV_LINKS.map((link) => (
+                  <div key={link.path} className="flex flex-col">
+                    <Link
+                      to={link.path}
+                      onClick={toggleMenu}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      {link.icon}
+                      {link.label}
+                    </Link>
+                    {link.sublinks && (
+                      <div className="flex flex-col gap-2 pl-4 mt-2">
+                        {link.sublinks.map((sublink) =>
+                          sublink.path.startsWith("https://") ? (
+                            <a
+                              href={sublink.path}
+                              className="flex items-center gap-2 text-sm text-gray-400"
+                              target="_blank"
+                              key={sublink.path}
+                              onClick={toggleMenu}
+                            >
+                              {sublink.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={sublink.path}
+                              to={sublink.path}
+                              onClick={toggleMenu}
+                              className="flex items-center gap-2 text-sm text-gray-400"
+                            >
+                              {sublink.label}
+                            </Link>
+                          ),
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {/* Newsletter button in mobile menu */}
+                <button
+                  onClick={() => {
+                    setMenuOpen(false); // Close the menu
+                    setIsSignUpOpen(true); // Open the newsletter popover
+                  }}
+                  className="flex items-center gap-2 text-blue-3"
+                >
+                  <Mail className="w-4 h-4" />
+                  {t("header.newsletter")}
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </header>
+          )}
+        </div>
+      </header>
+      <AICommandPalette
+        open={commandOpen}
+        setOpen={setCommandOpen}
+        onSelectResponse={handleSelectResponse}
+      />
+    </>
   );
 }

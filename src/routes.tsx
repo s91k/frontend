@@ -45,7 +45,7 @@ export function AppRoutes() {
       <Route path={`${basePath}/`} element={<LandingPage />} />
 
       {/* Companies routes */}
-      <Route path={`${basePath}/ai-driven`} element={<AIDriven />} />
+      <Route path={`${basePath}/ai-driven/:id`} element={<AIDriven />} />
       <Route path={`${basePath}/companies`} element={<CompaniesPage />} />
       <Route
         path={`${basePath}/companies/:id`}
