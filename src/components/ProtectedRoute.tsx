@@ -1,12 +1,27 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
+import { CompanyAuthExpiredModal } from "@/components/companies/edit/CompanyAuthExpiredModal";
 
 const ProtectedRoute = () => {
-  const { token } = useAuth();
-  if (token) {
-    return <Outlet />;
+  const { token, login } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(!token);
+
+  useEffect(() => {
+    setShowAuthModal(!token);
+  }, [token]);
+
+  if (!token || showAuthModal) {
+    return (
+      <CompanyAuthExpiredModal
+        isOpen={true}
+        onClose={() => setShowAuthModal(false)}
+        onLogin={login}
+      />
+    );
   }
-  return <Navigate to={"/403"} replace />;
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -12,8 +12,6 @@ import { mapCompanyEditFormToRequestBody } from "@/lib/company-edit";
 import { updateReportingPeriods } from "@/lib/api";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "@/contexts/AuthContext";
-import { CompanyAuthExpiredModal } from "@/components/companies/edit/CompanyAuthExpiredModal";
 
 export function CompanyEditPage() {
   const { t } = useTranslation();
@@ -26,17 +24,6 @@ export function CompanyEditPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const { showToast } = useToast();
-  const { login, token } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // Show login modal if not authenticated
-  useEffect(() => {
-    if (!token) {
-      setShowAuthModal(true);
-    } else {
-      setShowAuthModal(false);
-    }
-  }, [token]);
 
   const selectedPeriods =
     company !== undefined
@@ -66,7 +53,13 @@ export function CompanyEditPage() {
     );
   }
 
-  if (error) {
+  if (
+    error &&
+    !(
+      typeof (error as any).status === "number" &&
+      ((error as any).status === 401 || (error as any).status === 403)
+    )
+  ) {
     return (
       <div className="text-center py-24">
         <Text variant="h3" className="text-red-500 mb-4">
@@ -147,14 +140,10 @@ export function CompanyEditPage() {
           t("companyEditPage.success.description"),
         );
       } catch (error: any) {
-        if (error?.status === 401) {
-          setShowAuthModal(true);
-        } else {
-          showToast(
-            t("companyEditPage.error.couldNotSave"),
-            t("companyEditPage.error.tryAgainLater"),
-          );
-        }
+        showToast(
+          t("companyEditPage.error.couldNotSave"),
+          t("companyEditPage.error.tryAgainLater"),
+        );
       } finally {
         setIsUpdating(false);
       }
@@ -172,16 +161,6 @@ export function CompanyEditPage() {
     }
     setFormData(updatedFormData);
   };
-
-  if (!token) {
-    return (
-      <CompanyAuthExpiredModal
-        isOpen={showAuthModal}
-        onClose={() => {}}
-        onLogin={login}
-      />
-    );
-  }
 
   return (
     <div className="space-y-16 max-w-[1400px] mx-auto">
@@ -238,11 +217,6 @@ export function CompanyEditPage() {
           </form>
         )}
       </div>
-      <CompanyAuthExpiredModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onLogin={login}
-      />
     </div>
   );
 }
