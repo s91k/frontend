@@ -14,7 +14,7 @@ export interface AIResponseType {
 export const aiResponseMock: AIResponseType[] = [
   {
     id: "corporate-emissions-report",
-    title: "Corporate Carbon Footprints",
+    title: "Explore the worlds larget carbon emitters",
     description:
       "Analysis of the world's largest corporate greenhouse gas emitters and their climate commitments",
     iconSrc: "/src/pages/ai-driven/assets/co2-emissions.svg",
@@ -94,7 +94,7 @@ export const aiResponseMock: AIResponseType[] = [
             {
               key: "actual",
               name: "Actual Emissions (Top 100 Companies, Index)",
-              color: "red.3",
+              color: "blue.3",
             },
           ],
         },

@@ -27,7 +27,6 @@ export function TextSection({
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl md:text-2xl font-medium text-white mb-4">{title}</h2>
       {introText && <p className="text-gray-400 mb-4">{introText}</p>}
       <div
         className={`flex flex-col ${

@@ -9,6 +9,32 @@ interface PageRendererProps {
   components: ComponentConfig[];
 }
 
+type RenderComponentProps = {
+  index: number;
+  component: ComponentConfig;
+};
+
+const RenderComponent = ({ index, component }: RenderComponentProps) => {
+  switch (component.type) {
+    case "text":
+      return <TextSection key={index} {...component.props} />;
+    case "image":
+      return <ImageSection key={index} {...component.props} />;
+    case "linechart":
+      return <LineChart key={index} {...component.props} />;
+    case "barchart":
+      return <BarChart key={index} data={component.props.data} />;
+    case "piechart":
+      return <DonutChart key={index} data={component.props.data} />;
+    default:
+      return (
+        <div key={index} className="p-4 bg-black-2 rounded-level-2 text-grey">
+          Unknown component type: {component.type}
+        </div>
+      );
+  }
+};
+
 export function PageRenderer({ components }: PageRendererProps) {
   if (!components || components.length === 0) {
     return (
@@ -20,29 +46,14 @@ export function PageRenderer({ components }: PageRendererProps) {
 
   return (
     <div className="space-y-8">
-      {components.map((component, index) => {
-        switch (component.type) {
-          case "text":
-            return <TextSection key={index} {...component.props} />;
-          case "image":
-            return <ImageSection key={index} {...component.props} />;
-          case "linechart":
-            return <LineChart key={index} {...component.props} />;
-          case "barchart":
-            return <BarChart key={index} data={component.props.data} />;
-          case "piechart":
-            return <DonutChart key={index} data={component.props.data} />;
-          default:
-            return (
-              <div
-                key={index}
-                className="p-4 bg-black-2 rounded-level-2 text-grey"
-              >
-                Unknown component type: {component.type}
-              </div>
-            );
-        }
-      })}
+      {components.map((component, index) => (
+        <section className="mt-8">
+          <h2 className="text-xl md:text-2xl font-medium text-white mb-4">
+            {component.props.title}
+          </h2>
+          <RenderComponent index={index} component={component} />
+        </section>
+      ))}
     </div>
   );
 }
