@@ -9,7 +9,12 @@ export interface CompanyEditInputFieldProps {
   name: string;
   displayAddition: "verification" | "topBracket" | "bottomBracket" | "none";
   verified?: boolean;
-  onInputChange: (name: string, value: string) => void;
+  originalVerified?: boolean;
+  onInputChange: (
+    name: string,
+    value: string,
+    originalVerified?: boolean,
+  ) => void;
   formData: Map<string, string>;
 }
 
@@ -19,6 +24,7 @@ export function CompanyEditInputField({
   name,
   displayAddition = "verification",
   verified,
+  originalVerified,
   onInputChange,
   formData,
 }: CompanyEditInputFieldProps) {
@@ -27,10 +33,14 @@ export function CompanyEditInputField({
   };
 
   const handleCheckboxChange = (event: boolean) => {
-    onInputChange(name + "-checkbox", String(event));
+    onInputChange(name + "-checkbox", String(event), originalVerified);
   };
-  const currentValue = formData.get(name) ?? value;
-  const currentVerified = formData.get(name + "-checkbox") ? true : verified;
+  const currentValue = formData.has(name) ? formData.get(name) : value;
+  const currentVerified = formData.has(name + "-checkbox")
+    ? formData.get(name + "-checkbox") === "true"
+    : verified;
+
+  const isDisabled = verified === true;
 
   const topBracket = (
     <svg
@@ -68,7 +78,6 @@ export function CompanyEditInputField({
         onChange={handleChange}
         className={`w-[150px] align-right bg-black-1 border ${currentValue != value ? "border-orange-600" : ""}`}
         value={currentValue}
-        defaultValue={currentValue}
         placeholder={String(value)}
       ></Input>
       {displayAddition === "verification" && (
@@ -78,6 +87,7 @@ export function CompanyEditInputField({
           checked={currentVerified}
           name={name + "-checkbox"}
           onCheckedChange={handleCheckboxChange}
+          disabled={isDisabled}
         />
       )}
       {displayAddition === "topBracket" && topBracket}

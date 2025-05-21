@@ -50,6 +50,7 @@ export function CompanyEditScope2({
             key={`scope-2-lb-${period.id}`}
             displayAddition="verification"
             verified={!!period.emissions?.scope2?.metadata?.verifiedBy}
+            originalVerified={!!period.emissions?.scope2?.metadata?.verifiedBy}
             value={period.emissions?.scope2?.lb ?? ""}
             onInputChange={onInputChange}
             formData={formData}

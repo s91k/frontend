@@ -81,6 +81,10 @@ export function CompanyEditScope3({
               !!period.emissions?.scope3?.statedTotalEmissions?.metadata
                 ?.verifiedBy
             }
+            originalVerified={
+              !!period.emissions?.scope3?.statedTotalEmissions?.metadata
+                ?.verifiedBy
+            }
             value={period.emissions?.scope3?.statedTotalEmissions?.total ?? ""}
             onInputChange={onInputChange}
             formData={formData}
@@ -100,6 +104,10 @@ export function CompanyEditScope3({
               key={`scope-3-${period.id}-${categoryId}`}
               displayAddition="verification"
               verified={getCategoryVerified(
+                categoryId - 1,
+                period.emissions?.scope3?.categories,
+              )}
+              originalVerified={getCategoryVerified(
                 categoryId - 1,
                 period.emissions?.scope3?.categories,
               )}

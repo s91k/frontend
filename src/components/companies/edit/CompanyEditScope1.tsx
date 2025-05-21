@@ -23,6 +23,7 @@ export function CompanyEditScope1({
           displayAddition="verification"
           value={period.emissions?.scope1?.total ?? ""}
           verified={!!period.emissions?.scope1?.metadata?.verifiedBy}
+          originalVerified={!!period.emissions?.scope1?.metadata?.verifiedBy}
           onInputChange={onInputChange}
           formData={formData}
         />

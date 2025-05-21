@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useCompanyDetails } from "@/hooks/companies/useCompanyDetails";
 import { Text } from "@/components/ui/text";
 import { CompanyEditHeader } from "@/components/companies/edit/CompanyEditHeader";
@@ -26,8 +26,17 @@ export function CompanyEditPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const { showToast } = useToast();
-  const { login } = useAuth();
+  const { login, token } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // Show login modal if not authenticated
+  useEffect(() => {
+    if (!token) {
+      setShowAuthModal(true);
+    } else {
+      setShowAuthModal(false);
+    }
+  }, [token]);
 
   const selectedPeriods =
     company !== undefined
@@ -79,23 +88,26 @@ export function CompanyEditPage() {
     );
   }
 
-  const handleInputChange = async (
+  const handleInputChange = (
     name: string,
     value: string,
-    originalValue: string,
+    originalVerified?: boolean,
   ) => {
     const updateFormData = new Map(formData);
-    if (value != originalValue) {
-      updateFormData.set(name, value);
+    // Checkbox logic: only track if changed from false to true
+    if (name.endsWith("-checkbox") && originalVerified === false) {
+      if (value === "true") {
+        updateFormData.set(name, value);
+      } else {
+        updateFormData.delete(name);
+      }
     } else {
-      updateFormData.delete(name);
+      updateFormData.set(name, value);
     }
     setFormData(updateFormData);
   };
 
-  const onInputChange = (name: string, value: string) => {
-    handleInputChange(name, value, value);
-  };
+  const onInputChange = handleInputChange;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsUpdating(true);
@@ -160,6 +172,16 @@ export function CompanyEditPage() {
     }
     setFormData(updatedFormData);
   };
+
+  if (!token) {
+    return (
+      <CompanyAuthExpiredModal
+        isOpen={showAuthModal}
+        onClose={() => {}}
+        onLogin={login}
+      />
+    );
+  }
 
   return (
     <div className="space-y-16 max-w-[1400px] mx-auto">

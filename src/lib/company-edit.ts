@@ -95,7 +95,10 @@ export function mapCompanyEditFormToRequestBody(
           "true",
       };
     }
-    periodsUpdate.push(periodUpdate);
+    // Only add emissions if not empty
+    if (Object.keys(periodUpdate.emissions).length > 0) {
+      periodsUpdate.push(periodUpdate);
+    }
   }
   const metadata: {
     comment?: string;
