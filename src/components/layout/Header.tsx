@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/menubar";
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
+import { AiIcon } from "../ui/ai-icon";
 
 export function Header() {
   const { t } = useTranslation();
@@ -59,6 +60,11 @@ export function Header() {
   }
 
   const NAV_LINKS: NavLink[] = [
+    {
+      label: "AI Driven",
+      icon: <AiIcon className="w-4 h-4" aria-hidden="true" />,
+      path: `${currentLanguage}/ai-driven`,
+    },
     {
       label: t("header.companies"),
       icon: <BarChart3 className="w-4 h-4" aria-hidden="true" />,
