@@ -121,6 +121,7 @@ export function CompanyYearHeaderField({
         <Undo2
           onClick={handleClick}
           className="text-grey hover:text-white"
+          data-testid="undo"
         ></Undo2>
       </span>
     </div>
