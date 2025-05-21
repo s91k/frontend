@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { CompanyAuthExpiredModal } from "@/components/companies/edit/CompanyAuthExpiredModal";
+import { AuthExpiredModal } from "@/components/companies/edit/AuthExpiredModal";
 
 const ProtectedRoute = () => {
   const { token, login } = useAuth();
@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
 
   if (!token || showAuthModal) {
     return (
-      <CompanyAuthExpiredModal
+      <AuthExpiredModal
         isOpen={true}
         onClose={() => setShowAuthModal(false)}
         onLogin={login}

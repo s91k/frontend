@@ -6,7 +6,7 @@ import { CompanyEditScope3 } from "../CompanyEditScope3";
 import { CompanyEditPeriod } from "../CompanyEditPeriod";
 import { CompanyEditHeader } from "../CompanyEditHeader";
 import { CompanyEditRow } from "../CompanyEditRow";
-import { CompanyAuthExpiredModal } from "../CompanyAuthExpiredModal";
+import { AuthExpiredModal } from "../AuthExpiredModal";
 import { vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
@@ -153,7 +153,7 @@ describe("Editor Logic Integration", () => {
     const onClose = vi.fn();
     const onLogin = vi.fn();
     render(
-      <CompanyAuthExpiredModal
+      <AuthExpiredModal
         isOpen={true}
         onClose={onClose}
         onLogin={onLogin}
@@ -242,9 +242,9 @@ describe("Editor Logic Integration", () => {
     expect(onInputChange).toHaveBeenCalledTimes(3);
   });
 
-  it("CompanyAuthExpiredModal: shows correct message when open", () => {
+  it("AuthExpiredModal: shows correct message when open", () => {
     render(
-      <CompanyAuthExpiredModal
+      <AuthExpiredModal
         isOpen={true}
         onClose={vi.fn()}
         onLogin={vi.fn()}
@@ -258,7 +258,7 @@ describe("Editor Logic Integration", () => {
   // Simulate the logic for indicating the user is logged out (auth modal open)
   it("Indicates user is logged out by showing auth modal", () => {
     render(
-      <CompanyAuthExpiredModal
+      <AuthExpiredModal
         isOpen={true}
         onClose={vi.fn()}
         onLogin={vi.fn()}

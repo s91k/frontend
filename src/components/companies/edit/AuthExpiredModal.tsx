@@ -6,17 +6,17 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-interface CompanyAuthExpiredModalProps {
+interface AuthExpiredModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLogin: () => void;
 }
 
-export function CompanyAuthExpiredModal({
+export function AuthExpiredModal({
   isOpen,
   onClose,
   onLogin,
-}: CompanyAuthExpiredModalProps) {
+}: AuthExpiredModalProps) {
   const { t } = useTranslation();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
