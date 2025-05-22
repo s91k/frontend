@@ -82,7 +82,6 @@ describe("mapCompanyEditFormToRequestBody", () => {
     expect(result.reportingPeriods[0].emissions.scope3.categories[0]).toEqual({
       category: 1,
       total: 123,
-      verified: false,
     });
   });
 
