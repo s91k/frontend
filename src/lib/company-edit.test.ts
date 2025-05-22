@@ -106,4 +106,70 @@ describe("mapCompanyEditFormToRequestBody", () => {
     expect(result.reportingPeriods.length).toBe(0);
     expect(result.metadata.comment).toBe("hello");
   });
+
+  it("should only send verified for existing value if only verified is changed", () => {
+    const formData = new Map([["scope-3-1-1-checkbox", "true"]]);
+    const result = mapCompanyEditFormToRequestBody([basePeriod], formData);
+    expect(result.reportingPeriods[0].emissions.scope3.categories).toEqual([
+      { category: 1, verified: true },
+    ]);
+  });
+
+  it("should send total (and verified if checked) for previously null category", () => {
+    // Simulate a period with a null category 3
+    const periodWithNullCat: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          categories: [
+            ...basePeriod.emissions!.scope3!.categories!,
+            { category: 3, total: undefined as any, unit: "tCO2e" },
+          ],
+        },
+      },
+    };
+    // Add value only
+    let formData = new Map([["scope-3-1-3", "77"]]);
+    let result = mapCompanyEditFormToRequestBody([periodWithNullCat], formData);
+    expect(result.reportingPeriods[0].emissions.scope3.categories).toEqual([
+      { category: 3, total: 77 },
+    ]);
+    // Add value and verified
+    formData = new Map([
+      ["scope-3-1-3", "88"],
+      ["scope-3-1-3-checkbox", "true"],
+    ]);
+    result = mapCompanyEditFormToRequestBody([periodWithNullCat], formData);
+    expect(result.reportingPeriods[0].emissions.scope3.categories).toEqual([
+      { category: 3, total: 88, verified: true },
+    ]);
+  });
+
+  it("should combine value and verified changes into one object", () => {
+    const formData = new Map([
+      ["scope-3-1-1", "111"],
+      ["scope-3-1-1-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody([basePeriod], formData);
+    expect(result.reportingPeriods[0].emissions.scope3.categories).toEqual([
+      { category: 1, total: 111, verified: true },
+    ]);
+  });
+
+  it("should never send duplicate category objects", () => {
+    // Simulate a user changing both value and verified for two categories
+    const formData = new Map([
+      ["scope-3-1-1", "111"],
+      ["scope-3-1-1-checkbox", "true"],
+      ["scope-3-1-2", "222"],
+      ["scope-3-1-2-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody([basePeriod], formData);
+    const cats = result.reportingPeriods[0].emissions.scope3.categories;
+    expect(cats.length).toBe(2);
+    expect(cats).toContainEqual({ category: 1, total: 111, verified: true });
+    expect(cats).toContainEqual({ category: 2, total: 222, verified: true });
+  });
 });
