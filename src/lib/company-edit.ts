@@ -23,12 +23,35 @@ export function mapCompanyEditFormToRequestBody(
       periodUpdate.endDate = period.endDate;
     }
     periodUpdate.emissions = {};
-    if (formData.has("scope-1-" + period.id)) {
+    
+    // --- Scope 1 logic ---
+    const scope1ValueKey = "scope-1-" + period.id;
+    const scope1CheckboxKey = scope1ValueKey + "-checkbox";
+    const originalScope1 = period.emissions?.scope1;
+    const scope1ValueChanged = formData.has(scope1ValueKey);
+    const scope1VerifiedChanged = formData.has(scope1CheckboxKey);
+    const scope1NewVerified = scope1VerifiedChanged
+      ? formData.get(scope1CheckboxKey) === "true"
+      : undefined;
+
+    if (scope1ValueChanged) {
       periodUpdate.emissions.scope1 = {
-        total: parseInt(formData.get("scope-1-" + period.id) || "0") ?? 0,
-        verified: formData.get("scope-1-" + period.id + "-checkbox") === "true",
+        total: parseInt(formData.get(scope1ValueKey) || "0") ?? 0,
+        verified: scope1NewVerified ?? false,
+      };
+    } else if (
+      scope1VerifiedChanged &&
+      originalScope1 &&
+      originalScope1.total !== null &&
+      originalScope1.total !== undefined
+    ) {
+      periodUpdate.emissions.scope1 = {
+        verified: scope1NewVerified,
       };
     }
+
+
+    // --- Scope 2 logic ---
     if (
       formData.has("scope-2-mb-" + period.id) ||
       formData.has("scope-2-lb-" + period.id) ||
@@ -63,7 +86,9 @@ export function mapCompanyEditFormToRequestBody(
         formData.get("scope-2-lb-" + period.id + "-checkbox") === "true" ||
         formData.get("scope-2-mb-" + period.id + "-checkbox") === "true";
     }
-    // --- Refactored Scope 3 category mapping ---
+
+
+    // --- Scope 3 logic ---
     const changedCategoryIds = new Set<string>();
     for (const formKey of formKeys) {
       if (
@@ -117,22 +142,38 @@ export function mapCompanyEditFormToRequestBody(
         // If both value and verified are changed, the above covers it in one object
       }
     }
-    // --- End refactor ---
-    // Add statedTotalEmissions for scope 3
-    if (formData.has(`scope-3-statedTotalEmissions-${period.id}`)) {
+
+    // --- Scope 3 statedTotalEmissions logic ---
+    const statedTotalValueKey = `scope-3-statedTotalEmissions-${period.id}`;
+    const statedTotalCheckboxKey = statedTotalValueKey + "-checkbox";
+    const originalStatedTotal = period.emissions?.scope3?.statedTotalEmissions;
+    const statedTotalValueChanged = formData.has(statedTotalValueKey);
+    const statedTotalVerifiedChanged = formData.has(statedTotalCheckboxKey);
+    const statedTotalNewVerified = statedTotalVerifiedChanged
+      ? formData.get(statedTotalCheckboxKey) === "true"
+      : undefined;
+    if (statedTotalValueChanged) {
       if (periodUpdate.emissions.scope3 === undefined) {
         periodUpdate.emissions.scope3 = {};
       }
       periodUpdate.emissions.scope3.statedTotalEmissions = {
-        total:
-          parseInt(
-            formData.get(`scope-3-statedTotalEmissions-${period.id}`) || "0",
-          ) ?? 0,
-        verified:
-          formData.get(`scope-3-statedTotalEmissions-${period.id}-checkbox`) ===
-          "true",
+        total: parseInt(formData.get(statedTotalValueKey) || "0") ?? 0,
+        verified: statedTotalNewVerified ?? false,
+      };
+    } else if (
+      statedTotalVerifiedChanged &&
+      originalStatedTotal &&
+      originalStatedTotal.total !== null &&
+      originalStatedTotal.total !== undefined
+    ) {
+      if (periodUpdate.emissions.scope3 === undefined) {
+        periodUpdate.emissions.scope3 = {};
+      }
+      periodUpdate.emissions.scope3.statedTotalEmissions = {
+        verified: statedTotalNewVerified,
       };
     }
+
     // Only add emissions if not empty
     if (Object.keys(periodUpdate.emissions).length > 0) {
       periodsUpdate.push(periodUpdate);

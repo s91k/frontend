@@ -171,4 +171,43 @@ describe("mapCompanyEditFormToRequestBody", () => {
     expect(cats).toContainEqual({ category: 1, total: 111, verified: true });
     expect(cats).toContainEqual({ category: 2, total: 222, verified: true });
   });
+
+  it("should only send verified for scope1 if only verified is changed", () => {
+    // Simulate only the checkbox being changed for scope1
+    const formData = new Map([["scope-1-1-checkbox", "true"]]);
+    const result = mapCompanyEditFormToRequestBody([basePeriod], formData);
+    expect(result.reportingPeriods[0].emissions.scope1).toEqual({
+      verified: true,
+    });
+  });
+
+  it("should only send verified for statedTotalEmissions if only verified is changed", () => {
+    // Simulate a period with a statedTotalEmissions value
+    const periodWithStatedTotal: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          statedTotalEmissions: {
+            total: 123,
+            unit: "tCO2e",
+            metadata: { verifiedBy: null },
+          },
+        },
+      },
+    };
+    const formData = new Map([
+      ["scope-3-statedTotalEmissions-1-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody(
+      [periodWithStatedTotal],
+      formData,
+    );
+    expect(
+      result.reportingPeriods[0].emissions.scope3.statedTotalEmissions,
+    ).toEqual({
+      verified: true,
+    });
+  });
 });
