@@ -78,6 +78,19 @@ export function mapCompanyEditFormToRequestBody(
           total: parseInt(formData.get(formKey) || "0") ?? 0,
           verified: formData.get(formKey + "-checkbox") === "true",
         });
+      } else if(
+        formKey.startsWith("scope-3-" + period.id) &&
+        formKey.endsWith("-checkbox")
+      ) {
+        const categoryId = formKey.split("-")[3];
+        if (periodUpdate.emissions.scope3 === undefined) {
+          periodUpdate.emissions.scope3 = {};
+          periodUpdate.emissions.scope3.categories = [];
+        }
+        periodUpdate.emissions.scope3.categories.push({
+          category: parseInt(categoryId),
+          verified: formData.get(formKey) === "true",
+        });
       }
     }
     // Add statedTotalEmissions for scope 3
