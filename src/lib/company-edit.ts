@@ -142,7 +142,6 @@ export function mapCompanyEditFormToRequestBody(
         // If both value and verified are changed, the above covers it in one object
       }
     }
-
     // --- Scope 3 statedTotalEmissions logic ---
     const statedTotalValueKey = `scope-3-statedTotalEmissions-${period.id}`;
     const statedTotalCheckboxKey = statedTotalValueKey + "-checkbox";

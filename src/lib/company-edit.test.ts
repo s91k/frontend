@@ -172,17 +172,64 @@ describe("mapCompanyEditFormToRequestBody", () => {
     expect(cats).toContainEqual({ category: 2, total: 222, verified: true });
   });
 
-  it("should only send verified for scope1 if only verified is changed", () => {
-    // Simulate only the checkbox being changed for scope1
-    const formData = new Map([["scope-1-1-checkbox", "true"]]);
-    const result = mapCompanyEditFormToRequestBody([basePeriod], formData);
-    expect(result.reportingPeriods[0].emissions.scope1).toEqual({
+  it("should only send verified for statedTotalEmissions if only verified is changed", () => {
+    // Simulate a period with a statedTotalEmissions value (including 0)
+    const periodWithStatedTotal: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          statedTotalEmissions: {
+            total: 0,
+            unit: "tCO2e",
+            metadata: { verifiedBy: null },
+          },
+        },
+      },
+    };
+    const formData = new Map([
+      ["scope-3-statedTotalEmissions-1-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody(
+      [periodWithStatedTotal],
+      formData,
+    );
+    expect(
+      result.reportingPeriods[0].emissions.scope3.statedTotalEmissions,
+    ).toEqual({
       verified: true,
     });
   });
 
-  it("should only send verified for statedTotalEmissions if only verified is changed", () => {
-    // Simulate a period with a statedTotalEmissions value
+  it("should only send total for statedTotalEmissions if only value is changed", () => {
+    const periodWithStatedTotal: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          statedTotalEmissions: {
+            total: 123,
+            unit: "tCO2e",
+            metadata: { verifiedBy: null },
+          },
+        },
+      },
+    };
+    const formData = new Map([["scope-3-statedTotalEmissions-1", "456"]]);
+    const result = mapCompanyEditFormToRequestBody(
+      [periodWithStatedTotal],
+      formData,
+    );
+    expect(
+      result.reportingPeriods[0].emissions.scope3.statedTotalEmissions,
+    ).toEqual({
+      total: 456,
+    });
+  });
+
+  it("should only send verified for statedTotalEmissions if only verified is changed and original value exists", () => {
     const periodWithStatedTotal: ReportingPeriod = {
       ...basePeriod,
       emissions: {
@@ -209,5 +256,59 @@ describe("mapCompanyEditFormToRequestBody", () => {
     ).toEqual({
       verified: true,
     });
+  });
+
+  it("should send total and verified for statedTotalEmissions if both are changed", () => {
+    const periodWithStatedTotal: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          statedTotalEmissions: {
+            total: 123,
+            unit: "tCO2e",
+            metadata: { verifiedBy: null },
+          },
+        },
+      },
+    };
+    const formData = new Map([
+      ["scope-3-statedTotalEmissions-1", "789"],
+      ["scope-3-statedTotalEmissions-1-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody(
+      [periodWithStatedTotal],
+      formData,
+    );
+    expect(
+      result.reportingPeriods[0].emissions.scope3.statedTotalEmissions,
+    ).toEqual({
+      total: 789,
+      verified: true,
+    });
+  });
+
+  it("should not send statedTotalEmissions if only verified is changed and original value is null", () => {
+    const periodWithNoStatedTotal: ReportingPeriod = {
+      ...basePeriod,
+      emissions: {
+        ...basePeriod.emissions!,
+        scope3: {
+          ...basePeriod.emissions!.scope3!,
+          statedTotalEmissions: undefined,
+        },
+      },
+    };
+    const formData = new Map([
+      ["scope-3-statedTotalEmissions-1-checkbox", "true"],
+    ]);
+    const result = mapCompanyEditFormToRequestBody(
+      [periodWithNoStatedTotal],
+      formData,
+    );
+    expect(
+      result.reportingPeriods[0].emissions.scope3.statedTotalEmissions,
+    ).toBeUndefined();
   });
 });
