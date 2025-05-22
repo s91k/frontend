@@ -168,7 +168,15 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-
+          <button
+            onClick={() => setCommandOpen(true)}
+            className="lg:ml-auto px-2 py-1 bg-black-1 min-w-16 md:min-w-36 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2"
+          >
+            <SearchIcon className="h-4 w-4" />
+            <span className="text-xs text-grey/60 border border-grey/20 rounded px-1">
+              ⌘K
+            </span>
+          </button>
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
@@ -184,15 +192,6 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6 ml-auto">
             <Menubar className="border-none bg-transparent h-full">
-              <button
-                onClick={() => setCommandOpen(true)}
-                className="px-2 py-1 bg-black-1 min-w-36 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex items-center gap-2"
-              >
-                <SearchIcon />
-                <span className="text-xs text-grey/60 border border-grey/20 rounded px-1">
-                  ⌘K
-                </span>
-              </button>
               {NAV_LINKS.map((item) =>
                 item.sublinks ? (
                   <MenubarMenu key={item.label}>
