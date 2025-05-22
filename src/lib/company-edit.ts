@@ -1,5 +1,7 @@
+import type { ReportingPeriod } from "@/types/company";
+
 export function mapCompanyEditFormToRequestBody(
-  selectedPeriods,
+  selectedPeriods: ReportingPeriod[],
   formData: Map<string, string>,
 ) {
   const formKeys = Array.from(formData.keys());
@@ -81,8 +83,6 @@ export function mapCompanyEditFormToRequestBody(
         formKey.endsWith("-checkbox")
       ) {
         const categoryId = formKey.split("-")[3];
-        console.log(categoryId);
-        console.log(formKey);
         if (periodUpdate.emissions.scope3 === undefined) {
           periodUpdate.emissions.scope3 = {};
           periodUpdate.emissions.scope3.categories = [];
@@ -93,22 +93,40 @@ export function mapCompanyEditFormToRequestBody(
         });
       }
     }
-    periodsUpdate.push(periodUpdate);
-}
-    const metadata: {
-        comment?: string,
-        source?: string
-    } = {};
-
-    if(formData.get('comment')) {
-        metadata.comment = formData.get('comment');
+    // Add statedTotalEmissions for scope 3
+    if (formData.has(`scope-3-statedTotalEmissions-${period.id}`)) {
+      if (periodUpdate.emissions.scope3 === undefined) {
+        periodUpdate.emissions.scope3 = {};
+      }
+      periodUpdate.emissions.scope3.statedTotalEmissions = {
+        total:
+          parseInt(
+            formData.get(`scope-3-statedTotalEmissions-${period.id}`) || "0",
+          ) ?? 0,
+        verified:
+          formData.get(`scope-3-statedTotalEmissions-${period.id}-checkbox`) ===
+          "true",
+      };
     }
-
-    if(formData.get('source')) {
-        metadata.source = formData.get('source');
+    // Only add emissions if not empty
+    if (Object.keys(periodUpdate.emissions).length > 0) {
+      periodsUpdate.push(periodUpdate);
     }
-    return {
-        reportingPeriods: periodsUpdate,
-        metadata
-    };
+  }
+  const metadata: {
+    comment?: string;
+    source?: string;
+  } = {};
+
+  if (formData.get("comment")) {
+    metadata.comment = formData.get("comment");
+  }
+
+  if (formData.get("source")) {
+    metadata.source = formData.get("source");
+  }
+  return {
+    reportingPeriods: periodsUpdate,
+    metadata,
+  };
 }

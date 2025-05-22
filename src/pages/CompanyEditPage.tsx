@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useCompanyDetails } from "@/hooks/companies/useCompanyDetails";
 import { Text } from "@/components/ui/text";
 import { CompanyEditHeader } from "@/components/companies/edit/CompanyEditHeader";
@@ -53,7 +53,13 @@ export function CompanyEditPage() {
     );
   }
 
-  if (error) {
+  if (
+    error &&
+    !(
+      typeof (error as any).status === "number" &&
+      ((error as any).status === 401 || (error as any).status === 403)
+    )
+  ) {
     return (
       <div className="text-center py-24">
         <Text variant="h3" className="text-red-500 mb-4">
@@ -75,19 +81,26 @@ export function CompanyEditPage() {
     );
   }
 
-  const handleInputChange = async (
+  const handleInputChange = (
     name: string,
     value: string,
-    originalValue: string,
+    originalVerified?: boolean,
   ) => {
     const updateFormData = new Map(formData);
-    if (value != originalValue) {
-      updateFormData.set(name, value);
+    // Checkbox logic: only track if changed from false to true
+    if (name.endsWith("-checkbox") && originalVerified === false) {
+      if (value === "true") {
+        updateFormData.set(name, value);
+      } else {
+        updateFormData.delete(name);
+      }
     } else {
-      updateFormData.delete(name);
+      updateFormData.set(name, value);
     }
     setFormData(updateFormData);
   };
+
+  const onInputChange = handleInputChange;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsUpdating(true);
@@ -114,18 +127,28 @@ export function CompanyEditPage() {
       }
     }
     if (id !== undefined) {
-      await updateReportingPeriods(
-        id,
-        mapCompanyEditFormToRequestBody(selectedPeriods, formData),
-      );
-      await refetch();
-      setSelectedYears(selectedYears);
-      setFormData(new Map());
+      try {
+        await updateReportingPeriods(
+          id,
+          mapCompanyEditFormToRequestBody(selectedPeriods, formData),
+        );
+        await refetch();
+        setSelectedYears(selectedYears);
+        setFormData(new Map());
+        showToast(
+          t("companyEditPage.success.title"),
+          t("companyEditPage.success.description"),
+        );
+      } catch (error: any) {
+        showToast(
+          t("companyEditPage.error.couldNotSave"),
+          t("companyEditPage.error.tryAgainLater"),
+        );
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
       setIsUpdating(false);
-      showToast(
-        t("companyEditPage.success.title"),
-        t("companyEditPage.success.description"),
-      );
     }
   };
 
@@ -151,23 +174,23 @@ export function CompanyEditPage() {
           <form onSubmit={handleSubmit} ref={formRef}>
             <CompanyEditPeriod
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
               resetPeriod={resetPeriod}
             ></CompanyEditPeriod>
             <CompanyEditScope1
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope1>
             <CompanyEditScope2
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope2>
             <CompanyEditScope3
               periods={selectedPeriods}
-              onInputChange={handleInputChange}
+              onInputChange={onInputChange}
               formData={formData}
             ></CompanyEditScope3>
             <div className="w-full ps-4 pe-2 mt-6">
