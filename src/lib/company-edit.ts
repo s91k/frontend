@@ -63,36 +63,61 @@ export function mapCompanyEditFormToRequestBody(
         formData.get("scope-2-lb-" + period.id + "-checkbox") === "true" ||
         formData.get("scope-2-mb-" + period.id + "-checkbox") === "true";
     }
+    // --- Refactored Scope 3 category mapping ---
+    const changedCategoryIds = new Set<string>();
     for (const formKey of formKeys) {
       if (
-        formKey.startsWith("scope-3-" + period.id) &&
-        !formKey.endsWith("-checkbox")
+        formKey.startsWith("scope-3-" + period.id + "-") &&
+        !formKey.includes("statedTotalEmissions")
       ) {
-        const categoryId = formKey.substring(formKey.lastIndexOf("-") + 1);
-        if (periodUpdate.emissions.scope3 === undefined) {
-          periodUpdate.emissions.scope3 = {};
-          periodUpdate.emissions.scope3.categories = [];
-        }
-        periodUpdate.emissions.scope3.categories.push({
-          category: parseInt(categoryId),
-          total: parseInt(formData.get(formKey) || "0") ?? 0,
-          verified: formData.get(formKey + "-checkbox") === "true",
-        });
-      } else if(
-        formKey.startsWith("scope-3-" + period.id) &&
-        formKey.endsWith("-checkbox")
-      ) {
-        const categoryId = formKey.split("-")[3];
-        if (periodUpdate.emissions.scope3 === undefined) {
-          periodUpdate.emissions.scope3 = {};
-          periodUpdate.emissions.scope3.categories = [];
-        }
-        periodUpdate.emissions.scope3.categories.push({
-          category: parseInt(categoryId),
-          verified: formData.get(formKey) === "true",
-        });
+        const parts = formKey.split("-");
+        const categoryId = parts[3];
+        if (categoryId) changedCategoryIds.add(categoryId);
       }
     }
+    if (changedCategoryIds.size > 0) {
+      if (!periodUpdate.emissions.scope3) {
+        periodUpdate.emissions.scope3 = {};
+      }
+      periodUpdate.emissions.scope3.categories = [];
+      for (const categoryId of changedCategoryIds) {
+        const valueKey = `scope-3-${period.id}-${categoryId}`;
+        const checkboxKey = `scope-3-${period.id}-${categoryId}-checkbox`;
+        const originalCategory = period.emissions?.scope3?.categories?.find(
+          (c) => String(c.category) === String(categoryId),
+        );
+        const valueChanged = formData.has(valueKey);
+        const verifiedChanged = formData.has(checkboxKey);
+        const newValue = valueChanged ? formData.get(valueKey) : undefined;
+        const newVerified = verifiedChanged
+          ? formData.get(checkboxKey) === "true"
+          : undefined;
+        const originalValue = originalCategory?.total;
+        // If original value is not null/undefined and only verified is changed
+        if (
+          originalValue !== null &&
+          originalValue !== undefined &&
+          !valueChanged &&
+          verifiedChanged
+        ) {
+          periodUpdate.emissions.scope3.categories.push({
+            category: parseInt(categoryId),
+            verified: newVerified,
+          });
+        }
+        // If value is changed (from null or to a new value)
+        else if (valueChanged) {
+          const obj: any = {
+            category: parseInt(categoryId),
+            total: parseInt(newValue || "0"),
+          };
+          if (verifiedChanged) obj.verified = newVerified;
+          periodUpdate.emissions.scope3.categories.push(obj);
+        }
+        // If both value and verified are changed, the above covers it in one object
+      }
+    }
+    // --- End refactor ---
     // Add statedTotalEmissions for scope 3
     if (formData.has(`scope-3-statedTotalEmissions-${period.id}`)) {
       if (periodUpdate.emissions.scope3 === undefined) {
