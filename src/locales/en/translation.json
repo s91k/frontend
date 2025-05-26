@@ -1268,5 +1268,9 @@
       ],
       "tco2e": "tCO2e stands for \"tonnes of carbon dioxide equivalent\". It's a standardized measure that converts the impact of various greenhouse gases into the equivalent amount of CO2."
     }
+  },
+  "newsletterArchive": {
+    "title": "Newsletter archive",
+    "description": "Browse through all of the released newsletters"
   }
 }

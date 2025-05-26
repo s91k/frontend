@@ -1267,5 +1267,9 @@
       ],
       "tco2e": "tCO2e står för \"ton koldioxidekvivalenter\". Det är ett standardiserat mått som omvandlar påverkan från olika växthusgaser till motsvarande mängd koldioxid."
     }
+  },
+  "newsletterArchivePage": {
+    "title": "Arkiv för nyhetsbrev",
+    "description": "Titta igenom alla tidigare släppta nyhetsbrev"
   }
 }

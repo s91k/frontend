@@ -25,6 +25,7 @@ import { PrivacyPage } from "./pages/PrivacyPage";
 import ProductsPage from "./pages/ProductsPage";
 import { UnauthorizedErrorPage } from "./pages/error/UnauthorizedErrorPage";
 import { SupportPage } from "./pages/SupportPage";
+import { NewsLetterArchivePage } from "./pages/NewslettersPage";
 
 export function AppRoutes() {
   const { currentLanguage } = useLanguage();
@@ -84,6 +85,11 @@ export function AppRoutes() {
       <Route path={`${basePath}/reports`} element={<ReportsPage />} />
       <Route path={`${basePath}/insights/:id`} element={<BlogDetailPage />} />
       <Route path={`${basePath}/learn-more`} element={<LearnMoreOverview />} />
+      <Route
+        path={`${basePath}/newsletter-archive`}
+        element={<NewsLetterArchivePage />}
+      />
+
       <Route
         path={`${basePath}/learn-more/:id`}
         element={<LearnMoreArticle />}
