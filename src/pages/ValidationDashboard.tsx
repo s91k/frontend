@@ -5,24 +5,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCompanies } from "@/hooks/companies/useCompanies";
+import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 
+type UnverifiedCompanyWithPeriod = {
+  company: RankedCompany;
+  period: RankedCompany["reportingPeriods"][0];
+};
 const useGetUnverifiedCompaniesForYear = (year: number) => {
   const { companies } = useCompanies();
   const { isEmissionsAIGenerated } = useVerificationStatus();
 
   const unverifiedCompanies = companies
-    .filter((company) => {
+    .map((company) => {
       const period = company.reportingPeriods.find(
         (period) => new Date(period.endDate).getFullYear() == year,
       );
 
+      return {
+        company,
+        period,
+      };
+    })
+    .filter(({ period }) => {
       return period && isEmissionsAIGenerated(period);
     })
-    .sort((companyA, companyB) => companyA.name.localeCompare(companyB.name));
+    .sort(({ company: companyA }, { company: companyB }) =>
+      companyA.name.localeCompare(companyB.name),
+    );
 
-  return unverifiedCompanies;
+  return unverifiedCompanies as UnverifiedCompanyWithPeriod[];
 };
 
 export const ValidationDashboard = () => {
@@ -65,18 +77,26 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
-      <ul className="list-disc text-lg">
-        {companies.map((company) => (
-          <li className="mb-2" key={company.wikidataId}>
+      <div className="grid grid-cols-[auto_1fr] mb-6 gap-x-8 gap-y-2">
+        {companies.map(({ company, period }) => (
+          <div
+            key={company.wikidataId}
+            className="grid grid-cols-subgrid col-span-2"
+          >
             <a
               className="text-blue-2"
-              href={`/companies/${company.wikidataId}`}
+              href={`/companies/${company.wikidataId}/edit`}
             >
               {company.name}
             </a>
-          </li>
+            {period.reportURL && (
+              <a className="text-green-2" href={period.reportURL}>
+                Report
+              </a>
+            )}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
