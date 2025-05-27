@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useValidationClaims } from "@/hooks/useValidationClaims";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
+import { cn } from "@/lib/utils";
 import { formatPercent } from "@/utils/localizeUnit";
 
 type UnverifiedCompanyWithPeriod = {
@@ -91,67 +92,88 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
-      <p className="text-gray-400 mb-1">
-        Verified: {allCompanies.length - companies.length} of{" "}
-        {allCompanies.length}
-        <span className="ml-2">
-          ({formatPercent(progress, currentLanguage)})
-        </span>
-      </p>
-      <Progress value={progress * 100} className="mb-8" />
+      <div className="inline-grid grid-cols-[auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400">
+        <div className="col-span-4">
+          <p className="text-gray-400 mb-1">
+            Verified: {allCompanies.length - companies.length} of{" "}
+            {allCompanies.length}
+            <span className="ml-2">
+              ({formatPercent(progress, currentLanguage)})
+            </span>
+          </p>
+          <Progress value={progress * 100} className="mb-8" />
+        </div>
+        <div className="grid grid-cols-subgrid col-span-4 text-gray-400 border-b border-gray-400">
+          <span>Company name</span>
+          <span>Report link</span>
+          <span>In progress by</span>
+          <span>Start/stop working</span>
+        </div>
 
-      <p className="text-gray-400 mb-4">
-        These are companies that have one or more unverified data points
-      </p>
-      <div className="grid grid-cols-[auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2">
-        {companies.map(({ company, period }) => (
-          <div
-            key={company.wikidataId}
-            className="grid grid-cols-subgrid col-span-4"
-          >
-            <a
-              className="text-blue-2"
-              href={`/companies/${company.wikidataId}/edit`}
+        {companies.length > 0 ? (
+          companies.map(({ company, period }) => (
+            <div
+              key={company.wikidataId}
+              className="grid grid-cols-subgrid col-span-4"
             >
-              {company.name}
-            </a>
-            {period.reportURL && (
-              <a className="text-green-2" href={period.reportURL}>
-                Report
+              <a
+                className="text-blue-2"
+                href={`/companies/${company.wikidataId}/edit`}
+              >
+                {company.name}
               </a>
-            )}
-            {claims[company.wikidataId] ? (
-              <span className="text-pink-3">{claims![company.wikidataId]}</span>
-            ) : (
-              <span></span>
-            )}
-
-            <div className="self-start">
-              {claims[company.wikidataId] === user?.githubId ? (
-                <button
-                  onClick={() => unclaimValidation(company.wikidataId)}
-                  className="text-blue-2"
-                >
-                  Release
-                </button>
-              ) : claims[company.wikidataId] ? (
-                <button
-                  onClick={() => stealClaim(company.wikidataId)}
-                  className="text-red-400"
-                >
-                  Take over
-                </button>
+              {period.reportURL ? (
+                <a className="text-blue-3 text-center" href={period.reportURL}>
+                  Report
+                </a>
               ) : (
-                <button
-                  onClick={() => claimValidation(company.wikidataId)}
-                  className="text-green-2"
-                >
-                  Claim
-                </button>
+                <span />
               )}
+              {claims[company.wikidataId] ? (
+                <span
+                  className={cn(
+                    claims[company.wikidataId] === user?.githubId
+                      ? "text-pink-3"
+                      : "text-gray-400",
+                  )}
+                >
+                  {claims[company.wikidataId]}
+                </span>
+              ) : (
+                <span></span>
+              )}
+
+              <div className="text-center">
+                {claims[company.wikidataId] === user?.githubId ? (
+                  <button
+                    onClick={() => unclaimValidation(company.wikidataId)}
+                    className="text-blue-2"
+                  >
+                    Release
+                  </button>
+                ) : claims[company.wikidataId] ? (
+                  <button
+                    onClick={() => stealClaim(company.wikidataId)}
+                    className="text-pink-4"
+                  >
+                    Take over
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => claimValidation(company.wikidataId)}
+                    className="text-green-2"
+                  >
+                    Claim
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <span className="col-span-4 text-center text-2xl my-4">
+            All done! 🎉
+          </span>
+        )}
       </div>
     </div>
   );
