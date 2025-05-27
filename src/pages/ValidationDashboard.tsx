@@ -7,7 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from "@/contexts/AuthContext";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
+import { useValidationClaims } from "@/hooks/useValidationClaims";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { formatPercent } from "@/utils/localizeUnit";
 
@@ -47,12 +49,19 @@ export const ValidationDashboard = () => {
   const { companies: allCompanies } = useCompanies();
   const companies = useGetUnverifiedCompaniesForYear(parseInt(year));
   const { currentLanguage } = useLanguage();
+  const { user } = useAuth();
+
+  const { claims, claimValidation, unclaimValidation } = useValidationClaims();
 
   const handleYearChange = (selectedYear: string) => {
     const url = new URL(window.location.href);
     url.searchParams.set("year", selectedYear);
     window.history.pushState({}, "", url);
     window.location.reload();
+  };
+
+  const stealClaim = (wikidataId: string) => {
+    claimValidation(wikidataId, true);
   };
 
   const years = Array.from({ length: 5 }, (_, i) => 2024 - i);
@@ -94,11 +103,11 @@ export const ValidationDashboard = () => {
       <p className="text-gray-400 mb-4">
         These are companies that have one or more unverified data points
       </p>
-      <div className="grid grid-cols-[auto_1fr] mb-6 gap-x-8 gap-y-2">
+      <div className="grid grid-cols-[auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2">
         {companies.map(({ company, period }) => (
           <div
             key={company.wikidataId}
-            className="grid grid-cols-subgrid col-span-2"
+            className="grid grid-cols-subgrid col-span-4"
           >
             <a
               className="text-blue-2"
@@ -111,6 +120,36 @@ export const ValidationDashboard = () => {
                 Report
               </a>
             )}
+            {claims[company.wikidataId] ? (
+              <span className="text-pink-3">{claims![company.wikidataId]}</span>
+            ) : (
+              <span></span>
+            )}
+
+            <div className="self-start">
+              {claims[company.wikidataId] === user?.githubId ? (
+                <button
+                  onClick={() => unclaimValidation(company.wikidataId)}
+                  className="text-blue-2"
+                >
+                  Release
+                </button>
+              ) : claims[company.wikidataId] ? (
+                <button
+                  onClick={() => stealClaim(company.wikidataId)}
+                  className="text-red-400"
+                >
+                  Take over
+                </button>
+              ) : (
+                <button
+                  onClick={() => claimValidation(company.wikidataId)}
+                  className="text-green-2"
+                >
+                  Claim
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
