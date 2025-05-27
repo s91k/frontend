@@ -1,3 +1,5 @@
+import { useLanguage } from "@/components/LanguageProvider";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -7,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
+import { formatPercent } from "@/utils/localizeUnit";
 
 type UnverifiedCompanyWithPeriod = {
   company: RankedCompany;
@@ -41,7 +44,9 @@ export const ValidationDashboard = () => {
   const year =
     new URLSearchParams(window.location.search).get("year") || "2024";
 
+  const { companies: allCompanies } = useCompanies();
   const companies = useGetUnverifiedCompaniesForYear(parseInt(year));
+  const { currentLanguage } = useLanguage();
 
   const handleYearChange = (selectedYear: string) => {
     const url = new URL(window.location.href);
@@ -52,16 +57,16 @@ export const ValidationDashboard = () => {
 
   const years = Array.from({ length: 5 }, (_, i) => 2024 - i);
 
+  const nrFinishedCompanies = allCompanies.length - companies.length;
+  const progress = nrFinishedCompanies / allCompanies.length;
+
   return (
     <div className="p-4">
       <h1 className="text-3xl font-bold">
-        Unverified Companies for <span className="text-green-3">{year}</span>
+        Validation status for <span className="text-green-3">{year}</span>
       </h1>
-      <p className="text-gray-400 mb-4">
-        These are companies that have one or more unverified data points
-      </p>
 
-      <div className="mb-6 flex items-center gap-2">
+      <div className="my-6 flex items-center gap-2">
         <label htmlFor="year-selector" className="block text-sm">
           Select Year:
         </label>
@@ -77,6 +82,18 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
+      <p className="text-gray-400 mb-1">
+        Verified: {allCompanies.length - companies.length} of{" "}
+        {allCompanies.length}
+        <span className="ml-2">
+          ({formatPercent(progress, currentLanguage)})
+        </span>
+      </p>
+      <Progress value={progress * 100} className="mb-8" />
+
+      <p className="text-gray-400 mb-4">
+        These are companies that have one or more unverified data points
+      </p>
       <div className="grid grid-cols-[auto_1fr] mb-6 gap-x-8 gap-y-2">
         {companies.map(({ company, period }) => (
           <div
