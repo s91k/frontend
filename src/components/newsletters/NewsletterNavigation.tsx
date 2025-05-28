@@ -80,19 +80,19 @@ export function NewsletterNavigation({
             {expandedYear.includes(year) && (
               <ul className="pl-4 pb-2 animate-slideDown">
                 {months.map((month) => (
-                  <li key={month.id}>
+                  <li key={month.url}>
                     <button
                       onClick={() => {
-                        handleMonthChange(month.id);
+                        handleMonthChange(month.url);
                         setDisplayedNewsletter(month);
                       }}
                       className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
-                        selectedMonth === month.id
+                        selectedMonth === month.url
                           ? "bg-black-1 text-blue-3 font-medium"
                           : "text-grey hover:bg-black-1 hover:text-white"
                       }`}
                       aria-current={
-                        selectedMonth === month.id ? "page" : undefined
+                        selectedMonth === month.url ? "page" : undefined
                       }
                     >
                       {month.monthPosted}
