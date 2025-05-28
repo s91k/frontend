@@ -1,5 +1,3 @@
-//https://api.github.com/repos/hallski/klimatkollen-test/issues
-
 import { useQuery } from "@tanstack/react-query";
 
 type Label = {
