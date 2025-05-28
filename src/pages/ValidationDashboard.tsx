@@ -58,7 +58,15 @@ type IssueViewProps = {
 };
 const IssueView = ({ issue, company, period, className }: IssueViewProps) => {
   if (!issue) {
-    return <a href={githubUrl(company, period?.reportURL)}>Report issue</a>;
+    return (
+      <a
+        target="_blank"
+        href={githubUrl(company, period?.reportURL)}
+        className="text-blue-2"
+      >
+        Report issue
+      </a>
+    );
   }
 
   return (
@@ -70,15 +78,18 @@ const IssueView = ({ issue, company, period, className }: IssueViewProps) => {
           "mr-2",
           issue.state == "open" ? "text-green-3" : "text-gray-500",
         )}
-      >{`Issue #${issue.number}`}</a>
-      {issue.labels.map((label) => (
-        <span
-          style={{ backgroundColor: `#${label.color}` }}
-          className="rounded-sm text-xs font-bold uppercase mx-[2px] px-1"
-        >
-          {label.name}
-        </span>
-      ))}
+      >
+        {issue.state === "open" ? "Issue reported" : "Issue closed"}
+      </a>
+      {issue.state === "open" &&
+        issue.labels.map((label) => (
+          <span
+            style={{ backgroundColor: `#${label.color}` }}
+            className="rounded-sm text-xs font-bold uppercase mx-[2px] px-1"
+          >
+            {label.name}
+          </span>
+        ))}
     </span>
   );
 };
@@ -232,21 +243,12 @@ export const ValidationDashboard = () => {
                   </button>
                 )}
               </div>
-              {issues && issues[company.wikidataId] ? (
-                <IssueView
-                  issue={issues[company.wikidataId]}
-                  company={company}
-                  period={period as ReportingPeriod}
-                  className=""
-                />
-              ) : (
-                <a
-                  href={githubUrl(company, period.reportURL)}
-                  className="text-blue-2"
-                >
-                  Report issue
-                </a>
-              )}
+              <IssueView
+                issue={issues?.[company.wikidataId]}
+                company={company}
+                period={period as ReportingPeriod}
+                className=""
+              />
             </div>
           ))
         ) : (
