@@ -10,43 +10,52 @@ export type NewsletterArchiveList = {
 };
 
 export const newsletterList = {
+  2025: [
+    {
+      url: "newsletters/05-2025-Ny data om kommunerna + Almedalen calling.pdf",
+      yearPosted: 2025,
+      monthPosted: "May",
+    },
+    {
+      url: "newsletters/03-2025-Storbolagens ökade utsläpp, en Brysselresa och AI-röster från framtiden.pdf",
+      yearPosted: 2025,
+      monthPosted: "March",
+    },
+  ],
   2024: [
     {
-      id: "3",
-      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      url: "newsletters/12-2024-Ökade utsläpp i statliga bolag + vår julklapp.pdf",
+      yearPosted: 2024,
+      monthPosted: "December",
+    },
+    {
+      url: "newsletters/11-2024-Därför finns vi nu på Wikipedia (+ storbolagslista och AI-podd!).pdf",
       yearPosted: 2024,
       monthPosted: "November",
     },
     {
-      id: "4",
-      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      url: "newsletters/07-2024-AI-genererad utsläppsdata och rapport om storbolagens klimatredovisning.pdf",
       yearPosted: 2024,
-      monthPosted: "October",
+      monthPosted: "July",
     },
     {
-      id: "5",
-      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      url: "newsletters/06-2024-Färsk utsläppsdata om kommunerna + Klimatkollen i Almedalen.pdf",
       yearPosted: 2024,
-      monthPosted: "September",
+      monthPosted: "June",
     },
-  ],
-  2025: [
     {
-      id: "0",
-      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
-      yearPosted: 2025,
+      url: "newsletters/05-2024-Nu släpper vi data om storbolagens utsläpp.pdf",
+      yearPosted: 2024,
+      monthPosted: "May",
+    },
+    {
+      url: "newsletters/03-2024-Endast 122 kommuner ställer klimatkrav vid upphandling.pdf",
+      yearPosted: 2024,
       monthPosted: "March",
     },
     {
-      id: "1",
-      url: "",
-      yearPosted: 2025,
-      monthPosted: "February",
-    },
-    {
-      id: "2",
-      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
-      yearPosted: 2025,
+      url: "newsletters/01-2024-Bara 74 kommuner klarar EU_s rekommendation om laddinfrastruktur.pdf",
+      yearPosted: 2024,
       monthPosted: "January",
     },
   ],

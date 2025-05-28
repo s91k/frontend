@@ -3,12 +3,13 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { newsletterList } from "@/lib/newsletterArchive/newsletterData";
+import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
 
 interface NewsletterNavigationProps {
   selectedMonth: string;
   onMonthChange: (month: string) => void;
   contentRef: React.RefObject<HTMLDivElement>;
-  setDisplayedNewsletter;
+  setDisplayedNewsletter: NewsletterType;
 }
 
 export function NewsletterNavigation({

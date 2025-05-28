@@ -4,7 +4,8 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { useState, useEffect, useRef } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterNavigation } from "@/components/newsletters/newsletterNavigation";
-import { newsletterList } from "@/lib/newsletterArchive/newsletterData";
+import { newsletterList, NewsletterType } from "@/lib/newsletterArchive/newsletterData";
+
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ export function NewsLetterArchivePage() {
   const [selectedMonth, setSelectedMonth] = useState("March");
   const { isMobile } = useScreenSize();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [displayedNewsletter, setDisplayedNewsletter] = useState();
+  const [displayedNewsletter, setDisplayedNewsletter] = useState<NewsletterType>();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,42 +54,19 @@ export function NewsLetterArchivePage() {
         title={t("newsletterArchivePage.title")}
         description={t("newsletterArchivePage.description")}
       ></PageHeader>
-      <div className="mt-6 relative flex lg:flex-row gap-8">
+      <div
+        className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative lg:flex-row gap-8`}
+      >
         <NewsletterNavigation
           selectedMonth={selectedMonth}
           onMonthChange={setSelectedMonth}
           contentRef={contentRef}
           setDisplayedNewsletter={setDisplayedNewsletter}
         />
-        {/*         <nav
-          aria-label="Methodology Navigation"
-          className="bg-black-2 rounded-md p-2"
-        >
-          <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
 
-          <ul className="divide-y divide-black-1">
-            {Object.keys(newsletterList).map((year) => (
-              <li key={year}>
-                <button
-                  onClick={() => toggleYear(year)}
-                  className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
-                                    aria-expanded={setExpandedYear.includes(year)}
-                  
-                >
-                  <span>{t(`${year}`)}</span>
-                  {expandedYear.includes(year) ? (
-                    <ChevronUp size={18} className="text-grey" />
-                  ) : (
-                    <ChevronDown size={18} className="text-grey" />
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav> */}
         {displayedNewsletter?.url && (
           <iframe
-            className="rounded-md w-full bg-black-2"
+            className="rounded-md min-h-screen w-full bg-black-2"
             src={`${displayedNewsletter.url}`}
             height={800}
             width={1000}
