@@ -18,13 +18,17 @@ export type GithubValidationIssue = {
   state: "open" | "closed";
 };
 
-const owner = "hallski";
-const repo = "klimatkollen-test";
+const owner = "Klimatbyran";
+const repo = "validation-tracking";
 
-const fetchAllGithubIssues = async (): Promise<Record<string, Issue>> => {
+export const githubProjectUrl = `https://github.com/${owner}/${repo}`;
+
+const fetchAllGithubIssues = async (): Promise<
+  Record<string, GithubValidationIssue>
+> => {
   const perPage = 100;
   let page = 1;
-  let allIssues: Issue[] = [];
+  let allIssues: GithubValidationIssue[] = [];
   let hasMore = true;
   const token = undefined;
 
@@ -59,7 +63,7 @@ const fetchAllGithubIssues = async (): Promise<Record<string, Issue>> => {
       }
       return acc;
     },
-    {} as Record<string, Issue>,
+    {} as Record<string, GithubValidationIssue>,
   );
 
   // Optionally filter out pull requests

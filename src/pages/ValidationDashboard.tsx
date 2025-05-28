@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useValidationClaims } from "@/hooks/useValidationClaims";
 import {
+  githubProjectUrl,
   GithubValidationIssue,
   useValidationReports,
 } from "@/hooks/useValidationReports";
@@ -41,13 +42,13 @@ const useGetUnverifiedCompaniesForYear = (year: number) => {
 };
 
 const githubUrl = (company: RankedCompany, reportUrl?: string | null) => {
-  const body = reportUrl ? `Report URL: ${reportUrl}` : "";
+  const body = reportUrl ? `\nReport URL: ${reportUrl}` : "";
 
   const encodedTitle = encodeURIComponent(
     `[${company.wikidataId}] ${company.name}`,
   );
   const encodedBody = encodeURIComponent(body);
-  return `https://github.com/hallski/klimatkollen-test/issues/new?title=${encodedTitle}&body=${encodedBody}`;
+  return `${githubProjectUrl}/issues/new?title=${encodedTitle}&body=${encodedBody}`;
 };
 
 type IssueViewProps = {
@@ -55,8 +56,22 @@ type IssueViewProps = {
   company: RankedCompany;
   period?: ReportingPeriod;
   className?: string;
+  error: boolean;
 };
-const IssueView = ({ issue, company, period, className }: IssueViewProps) => {
+const IssueView = ({
+  issue,
+  company,
+  period,
+  className,
+  error,
+}: IssueViewProps) => {
+  if (error) {
+    return (
+      <a href={`${githubProjectUrl}/issues`} className="text-red-400">
+        Error fetching issues, see all issues
+      </a>
+    );
+  }
   if (!issue) {
     return (
       <a
@@ -136,7 +151,7 @@ export const ValidationDashboard = () => {
   const nrFinishedCompanies = allCompanies.length - unverifiedCompanies.length;
   const progress = nrFinishedCompanies / allCompanies.length;
 
-  if (issuesError || companiesError || claimsError) {
+  if (companiesError || claimsError) {
     return <span>Error</span>;
   }
 
@@ -247,6 +262,7 @@ export const ValidationDashboard = () => {
                 issue={issues?.[company.wikidataId]}
                 company={company}
                 period={period as ReportingPeriod}
+                error={!!issuesError}
                 className=""
               />
             </div>
