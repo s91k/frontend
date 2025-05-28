@@ -7,9 +7,9 @@ type Label = {
   color: string;
 };
 
-type Issue = {
+export type GithubValidationIssue = {
   number: number;
-  url: string;
+  html_url: string;
   title: string;
   user: {
     login: string;

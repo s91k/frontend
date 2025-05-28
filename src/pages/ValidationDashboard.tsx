@@ -10,57 +10,37 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useValidationClaims } from "@/hooks/useValidationClaims";
-import { useValidationReports } from "@/hooks/useValidationReports";
+import {
+  GithubValidationIssue,
+  useValidationReports,
+} from "@/hooks/useValidationReports";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { cn } from "@/lib/utils";
+import { ReportingPeriod } from "@/types/company";
 import { formatPercent } from "@/utils/localizeUnit";
-
-type UnverifiedCompanyWithPeriod = {
-  company: RankedCompany;
-  period: RankedCompany["reportingPeriods"][0];
-};
-
-function splitByFilter<T>(
-  array: T[],
-  filterFn: (item: T) => boolean,
-): [T[], T[]] {
-  return array.reduce<[T[], T[]]>(
-    ([pass, fail], item) => {
-      return filterFn(item) ? [[...pass, item], fail] : [pass, [...fail, item]];
-    },
-    [[], []],
-  );
-}
 
 const useGetUnverifiedCompaniesForYear = (year: number) => {
   const { companies } = useCompanies();
   const { isEmissionsAIGenerated } = useVerificationStatus();
 
-  const [unverified, verified] = splitByFilter(
-    companies
-      .map((company) => {
-        const period = company.reportingPeriods.find(
-          (period) => new Date(period.endDate).getFullYear() == year,
-        );
+  return companies
+    .map((company) => {
+      const period = company.reportingPeriods.find(
+        (period) => new Date(period.endDate).getFullYear() == year,
+      );
 
-        return {
-          company,
-          period,
-        };
-      })
-      .sort(({ company: companyA }, { company: companyB }) =>
-        companyA.name.localeCompare(companyB.name),
-      ),
-    (item) => !!(item.period && isEmissionsAIGenerated(item.period)),
-  );
-
-  return [unverified, verified] as [
-    UnverifiedCompanyWithPeriod[],
-    UnverifiedCompanyWithPeriod[],
-  ];
+      return {
+        company,
+        period: period as ReportingPeriod,
+      };
+    })
+    .filter(({ period }) => period && isEmissionsAIGenerated(period))
+    .sort(({ company: companyA }, { company: companyB }) =>
+      companyA.name.localeCompare(companyB.name),
+    );
 };
 
-const githubUrl = (company: RankedCompany, reportUrl: string | null) => {
+const githubUrl = (company: RankedCompany, reportUrl?: string | null) => {
   const body = reportUrl ? `Report URL: ${reportUrl}` : "";
 
   const encodedTitle = encodeURIComponent(
@@ -68,6 +48,39 @@ const githubUrl = (company: RankedCompany, reportUrl: string | null) => {
   );
   const encodedBody = encodeURIComponent(body);
   return `https://github.com/hallski/klimatkollen-test/issues/new?title=${encodedTitle}&body=${encodedBody}`;
+};
+
+type IssueViewProps = {
+  issue?: GithubValidationIssue;
+  company: RankedCompany;
+  period?: ReportingPeriod;
+  className?: string;
+};
+const IssueView = ({ issue, company, period, className }: IssueViewProps) => {
+  if (!issue) {
+    return <a href={githubUrl(company, period?.reportURL)}>Report issue</a>;
+  }
+
+  return (
+    <span className={className}>
+      <a
+        href={issue.html_url}
+        target="_blank"
+        className={cn(
+          "mr-2",
+          issue.state == "open" ? "text-green-3" : "text-gray-500",
+        )}
+      >{`Issue #${issue.number}`}</a>
+      {issue.labels.map((label) => (
+        <span
+          style={{ backgroundColor: `#${label.color}` }}
+          className="rounded-sm text-xs font-bold uppercase mx-[2px] px-1"
+        >
+          {label.name}
+        </span>
+      ))}
+    </span>
+  );
 };
 
 export const ValidationDashboard = () => {
@@ -79,8 +92,7 @@ export const ValidationDashboard = () => {
     loading: companiesLoading,
     error: companiesError,
   } = useCompanies();
-  const [unverifiedCompanies, _verifiedCompanies] =
-    useGetUnverifiedCompaniesForYear(parseInt(year));
+  const unverifiedCompanies = useGetUnverifiedCompaniesForYear(parseInt(year));
   const { currentLanguage } = useLanguage();
   const { user } = useAuth();
   const {
@@ -143,8 +155,8 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
-      <div className="inline-grid grid-cols-[auto_auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400">
-        <div className="col-span-4">
+      <div className="inline-grid grid-cols-[auto_auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400 pb-2">
+        <div className="col-span-5">
           <p className="text-gray-400 mb-1">
             Verified: {allCompanies.length - unverifiedCompanies.length} of{" "}
             {allCompanies.length}
@@ -154,12 +166,12 @@ export const ValidationDashboard = () => {
           </p>
           <Progress value={progress * 100} className="mb-8" />
         </div>
-        <div className="grid grid-cols-subgrid col-span-5 text-gray-400 border-b border-gray-400">
+        <div className="grid grid-cols-subgrid col-span-5 text-gray-400 border-b border-gray-400 pb-1 mb-2">
           <span>Company name</span>
           <span>Report link</span>
           <span>In progress by</span>
           <span>Start/stop working</span>
-          <span>Issues</span>
+          <span className="">Issues</span>
         </div>
 
         {unverifiedCompanies.length > 0 ? (
@@ -168,14 +180,15 @@ export const ValidationDashboard = () => {
               key={company.wikidataId}
               className="grid grid-cols-subgrid col-span-5"
             >
-              <a
-                className="text-blue-2"
-                href={`/companies/${company.wikidataId}/edit`}
-              >
+              <a target="_blank" href={`/companies/${company.wikidataId}/edit`}>
                 {company.name}
               </a>
               {period.reportURL ? (
-                <a className="text-blue-3 text-center" href={period.reportURL}>
+                <a
+                  className="text-blue-3 text-center"
+                  target="_blank"
+                  href={period.reportURL}
+                >
                   Report
                 </a>
               ) : (
@@ -219,28 +232,20 @@ export const ValidationDashboard = () => {
                   </button>
                 )}
               </div>
-              {issues![company.wikidataId] ? (
-                <span>
-                  <a
-                    href={issues![company.wikidataId].url}
-                    className={cn(
-                      "mr-2",
-                      issues![company.wikidataId].state == "open"
-                        ? "text-green-3"
-                        : "text-gray-500",
-                    )}
-                  >{`#${issues![company.wikidataId].number} by ${issues![company.wikidataId].user.login}`}</a>
-                  {issues![company.wikidataId].labels.map((label) => (
-                    <span
-                      style={{ backgroundColor: `#${label.color}` }}
-                      className="rounded-2xl mx-[2px] px-2"
-                    >
-                      {label.name}
-                    </span>
-                  ))}
-                </span>
+              {issues && issues[company.wikidataId] ? (
+                <IssueView
+                  issue={issues[company.wikidataId]}
+                  company={company}
+                  period={period as ReportingPeriod}
+                  className=""
+                />
               ) : (
-                <a href={githubUrl(company, period.reportURL)}>Report issue</a>
+                <a
+                  href={githubUrl(company, period.reportURL)}
+                  className="text-blue-2"
+                >
+                  Report issue
+                </a>
               )}
             </div>
           ))
