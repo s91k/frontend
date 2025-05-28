@@ -10,6 +10,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
 import { useValidationClaims } from "@/hooks/useValidationClaims";
+import { useValidationReports } from "@/hooks/useValidationReports";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { cn } from "@/lib/utils";
 import { formatPercent } from "@/utils/localizeUnit";
@@ -18,41 +19,83 @@ type UnverifiedCompanyWithPeriod = {
   company: RankedCompany;
   period: RankedCompany["reportingPeriods"][0];
 };
+
+function splitByFilter<T>(
+  array: T[],
+  filterFn: (item: T) => boolean,
+): [T[], T[]] {
+  return array.reduce<[T[], T[]]>(
+    ([pass, fail], item) => {
+      return filterFn(item) ? [[...pass, item], fail] : [pass, [...fail, item]];
+    },
+    [[], []],
+  );
+}
+
 const useGetUnverifiedCompaniesForYear = (year: number) => {
   const { companies } = useCompanies();
   const { isEmissionsAIGenerated } = useVerificationStatus();
 
-  const unverifiedCompanies = companies
-    .map((company) => {
-      const period = company.reportingPeriods.find(
-        (period) => new Date(period.endDate).getFullYear() == year,
-      );
+  const [unverified, verified] = splitByFilter(
+    companies
+      .map((company) => {
+        const period = company.reportingPeriods.find(
+          (period) => new Date(period.endDate).getFullYear() == year,
+        );
 
-      return {
-        company,
-        period,
-      };
-    })
-    .filter(({ period }) => {
-      return period && isEmissionsAIGenerated(period);
-    })
-    .sort(({ company: companyA }, { company: companyB }) =>
-      companyA.name.localeCompare(companyB.name),
-    );
+        return {
+          company,
+          period,
+        };
+      })
+      .sort(({ company: companyA }, { company: companyB }) =>
+        companyA.name.localeCompare(companyB.name),
+      ),
+    (item) => !!(item.period && isEmissionsAIGenerated(item.period)),
+  );
 
-  return unverifiedCompanies as UnverifiedCompanyWithPeriod[];
+  return [unverified, verified] as [
+    UnverifiedCompanyWithPeriod[],
+    UnverifiedCompanyWithPeriod[],
+  ];
+};
+
+const githubUrl = (company: RankedCompany, reportUrl: string | null) => {
+  const body = reportUrl ? `Report URL: ${reportUrl}` : "";
+
+  const encodedTitle = encodeURIComponent(
+    `[${company.wikidataId}] ${company.name}`,
+  );
+  const encodedBody = encodeURIComponent(body);
+  return `https://github.com/hallski/klimatkollen-test/issues/new?title=${encodedTitle}&body=${encodedBody}`;
 };
 
 export const ValidationDashboard = () => {
   const year =
     new URLSearchParams(window.location.search).get("year") || "2024";
 
-  const { companies: allCompanies } = useCompanies();
-  const companies = useGetUnverifiedCompaniesForYear(parseInt(year));
+  const {
+    companies: allCompanies,
+    loading: companiesLoading,
+    error: companiesError,
+  } = useCompanies();
+  const [unverifiedCompanies, _verifiedCompanies] =
+    useGetUnverifiedCompaniesForYear(parseInt(year));
   const { currentLanguage } = useLanguage();
   const { user } = useAuth();
+  const {
+    issues,
+    isLoading: issuesLoading,
+    error: issuesError,
+  } = useValidationReports();
 
-  const { claims, claimValidation, unclaimValidation } = useValidationClaims();
+  const {
+    claims,
+    claimValidation,
+    unclaimValidation,
+    isLoading: claimsLoading,
+    error: claimsError,
+  } = useValidationClaims();
 
   const handleYearChange = (selectedYear: string) => {
     const url = new URL(window.location.href);
@@ -67,8 +110,16 @@ export const ValidationDashboard = () => {
 
   const years = Array.from({ length: 5 }, (_, i) => 2024 - i);
 
-  const nrFinishedCompanies = allCompanies.length - companies.length;
+  const nrFinishedCompanies = allCompanies.length - unverifiedCompanies.length;
   const progress = nrFinishedCompanies / allCompanies.length;
+
+  if (issuesError || companiesError || claimsError) {
+    return <span>Error</span>;
+  }
+
+  if (issuesLoading || companiesLoading || claimsLoading) {
+    return <span>Loading</span>;
+  }
 
   return (
     <div className="p-4">
@@ -92,10 +143,10 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
-      <div className="inline-grid grid-cols-[auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400">
+      <div className="inline-grid grid-cols-[auto_auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400">
         <div className="col-span-4">
           <p className="text-gray-400 mb-1">
-            Verified: {allCompanies.length - companies.length} of{" "}
+            Verified: {allCompanies.length - unverifiedCompanies.length} of{" "}
             {allCompanies.length}
             <span className="ml-2">
               ({formatPercent(progress, currentLanguage)})
@@ -103,18 +154,19 @@ export const ValidationDashboard = () => {
           </p>
           <Progress value={progress * 100} className="mb-8" />
         </div>
-        <div className="grid grid-cols-subgrid col-span-4 text-gray-400 border-b border-gray-400">
+        <div className="grid grid-cols-subgrid col-span-5 text-gray-400 border-b border-gray-400">
           <span>Company name</span>
           <span>Report link</span>
           <span>In progress by</span>
           <span>Start/stop working</span>
+          <span>Issues</span>
         </div>
 
-        {companies.length > 0 ? (
-          companies.map(({ company, period }) => (
+        {unverifiedCompanies.length > 0 ? (
+          unverifiedCompanies.map(({ company, period }) => (
             <div
               key={company.wikidataId}
-              className="grid grid-cols-subgrid col-span-4"
+              className="grid grid-cols-subgrid col-span-5"
             >
               <a
                 className="text-blue-2"
@@ -167,6 +219,29 @@ export const ValidationDashboard = () => {
                   </button>
                 )}
               </div>
+              {issues![company.wikidataId] ? (
+                <span>
+                  <a
+                    href={issues![company.wikidataId].url}
+                    className={cn(
+                      "mr-2",
+                      issues![company.wikidataId].state == "open"
+                        ? "text-green-3"
+                        : "text-gray-500",
+                    )}
+                  >{`#${issues![company.wikidataId].number} by ${issues![company.wikidataId].user.login}`}</a>
+                  {issues![company.wikidataId].labels.map((label) => (
+                    <span
+                      style={{ backgroundColor: `#${label.color}` }}
+                      className="rounded-2xl mx-[2px] px-2"
+                    >
+                      {label.name}
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                <a href={githubUrl(company, period.reportURL)}>Report issue</a>
+              )}
             </div>
           ))
         ) : (
