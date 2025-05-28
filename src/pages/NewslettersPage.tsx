@@ -1,13 +1,36 @@
 import { useTranslation } from "react-i18next";
 import { articleMetaData } from "@/lib/learn-more/articleList";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { newsletterList } from "@/lib/newletterArchive/newletterData";
+import { useState, useEffect, useRef } from "react";
+import { useScreenSize } from "@/hooks/useScreenSize";
+import { NewsletterNavigation } from "@/components/newsletters/newsletterNavigation";
+import { newsletterList } from "@/lib/newsletterArchive/newsletterData";
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
   const canonicalUrl = "https://klimatkollen.se/insights/newsletter-archive";
   const pageTitle = t("newsletterArchivePage.title");
   const pageDescription = t("newsletterArchivePage.description");
+  const [selectedMonth, setSelectedMonth] = useState("March");
+  const { isMobile } = useScreenSize();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [displayedNewsletter, setDisplayedNewsletter] = useState();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selectedMonth]);
+
+  useEffect(() => {
+    const latestYear = Object.keys(newsletterList)
+      .map(Number)
+      .sort((a, b) => b - a)[0];
+
+    const latestNewspaperPublished = newsletterList[latestYear];
+
+    if (latestNewspaperPublished?.[0]) {
+      setDisplayedNewsletter(latestNewspaperPublished[0]);
+    }
+  }, [newsletterList]);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -24,11 +47,6 @@ export function NewsLetterArchivePage() {
     image: article.image || "",
   }));
 
-  const years = ["2025", "2024", "2023", "2023"];
-  /*   const newsletters = [
-    "Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
-  ]; */
-
   return (
     <div className="max-w-[1200px] mx-auto px-4 md:px-6 text-white gap-4">
       <PageHeader
@@ -36,31 +54,46 @@ export function NewsLetterArchivePage() {
         description={t("newsletterArchivePage.description")}
       ></PageHeader>
       <div className="mt-6 relative flex lg:flex-row gap-8">
-        <nav
+        <NewsletterNavigation
+          selectedMonth={selectedMonth}
+          onMonthChange={setSelectedMonth}
+          contentRef={contentRef}
+          setDisplayedNewsletter={setDisplayedNewsletter}
+        />
+        {/*         <nav
           aria-label="Methodology Navigation"
-          className="bg-black-2 rounded-md h-60 p-2 w-64"
+          className="bg-black-2 rounded-md p-2"
         >
+          <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
+
           <ul className="divide-y divide-black-1">
-            {years.map((year) => (
-              <li key="1">
+            {Object.keys(newsletterList).map((year) => (
+              <li key={year}>
                 <button
-                  /*               onClick={() => toggleCategory(category)}
-                   */ className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
-                  /*               aria-expanded={expandedCategories.includes(category)}
-                   */
+                  onClick={() => toggleYear(year)}
+                  className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
+                                    aria-expanded={setExpandedYear.includes(year)}
+                  
                 >
-                  {year}
+                  <span>{t(`${year}`)}</span>
+                  {expandedYear.includes(year) ? (
+                    <ChevronUp size={18} className="text-grey" />
+                  ) : (
+                    <ChevronDown size={18} className="text-grey" />
+                  )}
                 </button>
               </li>
             ))}
           </ul>
-        </nav>
-        <iframe
-          className="rounded-md w-full bg-black-2"
-          src="newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf"
-          height={800}
-          width={1000}
-        ></iframe>
+        </nav> */}
+        {displayedNewsletter?.url && (
+          <iframe
+            className="rounded-md w-full bg-black-2"
+            src={`${displayedNewsletter.url}`}
+            height={800}
+            width={1000}
+          ></iframe>
+        )}
       </div>
     </div>
   );

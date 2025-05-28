@@ -1,46 +1,47 @@
 import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { methodologySections } from "@/lib/methods/methodologyData";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { newsletterList } from "@/lib/newsletterArchive/newsletterData";
 
-interface MethodologyNavigationProps {
-  selectedMethod: string;
-  onMethodChange: (method: string) => void;
+interface NewsletterNavigationProps {
+  selectedMonth: string;
+  onMonthChange: (month: string) => void;
   contentRef: React.RefObject<HTMLDivElement>;
+  setDisplayedNewsletter;
 }
 
-export function MethodologyNavigation({
-  selectedMethod,
-  onMethodChange,
+export function NewsletterNavigation({
+  selectedMonth,
+  onMonthChange,
   contentRef,
-}: MethodologyNavigationProps) {
+  setDisplayedNewsletter,
+}: NewsletterNavigationProps) {
   const { t } = useTranslation();
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(
-    Object.keys(methodologySections),
+  const [expandedYear, setExpandedYear] = useState<string[]>(
+    Object.keys(newsletterList),
   );
   const { isMobile } = useScreenSize();
 
-  console.log(Object.keys(methodologySections))
   useEffect(() => {
     if (isMobile) {
-      setExpandedCategories([]);
+      setExpandedYear([]);
     } else {
-      setExpandedCategories(Object.keys(methodologySections));
+      setExpandedYear(Object.keys(newsletterList));
     }
   }, [isMobile]);
 
-  const toggleCategory = (category: string) => {
-    setExpandedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((cat) => cat !== category)
-        : [...prev, category],
+  const toggleYear = (year: string) => {
+    setExpandedYear((prev) =>
+      prev.includes(year)
+        ? prev.filter((cat) => cat !== year)
+        : [...prev, year],
     );
   };
 
   // Scroll to MethodContent on mobile when a method is selected
-  const handleMethodChange = (method: string) => {
-    onMethodChange(method);
+  const handleMonthChange = (month: string) => {
+    onMonthChange(month);
     if (isMobile && contentRef?.current) {
       setTimeout(() => {
         if (!contentRef.current) return;
@@ -55,42 +56,45 @@ export function MethodologyNavigation({
   return (
     <nav
       aria-label="Methodology Navigation"
-      className="bg-black-2 rounded-md p-2"
+      className="bg-black-2 rounded-md p-2 min-w-[280px]"
     >
       <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
 
       <ul className="divide-y divide-black-1">
-        {Object.entries(methodologySections).map(([category, methods]) => (
-          <li key={category}>
+        {Object.entries(newsletterList).map(([year, months]) => (
+          <li key={year}>
             <button
-              onClick={() => toggleCategory(category)}
+              onClick={() => toggleYear(year)}
               className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
-              aria-expanded={expandedCategories.includes(category)}
+              aria-expanded={expandedYear.includes(year)}
             >
-              <span>{t(`methodsPage.categories.${category}`)}</span>
-              {expandedCategories.includes(category) ? (
+              <span>{year}</span>
+              {expandedYear.includes(year) ? (
                 <ChevronUp size={18} className="text-grey" />
               ) : (
                 <ChevronDown size={18} className="text-grey" />
               )}
             </button>
 
-            {expandedCategories.includes(category) && (
+            {expandedYear.includes(year) && (
               <ul className="pl-4 pb-2 animate-slideDown">
-                {methods.map((method) => (
-                  <li key={method.id}>
+                {months.map((month) => (
+                  <li key={month.id}>
                     <button
-                      onClick={() => handleMethodChange(method.id)}
+                      onClick={() => {
+                        handleMonthChange(month.id);
+                        setDisplayedNewsletter(month);
+                      }}
                       className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
-                        selectedMethod === method.id
+                        selectedMonth === month.id
                           ? "bg-black-1 text-blue-3 font-medium"
                           : "text-grey hover:bg-black-1 hover:text-white"
                       }`}
                       aria-current={
-                        selectedMethod === method.id ? "page" : undefined
+                        selectedMonth === month.id ? "page" : undefined
                       }
                     >
-                      {t(`methodsPage.${category}.${method.id}.title`)}
+                      {month.monthPosted}
                     </button>
                   </li>
                 ))}

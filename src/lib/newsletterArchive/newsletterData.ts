@@ -3,32 +3,51 @@ export type NewsletterType = {
   url: String;
   yearPosted: Number;
   monthPosted: String;
-  category: String;
 };
 
 export type NewsletterArchiveList = {
   newsletters: NewsletterType[];
 };
 
-export const newsletterSections = {
-  2025: [
+export const newsletterList = {
+  2024: [
     {
-      id: "March",
-      category: 2025,
-      url: "newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      id: "3",
+      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      yearPosted: 2024,
+      monthPosted: "November",
     },
     {
-      id: "February",
-      url: "newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
-      category: "2025",
+      id: "4",
+      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      yearPosted: 2024,
+      monthPosted: "October",
     },
     {
-      id: "January",
-      category: "2025",
-      url: "newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      id: "5",
+      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      yearPosted: 2024,
+      monthPosted: "September",
     },
   ],
-  2024: [],
-  2023: [],
-  2022: [],
+  2025: [
+    {
+      id: "0",
+      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      yearPosted: 2025,
+      monthPosted: "March",
+    },
+    {
+      id: "1",
+      url: "",
+      yearPosted: 2025,
+      monthPosted: "February",
+    },
+    {
+      id: "2",
+      url: "03-2025-newsletters/Storbolagens ökade utsläpp en Brysselresa och AIröster från framtiden.pdf",
+      yearPosted: 2025,
+      monthPosted: "January",
+    },
+  ],
 };
