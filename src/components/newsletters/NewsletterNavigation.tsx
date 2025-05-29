@@ -9,7 +9,7 @@ interface NewsletterNavigationProps {
   selectedMonth: string;
   onMonthChange: (month: string) => void;
   contentRef: React.RefObject<HTMLDivElement>;
-  setDisplayedNewsletter: NewsletterType;
+  setDisplayedNewsletter?: NewsletterType;
 }
 
 export function NewsletterNavigation({
@@ -40,7 +40,16 @@ export function NewsletterNavigation({
     );
   };
 
-  // Scroll to MethodContent on mobile when a method is selected
+  //Having it as an array, mapping of year posted as category instead and filtering that.
+  const yearsPosted = new Set(
+    newsletterList.map((newsletter) => {
+      return newsletter.yearPosted;
+    }),
+  );
+
+  const yearsPostedArray = [...yearsPosted];
+  console.log(yearsPostedArray);
+
   const handleMonthChange = (month: string) => {
     onMonthChange(month);
     if (isMobile && contentRef?.current) {
@@ -62,47 +71,53 @@ export function NewsletterNavigation({
       <h2 className="sr-only">{t("methodsPage.dataSelector.label")}</h2>
 
       <ul className="divide-y divide-black-1">
-        {Object.entries(newsletterList).map(([year, months]) => (
-          <li key={year}>
-            <button
-              onClick={() => toggleYear(year)}
-              className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
-              aria-expanded={expandedYear.includes(year)}
-            >
-              <span>{year}</span>
-              {expandedYear.includes(year) ? (
-                <ChevronUp size={18} className="text-grey" />
-              ) : (
-                <ChevronDown size={18} className="text-grey" />
-              )}
-            </button>
+        {yearsPostedArray.map((year, index) => {
+          return (
+            <li key={index}>
+              <button
+                onClick={() => toggleYear(year)}
+                className="flex justify-between items-center w-full p-3 my-1 text-left font-medium text-white hover:bg-black-1 transition-colors duration-200 rounded-lg"
+                aria-expanded={expandedYear.includes(year)}
+              >
+                <span>{year}</span>
+                {expandedYear.includes(year) ? (
+                  <ChevronUp size={18} className="text-grey" />
+                ) : (
+                  <ChevronDown size={18} className="text-grey" />
+                )}
+              </button>
 
-            {expandedYear.includes(year) && (
-              <ul className="pl-4 pb-2 animate-slideDown">
-                {months.map((month) => (
-                  <li key={month.url}>
-                    <button
-                      onClick={() => {
-                        handleMonthChange(month.url);
-                        setDisplayedNewsletter(month);
-                      }}
-                      className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
-                        selectedMonth === month.url
-                          ? "bg-black-1 text-blue-3 font-medium"
-                          : "text-grey hover:bg-black-1 hover:text-white"
-                      }`}
-                      aria-current={
-                        selectedMonth === month.url ? "page" : undefined
-                      }
-                    >
-                      {month.monthPosted}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
+              {expandedYear.includes(year) && (
+                <ul className="pl-4 pb-2 animate-slideDown">
+                  {newsletterList.map((newsletter) =>
+                    newsletter.yearPosted === year ? (
+                      <li key={newsletter.url}>
+                        <button
+                          onClick={() => {
+                            handleMonthChange(newsletter.url);
+                            setDisplayedNewsletter(newsletter);
+                          }}
+                          className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
+                            selectedMonth === newsletter.url
+                              ? "bg-black-1 text-blue-3 font-medium"
+                              : "text-grey hover:bg-black-1 hover:text-white"
+                          }`}
+                          aria-current={
+                            selectedMonth === newsletter.url
+                              ? "page"
+                              : undefined
+                          }
+                        >
+                          {newsletter.monthPosted}
+                        </button>
+                      </li>
+                    ) : null,
+                  )}
+                </ul>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

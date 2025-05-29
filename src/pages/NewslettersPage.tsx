@@ -4,8 +4,10 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { useState, useEffect, useRef } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterNavigation } from "@/components/newsletters/newsletterNavigation";
-import { newsletterList, NewsletterType } from "@/lib/newsletterArchive/newsletterData";
-
+import {
+  newsletterList,
+  NewsletterType,
+} from "@/lib/newsletterArchive/newsletterData";
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
@@ -15,7 +17,8 @@ export function NewsLetterArchivePage() {
   const [selectedMonth, setSelectedMonth] = useState("March");
   const { isMobile } = useScreenSize();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [displayedNewsletter, setDisplayedNewsletter] = useState<NewsletterType>();
+  const [displayedNewsletter, setDisplayedNewsletter] =
+    useState<NewsletterType>();
 
   useEffect(() => {
     window.scrollTo(0, 0);
