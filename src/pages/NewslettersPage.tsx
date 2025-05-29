@@ -7,6 +7,7 @@ import { NewsletterNavigation } from "@/components/newsletters/newsletterNavigat
 import {
   newsletterList,
   NewsletterType,
+  monthsToNumberedValue,
 } from "@/lib/newsletterArchive/newsletterData";
 
 export function NewsLetterArchivePage() {
@@ -14,7 +15,7 @@ export function NewsLetterArchivePage() {
   const canonicalUrl = "https://klimatkollen.se/insights/newsletter-archive";
   const pageTitle = t("newsletterArchivePage.title");
   const pageDescription = t("newsletterArchivePage.description");
-  const [selectedMonth, setSelectedMonth] = useState("March");
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const { isMobile } = useScreenSize();
   const contentRef = useRef<HTMLDivElement>(null);
   const [displayedNewsletter, setDisplayedNewsletter] =
@@ -25,16 +26,29 @@ export function NewsLetterArchivePage() {
   }, [selectedMonth]);
 
   useEffect(() => {
-    const latestYear = Object.keys(newsletterList)
-      .map(Number)
-      .sort((a, b) => b - a)[0];
+    const sortedNewsletterList = [...newsletterList].sort((a, b) => {
+      const yearA = parseInt(a.yearPosted);
+      const yearB = parseInt(b.yearPosted);
 
-    const latestNewspaperPublished = newsletterList[latestYear];
+      const monthA = convertMonthToNumber(a.monthPosted) ?? 0;
+      const monthB = convertMonthToNumber(b.monthPosted) ?? 0;
 
-    if (latestNewspaperPublished?.[0]) {
-      setDisplayedNewsletter(latestNewspaperPublished[0]);
-    }
-  }, [newsletterList]);
+      const sortValueA = yearA * 100 + monthA;
+      const sortValueB = yearB * 100 + monthB;
+
+      return sortValueB - sortValueA;
+    });
+
+    setDisplayedNewsletter(sortedNewsletterList[0]);
+    setSelectedMonth(sortedNewsletterList[0].url);
+  }, []);
+
+  const convertMonthToNumber = (month: string) => {
+    const foundMonth = monthsToNumberedValue.find(
+      (listedMonth) => listedMonth.name === month,
+    );
+    return foundMonth?.number;
+  };
 
   const structuredData = {
     "@context": "https://schema.org",

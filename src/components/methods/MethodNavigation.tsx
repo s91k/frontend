@@ -21,7 +21,6 @@ export function MethodologyNavigation({
   );
   const { isMobile } = useScreenSize();
 
-  console.log(Object.keys(methodologySections))
   useEffect(() => {
     if (isMobile) {
       setExpandedCategories([]);

@@ -1,5 +1,4 @@
 export type NewsletterType = {
-  id: String;
   url: String;
   yearPosted: String;
   monthPosted: String;
@@ -19,11 +18,6 @@ export const newsletterList = [
     url: "newsletters/03-2025-Storbolagens ökade utsläpp, en Brysselresa och AI-röster från framtiden.pdf",
     yearPosted: "2025",
     monthPosted: "March",
-  },
-  {
-    url: "newsletters/12-2024-Ökade utsläpp i statliga bolag + vår julklapp.pdf",
-    yearPosted: "2024",
-    monthPosted: "December",
   },
   {
     url: "newsletters/11-2024-Därför finns vi nu på Wikipedia (+ storbolagslista och AI-podd!).pdf",
@@ -46,6 +40,11 @@ export const newsletterList = [
     monthPosted: "May",
   },
   {
+    url: "newsletters/12-2024-Ökade utsläpp i statliga bolag + vår julklapp.pdf",
+    yearPosted: "2024",
+    monthPosted: "December",
+  },
+  {
     url: "newsletters/03-2024-Endast 122 kommuner ställer klimatkrav vid upphandling.pdf",
     yearPosted: "2024",
     monthPosted: "March",
@@ -54,5 +53,56 @@ export const newsletterList = [
     url: "newsletters/01-2024-Bara 74 kommuner klarar EU_s rekommendation om laddinfrastruktur.pdf",
     yearPosted: "2024",
     monthPosted: "January",
+  },
+];
+
+export const monthsToNumberedValue = [
+  {
+    number: 1,
+    name: "January",
+  },
+  {
+    number: 2,
+    name: "February",
+  },
+  {
+    number: 3,
+    name: "March",
+  },
+  {
+    number: 4,
+    name: "April",
+  },
+  {
+    number: 5,
+    name: "May",
+  },
+  {
+    number: 6,
+    name: "June",
+  },
+  {
+    number: 7,
+    name: "July",
+  },
+  {
+    number: 8,
+    name: "August",
+  },
+  {
+    number: 9,
+    name: "September",
+  },
+  {
+    number: 10,
+    name: "October",
+  },
+  {
+    number: 11,
+    name: "November",
+  },
+  {
+    number: 12,
+    name: "December",
   },
 ];

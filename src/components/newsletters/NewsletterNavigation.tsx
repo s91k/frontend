@@ -9,7 +9,7 @@ interface NewsletterNavigationProps {
   selectedMonth: string;
   onMonthChange: (month: string) => void;
   contentRef: React.RefObject<HTMLDivElement>;
-  setDisplayedNewsletter?: NewsletterType;
+  setDisplayedNewsletter?: (newsletter: NewsletterType) => void;
 }
 
 export function NewsletterNavigation({
@@ -20,15 +20,21 @@ export function NewsletterNavigation({
 }: NewsletterNavigationProps) {
   const { t } = useTranslation();
   const [expandedYear, setExpandedYear] = useState<string[]>(
-    Object.keys(newsletterList),
+    newsletterList.map((newsletter) => {
+      return newsletter.yearPosted;
+    }),
   );
   const { isMobile } = useScreenSize();
-
+  console.log(selectedMonth);
   useEffect(() => {
     if (isMobile) {
       setExpandedYear([]);
     } else {
-      setExpandedYear(Object.keys(newsletterList));
+      setExpandedYear(
+        newsletterList.map((newsletter) => {
+          return newsletter.yearPosted;
+        }),
+      );
     }
   }, [isMobile]);
 
@@ -40,7 +46,6 @@ export function NewsletterNavigation({
     );
   };
 
-  //Having it as an array, mapping of year posted as category instead and filtering that.
   const yearsPosted = new Set(
     newsletterList.map((newsletter) => {
       return newsletter.yearPosted;
@@ -48,7 +53,6 @@ export function NewsletterNavigation({
   );
 
   const yearsPostedArray = [...yearsPosted];
-  console.log(yearsPostedArray);
 
   const handleMonthChange = (month: string) => {
     onMonthChange(month);
@@ -95,7 +99,7 @@ export function NewsletterNavigation({
                         <button
                           onClick={() => {
                             handleMonthChange(newsletter.url);
-                            setDisplayedNewsletter(newsletter);
+                            setDisplayedNewsletter?.(newsletter);
                           }}
                           className={`w-full p-2 my-0.5 text-left text-sm rounded-lg transition-colors duration-200 ${
                             selectedMonth === newsletter.url
