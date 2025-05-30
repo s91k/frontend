@@ -176,6 +176,7 @@ export interface paths {
                             wikidataId: string;
                             name: string;
                             description: string | null;
+                            lei?: string | null;
                             reportingPeriods: {
                                 startDate: string;
                                 endDate: string;
@@ -283,6 +284,22 @@ export interface paths {
                                     } | null;
                                 };
                             } | null;
+                            baseYear?: {
+                                id: string;
+                                year: number;
+                                metadata: {
+                                    id: string;
+                                    comment: string | null;
+                                    source: string | null;
+                                    updatedAt: string;
+                                    user: {
+                                        name: string;
+                                    };
+                                    verifiedBy: {
+                                        name: string;
+                                    } | null;
+                                };
+                            } | null;
                             tags: string[];
                         }[];
                     };
@@ -290,83 +307,7 @@ export interface paths {
             };
         };
         put?: never;
-        /**
-         * Create or update a company
-         * @description Creates a new company or updates an existing one based on wikidataId
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        wikidataId: string;
-                        name: string;
-                        description?: string;
-                        /** Format: uri */
-                        url?: string;
-                        internalComment?: string;
-                        tags?: string[];
-                    };
-                };
-            };
-            responses: {
-                /** @description Default Response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            ok: boolean;
-                        };
-                    };
-                };
-                /** @description Default Response */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            code: string;
-                            message?: string;
-                            details?: unknown;
-                        };
-                    };
-                };
-                /** @description Default Response */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            code: string;
-                            message?: string;
-                            details?: unknown;
-                        };
-                    };
-                };
-                /** @description Default Response */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            code: string;
-                            message?: string;
-                            details?: unknown;
-                        };
-                    };
-                };
-            };
-        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -405,6 +346,7 @@ export interface paths {
                             wikidataId: string;
                             name: string;
                             description: string | null;
+                            lei?: string | null;
                             reportingPeriods: {
                                 id: string;
                                 startDate: string;
@@ -626,7 +568,7 @@ export interface paths {
                                     } | null;
                                 };
                             } | null;
-                            baseYear: {
+                            baseYear?: {
                                 id: string;
                                 year: number;
                                 metadata: {
@@ -712,7 +654,86 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
+        /**
+         * Create or update a company
+         * @description Creates a new company or updates an existing one based on wikidataId
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    wikidataId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        wikidataId: string;
+                        name: string;
+                        description?: string;
+                        /** Format: uri */
+                        url?: string;
+                        internalComment?: string;
+                        tags?: string[];
+                        lei?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            ok: boolean;
+                        };
+                    };
+                };
+                /** @description Default Response */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message?: string;
+                            details?: unknown;
+                        };
+                    };
+                };
+                /** @description Default Response */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message?: string;
+                            details?: unknown;
+                        };
+                    };
+                };
+                /** @description Default Response */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message?: string;
+                            details?: unknown;
+                        };
+                    };
+                };
+            };
+        };
         /**
          * Delete company
          * @description Delete a company by Wikidata ID
@@ -815,6 +836,7 @@ export interface paths {
                             wikidataId: string;
                             name: string;
                             description: string | null;
+                            lei?: string | null;
                             reportingPeriods: {
                                 startDate: string;
                                 endDate: string;
@@ -917,6 +939,22 @@ export interface paths {
                                     subIndustryCode: string;
                                 };
                                 metadata: {
+                                    verifiedBy: {
+                                        name: string;
+                                    } | null;
+                                };
+                            } | null;
+                            baseYear?: {
+                                id: string;
+                                year: number;
+                                metadata: {
+                                    id: string;
+                                    comment: string | null;
+                                    source: string | null;
+                                    updatedAt: string;
+                                    user: {
+                                        name: string;
+                                    };
                                     verifiedBy: {
                                         name: string;
                                     } | null;
@@ -3078,7 +3116,7 @@ export interface paths {
         put?: never;
         /**
          * Claim a company
-         * @description Claim stuff
+         * @description Used to claim that a company report is being worked on
          */
         post: {
             parameters: {
@@ -3112,7 +3150,7 @@ export interface paths {
         };
         /**
          * Delete a claim
-         * @description Claim stuff
+         * @description Used to release a claim
          */
         delete: {
             parameters: {
