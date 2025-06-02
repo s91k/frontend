@@ -986,7 +986,8 @@
       "latestYear": "Latest Year",
       "visualisation": "Visualisation",
       "data": "Data",
-      "historicalDevelopment": "Historical Development"
+      "historicalDevelopment": "Historical Development",
+      "ofTotal": "of total"
     },
     "scopeReportingList": {
       "category": "Category"
@@ -1065,7 +1066,7 @@
         "totalConsumptionEmission": {
           "label": "Consumption",
           "description": "Total emissions from consumption",
-          "detailedDescription": "Household consumption emissions (CO₂e) in tonnes per inhabitant and municipality in 2019. By 2050, emissions should be at most 1 tonne per person per year to be in line with the Paris Agreement.",
+          "detailedDescription": "Household consumption emissions (CO₂e) in tonnes per inhabitant and municipality in 2023 (estimated data). By 2050, emissions should be at most 1 tonne per person per year to be in line with the Paris Agreement.",
           "source": "<0>Stockholm Environment Institute</0>"
         },
         "electricVehiclePerChargePoints": {
@@ -1192,7 +1193,7 @@
     "subtitle": "Why tracking, reporting and transparency of emissions is critical to enacting tangible change.",
     "impactTitle": "Understanding the Impact",
     "impactDescription": "Each particle represents millions of tons of CO₂ emissions. Watch as they accumulate over time, demonstrating the exponential growth of global emissions since the industrial revolution.",
-    "impactDescription2": "The visualization above shows how emissions have increased dramatically since 1950, with particularly rapid growth in recent decades.",
+    "impactDescription2": "The visualisation above shows how emissions have increased dramatically since 1950, with particularly rapid growth in recent decades.",
     "trackingTitle": "Measuring to Manage",
     "trackingDescription": "We cannot effectively reduce what is not measured. Accurate emissions tracking is the foundation for meaningful climate action.",
     "companies": "Companies",
