@@ -56,6 +56,12 @@ export function useVerificationStatus() {
     if (isAIGenerated(period.emissions.scope1)) return true;
     if (isAIGenerated(period.emissions.scope2)) return true;
 
+    if (period.emissions.scope3?.statedTotalEmissions) {
+      if ("metadata" in period.emissions.scope3.statedTotalEmissions &&
+        isAIGenerated(period.emissions.scope3.statedTotalEmissions as any))
+        return true;
+    }
+
     // Check scope 3 categories if they exist
     if (period.emissions.scope3?.categories) {
       for (const category of period.emissions.scope3.categories) {
