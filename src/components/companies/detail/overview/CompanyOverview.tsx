@@ -29,6 +29,7 @@ import { AiIcon } from "@/components/ui/ai-icon";
 import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
+import { calculateRateOfChange } from "@/lib/calculations/general";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -72,13 +73,10 @@ export function CompanyOverview({
       company.industry?.industryGics?.en?.sectorName ||
       t("companies.overview.unknownSector");
 
-  const yearOverYearChange =
-    previousPeriod && selectedPeriod.emissions?.calculatedTotalEmissions
-      ? ((selectedPeriod.emissions.calculatedTotalEmissions -
-          (previousPeriod.emissions?.calculatedTotalEmissions || 0)) /
-          (previousPeriod.emissions?.calculatedTotalEmissions || 1)) *
-        100
-      : null;
+  const yearOverYearChange = calculateRateOfChange(
+    selectedPeriod?.emissions?.calculatedTotalEmissions,
+    previousPeriod?.emissions?.calculatedTotalEmissions,
+  );
 
   const sortedPeriods = [...company.reportingPeriods].sort(
     (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
@@ -207,11 +205,7 @@ export function CompanyOverview({
                   yearOverYearChange < 0 ? "text-orange-2" : "text-pink-3"
                 }
               >
-                {formatPercentChange(
-                  Math.ceil(yearOverYearChange) / 100,
-                  currentLanguage,
-                  true,
-                )}
+                {formatPercentChange(yearOverYearChange, currentLanguage, true)}
               </span>
             ) : (
               <span className="text-grey">
