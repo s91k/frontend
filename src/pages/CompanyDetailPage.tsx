@@ -9,6 +9,7 @@ import { PageSEO } from "@/components/SEO/PageSEO";
 import { createSlug } from "@/lib/utils";
 import { CompanyScope3 } from "@/components/companies/detail/CompanyScope3";
 import { useDataGuide } from "@/data-guide/useDataGuide";
+import { companyDetailsItems } from "@/data-guide/guide-items";
 
 export function CompanyDetailPage() {
   const { t } = useTranslation();
@@ -18,11 +19,11 @@ export function CompanyDetailPage() {
   const { company, loading, error } = useCompanyDetails(id!);
   const [selectedYear, setSelectedYear] = useState<string>("latest");
 
-  useDataGuide(["changeRates", "companySector", "companyTurnover", "tco2e"]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useDataGuide(companyDetailsItems);
 
   if (loading) {
     return (

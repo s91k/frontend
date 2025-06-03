@@ -1,11 +1,11 @@
 import { useState, useMemo, useCallback, createContext } from "react";
-import { HelpItemId } from "./guide-items";
+import { DataGuideItemId } from "./guide-items";
 
-export type ItemRefCount = Record<HelpItemId, number>;
+export type ItemRefCount = Record<DataGuideItemId, number>;
 
 interface DataGuideContext {
-  pushGuideItems: (items: HelpItemId[]) => void;
-  popGuideItems: (items: HelpItemId[]) => void;
+  pushGuideItems: (items: DataGuideItemId[]) => void;
+  popGuideItems: (items: DataGuideItemId[]) => void;
 }
 
 export const DataGuideContext = createContext<DataGuideContext>({
@@ -16,7 +16,7 @@ export const DataGuideContext = createContext<DataGuideContext>({
 export const itemsToShow = (itemRefCount: ItemRefCount) =>
   Object.entries(itemRefCount)
     .filter(([_id, refCount]) => refCount > 0)
-    .map(([id, _refCount]) => id as HelpItemId);
+    .map(([id, _refCount]) => id as DataGuideItemId);
 
 export const useTrackGuideItems = () => {
   const [itemRefCount, setItemRefCount] = useState({} as ItemRefCount);
@@ -24,7 +24,7 @@ export const useTrackGuideItems = () => {
   const items = useMemo(() => itemsToShow(itemRefCount), [itemRefCount]);
 
   const pushItems = useCallback(
-    (items: HelpItemId[]) => {
+    (items: DataGuideItemId[]) => {
       setItemRefCount((oldRefCount) =>
         items.reduce(
           (acc, id) => ({
@@ -39,7 +39,7 @@ export const useTrackGuideItems = () => {
   );
 
   const popItems = useCallback(
-    (items: HelpItemId[]) => {
+    (items: DataGuideItemId[]) => {
       setItemRefCount((oldRefCount) =>
         items.reduce(
           (acc, id) => ({

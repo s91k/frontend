@@ -3,12 +3,12 @@ import { PanelRightCloseIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DataGuideContent } from "./DataGuideContent";
-import { HelpItemId } from "./guide-items";
+import { DataGuideItemId } from "./guide-items";
 
 type GuideSidebarProps = {
   toggleOpen: () => void;
   open: boolean;
-  items: HelpItemId[];
+  items: DataGuideItemId[];
 };
 
 export const GuideSidebar = ({

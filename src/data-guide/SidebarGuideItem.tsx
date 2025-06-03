@@ -25,7 +25,8 @@ export const SidebarGuideItem = ({
     >
       <CollapsibleTrigger asChild>
         <button className="flex justify-between w-full mt-2 py-2 items-center">
-          <span>{title}</span> {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          <span className="text-left">{title}</span>
+          {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent>

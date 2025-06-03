@@ -1,11 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { CircleXIcon } from "lucide-react";
 import { ChangeEvent, useMemo, useState } from "react";
-import { dataGuideHelpItems, HelpItemId } from "./guide-items";
-import { SidebarGuideItem } from "./SidebarGuideItem";
+import { dataGuideHelpItems, DataGuideItemId } from "./guide-items";
+import { DataGuideItemView } from "./DataGuideItemView";
 
 type DataGuideContentProps = {
-  items: HelpItemId[];
+  items: DataGuideItemId[];
 };
 
 export const DataGuideContent = ({ items }: DataGuideContentProps) => {
@@ -16,10 +16,10 @@ export const DataGuideContent = ({ items }: DataGuideContentProps) => {
 
     return Object.values(dataGuideHelpItems)
       .filter((i) => items.includes(i.id))
-      .filter((i) => i.title.toLowerCase().includes(filterLC))
-      .sort((a, b) =>
-        a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
-      );
+      .filter((i) => i.titleKey.toLowerCase().includes(filterLC));
+    // .sort((a, b) =>
+    //   a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
+    // );
   }, [filter, items]);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,13 +51,9 @@ export const DataGuideContent = ({ items }: DataGuideContentProps) => {
         )}
       </div>
       <div className="overflow-y-auto overscroll-contain">
-        {filteredItems.map(
-          ({ id, title: itemTitle, component: ItemComponent }) => (
-            <SidebarGuideItem key={id} title={itemTitle}>
-              <ItemComponent />
-            </SidebarGuideItem>
-          ),
-        )}
+        {filteredItems.map((item) => (
+          <DataGuideItemView key={item.id} item={item} />
+        ))}
       </div>
     </div>
   );

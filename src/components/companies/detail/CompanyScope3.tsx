@@ -14,8 +14,6 @@ export function CompanyScope3({
 }: CompanyScope3Props) {
   const { t } = useTranslation();
 
-  useDataGuide(["scopes"]);
-
   if (!emissions?.scope3?.categories?.length) {
     return null;
   }

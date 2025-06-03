@@ -1,13 +1,13 @@
 import { useContext, useMemo, useEffect } from "react";
 import { DataGuideContext } from "./internal";
-import { HelpItemId } from "./guide-items";
+import { DataGuideItemId } from "./guide-items";
 
 /**
  * The main way for components to indicate which help items are relevant when the component is used.
  *
  * @param items The help items relevant to the component using this hook
  */
-export const useDataGuide = (items: HelpItemId[]) => {
+export const useDataGuide = (items: DataGuideItemId[]) => {
   const context = useContext(DataGuideContext);
   if (!context) {
     throw new Error("useDataGuide must be used within a DataGuideProvider");

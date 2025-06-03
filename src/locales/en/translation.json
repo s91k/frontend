@@ -1253,24 +1253,195 @@
     "title": "Data Guide",
     "buttonTitle": "Data Guide",
     "items": {
-      "baseYear": "The base year is a specific year used as a reference point to compare future emissions",
-      "changeRate": "The emission change rate compared to previous year",
-      "companySectors": [
-        "We have diveded companies into different sectors to make it easier to compare companies against each other",
-        "Examples of sectors are:",
-        "- Industrials",
-        "- Energy",
-        "- Consumer Discretionary",
-        "- ..."
-      ],
-      "companyTurnover": "The company turnover is their total revenue or sales. It is important not to confuse this with the profit.",
-      "scopes": [
-        "Scope 1, 2, and 3 emissions come from the Greenhouse Gas Protocol, a global standard for measuring corporate emissions:",
-        "1. **Scope 1** - Direct emissions from company-owned or controlled sources (e.g., fuel combustion).",
-        "2. **Scope 2** - Indirect emissions from purchased energy consumption.",
-        "3. **Scope 3** - Other indirect emissions from the value chain, such as suppliers, product use, and waste."
-      ],
-      "tco2e": "tCO2e stands for \"tonnes of carbon dioxide equivalent\". It's a standardized measure that converts the impact of various greenhouse gases into the equivalent amount of CO2."
+      "totalEmissions": {
+        "title": "What our total emissions represent",
+        "content": [
+          "This figure represents the **total reported greenhouse gas (GHG)**",
+          "emissions for the company in a given year. It includes emissions from **Scope 1, 2, and 3**",
+          "— offering a broad view of the company’s climate impact across its operations and value chain.",
+          "**Note:** Biogenic emissions (e.g. from plant-based materials) are not included in this total.",
+          "Companies report their emissions in three categories **— Scope 1,**",
+          "**Scope 2, and Scope 3 —** to clarify where emissions come from and how responsibility is assigned.",
+          "See the definitions below for a breakdown of each scope."
+        ]
+      },
+      "yearOverYearChange": {
+        "title": "What the year-over-year change shows",
+        "content": [
+          "This number shows the percentage change in total reported emissions compared to the previous year. It helps highlight whether a company’s climate impact was increasing or decreasing between two years.",
+          "",
+          "**Note:** Large changes from one year to the next can sometimes reflect more than just actual emissions trends. For example, emissions can jump or drop if:",
+          "- The company starts or stops reporting certain scopes or categories",
+          "- There’s a merger, acquisition, or major restructuring",
+          "- Reporting methods or boundaries change",
+          "",
+          "Always consider the context when interpreting large percentage changes.",
+          "",
+          "**Most companies track their climate progress based on a selected “base year”** ",
+          "(such as 2019 or 2020), and measure reductions from that starting point.",
+          "",
+          "This number, however, **only shows the change between the selected year and the ",
+          "previous year**, and is not necessarily aligned with the company’s own climate targets or tracking. "
+        ]
+      },
+      "baseYear": {
+        "title": "What is a base year?",
+        "content": [
+          "A base year is the year a company chooses as the starting point for tracking its climate progress. All future emission reductions are usually measured in comparison to this year.",
+          "For example, if a company set its base year as 2020 and aimed to cut emissions by 50% by 2030, all reductions would be measured relative to its 2020 emissions.",
+          "Why it matters:",
+          "The base year provides a consistent reference point to measure long-term progress. Without it, it’s hard to know whether a company is actually reducing emissions — or just fluctuating year to year.",
+          "Note:  Some companies update their base year if they change how they calculate emissions or if they undergo a major restructuring (like a merger or acquisition)."
+        ]
+      },
+      "scope1": {
+        "title": "What is Scope 1",
+        "content": [
+          "**Scope 1 – Direct emissions**",
+          "These are emissions that come directly from activities the company controls.",
+          "Think of things like:",
+          "Fuel burned in company vehicles",
+          "- Emissions from boilers or furnaces in company buildings",
+          "- Any manufacturing processes that release greenhouse gases",
+          "If the company owns it and it burns fuel or releases emissions on-site, it’s Scope 1."
+        ]
+      },
+      "scope2": {
+        "title": "What is Scope 2",
+        "content": [
+          "**Scope 2 – Indirect energy emissions**",
+          "Scope 2 covers emissions from the electricity and energy the company buys and uses, even though the pollution happens at the power plant, not on-site.",
+          "For example:",
+          "- Electricity used to power offices, stores, or factories",
+          "- Heating or cooling purchased from an external provider",
+          "The company doesn’t create these emissions directly, but they’re still responsible for choosing and using that energy."
+        ]
+      },
+      "scope3": {
+        "title": "What is Scope 3",
+        "content": [
+          "Scope 3 – Other indirect emissions (supply chain and beyond)",
+          "Scope 3 is the broadest category. It includes all other emissions connected to the company, both before and after its operations — even if the company doesn’t directly control them.",
+          "Scope 3 is split into two parts:",
+          "**Upstream emissions** (before the product reaches the company):",
+          "- Making and transporting raw materials",
+          "- Emissions from suppliers",
+          "- Business travel or employee commuting",
+          "",
+          "**Downstream emissions** (after the company sells the product):",
+          "- How customers use the product",
+          "- How the product is disposed of or recycled",
+          "- Investments or services the company funds"
+        ]
+      },
+      "companySectors": {
+        "title": "Understanding company sectors",
+        "content": [
+          "Companies are grouped into sectors based on what they do, using the Global Industry Classification Standard (GICS). This system helps organize companies into consistent categories — such as energy, finance, consumer goods, or technology — making it easier to compare businesses with similar operations.",
+          "[Learn more about the GICS system here](https://www.msci.com/our-solutions/indexes/gics)",
+          "**Why it matters:**",
+          "Different industries have very different emissions profiles and challenges.",
+          "For example:",
+          "- A **utility company** may naturally have high emissions due to energy production",
+          "- A **tech company** might have lower direct emissions but still face pressure to reduce supply chain (Scope 3) impacts",
+          "Comparing companies within the same sector helps provide more meaningful insights into climate performance and progress."
+        ]
+      },
+      "co2units": {
+        "title": "Units: tCO2 & tCO2e",
+        "content": "All emissions are shown as tonnes CO2 or tonnes CO2e which stands for \"tonnes of carbon dioxide equivalent\". It's a standardized measure that converts the impact of various greenhouse gases into the equivalent amount of CO2."
+      },
+      "companyTurnover": {
+        "title": "What is turnover, and why does it matter for emissions?",
+        "content": [
+          "Turnover refers to the total revenue or income a company generates from its business activities — in other words, how much money it brings in before costs are deducted.",
+          "For example, a company with a turnover of £500 million has earned that amount in sales over the course of a year.",
+          "",
+          "Turnover helps put a company’s emissions into perspective. By comparing emissions to turnover, we can see how much climate impact is generated per unit of economic activity.",
+          "This is often referred to as emissions intensity, and it can help answer questions like:",
+          "- Is the company growing its business while reducing its emissions?",
+          "- How efficient is the company in terms of emissions per £1 million earned?",
+          "",
+          "Two companies might emit the same amount of greenhouse gases, but if one has five times the turnover, it may be operating more efficiently — or have more resources to invest in reductions.",
+          "Turnover doesn’t explain everything, but it’s a useful indicator when comparing companies of different sizes or evaluating progress over time."
+        ]
+      },
+      "scope3EmissionLevels": {
+        "title": "Why are Scope 3 emissions often so much higher?",
+        "content": [
+          "Scope 3 emissions cover all the indirect greenhouse gas emissions that occur outside a company’s own operations — such as those from its supply chain, product use, business travel, waste, and more.",
+          "Because Scope 3 includes so many different activities — from how raw materials are produced to how customers use and dispose of products — it usually represents the largest share of a company’s total climate impact.",
+          "Unlike Scope 1 and 2 emissions, which are mostly under a company’s direct control (e.g. fuel used on-site or electricity purchased), Scope 3 emissions happen outside the company’s walls. This makes them more complex to measure, because:",
+          "- Companies often rely on data from suppliers, partners, or customers, which may not always be available or accurate",
+          "- Emissions can vary greatly depending on how and where products are made, used, and disposed of",
+          "- Some categories, like employee commuting or the full lifecycle of a product, involve many assumptions and estimations",
+          "",
+          "Despite these challenges, tracking Scope 3 is essential for understanding a company’s full climate footprint — and for identifying the biggest opportunities for real emissions reductions."
+        ]
+      },
+      "scope3Variations": {
+        "title": "Why do Scope 3 emissions vary so much between companies?",
+        "content": [
+          "Scope 3 covers all indirect emissions across a company’s value chain — from raw materials and supplier operations to how products are used and disposed of. These emissions vary depending on the company’s size, business model, supply chain complexity, and how much of Scope 3 they actually report.",
+          "Some companies report only a few categories, while others include a full breakdown — which can make comparisons tricky without that context."
+        ]
+      },
+      "companyLowEmissionsImpact": {
+        "title": "Can a company have low emissions but still be harmful to the climate?",
+        "content": [
+          "Yes. A company might show low emissions if it outsources its most polluting activities, reports only partial Scope 3 data, or operates in a low-emitting sector. But it could still be enabling large emissions — for example, through its investments, supply chain choices, or by selling high-impact products.",
+          "Looking only at reported emissions can miss this wider influence — especially if Scope 3 is limited or excluded."
+        ]
+      },
+      "meaningOfNetZero": {
+        "title": "What does “net-zero” actually mean?",
+        "content": [
+          "Net-zero means a company aims to reduce its greenhouse gas emissions as much as possible, and then balance out the remaining emissions by removing an equivalent amount from the atmosphere — often through carbon removal, tree planting, or offsetting.",
+          "This concept is central to the Paris Agreement, which calls on countries (and companies) to reach net-zero emissions by mid-century in order to limit global warming to 1.5°C above pre-industrial levels.",
+          "To be credible, net-zero plans should focus on deep, long-term emission reductions — not just relying on offsets.",
+          "In short: true net-zero means cutting emissions at the source first, then carefully addressing what’s left."
+        ]
+      },
+      "companyRealChange": {
+        "title": "How can I tell if a company is making real progress on climate?",
+        "content": [
+          "Look for:",
+          "- Clear emissions reduction over multiple years (especially in Scope 3)",
+          "- A consistent and disclosed **base year**",
+          "- Sector-specific targets that align with 1.5°C pathways",
+          "- Transparent and consistent reporting across all three scopes",
+          "",
+          "Reductions that follow a clear trend — not just one-off drops — and full Scope 3 reporting are strong signs of serious climate action."
+        ]
+      },
+      "companiesHowToCompare": {
+        "title": "How can I use this information to compare companies fairly?",
+        "content": [
+          "Start by comparing companies **within the same industry**, as different sectors have very different emissions profiles. You can also look at **emissions per million in revenue** (emissions intensity), which helps adjust for company size.",
+          "Finally, consider how complete their reporting is — a company that reports all scopes, even if the numbers are high, is often showing more transparency than one that reports very little."
+        ]
+      },
+      "companyCitizenAction": {
+        "title": "What can I do with this knowledge as a citizen, consumer, investor, or employee?",
+        "content": [
+          "You can use this data to:",
+          "- Support companies that report transparently and act on climate",
+          "- Ask critical questions about gaps or inconsistencies",
+          "- Choose products or services aligned with low-impact sectors",
+          "- Advocate for stronger targets and reporting in your workplace or portfolio",
+          "- Support local and national policy towards industry that improves transparency requirements and follow-through on targets and emissions reduction goals",
+          "",
+          "Climate-literate consumers and stakeholders help push companies to improve — and transparency is a powerful first step."
+        ]
+      },
+      "companyMissingData": {
+        "title": "Why are some companies missing data for certain scopes or years?",
+        "content": [
+          "Some companies may not have systems in place to track full emissions, or may only report what’s legally required or easiest to calculate.",
+          "Others might be new to reporting, have changed methods, or only report certain scopes (like Scope 1 and 2, but not Scope 3).",
+          "Gaps in data don’t automatically mean bad intent — but they do make it harder to judge progress or compare companies fairly."
+        ]
+      }
     }
   }
 }
