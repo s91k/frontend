@@ -19,10 +19,14 @@ export const InternalDashboard = () => {
   const { companies, loading, error } = useCompanies();
   const { currentLanguage } = useLanguage();
 
-  const [sortBy, setSortBy] = useState<"emissions" | "change" | "employees" | "emissionsPerEmployee">("emissions");
+  const [sortBy, setSortBy] = useState<
+    "emissions" | "change" | "employees" | "emissionsPerEmployee"
+  >("emissions");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const handleSort = (column: "emissions" | "change" | "employees" | "emissionsPerEmployee") => {
+  const handleSort = (
+    column: "emissions" | "change" | "employees" | "emissionsPerEmployee",
+  ) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
@@ -75,14 +79,20 @@ export const InternalDashboard = () => {
         } else if (sortBy === "change") {
           comparison = aChange - bChange;
         } else if (sortBy === "employees") {
-          const aEmployees = a.reportingPeriods[0]?.economy?.employees?.value || 0;
-          const bEmployees = b.reportingPeriods[0]?.economy?.employees?.value || 0;
+          const aEmployees =
+            a.reportingPeriods[0]?.economy?.employees?.value || 0;
+          const bEmployees =
+            b.reportingPeriods[0]?.economy?.employees?.value || 0;
           comparison = aEmployees - bEmployees;
         } else if (sortBy === "emissionsPerEmployee") {
-          const aEmissions = a.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
-          const aEmployees = a.reportingPeriods[0]?.economy?.employees?.value || 0;
-          const bEmissions = b.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
-          const bEmployees = b.reportingPeriods[0]?.economy?.employees?.value || 0;
+          const aEmissions =
+            a.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
+          const aEmployees =
+            a.reportingPeriods[0]?.economy?.employees?.value || 0;
+          const bEmissions =
+            b.reportingPeriods[0]?.emissions?.calculatedTotalEmissions || 0;
+          const bEmployees =
+            b.reportingPeriods[0]?.economy?.employees?.value || 0;
           const aRatio = aEmployees > 0 ? aEmissions / aEmployees : 0;
           const bRatio = bEmployees > 0 ? bEmissions / bEmployees : 0;
           comparison = aRatio - bRatio;
@@ -99,7 +109,7 @@ export const InternalDashboard = () => {
     );
 
     return changeRate
-      ? formatPercentChange(changeRate, currentLanguage)
+      ? formatPercentChange(changeRate, currentLanguage, true)
       : "N/A";
   };
 
@@ -110,25 +120,31 @@ export const InternalDashboard = () => {
   };
 
   const getEmployeeCount = (company: RankedCompany) => {
-    const employeeCount = company.reportingPeriods[0]?.economy?.employees?.value;
-    return employeeCount ? formatEmployeeCount(employeeCount, currentLanguage) : "N/A";
+    const employeeCount =
+      company.reportingPeriods[0]?.economy?.employees?.value;
+    return employeeCount
+      ? formatEmployeeCount(employeeCount, currentLanguage)
+      : "N/A";
   };
 
   const getEmissionsPerEmployee = (company: RankedCompany) => {
-    const emissions = company.reportingPeriods[0]?.emissions?.calculatedTotalEmissions;
+    const emissions =
+      company.reportingPeriods[0]?.emissions?.calculatedTotalEmissions;
     const employees = company.reportingPeriods[0]?.economy?.employees?.value;
-    
+
     if (!emissions || !employees || employees === 0) {
       return "N/A";
     }
-    
+
     const ratio = emissions / employees;
     return formatEmissionsAbsolute(ratio, currentLanguage);
   };
 
   const getLatestYear = (company: RankedCompany) => {
     const latestPeriod = company.reportingPeriods[0];
-    return latestPeriod ? new Date(latestPeriod.endDate).getFullYear().toString() : "N/A";
+    return latestPeriod
+      ? new Date(latestPeriod.endDate).getFullYear().toString()
+      : "N/A";
   };
 
   return (
