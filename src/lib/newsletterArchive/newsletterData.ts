@@ -8,9 +8,11 @@ export type NewsletterArchiveList = {
   newsletters: NewsletterType[];
 };
 
+
+
 export const newsletterList = [
   {
-    url: "newsletters/05-2025-Ny data om kommunerna + Almedalen calling.pdf",
+    url: "https://mailchi.mp/ef3701ca8f24/drfr-finns-vi-nu-p-wikipedia-storbolagslista-och-ai-podd?e=24d5e3dd0d",
     yearPosted: "2025",
     monthPosted: "May",
   },
@@ -38,7 +40,7 @@ export const newsletterList = [
     url: "newsletters/05-2024-Nu släpper vi data om storbolagens utsläpp.pdf",
     yearPosted: "2024",
     monthPosted: "May",
-  },
+  },  
   {
     url: "newsletters/12-2024-Ökade utsläpp i statliga bolag + vår julklapp.pdf",
     yearPosted: "2024",

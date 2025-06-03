@@ -3,7 +3,7 @@ import { articleMetaData } from "@/lib/learn-more/articleList";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { useState, useEffect, useRef } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { NewsletterNavigation } from "@/components/newsletters/newsletterNavigation";
+import { NewsletterNavigation } from "@/components/newsletters/NewsletterNavigation";
 import {
   newsletterList,
   NewsletterType,
