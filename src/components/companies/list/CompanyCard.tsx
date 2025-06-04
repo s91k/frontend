@@ -222,7 +222,7 @@ export function CompanyCard({
                   )}
                 >
                   {formatPercentChange(
-                    Math.ceil(emissionsChange) / 100,
+                    parseFloat(emissionsChange.toFixed(1)),
                     currentLanguage,
                   )}
                   {yearOverYearAIGenerated && (
