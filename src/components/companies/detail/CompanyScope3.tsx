@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Scope3Data } from "./Scope3Data";
 import type { Emissions, Scope3HistoricalData } from "@/types/company";
-import { useDataGuide } from "@/data-guide/useDataGuide";
 
 interface CompanyScope3Props {
   emissions: Emissions;

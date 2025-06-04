@@ -17,14 +17,22 @@ export const DataGuideItemView = ({ item }: DataGuidItemViewProps) => {
         remarkPlugins={[remarkBreaks]}
         components={{
           ol: ({ node, children, ...props }) => (
-            <ol {...props} className="list-decimal list-inside mt-4">
+            <ol {...props} className="list-decimal list-outside mt-4">
               {children}
             </ol>
           ),
           ul: ({ node, children, ...props }) => (
-            <ul {...props} className="list-disc list-inside mt-4">
+            <ul {...props} className="list-disc list-outside ml-3 mt-4">
               {children}
             </ul>
+          ),
+          p: ({ node, children, ...props }) => (
+            <p
+              {...props}
+              className="my-2 first:mt-0 last:mb-0 whitespace-pre-wrap"
+            >
+              {children}
+            </p>
           ),
         }}
       >

@@ -67,11 +67,6 @@ export const dataGuideHelpItems = defineHelpItems({
     titleKey: "dataGuide.items.scope3Variations.title",
     contentKey: "dataGuide.items.scope3Variations.content",
   },
-  companyDetails: {
-    id: "companyDetails",
-    titleKey: "dataGuide.items.companyDetails.title",
-    contentKey: "dataGuide.items.companyDetails.content",
-  },
   companyLowEmissionsImpact: {
     id: "companyLowEmissionsImpact",
     titleKey: "dataGuide.items.companyLowEmissionsImpact.title",
