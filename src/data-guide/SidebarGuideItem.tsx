@@ -21,16 +21,18 @@ export const SidebarGuideItem = ({
     <Collapsible
       open={open}
       onOpenChange={setOpen}
-      className="mt-2 first:mt-4 bg-blue-5/60 rounded-md px-2"
+      className="mt-1 first:mt-2 bg-blue-5/40 rounded-md px-3 py-1"
     >
       <CollapsibleTrigger asChild>
-        <button className="flex justify-between w-full mt-2 py-2 items-center">
-          <span className="text-left">{title}</span>
-          {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        <button className="flex justify-between w-full py-2 items-center text-sm hover:bg-blue-5/20 rounded transition-colors">
+          <span className="text-left font-medium">{title}</span>
+          <div className="ml-2 flex-shrink-0">
+            {open ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
+          </div>
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="border-t border-gray-400 py-2">{children}</div>
+        <div className="border-t border-gray-400/50 pt-2 pb-1 text-sm">{children}</div>
       </CollapsibleContent>
     </Collapsible>
   );

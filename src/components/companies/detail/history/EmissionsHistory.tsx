@@ -1,7 +1,10 @@
 import { useState, useMemo } from "react";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { EmissionPeriod, interpolateScope3Categories } from "@/lib/calculations/emissions";
+import {
+  EmissionPeriod,
+  interpolateScope3Categories,
+} from "@/lib/calculations/emissions";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
 import { getChartData } from "../../../../utils/getChartData";
 import { useTranslation } from "react-i18next";
@@ -11,6 +14,8 @@ import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
+import { dataGuideHelpItems } from "@/data-guide/guide-items";
+import { DataGuideItemView } from "@/data-guide/DataGuideItemView";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -145,6 +150,14 @@ export function EmissionsHistory({
         getCategoryName={getCategoryName}
         getCategoryColor={getCategoryColor}
       />
+
+      <div className="mt-8">
+        <DataGuideItemView item={dataGuideHelpItems["scope1"]} />
+        <DataGuideItemView item={dataGuideHelpItems["scope2"]} />
+        <DataGuideItemView item={dataGuideHelpItems["scope3"]} />
+        <DataGuideItemView item={dataGuideHelpItems["scope3EmissionLevels"]} />
+        <DataGuideItemView item={dataGuideHelpItems["companyMissingData"]} />
+      </div>
     </div>
   );
 }
