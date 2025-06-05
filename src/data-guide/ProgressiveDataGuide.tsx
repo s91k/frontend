@@ -5,7 +5,7 @@ import remarkBreaks from "remark-breaks";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DataGuideItemId, dataGuideHelpItems } from "./guide-items";
+import { DataGuideItemId, dataGuideHelpItems } from "./items";
 
 interface ProgressiveDataGuideProps {
   titleKey?: string;

@@ -1,4 +1,8 @@
-import { DataGuideItem } from "./types";
+export type DataGuideItem = {
+  id: string;
+  titleKey: string;
+  contentKey: string;
+};
 
 type DataGuideItems<T extends Record<string, object>> = {
   [K in keyof T]: T[K] & { id: K };
