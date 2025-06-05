@@ -231,17 +231,15 @@ export function CompanyOverview({
         className="mt-3 md:mt-0"
       />
 
-      <div className="mt-6">
-        <ProgressiveDataGuide 
-          items={[
-            "totalEmissions",
-            "co2units",
-            "companySectors",
-            "companyMissingData",
-            "yearOverYearChange",
-          ]}
-        />
-      </div>
+      <ProgressiveDataGuide
+        items={[
+          "totalEmissions",
+          "co2units",
+          "companySectors",
+          "companyMissingData",
+          "yearOverYearChange",
+        ]}
+      />
     </div>
   );
 }
