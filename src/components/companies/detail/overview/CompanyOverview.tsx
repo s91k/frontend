@@ -165,6 +165,94 @@ function MinimalHelpItem({ item, isOpen, onToggle }: MinimalHelpItemProps) {
   );
 }
 
+// Alternative 9: Progressive disclosure
+interface ProgressiveHelpProps {
+  items: Array<{ key: string; item: DataGuideItem }>;
+  isOpen: boolean;
+  onToggle: () => void;
+  activeItem: string | null;
+  onItemToggle: (key: string) => void;
+}
+
+function ProgressiveHelp({
+  items,
+  isOpen,
+  onToggle,
+  activeItem,
+  onItemToggle,
+}: ProgressiveHelpProps) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="space-y-2">
+      <button
+        onClick={onToggle}
+        className={cn(
+          "flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200",
+          isOpen
+            ? "bg-blue-5/40 text-blue-1"
+            : "bg-gray-800/30 text-gray-300 hover:bg-gray-800/50",
+        )}
+      >
+        <span className="w-4 h-4 rounded-full bg-blue-5/50 flex items-center justify-center text-xs">
+          ?
+        </span>
+        <span>Help & Information</span>
+        <ChevronDownIcon
+          className={cn(
+            "w-4 h-4 transition-transform ml-auto",
+            isOpen && "rotate-180",
+          )}
+        />
+      </button>
+
+      <div
+        className={cn(
+          "transition-all duration-300 ease-out overflow-hidden",
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+        )}
+      >
+        {isOpen && (
+          <div className="bg-gray-800/20 rounded-md p-3 space-y-1">
+            {items.map(({ key, item }) => (
+              <div key={key}>
+                <button
+                  onClick={() => onItemToggle(key)}
+                  className="flex justify-between w-full py-1.5 px-2 items-center text-xs hover:bg-gray-700/30 rounded transition-colors"
+                >
+                  <span className="text-left">{t(item.titleKey)}</span>
+                  <ChevronDownIcon
+                    className={cn(
+                      "w-3 h-3 transition-transform",
+                      activeItem === key && "rotate-180",
+                    )}
+                  />
+                </button>
+                <div
+                  className={cn(
+                    "transition-all duration-200 ease-out overflow-hidden",
+                    activeItem === key
+                      ? "max-h-32 opacity-100"
+                      : "max-h-0 opacity-0",
+                  )}
+                >
+                  {activeItem === key && (
+                    <div className="px-2 pb-2 pt-1 text-xs text-gray-300 leading-relaxed">
+                      <Markdown remarkPlugins={[remarkBreaks]}>
+                        {t(item.contentKey, { joinArrays: "\n" })}
+                      </Markdown>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Alternative 4: Tooltip approach
 interface HelpTooltipProps {
   item: DataGuideItem;
@@ -405,6 +493,7 @@ export function CompanyOverview({
     | "pills"
     | "floating"
     | "minimal"
+    | "progressive"
     | "tooltips"
     | "dropdown"
     | "sidebar"
@@ -416,6 +505,7 @@ export function CompanyOverview({
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showHelpSection, setShowHelpSection] = useState(false);
 
   const periodYear = new Date(selectedPeriod.endDate).getFullYear();
 
@@ -616,6 +706,12 @@ export function CompanyOverview({
             Minimal
           </button>
           <button
+            onClick={() => setHelpMode("progressive")}
+            className={helpMode === "progressive" ? "text-blue-2" : "text-grey"}
+          >
+            Progressive
+          </button>
+          <button
             onClick={() => setHelpMode("tooltips")}
             className={helpMode === "tooltips" ? "text-blue-2" : "text-grey"}
           >
@@ -679,48 +775,50 @@ export function CompanyOverview({
                 />
               ))}
             </div>
-            <div className={cn(
-              "transition-all duration-300 ease-out overflow-hidden",
-              activeHelpItem ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-            )}>
+            <div
+              className={cn(
+                "transition-all duration-300 ease-out overflow-hidden",
+                activeHelpItem ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+              )}
+            >
               {activeHelpItem && (
                 <div className="bg-blue-5/20 rounded-md p-4 mt-3 transform translate-y-0 transition-all duration-300 ease-out">
-                <Markdown
-                  remarkPlugins={[remarkBreaks]}
-                  components={{
-                    ol: ({ node, children, ...props }) => (
-                      <ol
-                        {...props}
-                        className="list-decimal list-outside mt-2 text-sm"
-                      >
-                        {children}
-                      </ol>
-                    ),
-                    ul: ({ node, children, ...props }) => (
-                      <ul
-                        {...props}
-                        className="list-disc list-outside ml-3 mt-2 text-sm"
-                      >
-                        {children}
-                      </ul>
-                    ),
-                    p: ({ node, children, ...props }) => (
-                      <p
-                        {...props}
-                        className="my-1 first:mt-0 last:mb-0 whitespace-pre-wrap text-sm leading-relaxed"
-                      >
-                        {children}
-                      </p>
-                    ),
-                  }}
-                >
-                  {t(
-                    dataGuideHelpItems[
-                      activeHelpItem as keyof typeof dataGuideHelpItems
-                    ].contentKey,
-                    { joinArrays: "\n" },
-                  )}
-                </Markdown>
+                  <Markdown
+                    remarkPlugins={[remarkBreaks]}
+                    components={{
+                      ol: ({ node, children, ...props }) => (
+                        <ol
+                          {...props}
+                          className="list-decimal list-outside mt-2 text-sm"
+                        >
+                          {children}
+                        </ol>
+                      ),
+                      ul: ({ node, children, ...props }) => (
+                        <ul
+                          {...props}
+                          className="list-disc list-outside ml-3 mt-2 text-sm"
+                        >
+                          {children}
+                        </ul>
+                      ),
+                      p: ({ node, children, ...props }) => (
+                        <p
+                          {...props}
+                          className="my-1 first:mt-0 last:mb-0 whitespace-pre-wrap text-sm leading-relaxed"
+                        >
+                          {children}
+                        </p>
+                      ),
+                    }}
+                  >
+                    {t(
+                      dataGuideHelpItems[
+                        activeHelpItem as keyof typeof dataGuideHelpItems
+                      ].contentKey,
+                      { joinArrays: "\n" },
+                    )}
+                  </Markdown>
                 </div>
               )}
             </div>
@@ -796,6 +894,36 @@ export function CompanyOverview({
               />
             ))}
           </div>
+        )}
+
+        {helpMode === "progressive" && (
+          <ProgressiveHelp
+            items={[
+              {
+                key: "totalEmissions",
+                item: dataGuideHelpItems["totalEmissions"],
+              },
+              { key: "co2units", item: dataGuideHelpItems["co2units"] },
+              {
+                key: "companySectors",
+                item: dataGuideHelpItems["companySectors"],
+              },
+              {
+                key: "companyMissingData",
+                item: dataGuideHelpItems["companyMissingData"],
+              },
+              {
+                key: "yearOverYearChange",
+                item: dataGuideHelpItems["yearOverYearChange"],
+              },
+            ]}
+            isOpen={showHelpSection}
+            onToggle={() => setShowHelpSection(!showHelpSection)}
+            activeItem={activeHelpItem}
+            onItemToggle={(key) =>
+              setActiveHelpItem(activeHelpItem === key ? null : key)
+            }
+          />
         )}
 
         {helpMode === "tooltips" && (
