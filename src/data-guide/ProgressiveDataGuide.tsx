@@ -63,11 +63,7 @@ export function ProgressiveDataGuide({
                 <div key={itemId}>
                   <button
                     onClick={() => handleItemToggle(itemId)}
-                    className={cn(
-                      "flex justify-between w-full py-1.5 px-2 items-center text-xs hover:bg-black-1/70 rounded transition-colors",
-                      activeItem === itemId &&
-                        "border-b border-black-1/80 text-blue-2",
-                    )}
+                    className="flex justify-between w-full py-1.5 px-2 items-center text-sm hover:bg-black-1/70 rounded transition-colors text-blue-2/90"
                   >
                     <span className="text-left">{t(item.titleKey)}</span>
                     <ChevronDownIcon
@@ -86,14 +82,14 @@ export function ProgressiveDataGuide({
                     )}
                   >
                     {activeItem === itemId && (
-                      <div className="px-2 py-4 text-xs text-gray-300 leading-relaxed">
+                      <div className="px-2 py-2 text-sm text-gray-300 leading-relaxed border-b border-t border-black-1/80 max-w-prose">
                         <Markdown
                           remarkPlugins={[remarkBreaks]}
                           components={{
                             ol: ({ node, children, ...props }) => (
                               <ol
                                 {...props}
-                                className="list-decimal list-outside mt-2 text-sm"
+                                className="list-decimal list-outside mt-2"
                               >
                                 {children}
                               </ol>
@@ -101,22 +97,33 @@ export function ProgressiveDataGuide({
                             ul: ({ node, children, ...props }) => (
                               <ul
                                 {...props}
-                                className="list-disc list-outside ml-3 mt-2 text-sm"
+                                className="list-disc list-outside ml-6 my-4"
                               >
                                 {children}
                               </ul>
                             ),
+                            li: ({ node, children, ...props }) => (
+                              <li {...props} className="my-1">
+                                {children}
+                              </li>
+                            ),
+
                             p: ({ node, children, ...props }) => (
                               <p
                                 {...props}
-                                className="my-1 first:mt-0 last:mb-0 whitespace-pre-wrap text-sm leading-relaxed"
+                                className="my-4 first:mt-0 last:mb-0 whitespace-pre-wrap leading-relaxed"
                               >
                                 {children}
                               </p>
                             ),
+                            a: ({ node, children, ...props }) => (
+                              <a {...props} className="text-blue-2 font-bold">
+                                {children}
+                              </a>
+                            ),
                           }}
                         >
-                          {t(item.contentKey, { joinArrays: "\n" })}
+                          {t(item.contentKey, { joinArrays: " " })}
                         </Markdown>
                       </div>
                     )}
