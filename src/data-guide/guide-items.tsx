@@ -101,24 +101,3 @@ export const dataGuideHelpItems = defineHelpItems({
 
 // Provide type safety for `useDataGudie`
 export type DataGuideItemId = keyof typeof dataGuideHelpItems;
-
-export const companyDetailsItems = [
-  "totalEmissions",
-  "yearOverYearChange",
-  "baseYear",
-  "scope1",
-  "scope2",
-  "scope3",
-  "companySectors",
-  "co2units",
-  "companyTurnover",
-  "scope3EmissionLevels",
-  "scope3Variations",
-  "companyDetails",
-  "companyLowEmissionsImpact",
-  "meaningOfNetZero",
-  "companyRealChange",
-  "companiesHowToCompare",
-  "companyCitizenAction",
-  "companyMissingData",
-] as DataGuideItemId[];

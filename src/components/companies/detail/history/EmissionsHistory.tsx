@@ -14,8 +14,7 @@ import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
-import { dataGuideHelpItems } from "@/data-guide/guide-items";
-import { DataGuideItemView } from "@/data-guide/DataGuideItemView";
+import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -151,13 +150,15 @@ export function EmissionsHistory({
         getCategoryColor={getCategoryColor}
       />
 
-      <div className="mt-8">
-        <DataGuideItemView item={dataGuideHelpItems["scope1"]} />
-        <DataGuideItemView item={dataGuideHelpItems["scope2"]} />
-        <DataGuideItemView item={dataGuideHelpItems["scope3"]} />
-        <DataGuideItemView item={dataGuideHelpItems["scope3EmissionLevels"]} />
-        <DataGuideItemView item={dataGuideHelpItems["companyMissingData"]} />
-      </div>
+      <ProgressiveDataGuide
+        items={[
+          "scope1",
+          "scope2",
+          "scope3",
+          "scope3EmissionLevels",
+          "companyMissingData",
+        ]}
+      />
     </div>
   );
 }

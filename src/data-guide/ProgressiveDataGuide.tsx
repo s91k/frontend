@@ -8,20 +8,28 @@ import { cn } from "@/lib/utils";
 import { DataGuideItemId, dataGuideHelpItems } from "./guide-items";
 
 interface ProgressiveDataGuideProps {
+  titleKey?: string;
   items: DataGuideItemId[];
+  className?: string;
 }
 
-export function ProgressiveDataGuide({ items }: ProgressiveDataGuideProps) {
+export function ProgressiveDataGuide({
+  titleKey,
+  items,
+  className,
+}: ProgressiveDataGuideProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
+  const title = titleKey ? t(titleKey) : t("dataGuide.buttonFallbackTitle");
+
   const handleToggle = () => setIsOpen(!isOpen);
-  const handleItemToggle = (key: string) => 
+  const handleItemToggle = (key: string) =>
     setActiveItem(activeItem === key ? null : key);
 
   return (
-    <div className="space-y-2">
+    <div className={cn(className, "space-y-2 mt-8")}>
       <button
         onClick={handleToggle}
         className={cn(
@@ -32,7 +40,7 @@ export function ProgressiveDataGuide({ items }: ProgressiveDataGuideProps) {
         )}
       >
         <GraduationCap className="w-4 h-4 text-blue-1" />
-        <span>Learn about the metrics</span>
+        <span>{title}</span>
         <ChevronDownIcon
           className={cn(
             "w-4 h-4 transition-transform ml-auto",
@@ -48,7 +56,7 @@ export function ProgressiveDataGuide({ items }: ProgressiveDataGuideProps) {
         )}
       >
         {isOpen && (
-          <div className="bg-gray-800/20 rounded-md p-3 space-y-1">
+          <div className="bg-black-1/60 rounded-md p-3 space-y-1">
             {items.map((itemId) => {
               const item = dataGuideHelpItems[itemId];
               return (
@@ -56,8 +64,9 @@ export function ProgressiveDataGuide({ items }: ProgressiveDataGuideProps) {
                   <button
                     onClick={() => handleItemToggle(itemId)}
                     className={cn(
-                      "flex justify-between w-full py-1.5 px-2 items-center text-xs hover:bg-gray-700/30 rounded transition-colors",
-                      activeItem === itemId && "border-b border-gray-600/20",
+                      "flex justify-between w-full py-1.5 px-2 items-center text-xs hover:bg-black-1/70 rounded transition-colors",
+                      activeItem === itemId &&
+                        "border-b border-black-1/80 text-blue-2",
                     )}
                   >
                     <span className="text-left">{t(item.titleKey)}</span>
@@ -70,12 +79,14 @@ export function ProgressiveDataGuide({ items }: ProgressiveDataGuideProps) {
                   </button>
                   <div
                     className={cn(
-                      "transition-all duration-200 ease-out overflow-hidden border-b border-gray-600/20",
-                      activeItem === itemId ? "opacity-100" : "max-h-0 opacity-0",
+                      "transition-all duration-200 ease-out overflow-hidden border-b border-black-1/80",
+                      activeItem === itemId
+                        ? "opacity-100"
+                        : "max-h-0 opacity-0",
                     )}
                   >
                     {activeItem === itemId && (
-                      <div className="px-2 pb-2 pt-1 text-xs text-gray-300 leading-relaxed">
+                      <div className="px-2 py-4 text-xs text-gray-300 leading-relaxed">
                         <Markdown
                           remarkPlugins={[remarkBreaks]}
                           components={{

@@ -10,8 +10,7 @@ import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import Scope3PieLegend from "./Scope3PieLegend";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { YearSelector } from "@/components/layout/YearSelector";
-import { DataGuideItemView } from "@/data-guide/DataGuideItemView";
-import { dataGuideHelpItems } from "@/data-guide/guide-items";
+import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
 
 interface Scope3DataProps {
   emissions: {
@@ -164,11 +163,9 @@ export function Scope3Data({
         </TabsContent>
       </Tabs>
 
-      <div className="mt-8">
-        <DataGuideItemView item={dataGuideHelpItems["scope3"]} />
-        <DataGuideItemView item={dataGuideHelpItems["scope3Variations"]} />
-        <DataGuideItemView item={dataGuideHelpItems["scope3EmissionLevels"]} />
-      </div>
+      <ProgressiveDataGuide
+        items={["scope3", "scope3Variations", "scope3EmissionLevels"]}
+      />
     </div>
   );
 }

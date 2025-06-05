@@ -8,12 +8,6 @@ import { useTranslation } from "react-i18next";
 import { PageSEO } from "@/components/SEO/PageSEO";
 import { createSlug } from "@/lib/utils";
 import { CompanyScope3 } from "@/components/companies/detail/CompanyScope3";
-import { useDataGuide } from "@/data-guide/useDataGuide";
-import {
-  companyDetailsItems,
-  dataGuideHelpItems,
-} from "@/data-guide/guide-items";
-import { DataGuideItemView } from "@/data-guide/DataGuideItemView";
 
 export function CompanyDetailPage() {
   const { t } = useTranslation();
@@ -26,8 +20,6 @@ export function CompanyDetailPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useDataGuide(companyDetailsItems);
 
   if (loading) {
     return (
@@ -201,15 +193,6 @@ export function CompanyDetailPage() {
             }))
             .sort((a, b) => a.year - b.year)}
         />
-
-        {/* <CompanySectorComparison company={company} /> */}
-        <div className="mt-8">
-          <Text className="text-xl">Additional guides</Text>
-          <DataGuideItemView item={dataGuideHelpItems["companyRealChange"]} />
-          <DataGuideItemView
-            item={dataGuideHelpItems["companyCitizenAction"]}
-          />
-        </div>
       </div>
     </>
   );

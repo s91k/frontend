@@ -1252,6 +1252,7 @@
   "dataGuide": {
     "title": "Data Guide",
     "buttonTitle": "Data Guide",
+    "buttonFallbackTitle": "Learn more about these metrics",
     "items": {
       "totalEmissions": {
         "title": "What our total emissions represent",
