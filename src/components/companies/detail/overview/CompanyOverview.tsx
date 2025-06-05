@@ -30,6 +30,7 @@ import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
 import { calculateRateOfChange } from "@/lib/calculations/general";
+import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -228,6 +229,16 @@ export function CompanyOverview({
         turnoverAIGenerated={turnoverAIGenerated}
         employeesAIGenerated={employeesAIGenerated}
         className="mt-3 md:mt-0"
+      />
+
+      <ProgressiveDataGuide
+        items={[
+          "totalEmissions",
+          "co2units",
+          "companySectors",
+          "companyMissingData",
+          "yearOverYearChange",
+        ]}
       />
     </div>
   );
