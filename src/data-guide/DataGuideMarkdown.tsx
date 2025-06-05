@@ -10,7 +10,7 @@ export const DataGuideMarkdown = ({ item }: DataGuideMarkdownProps) => {
   const { t } = useTranslation();
   return (
     <Markdown
-      className="max-w-prose"
+      className="max-w-[75ch] px-0 sm:px-4"
       remarkPlugins={[remarkBreaks]}
       components={{
         ol: ({ node, children, ...props }) => (
