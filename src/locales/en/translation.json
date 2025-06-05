@@ -1258,25 +1258,25 @@
           "This figure represents the **total reported greenhouse gas (GHG)** emissions for the",
           "company in a given year. It includes emissions from **Scope 1, 2, and 3** — offering",
           "a broad view of the company’s climate impact across its operations and value chain.\n",
-          "**Note:** Biogenic emissions (e.g. from plant-based materials) are not included in this total.\n",
+          "**Note:** Biogenic emissions (e.g. from plant-based materials) are **not included** in this total.\n",
           "Companies report their emissions in three categories **— Scope 1, Scope 2, and Scope 3",
-          "—** to clarify where emissions come from and how responsibility is assigned."
+          "—** to clarify **where emissions come from** and **how responsibility is assigned**."
         ]
       },
       "yearOverYearChange": {
         "title": "What the year-over-year change shows",
         "content": [
-          "This number shows the percentage change in total reported emissions compared to the",
-          "previous year. It helps highlight whether a company’s climate impact was increasing",
-          "or decreasing between two years.\n",
+          "This number shows the **percentage change in total reported emissions** compared to the",
+          "previous year. It helps highlight whether a company’s climate impact was **increasing",
+          "or decreasing between two years**.\n",
           "**Note:** Large changes from one year to the next can sometimes reflect more than",
           "just actual emissions trends. For example, emissions can jump or drop if:\n",
-          "- The company starts or stops reporting certain scopes or categories\n",
-          "- There’s a merger, acquisition, or major restructuring\n",
+          "- The company **starts or stops reporting certain scopes or categories**\n",
+          "- There’s a **merger, acquisition, or major restructuring**\n",
           "- Reporting methods or boundaries change\n\n",
           "Always consider the context when interpreting large percentage changes.\n",
-          "The year-over-year number, however, only shows the change between the selected year",
-          "and the previous year, and is not necessarily aligned with the company’s own climate",
+          "The year-over-year number, however, **only shows the change between the selected year",
+          "and the previous year**, and is not necessarily aligned with the company’s own climate",
           "targets or tracking.\n",
           "**Most companies track their climate progress based on a selected “base year”**",
           "(such as 2019 or 2020), and measure reductions from that starting point."
@@ -1285,15 +1285,15 @@
       "baseYear": {
         "title": "What is a base year?",
         "content": [
-          "A base year is the year a company chooses as the starting point for tracking its",
-          "climate progress. All future emission reductions are usually measured in",
-          "comparison to this year.\n",
+          "A **base year** is the year a company chooses as the starting point for tracking its",
+          "climate progress. All future emission reductions are usually measured **in",
+          "comparison to this year**.\n",
           "For example, if a company set its base year as 2020 and aimed to cut emissions by",
-          "50% by 2030, all reductions would be measured relative to its 2020 emissions.\n",
+          "50% by 2030, all reductions would be measured *relative to its 2020 emissions**.\n",
           "**Why it matters:** The base year provides a consistent reference point to measure",
           "long-term progress. Without it, it’s hard to know whether a company is actually",
           "reducing emissions — or just fluctuating year to year.\n",
-          "Note:  Some companies update their base year if they change how they calculate",
+          "**Note:** Some companies update their base year if they change how they calculate",
           "emissions or if they undergo a major restructuring (like a merger or acquisition)."
         ]
       },
@@ -1343,8 +1343,8 @@
       "companySectors": {
         "title": "Understanding company sectors",
         "content": [
-          "Companies are grouped into sectors based on what they do, using the Global Industry",
-          "Classification Standard (GICS). This system helps organize companies into consistent",
+          "Companies are grouped into sectors based on what they do, using the **Global Industry",
+          "Classification Standard (GICS)**. This system helps organize companies into consistent",
           "categories — such as energy, finance, consumer goods, or technology — making it easier",
           "to compare businesses with similar operations.\n",
           "[Learn more about the GICS system here](https://www.msci.com/our-solutions/indexes/gics)\n",
@@ -1353,7 +1353,7 @@
           "- A **utility company** may naturally have high emissions due to energy production\n",
           "- A **tech company** might have lower direct emissions but still face pressure to reduce supply",
           "chain (Scope 3) impacts\n\n",
-          "Comparing companies within the same sector helps provide more meaningful insights into climate",
+          "Comparing companies within the **same sector** helps provide more meaningful insights into climate",
           "performance and progress."
         ]
       },
@@ -1374,8 +1374,8 @@
           "For example, a company with a turnover of £500 million has earned that amount in sales",
           "over the course of a year.\n",
           "Turnover helps put a company’s **emissions into perspective**. By comparing emissions",
-          "to turnover, we can see how much climate impact is generated per unit of economic activity.\n",
-          "This is often referred to as emissions intensity, and it can help answer questions like:\n",
+          "to turnover, we can see how much climate impact is generated **per unit of economic activity**.\n",
+          "This is often referred to as **emissions intensity**, and it can help answer questions like:\n",
           "- Is the company growing its business while reducing its emissions?\n",
           "- How efficient is the company in terms of emissions per £1 million earned?\n\n",
           "Two companies might emit the same amount of greenhouse gases, but if one has five times",
@@ -1393,7 +1393,7 @@
           "travel, waste, and more.\n",
           "Because Scope 3 includes so many different activities — from how raw materials are",
           "produced to how customers use and dispose of products — it usually represents the",
-          "largest share of a company’s total climate impact.\n",
+          "**largest share of a company’s total climate impact**.\n",
           "Unlike Scope 1 and 2 emissions, which are mostly under a company’s direct control",
           "(e.g. fuel used on-site or electricity purchased), Scope 3 emissions happen **outside",
           "the company’s walls**. This makes them more complex to measure, because:\n",

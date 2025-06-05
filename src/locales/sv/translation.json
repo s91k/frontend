@@ -1261,26 +1261,26 @@
           "Denna siffra representerar de **totala rapporterade växthusgasutsläppen (GHG)** för",
           "företaget under ett givet år. Den inkluderar utsläpp från **Scope 1, 2 och 3** — och ger",
           "en bred överblick av företagets klimatpåverkan över sina verksamheter och värdekedja.\n",
-          "**Notera:** Biogena utsläpp (t.ex. från växtbaserade material) ingår inte i denna total.\n",
+          "**Notera:** Biogena utsläpp (t.ex. från växtbaserade material) **ingår inte** i denna total.\n",
           "Företag rapporterar sina utsläpp i tre kategorier **— Scope 1, Scope 2 och Scope 3",
-          "—** för att klargöra var utsläppen kommer ifrån och hur ansvar tilldelas."
+          "—** för att klargöra **var utsläppen kommer ifrån** och **hur ansvar tilldelas**."
         ]
       },
       "yearOverYearChange": {
         "title": "Vad förändringen år för år visar",
         "content": [
-          "Denna siffra visar den procentuella förändringen i totala rapporterade utsläpp jämfört med",
-          "föregående år. Den hjälper till att belysa om ett företags klimatpåverkan ökade",
-          "eller minskade mellan två år.\n",
+          "Denna siffra visar den **procentuella förändringen i totala rapporterade utsläpp** jämfört med",
+          "föregående år. Den hjälper till att belysa **om ett företags klimatpåverkan ökade",
+          "eller minskade mellan två år**.\n",
           "**Notera:** Stora förändringar från ett år till nästa kan ibland återspegla mer än",
           "bara faktiska utsläppstrender. Till exempel kan utsläpp hoppa eller sjunka om:\n",
-          "- Företaget börjar eller slutar rapportera vissa scopes eller kategorier\n",
-          "- Det sker en fusion, förvärv eller större omstrukturering\n",
+          "- Företaget **börjar eller slutar rapportera vissa scopes eller kategorier\n",
+          "- Det sker en **fusion, förvärv eller större omstrukturering**\n",
           "- Rapporteringsmetoder eller avgränsningar förändras\n\n",
           "Överväg alltid sammanhanget när du tolkar stora procentuella förändringar.\n",
-          "Siffran för år-för-år visar dock endast förändringen mellan det valda året",
-          "och föregående år, och är inte nödvändigtvis anpassad till företagets egna klimat-",
-          "mål eller uppföljning.\n",
+          "Siffran för år-för-år **visar endast förändringen mellan det valda året",
+          "och föregående år**, och är inte nödvändigtvis anpassad till företagets egna klimatmål",
+          "eller uppföljning.\n",
           "**De flesta företag följer sina klimatframsteg baserat på ett valt \"basår\"**",
           "(som 2019 eller 2020), och mäter minskningar från den startpunkten."
         ]
@@ -1288,11 +1288,11 @@
       "baseYear": {
         "title": "Vad är ett basår?",
         "content": [
-          "Ett basår är det år ett företag väljer som utgångspunkt för att följa sina",
-          "klimatframsteg. Alla framtida utsläppsminskningar mäts vanligtvis i",
-          "jämförelse med detta år.\n",
+          "Ett **basår** är det år ett företag väljer som utgångspunkt för att följa sina",
+          "klimatframsteg. Alla framtida utsläppsminskningar mäts vanligtvis",
+          "**i jämförelse med detta år**.\n",
           "Till exempel, om ett företag satte sitt basår till 2020 och siktar på att minska utsläppen med",
-          "50% till 2030, skulle alla minskningar mätas relativt till dess utsläpp 2020.\n",
+          "50% till 2030, skulle alla minskningar mätas **relativt dess utsläpp 2020**.\n",
           "**Varför det är viktigt:** Basåret ger en konsekvent referenspunkt för att mäta",
           "långsiktiga framsteg. Utan det är det svårt att veta om ett företag faktiskt",
           "minskar utsläppen — eller bara fluktuerar år för år.\n",
@@ -1346,17 +1346,17 @@
       "companySectors": {
         "title": "Förstå företagssektorer",
         "content": [
-          "Företag grupperas i sektorer baserat på vad de gör, med hjälp av Global Industry",
-          "Classification Standard (GICS). Detta system hjälper till att organisera företag i konsekventa",
+          "Företag grupperas i sektorer baserat på vad de gör, med hjälp av **Global Industry",
+          "Classification Standard (GICS)**. Detta system hjälper till att organisera företag i konsekventa",
           "kategorier — som energi, finans, konsumentvaror eller teknik — vilket gör det lättare",
           "att jämföra företag med liknande verksamhet.\n",
           "[Lär dig mer om GICS-systemet här](https://www.msci.com/our-solutions/indexes/gics)\n",
           "**Varför det är viktigt:** Olika branscher har mycket olika utsläppsprofiler och utmaningar.\n",
           "Till exempel:\n",
           "- Ett **energiföretag** kan naturligt ha höga utsläpp på grund av energiproduktion\n",
-          "- Ett **teknikföretag** kan ha lägre direkta utsläpp men ändå möta press att minska leverantörs-",
-          "kedjan (Scope 3) påverkan\n\n",
-          "Att jämföra företag inom samma sektor hjälper till att ge mer meningsfulla insikter om klimat-",
+          "- Ett **teknikföretag** kan ha lägre direkta utsläpp men ändå möta press att minska",
+          "leverantörskedjan (Scope 3) påverkan\n\n",
+          "Att jämföra företag inom **samma sektor** hjälper till att ge mer meningsfulla insikter om klimat-",
           "prestanda och framsteg."
         ]
       },
@@ -1378,7 +1378,7 @@
           "under loppet av ett år.\n",
           "Omsättning hjälper till att sätta ett företags **utsläpp i perspektiv**. Genom att jämföra utsläpp",
           "med omsättning kan vi se hur mycket klimatpåverkan som genereras per enhet ekonomisk aktivitet.\n",
-          "Detta kallas ofta utsläppsintensitet, och det kan hjälpa till att svara på frågor som:\n",
+          "Detta kallas ofta **utsläppsintensitet**, och det kan hjälpa till att svara på frågor som:\n",
           "- Växer företaget sin verksamhet samtidigt som det minskar sina utsläpp?\n",
           "- Hur effektivt är företaget när det gäller utsläpp per miljon kronor intjänad?\n\n",
           "Två företag kan släppa ut samma mängd växthusgaser, men om det ena har fem gånger",
@@ -1396,7 +1396,7 @@
           "resor, avfall och mer.\n",
           "Eftersom Scope 3 inkluderar så många olika aktiviteter — från hur råvaror produceras",
           "till hur kunder använder och kasserar produkter — representerar det vanligtvis den",
-          "största andelen av ett företags totala klimatpåverkan.\n",
+          "**största andelen av ett företags totala klimatpåverkan**.\n",
           "Till skillnad från Scope 1 och 2-utsläpp, som mestadels är under ett företags direkta kontroll",
           "(t.ex. bränsle som används på plats eller el som köps), sker Scope 3-utsläpp **utanför",
           "företagets väggar**. Detta gör dem mer komplexa att mäta, eftersom:\n",
