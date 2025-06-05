@@ -1,12 +1,5 @@
-import {
-  BarChart3,
-  ChevronDown,
-  Menu,
-  X,
-  Mail,
-  SearchIcon,
-} from "lucide-react";
-import { Link, useLocation, matchPath, useNavigate } from "react-router-dom";
+import { BarChart3, ChevronDown, Menu, X, Mail } from "lucide-react";
+import { Link, useLocation, matchPath } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,11 +13,7 @@ import {
 } from "@/components/ui/menubar";
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
-import { AiIcon } from "../ui/ai-icon";
-import {
-  AICommandPalette,
-  AICommandResult,
-} from "@/pages/ai-driven/components/AICommandPalette";
+import { HeaderSearchEntry } from "../search/HeaderSearchEntry";
 
 export function Header() {
   const { t } = useTranslation();
@@ -33,37 +22,6 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
-  const [commandOpen, setCommandOpen] = useState(false);
-  const navigate = useNavigate();
-
-  // Open command palette with CMD+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setCommandOpen(true);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const handleSelectResponse = (response: AICommandResult) => {
-    console.log("Selected:", response);
-
-    switch (response.type) {
-      case "story":
-        navigate(`/companies/${response.wikidataId}`);
-        return;
-      case "municipality":
-        navigate(`/municipalities/${response.name}`);
-        return;
-      case "aiStory":
-        navigate(`/ai-driven/${response.id}`);
-        return;
-    }
-  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -102,11 +60,6 @@ export function Header() {
   }
 
   const NAV_LINKS: NavLink[] = [
-    {
-      label: "AI Driven",
-      icon: <AiIcon className="w-4 h-4" aria-hidden="true" />,
-      path: `${currentLanguage}/ai-driven`,
-    },
     {
       label: t("header.companies"),
       icon: <BarChart3 className="w-4 h-4" aria-hidden="true" />,
@@ -168,15 +121,7 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          <button
-            onClick={() => setCommandOpen(true)}
-            className="lg:ml-auto px-2 py-1 bg-black-1 min-w-16 md:min-w-36 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2"
-          >
-            <SearchIcon className="h-4 w-4" />
-            <span className="text-xs text-grey/60 border border-grey/20 rounded px-1">
-              ⌘K
-            </span>
-          </button>
+          <HeaderSearchEntry />
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
@@ -190,7 +135,7 @@ export function Header() {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6 ml-auto">
+          <nav className="hidden lg:flex items-center gap-6">
             <Menubar className="border-none bg-transparent h-full">
               {NAV_LINKS.map((item) =>
                 item.sublinks ? (
@@ -322,11 +267,6 @@ export function Header() {
           )}
         </div>
       </header>
-      <AICommandPalette
-        open={commandOpen}
-        setOpen={setCommandOpen}
-        onSelectResponse={handleSelectResponse}
-      />
     </>
   );
 }

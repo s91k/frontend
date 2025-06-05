@@ -27,7 +27,6 @@ import { SupportPage } from "./pages/SupportPage";
 import { ValidationDashboard } from "./pages/ValidationDashboard";
 import { InternalDashboard } from "./pages/internal-dashboard/InternalDashboard";
 import { AllHelpItems } from "./data-guide/AllHelpItems";
-import { AIDriven } from "./pages/ai-driven/AIDriven";
 
 export function AppRoutes() {
   const { currentLanguage } = useLanguage();
@@ -45,7 +44,6 @@ export function AppRoutes() {
       <Route path={`${basePath}/`} element={<LandingPage />} />
 
       {/* Companies routes */}
-      <Route path={`${basePath}/ai-driven/:id`} element={<AIDriven />} />
       <Route path={`${basePath}/companies`} element={<CompaniesPage />} />
       <Route
         path={`${basePath}/companies/:id`}
