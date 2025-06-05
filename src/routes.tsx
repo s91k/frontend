@@ -26,6 +26,7 @@ import { UnauthorizedErrorPage } from "./pages/error/UnauthorizedErrorPage";
 import { SupportPage } from "./pages/SupportPage";
 import { ValidationDashboard } from "./pages/ValidationDashboard";
 import { InternalDashboard } from "./pages/internal-dashboard/InternalDashboard";
+import { AllHelpItems } from "./data-guide/AllHelpItems";
 
 export function AppRoutes() {
   const { currentLanguage } = useLanguage();
@@ -71,6 +72,7 @@ export function AppRoutes() {
           path={`${basePath}/internal-dashboard`}
           element={<InternalDashboard />}
         />
+        <Route path={`${basePath}/all-help-items`} element={<AllHelpItems />} />
       </Route>
       {/* Municipalities routes */}
       <Route
