@@ -31,6 +31,14 @@ export function ProgressiveDataGuide({
     setActiveItem(isOpen ? itemId : null);
   };
 
+  const dataGuideEnabled = ["localhost", "stage"].some((enabledHost) =>
+    window.location.hostname.includes(enabledHost),
+  );
+
+  if (!dataGuideEnabled) {
+    return null;
+  }
+
   return (
     <div className={cn(className, "space-y-2 mt-8")}>
       <Collapsible>
