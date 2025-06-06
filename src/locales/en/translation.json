@@ -1247,6 +1247,7 @@
     "title": "Find a company or municipality",
     "searchCategoryCompany": "Company",
     "searchCategoryMunicipality": "Municipality",
+    "searchCategoryPage": "Page",
     "placeholder": "Example: Alfa Laval"
   },
   "dataGuide": {

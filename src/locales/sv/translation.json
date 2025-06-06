@@ -1250,6 +1250,7 @@
     "title": "Hitta ett företag eller kommun",
     "searchCategoryCompany": "Företag",
     "searchCategoryMunicipality": "Kommun",
+    "searchCategoryPage": "Sida",
     "placeholder": "Exempel: Alfa Laval"
   },
   "dataGuide": {
