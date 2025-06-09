@@ -18,10 +18,18 @@ export function ProgressiveDataGuideMobile({
   items,
 }: ProgressiveDataGuideMobileProps) {
   const { t } = useTranslation();
-  const [activeItem, setActiveItem] = useState<DataGuideItemId | null>(null);
+  const [openItems, setOpenItems] = useState<Set<DataGuideItemId>>(new Set());
 
   const handleItemToggle = (itemId: DataGuideItemId, isOpen: boolean) => {
-    setActiveItem(isOpen ? itemId : null);
+    setOpenItems(prev => {
+      const newSet = new Set(prev);
+      if (isOpen) {
+        newSet.add(itemId);
+      } else {
+        newSet.delete(itemId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -31,7 +39,7 @@ export function ProgressiveDataGuideMobile({
         return (
           <Collapsible
             key={itemId}
-            open={activeItem === itemId}
+            open={openItems.has(itemId)}
             onOpenChange={(isOpen) => handleItemToggle(itemId, isOpen)}
           >
             <CollapsibleTrigger asChild>
@@ -44,7 +52,7 @@ export function ProgressiveDataGuideMobile({
                 <ChevronDownIcon
                   className={cn(
                     "w-3 h-3 transition-transform",
-                    activeItem === itemId && "rotate-180",
+                    openItems.has(itemId) && "rotate-180",
                   )}
                 />
               </button>
