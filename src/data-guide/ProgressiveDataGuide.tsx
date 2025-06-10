@@ -15,6 +15,7 @@ import {
 } from "./ProgressiveDataGuideDesktop";
 import { ProgressiveDataGuideMobile } from "./ProgressiveDataGuideMobile";
 import { useState } from "react";
+import { dataGuideFeatureFlagEnabled } from "./feature-flag";
 
 interface ProgressiveDataGuideProps {
   titleKey?: string;
@@ -36,11 +37,7 @@ export function ProgressiveDataGuide({
 
   const title = titleKey ? t(titleKey) : t("dataGuide.buttonFallbackTitle");
 
-  const dataGuideEnabled = ["localhost", "stage"].some((enabledHost) =>
-    window.location.hostname.includes(enabledHost),
-  );
-
-  if (!dataGuideEnabled || items.length < 1) {
+  if (!dataGuideFeatureFlagEnabled() || items.length < 1) {
     return null;
   }
 
