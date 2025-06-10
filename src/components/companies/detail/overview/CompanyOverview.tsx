@@ -29,6 +29,8 @@ import { AiIcon } from "@/components/ui/ai-icon";
 import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
+import { calculateRateOfChange } from "@/lib/calculations/general";
+import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -72,13 +74,10 @@ export function CompanyOverview({
       company.industry?.industryGics?.en?.sectorName ||
       t("companies.overview.unknownSector");
 
-  const yearOverYearChange =
-    previousPeriod && selectedPeriod.emissions?.calculatedTotalEmissions
-      ? ((selectedPeriod.emissions.calculatedTotalEmissions -
-          (previousPeriod.emissions?.calculatedTotalEmissions || 0)) /
-          (previousPeriod.emissions?.calculatedTotalEmissions || 1)) *
-        100
-      : null;
+  const yearOverYearChange = calculateRateOfChange(
+    selectedPeriod?.emissions?.calculatedTotalEmissions,
+    previousPeriod?.emissions?.calculatedTotalEmissions,
+  );
 
   const sortedPeriods = [...company.reportingPeriods].sort(
     (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
@@ -155,7 +154,10 @@ export function CompanyOverview({
 
       <div className="flex flex-col mb-6 gap-4 md:flex-row md:gap-12 md:items-start md:mb-12">
         <div className="flex-1">
-          <Text variant="body" className="mb-1 md:mb-2 lg:text-lg md:text-base text-sm">
+          <Text
+            variant="body"
+            className="mb-1 md:mb-2 lg:text-lg md:text-base text-sm"
+          >
             {t("companies.overview.totalEmissions")} {periodYear}
           </Text>
           <div className="flex items-baseline gap-4">
@@ -204,13 +206,12 @@ export function CompanyOverview({
                   yearOverYearChange < 0 ? "text-orange-2" : "text-pink-3"
                 }
               >
-                {formatPercentChange(
-                  Math.ceil(yearOverYearChange) / 100,
-                  currentLanguage,
-                )}
+                {formatPercentChange(yearOverYearChange, currentLanguage, true)}
               </span>
             ) : (
-              <span className="text-grey">{t("companies.overview.noData")}</span>
+              <span className="text-grey">
+                {t("companies.overview.noData")}
+              </span>
             )}
             {yearOverYearAIGenerated && (
               <span className="ml-2">
@@ -228,6 +229,16 @@ export function CompanyOverview({
         turnoverAIGenerated={turnoverAIGenerated}
         employeesAIGenerated={employeesAIGenerated}
         className="mt-3 md:mt-0"
+      />
+
+      <ProgressiveDataGuide
+        items={[
+          "totalEmissions",
+          "co2units",
+          "companySectors",
+          "companyMissingData",
+          "yearOverYearChange",
+        ]}
       />
     </div>
   );

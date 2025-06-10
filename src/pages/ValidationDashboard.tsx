@@ -52,14 +52,15 @@ const githubUrl = (company: RankedCompany, reportUrl?: string | null) => {
 };
 
 type IssueViewProps = {
-  issue?: GithubValidationIssue;
+  issues?: GithubValidationIssue[];
   company: RankedCompany;
   period?: ReportingPeriod;
   className?: string;
   error: boolean;
 };
+
 const IssueView = ({
-  issue,
+  issues,
   company,
   period,
   className,
@@ -72,40 +73,39 @@ const IssueView = ({
       </a>
     );
   }
-  if (!issue) {
-    return (
-      <a
-        target="_blank"
-        href={githubUrl(company, period?.reportURL)}
-        className="text-blue-2"
-      >
-        Report issue
-      </a>
-    );
+
+  if (!issues || issues.length === 0) {
+    return <span className="text-gray-400">No issues</span>;
   }
 
   return (
-    <span className={className}>
-      <a
-        href={issue.html_url}
-        target="_blank"
-        className={cn(
-          "mr-2",
-          issue.state == "open" ? "text-green-3" : "text-gray-500",
-        )}
-      >
-        {issue.state === "open" ? "Issue reported" : "Issue closed"}
-      </a>
-      {issue.state === "open" &&
-        issue.labels.map((label) => (
-          <span
-            style={{ backgroundColor: `#${label.color}` }}
-            className="rounded-sm text-xs font-bold uppercase mx-[2px] px-1"
+    <div className={cn("flex flex-col gap-1", className)}>
+      {issues.map((issue, _index) => (
+        <div key={issue.number} className="flex items-center">
+          <a
+            href={issue.html_url}
+            target="_blank"
+            className={cn(
+              "mr-2",
+              issue.state == "open" ? "text-green-3" : "text-gray-500",
+            )}
           >
-            {label.name}
-          </span>
-        ))}
-    </span>
+            {issues.length > 1 ? `#${issue.number} ` : ""}
+            {issue.state === "open" ? "Issue reported" : "Issue closed"}
+          </a>
+          {issue.state === "open" &&
+            issue.labels.map((label) => (
+              <span
+                key={label.name}
+                style={{ backgroundColor: `#${label.color}` }}
+                className="rounded-sm text-xs font-bold uppercase mx-[2px] px-1"
+              >
+                {label.name}
+              </span>
+            ))}
+        </div>
+      ))}
+    </div>
   );
 };
 
@@ -181,8 +181,8 @@ export const ValidationDashboard = () => {
         </Select>
       </div>
 
-      <div className="inline-grid grid-cols-[auto_auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400 pb-2">
-        <div className="col-span-5">
+      <div className="inline-grid grid-cols-[auto_auto_auto_auto_auto_1fr] mb-6 gap-x-8 gap-y-2 border-b border-gray-400 pb-2">
+        <div className="col-span-6">
           <p className="text-gray-400 mb-1">
             Verified: {allCompanies.length - unverifiedCompanies.length} of{" "}
             {allCompanies.length}
@@ -192,19 +192,20 @@ export const ValidationDashboard = () => {
           </p>
           <Progress value={progress * 100} className="mb-8" />
         </div>
-        <div className="grid grid-cols-subgrid col-span-5 text-gray-400 border-b border-gray-400 pb-1 mb-2">
+        <div className="grid grid-cols-subgrid col-span-6 text-gray-400 border-b border-gray-400 pb-1 mb-2">
           <span>Company name</span>
           <span>Report link</span>
           <span>In progress by</span>
           <span>Start/stop working</span>
-          <span className="">Issues</span>
+          <span>Report issue</span>
+          <span>Issues</span>
         </div>
 
         {unverifiedCompanies.length > 0 ? (
           unverifiedCompanies.map(({ company, period }) => (
             <div
               key={company.wikidataId}
-              className="grid grid-cols-subgrid col-span-5"
+              className="grid grid-cols-subgrid col-span-6"
             >
               <a target="_blank" href={`/companies/${company.wikidataId}/edit`}>
                 {company.name}
@@ -258,8 +259,17 @@ export const ValidationDashboard = () => {
                   </button>
                 )}
               </div>
+
+              <a
+                target="_blank"
+                href={githubUrl(company, period?.reportURL)}
+                className="text-blue-2 text-center"
+              >
+                Report issue
+              </a>
+
               <IssueView
-                issue={issues?.[company.wikidataId]}
+                issues={issues?.[company.wikidataId]}
                 company={company}
                 period={period as ReportingPeriod}
                 error={!!issuesError}
@@ -268,7 +278,7 @@ export const ValidationDashboard = () => {
             </div>
           ))
         ) : (
-          <span className="col-span-4 text-center text-2xl my-4">
+          <span className="col-span-6 text-center text-2xl my-4">
             All done! 🎉
           </span>
         )}

@@ -221,10 +221,7 @@ export function CompanyCard({
                     emissionsChange < 0 ? "text-orange-2" : "text-pink-3",
                   )}
                 >
-                  {formatPercentChange(
-                    Math.ceil(emissionsChange) / 100,
-                    currentLanguage,
-                  )}
+                  {formatPercentChange(emissionsChange, currentLanguage)}
                   {yearOverYearAIGenerated && (
                     <span className="ml-2">
                       <AiIcon size="sm" />

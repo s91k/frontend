@@ -1,7 +1,10 @@
 import { useState, useMemo } from "react";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { EmissionPeriod, interpolateScope3Categories } from "@/lib/calculations/emissions";
+import {
+  EmissionPeriod,
+  interpolateScope3Categories,
+} from "@/lib/calculations/emissions";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
 import { getChartData } from "../../../../utils/getChartData";
 import { useTranslation } from "react-i18next";
@@ -11,6 +14,7 @@ import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
+import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -144,6 +148,16 @@ export function EmissionsHistory({
         onCategoryToggle={handleCategoryToggle}
         getCategoryName={getCategoryName}
         getCategoryColor={getCategoryColor}
+      />
+
+      <ProgressiveDataGuide
+        items={[
+          "scope1",
+          "scope2",
+          "scope3",
+          "scope3EmissionLevels",
+          "companyMissingData",
+        ]}
       />
     </div>
   );
