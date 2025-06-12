@@ -1251,7 +1251,13 @@
     "searchCategoryCompany": "Företag",
     "searchCategoryMunicipality": "Kommun",
     "searchCategoryPage": "Sida",
-    "placeholder": "Exempel: Alfa Laval"
+    "placeholder": "Exempel: Alfa Laval",
+    "searchDialog": {
+      "title": "Sök",
+      "description": "Sök efter företag eller kommuner",
+      "emptyText": "Börja skriv för att söka",
+      "loadingText": "Hämtar företag och kommuner..."
+    }
   },
   "dataGuide": {
     "buttonFallbackTitle": "Lär dig mer om dessa mätvärden",

@@ -7,7 +7,13 @@ import {
   CommandList,
 } from "../ui/command";
 import { Command as CommandPrimitive } from "cmdk";
-import { Dialog, DialogOverlay, DialogPortal } from "../ui/dialog";
+import {
+  Dialog,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "../ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -51,6 +57,7 @@ const useGlobalSearch = (query: string) => {
           item.name.toLocaleLowerCase().includes(lcQuery),
         )
       : [];
+
   return {
     ...allData,
     data: result,
@@ -63,8 +70,8 @@ export function SearchDialog({
   onSelectResponse,
 }: SearchDialogProps) {
   const [inputValue, setInputValue] = useState("");
-
   const results = useGlobalSearch(inputValue);
+  const { t } = useTranslation();
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
@@ -79,6 +86,15 @@ export function SearchDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogPortal>
+        <DialogTitle>
+          {t("globalSearch.searchDialog.title", "Search")}
+        </DialogTitle>
+        <DialogDescription>
+          {t(
+            "globalSearch.searchDialog.description",
+            "Search for companies or municipalities",
+          )}
+        </DialogDescription>
         <DialogOverlay />
         <DialogPrimitive.Content className="fixed top-1/4 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50 focus:outline-none">
           <div
@@ -89,15 +105,14 @@ export function SearchDialog({
           >
             <Command className="rounded-lg" shouldFilter={false}>
               <CommandInput
-                placeholder="Search for companies or municipalities..."
+                placeholder={t("globalSearch.placeholder")}
                 value={inputValue}
                 onValueChange={handleInputChange}
                 className="focus:ring-0"
               />
               <CommandEmpty>
-                <p className="text-left text-gray-400">
-                  To search, start typing the name of a company or municipality
-                  you want to learn more about.
+                <p className="text-center text-gray-400">
+                  {t("globalSearch.searchDialog.emptyText")}
                 </p>
               </CommandEmpty>
               <CommandList
@@ -111,7 +126,10 @@ export function SearchDialog({
               >
                 {results.loading && (
                   <CommandPrimitive.Loading>
-                    Fetching companies and municipalities
+                    {t(
+                      "globalSearch.searchDialog.loadingText",
+                      "Fetching companies and municipalities...",
+                    )}
                   </CommandPrimitive.Loading>
                 )}
 
