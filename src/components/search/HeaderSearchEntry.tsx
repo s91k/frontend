@@ -1,7 +1,8 @@
 import { SearchIcon } from "lucide-react";
-import { SearchDialog, SearchResult } from "./SearchDialog";
+import { SearchDialog } from "./SearchDialog";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CombinedData } from "@/hooks/useCombinedData";
 
 export const HeaderSearchEntry = () => {
   const [commandOpen, setCommandOpen] = useState(false);
@@ -23,12 +24,12 @@ export const HeaderSearchEntry = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleSelectResponse = (response: SearchResult) => {
-    switch (response.type) {
-      case "company":
+  const handleSelectResponse = (response: CombinedData) => {
+    switch (response.category) {
+      case "companies":
         navigate(`/companies/${response.id}`);
         return;
-      case "municipality":
+      case "municipalities":
         navigate(`/municipalities/${response.id}`);
         return;
     }

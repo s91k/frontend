@@ -1,7 +1,4 @@
-import { RankedCompany, useCompanies } from "@/hooks/companies/useCompanies";
-import { useMunicipalities } from "@/hooks/useMunicipalities";
-import { Municipality } from "@/types/municipality";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -9,70 +6,55 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import { Command as CommandPrimitive } from "cmdk";
 import { Dialog, DialogOverlay, DialogPortal } from "../ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-
-export type SearchResult = {
-  id: string;
-  type: "company" | "municipality";
-  name: string;
-};
+import { CombinedData, useCombinedData } from "@/hooks/useCombinedData";
 
 interface SearchDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSelectResponse: (response: SearchResult) => void;
+  onSelectResponse: (response: CombinedData) => void;
 }
 
-const calculateSearchResults = (
-  query: string,
-  allCompanies: RankedCompany[],
-  allMunicipalities: Municipality[],
-) => {
-  if (query.length <= 0) {
-    return [] as SearchResult[];
-  }
-
-  const lcInput = query.toLowerCase();
-
-  const companies = allCompanies
-    .filter((company) => company.name.toLowerCase().includes(lcInput))
-    .map((c) => ({
-      name: c.name,
-      id: c.wikidataId,
-      type: "company",
-    }));
-
-  const municipalities = allMunicipalities
-    .filter((municipality) => municipality.name.toLowerCase().includes(lcInput))
-    .map((m) => ({
-      name: m.name,
-      id: m.name,
-      type: "municipality",
-    }));
-
-  return [...companies, ...municipalities] as SearchResult[];
-};
-
 const resultTypeTranslationKeys = {
-  company: "globalSearch.searchCategoryCompany",
-  municipality: "globalSearch.searchCategoryMunicipality",
-  page: "globalSearch.searchCategoryPage",
+  companies: "globalSearch.searchCategoryCompany",
+  municipalities: "globalSearch.searchCategoryMunicipality",
 } as const;
 
-const SearchResultItem = ({ item }: { item: SearchResult }) => {
+const SearchResultItem = ({ item }: { item: CombinedData }) => {
   const { t } = useTranslation();
 
   return (
     <div className="flex items-center w-full text-sm text-gray-500 dark:text-gray-400">
       <span>{item.name}</span>
       <span className="ml-auto mr-2">
-        {t(resultTypeTranslationKeys[item.type])}
+        {t(resultTypeTranslationKeys[item.category])}
       </span>
     </div>
   );
+};
+
+const useGlobalSearch = (query: string) => {
+  const allData = useCombinedData();
+
+  if (allData.error || allData.loading) {
+    return allData;
+  }
+
+  const lcQuery = query.toLocaleLowerCase();
+  const result =
+    lcQuery.length > 1
+      ? allData.data.filter((item) =>
+          item.name.toLocaleLowerCase().includes(lcQuery),
+        )
+      : [];
+  return {
+    ...allData,
+    data: result,
+  };
 };
 
 export function SearchDialog({
@@ -81,13 +63,8 @@ export function SearchDialog({
   onSelectResponse,
 }: SearchDialogProps) {
   const [inputValue, setInputValue] = useState("");
-  const { companies: allCompanies } = useCompanies();
-  const { municipalities: allMunicipalities } = useMunicipalities();
 
-  const results = useMemo(
-    () => calculateSearchResults(inputValue, allCompanies, allMunicipalities),
-    [inputValue, allCompanies, allMunicipalities],
-  );
+  const results = useGlobalSearch(inputValue);
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
@@ -110,7 +87,7 @@ export function SearchDialog({
               "transition-all duration-200 ease-in-out",
             )}
           >
-            <Command className="rounded-lg">
+            <Command className="rounded-lg" shouldFilter={false}>
               <CommandInput
                 placeholder="Search for companies or municipalities..."
                 value={inputValue}
@@ -127,12 +104,18 @@ export function SearchDialog({
                 className="transition-all duration-200 ease-in-out mt-4"
                 style={{
                   maxHeight:
-                    results.length > 0
-                      ? `${Math.min(results.length * 48, 300)}px`
+                    results.data.length > 0
+                      ? `${Math.min(results.data.length * 48, 300)}px`
                       : "0px",
                 }}
               >
-                {results.map((item) => (
+                {results.loading && (
+                  <CommandPrimitive.Loading>
+                    Fetching companies and municipalities
+                  </CommandPrimitive.Loading>
+                )}
+
+                {results.data.map((item) => (
                   <CommandItem
                     key={item.id}
                     onSelect={() => {
