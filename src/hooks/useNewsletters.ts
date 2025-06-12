@@ -1,4 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+
 
 export const useNewsletters = async () => {
   const [newslettersData, setNewslettersData] = useState([]);
@@ -6,23 +8,17 @@ export const useNewsletters = async () => {
 
   useEffect(() => {
 
-    const fetchNewsletters = async () => {
-        try {
-          const response = await fetch(url);
-    
-          if (response) {
-            const result = await response.json();
-    
-            if (result) {
-                console.log(result)
-              return result;
-            }
-          }
-        } catch (err) {
-          console.log(err);
-        }
+    const fetchNewsletters = () => {
+
     }
 
+    const {data: newsletters, isLoading} = useQuery({
+        queryFn: () => fetchNewsletters(),
+        queryKey: ["newsletters"]
+      })
+
+      
+  
     fetchNewsletters();
   }, []);
 };

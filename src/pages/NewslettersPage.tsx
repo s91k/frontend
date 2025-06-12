@@ -9,6 +9,7 @@ import {
   NewsletterType,
   monthsToNumberedValue,
 } from "@/lib/newsletterArchive/newsletterData";
+import { useNewsletters } from "@/hooks/useNewsletters";
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
@@ -20,6 +21,8 @@ export function NewsLetterArchivePage() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [displayedNewsletter, setDisplayedNewsletter] =
     useState<NewsletterType>();
+
+  const newsletterListCalled = useNewsletters();
 
   useEffect(() => {
     window.scrollTo(0, 0);
