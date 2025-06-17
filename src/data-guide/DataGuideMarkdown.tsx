@@ -3,6 +3,7 @@ import remarkBreaks from "remark-breaks";
 import { DataGuideItem } from "./items";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { ArrowUpRight } from "lucide-react";
 
 type DataGuideMarkdownProps = {
   item: DataGuideItem;
@@ -42,8 +43,13 @@ export const DataGuideMarkdown = ({
           </p>
         ),
         a: ({ node, children, ...props }) => (
-          <a {...props} className="text-blue-2">
+          <a
+            {...props}
+            className="inline-flex items-center gap-2 text-blue-2 hover:text-blue-1"
+            target="_blank"
+          >
             {children}
+            <ArrowUpRight className="w-4 h-4 sm:w-3 sm:h-3" />
           </a>
         ),
       }}
