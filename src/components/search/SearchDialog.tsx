@@ -96,11 +96,11 @@ export function SearchDialog({
           )}
         </DialogDescription>
         <DialogOverlay className="backdrop-blur-sm bg-black/40" />
-        <DialogPrimitive.Content className="fixed top-16 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50 focus:outline-none">
+        <DialogPrimitive.Content className="fixed top-16 left-1/2 transform -translate-x-1/2 w-full max-w-lg z-50 focus:outline-none">
           <div
             className={cn(
               "bg-black-2 px-8 pb-8 pt-2 dark:bg-gray-800 border border-black-1 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden",
-              "transition-all duration-200 ease-in-out",
+              "transition-all duration-200 ease-in-out m-4",
             )}
           >
             <Command className="rounded-sm" shouldFilter={false}>
@@ -111,7 +111,7 @@ export function SearchDialog({
                 className="focus:ring-0"
               />
               <CommandEmpty>
-                <p className="text-center text-gray-400">
+                <p className="text-gray-400">
                   {t("globalSearch.searchDialog.emptyText")}
                 </p>
               </CommandEmpty>
