@@ -34,7 +34,7 @@ const SearchResultItem = ({ item }: { item: CombinedData }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center w-full text-sm text-gray-500 dark:text-gray-400">
+    <div className="flex items-center w-full text-sm text-gray-500 dark:text-gray-400 hover:cursor-pointer">
       <span>{item.name}</span>
       <span className="ml-auto mr-2">
         {t(resultTypeTranslationKeys[item.category])}
@@ -95,8 +95,8 @@ export function SearchDialog({
             "Search for companies or municipalities",
           )}
         </DialogDescription>
-        <DialogOverlay />
-        <DialogPrimitive.Content className="fixed top-1/4 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50 focus:outline-none">
+        <DialogOverlay className="backdrop-blur-sm bg-black/40" />
+        <DialogPrimitive.Content className="fixed top-16 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50 focus:outline-none">
           <div
             className={cn(
               "bg-black-2 px-8 pb-8 pt-2 dark:bg-gray-800 border border-black-1 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden",
