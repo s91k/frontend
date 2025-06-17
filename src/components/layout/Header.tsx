@@ -121,7 +121,7 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          <HeaderSearchEntry />
+          <HeaderSearchEntry className="ml-auto mr-2" />
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}

@@ -3,13 +3,18 @@ import { SearchDialog } from "./SearchDialog";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CombinedData } from "@/hooks/useCombinedData";
+import { cn } from "@/lib/utils";
 
-export const HeaderSearchEntry = () => {
+type HeaderSearchEntryProps = {
+  className?: string;
+};
+
+export const HeaderSearchEntry = ({ className }: HeaderSearchEntryProps) => {
   const [commandOpen, setCommandOpen] = useState(false);
   const navigate = useNavigate();
 
   const platform = window.navigator?.userAgent;
-  const isMac = platform.toLowerCase().includes("macintosh");
+  const isMac = platform.toLowerCase().includes("mac");
 
   // Open command palette with CMD+K
   useEffect(() => {
@@ -38,11 +43,17 @@ export const HeaderSearchEntry = () => {
     <>
       <button
         onClick={() => setCommandOpen(true)}
-        className="lg:ml-auto px-2 py-1 bg-black-1 min-w-16 md:min-w-36 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2"
+        className={cn(
+          className,
+          "lg:ml-auto px-2 py-1 bg-black-1 min-w-16 md:min-w-36 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2",
+        )}
       >
         <SearchIcon className="h-4 w-4" />
-        <span className="text-xs text-grey/60 border border-grey/20 rounded px-1">
-          {isMac ? "⌘K" : "^K"}
+        <span className="text-xs text-grey/60 inline-flex gap-0.5 min-w-14">
+          <kbd className="px-1.5 border border-grey/20 rounded ml-auto">
+            {isMac ? "⌘" : "Ctrl"}
+          </kbd>
+          <kbd className="px-1.5 border border-grey/20 rounded">K</kbd>
         </span>
       </button>
       <SearchDialog
