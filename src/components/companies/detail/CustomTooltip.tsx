@@ -1,6 +1,6 @@
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useTranslation } from "react-i18next";
-import { formatEmissionsAbsolute, localizeUnit } from "@/utils/localizeUnit";
+import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { AiIcon } from "@/components/ui/ai-icon";
@@ -81,9 +81,10 @@ export const CustomTooltip = ({
 
           // Correctly display "No Data Available" if original value was null or undefined
           const displayValue =
-          originalValue == null && (entry.value == null || isNaN(entry.value) || entry.value == 0)
+            originalValue == null &&
+            (entry.value == null || isNaN(entry.value) || entry.value == 0)
               ? t("companies.tooltip.noDataAvailable")
-              : `${formatEmissionsAbsolute(Math.round(entry.value ?? 0), currentLanguage)} ${t(
+              : `${formatEmissionsAbsoluteCompact(Math.round(entry.value ?? 0), currentLanguage)} ${t(
                   "companies.tooltip.tonsCO2e",
                 )}`;
 
@@ -91,7 +92,7 @@ export const CustomTooltip = ({
             <div
               key={entry.dataKey}
               className={`
-              ${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"} 
+              ${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"}
               text-grey mr-2 text-sm
             `}
             >
