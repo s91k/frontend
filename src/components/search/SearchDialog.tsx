@@ -53,9 +53,9 @@ const useGlobalSearch = (query: string) => {
   const lcQuery = query.toLocaleLowerCase();
   const result =
     lcQuery.length > 1
-      ? allData.data.filter((item) =>
-          item.name.toLocaleLowerCase().includes(lcQuery),
-        )
+      ? allData.data
+          .filter((item) => item.name.toLocaleLowerCase().includes(lcQuery))
+          .sort((a, b) => a.name.localeCompare(b.name))
       : [];
 
   return {
