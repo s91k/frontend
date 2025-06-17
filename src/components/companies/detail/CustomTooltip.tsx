@@ -99,7 +99,9 @@ export const CustomTooltip = ({
               )}
             >
               <span className="text-grey mr-2">{name}:</span>
-              <span style={{ color: entry.color }}>{displayValue}</span>
+              <span className="font-mono" style={{ color: entry.color }}>
+                {displayValue}
+              </span>
               {isDataAI && (
                 <span className="ml-2">
                   <AiIcon size="sm" />
