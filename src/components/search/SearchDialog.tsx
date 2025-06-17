@@ -140,7 +140,7 @@ export function SearchDialog({
                       onSelectResponse(item);
                       setOpen(false);
                     }}
-                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="px-4 py-3"
                   >
                     <SearchResultItem item={item} />
                   </CommandItem>
