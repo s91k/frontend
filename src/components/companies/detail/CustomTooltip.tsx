@@ -4,6 +4,7 @@ import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { AiIcon } from "@/components/ui/ai-icon";
+import { cn } from "@/lib/utils";
 
 interface CustomTooltipProps {
   active?: boolean;
@@ -91,10 +92,11 @@ export const CustomTooltip = ({
           return (
             <div
               key={entry.dataKey}
-              className={`
-              ${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"}
-              text-grey mr-2 text-sm
-            `}
+              className={cn(
+                `${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"}`,
+                "text-grey mr-2 text-sm",
+                "grid grid-cols-[1fr_auto] gap-1 w-full",
+              )}
             >
               <span className="text-grey mr-2">{name}:</span>
               <span style={{ color: entry.color }}>{displayValue}</span>
