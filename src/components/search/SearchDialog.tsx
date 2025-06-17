@@ -34,7 +34,7 @@ const SearchResultItem = ({ item }: { item: CombinedData }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center w-full text-sm text-gray-500 dark:text-gray-400 hover:cursor-pointer">
+    <div className="flex items-center w-full text-sm text-gray-500 hover:cursor-pointer">
       <span>{item.name}</span>
       <span className="ml-auto mr-2">
         {t(resultTypeTranslationKeys[item.category])}
@@ -103,7 +103,7 @@ export function SearchDialog({
               "transition-all duration-200 ease-in-out",
             )}
           >
-            <Command className="rounded-lg" shouldFilter={false}>
+            <Command className="rounded-sm" shouldFilter={false}>
               <CommandInput
                 placeholder={t("globalSearch.placeholder")}
                 value={inputValue}
@@ -116,7 +116,7 @@ export function SearchDialog({
                 </p>
               </CommandEmpty>
               <CommandList
-                className="transition-all duration-200 ease-in-out mt-4"
+                className="transition-all duration-200 ease-in-out"
                 style={{
                   maxHeight:
                     results.data.length > 0
