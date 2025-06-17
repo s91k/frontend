@@ -45,7 +45,7 @@ export const HeaderSearchEntry = ({ className }: HeaderSearchEntryProps) => {
         onClick={() => setCommandOpen(true)}
         className={cn(
           className,
-          "lg:ml-auto px-2 py-1 bg-black-1 min-w-16 md:min-w-36 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2",
+          "lg:ml-auto px-2 py-1 bg-black-1 min-w-28 md:min-w-48 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2",
         )}
       >
         <SearchIcon className="h-4 w-4" />
