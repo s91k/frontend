@@ -187,6 +187,11 @@ export default function EmissionsLineChart({
             .filter(
               (key) => key.startsWith("cat") && !key.includes("Interpolated"),
             )
+            .sort((a, b) => {
+              const aCatId = parseInt(a.replace("cat", ""));
+              const bCatId = parseInt(b.replace("cat", ""));
+              return aCatId - bCatId;
+            })
             .map((categoryKey) => {
               const categoryId = parseInt(categoryKey.replace("cat", ""));
               const isInterpolatedKey = `${categoryKey}Interpolated`;
