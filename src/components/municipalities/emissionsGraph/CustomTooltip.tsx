@@ -27,8 +27,11 @@ export const CustomTooltip: FC<CustomTooltipProps> = ({
 
   if (dataView === "sectors") {
     return (
-      <div className="bg-black-1 px-4 py-3 rounded-level-2">
-        <div className="text-sm font-medium mb-2">{label}</div>
+      <div className="bg-black-1 px-4 py-3 rounded-level-2 grid grid-cols-[1fr_auto] text-xs">
+        <div className="mb-2 grid grid-cols-subgrid col-span-2 font-medium text-sm">
+          <div className="ml-1">{label}</div>
+          <div className="flex justify-end mr-1">{t("emissionsUnitCO2")}</div>
+        </div>
         {payload.map((entry) => {
           if (hiddenSectors.has(entry.dataKey as string)) {
             return null;
@@ -40,16 +43,18 @@ export const CustomTooltip: FC<CustomTooltipProps> = ({
             : { translatedName: sectorName };
 
           return (
-            <div key={entry.dataKey} className="text-sm">
+            <div
+              key={entry.dataKey}
+              className="text-sm grid grid-cols-subgrid col-span-2 even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5"
+            >
               <span className="text-grey mr-2">
-                {sectorInfo.translatedName}:
+                {sectorInfo.translatedName}
               </span>
-              <span style={{ color: entry.color }}>
+              <span style={{ color: entry.color }} className="flex justify-end">
                 {formatEmissionsAbsolute(
                   entry.value as number,
                   currentLanguage,
-                )}{" "}
-                {t("emissionsUnitCO2")}
+                )}
               </span>
             </div>
           );
@@ -75,20 +80,28 @@ export const CustomTooltip: FC<CustomTooltipProps> = ({
     : filteredPayload;
 
   return (
-    <div className="bg-black-1 px-4 py-3 rounded-level-2">
-      <div className="text-sm font-medium mb-2">{label}</div>
+    <div className="bg-black-1 px-4 py-3 text-xs rounded-level-2 grid grid-cols-[1fr_auto]">
+      <div className="grid grid-cols-subgrid col-span-2 mb-2 font-medium text-sm">
+        <div className="ml-1">{label}</div>
+        <div className="flex justify-end mr-1">{t("emissionsUnitCO2")}</div>
+      </div>
       {displayPayload.map((entry) => {
         if (entry.dataKey === "gap") {
           return null;
         }
         return (
-          <div key={entry.dataKey} className="text-sm">
+          <div
+            key={entry.dataKey}
+            className="text-xs grid grid-cols-subgrid col-span-2 even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5"
+          >
             <span className="text-grey mr-2">
-              {t(`municipalities.graph.${entry.dataKey}`)}:
+              {t(`municipalities.graph.${entry.dataKey}`)}
             </span>
-            <span style={{ color: entry.color }}>
-              {formatEmissionsAbsolute(entry.value as number, currentLanguage)}{" "}
-              {t("emissionsUnitCO2")}
+            <span style={{ color: entry.color }} className="flex justify-end">
+              {formatEmissionsAbsolute(
+                entry.value as number,
+                currentLanguage,
+              )}{" "}
             </span>
           </div>
         );

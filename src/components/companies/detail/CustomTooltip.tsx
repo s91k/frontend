@@ -51,12 +51,12 @@ export const CustomTooltip = ({
           "grid grid-cols-[1fr_auto]",
         )}
       >
-        <div className="text-sm font-medium mb-2 grid grid-cols-subgrid col-span-3">
+        <div className="text-sm font-medium mb-2 grid grid-cols-subgrid col-span-2">
           <span>
             {label}
             {isBaseYear ? "*" : ""}
           </span>
-          <span className="flex justify-end">
+          <span className="flex justify-end mr-1">
             {t("companies.tooltip.tonsCO2e")}
           </span>
         </div>
@@ -105,7 +105,8 @@ export const CustomTooltip = ({
               className={cn(
                 `${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"}`,
                 "text-grey text-xs",
-                "grid grid-cols-subgrid col-span-2 w-full ",
+                "grid grid-cols-subgrid col-span-2 w-full",
+                "even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5",
               )}
             >
               <div className="text-grey mr-2">{name}</div>
@@ -124,7 +125,7 @@ export const CustomTooltip = ({
           );
         })}
         {isBaseYear ? (
-          <span className="text-grey mr-2 text-xs col-span-3">
+          <span className="text-grey mr-2 text-xs col-span-2">
             <br></br>* {t("companies.emissionsHistory.baseYearInfo")}
           </span>
         ) : null}
