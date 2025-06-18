@@ -99,7 +99,7 @@ export function SearchDialog({
         <DialogPrimitive.Content className="fixed top-16 left-1/2 transform -translate-x-1/2 w-full max-w-lg z-50 focus:outline-none">
           <div
             className={cn(
-              "bg-black-2 dark:bg-gray-800 border border-black-1 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden",
+              "bg-black-2 border-black-1 shadow-lg overflow-hidden",
               "transition-all duration-200 ease-in-out m-4",
             )}
           >
