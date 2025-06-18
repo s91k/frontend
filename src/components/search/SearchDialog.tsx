@@ -147,7 +147,7 @@ export function SearchDialog({
                 ))}
               </CommandList>
             </Command>
-            <div className="flex justify-center text-white/30 text-sm p-2">
+            <div className="flex justify-center text-white/40 text-sm p-2">
               <span className="text-xs">
                 {t("globalSearch.searchDialog.shortcutTipText")}
               </span>
