@@ -99,8 +99,9 @@ export function SearchDialog({
         <DialogPrimitive.Content className="fixed top-16 left-1/2 transform -translate-x-1/2 w-full max-w-lg z-50 focus:outline-none">
           <div
             className={cn(
-              "bg-black-2 border-black-1 shadow-lg overflow-hidden",
+              "bg-black-2 shadow-lg overflow-hidden",
               "transition-all duration-200 ease-in-out m-4",
+              "border border-black-1 rounded-lg",
             )}
           >
             <Command className="rounded-sm px-8 pb-8 pt-2" shouldFilter={false}>
@@ -147,7 +148,7 @@ export function SearchDialog({
                 ))}
               </CommandList>
             </Command>
-            <div className="flex justify-center text-white/40 text-sm p-2">
+            <div className="flex justify-center text-white/40 text-sm mb-4">
               <span className="text-xs">
                 {t("globalSearch.searchDialog.shortcutTipText")}
               </span>
