@@ -61,9 +61,11 @@ export const CustomTooltip = ({
           </span>
         </div>
         {payload.map((entry: any) => {
-          if (entry.dataKey === "gap") return null;
+          if (entry.dataKey === "gap") {
+            return null;
+          }
 
-          let name = entry.name;
+          let { name } = entry;
           if (entry.dataKey.startsWith("cat")) {
             const categoryId = parseInt(entry.dataKey.replace("cat", ""));
             name = `${categoryId.toLocaleString()}. ${getCategoryName(categoryId)}`;
