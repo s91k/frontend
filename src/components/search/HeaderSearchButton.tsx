@@ -43,11 +43,11 @@ export const HeaderSearchButton = ({ className }: HeaderSearchButtonProps) => {
       <button
         onClick={() => setCommandOpen(true)}
         className={cn(
-          className,
-          "px-2 py-1 bg-black-1 h-6 lg:h-8",
-          "flex justify-between items-center gap-2",
+          "px-2 py-1 bg-black-1 h-8",
+          "flex items-center gap-2",
           "text-white/30 hover:text-white/60 hover:bg-white/20",
           "rounded-full border border-grey/20 hover:border-gray/40 transition-colors ",
+          className,
         )}
       >
         <SearchIcon className="h-4 w-4 mx-1" />
