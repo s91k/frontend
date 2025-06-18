@@ -14,14 +14,11 @@ import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
-import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
-import { Section } from "@/data-guide/Section";
 import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 export function EmissionsHistory({
   reportingPeriods,
   onYearSelect,
-  className,
   baseYear,
   features = {
     interpolateScope3: true,
