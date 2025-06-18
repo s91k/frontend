@@ -8,9 +8,13 @@ import { useTranslation } from "react-i18next";
 
 type HeaderSearchButtonProps = {
   className?: string;
+  onSearchResultClick?: () => void;
 };
 
-export const HeaderSearchButton = ({ className }: HeaderSearchButtonProps) => {
+export const HeaderSearchButton = ({
+  className,
+  onSearchResultClick,
+}: HeaderSearchButtonProps) => {
   const [commandOpen, setCommandOpen] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -32,12 +36,15 @@ export const HeaderSearchButton = ({ className }: HeaderSearchButtonProps) => {
     switch (response.category) {
       case "companies":
         navigate(`/companies/${response.id}`);
-        return;
+        break;
       case "municipalities":
         navigate(`/municipalities/${response.id}`);
-        return;
+        break;
     }
+
+    onSearchResultClick?.();
   };
+
   return (
     <>
       <button

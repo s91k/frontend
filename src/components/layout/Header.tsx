@@ -212,7 +212,10 @@ export function Header() {
           {menuOpen && (
             <div className="fixed inset-0 w-full h-full z-100 flex p-8 mt-10 bg-black-2">
               <div className="flex flex-col gap-6 text-lg w-full">
-                <HeaderSearchButton className="w-full" />
+                <HeaderSearchButton
+                  className="w-full"
+                  onSearchResultClick={toggleMenu}
+                />
                 <LanguageButtons />
                 {NAV_LINKS.map((link) => (
                   <div key={link.path} className="flex flex-col">
