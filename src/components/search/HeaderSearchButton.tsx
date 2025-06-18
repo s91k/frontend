@@ -4,17 +4,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CombinedData } from "@/hooks/useCombinedData";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
-type HeaderSearchEntryProps = {
+type HeaderSearchButtonProps = {
   className?: string;
 };
 
-export const HeaderSearchEntry = ({ className }: HeaderSearchEntryProps) => {
+export const HeaderSearchButton = ({ className }: HeaderSearchButtonProps) => {
   const [commandOpen, setCommandOpen] = useState(false);
   const navigate = useNavigate();
-
-  const platform = window.navigator?.userAgent;
-  const isMac = platform.toLowerCase().includes("mac");
+  const { t } = useTranslation();
 
   // Open command palette with CMD+K
   useEffect(() => {
@@ -45,15 +44,15 @@ export const HeaderSearchEntry = ({ className }: HeaderSearchEntryProps) => {
         onClick={() => setCommandOpen(true)}
         className={cn(
           className,
-          "lg:ml-auto px-2 py-1 bg-black-1 min-w-28 md:min-w-48 h-6 lg:h-8 text-grey rounded-full border border-grey/20 hover:text-white transition-colors flex justify-between items-center gap-2",
+          "px-2 py-1 bg-black-1 h-6 lg:h-8",
+          "flex justify-between items-center gap-2",
+          "text-white/30 hover:text-white/60 hover:bg-white/20",
+          "rounded-full border border-grey/20 hover:border-gray/40 transition-colors ",
         )}
       >
-        <SearchIcon className="h-4 w-4" />
-        <span className="text-xs text-grey/60 inline-flex gap-0.5 min-w-14">
-          <kbd className="px-1.5 border border-grey/20 rounded ml-auto">
-            {isMac ? "⌘" : "Ctrl"}
-          </kbd>
-          <kbd className="px-1.5 border border-grey/20 rounded">K</kbd>
+        <SearchIcon className="h-4 w-4 mx-1" />
+        <span className="mr-2 text-sm">
+          {t("globalSearch.headerButtonTitle", "Search")}
         </span>
       </button>
       <SearchDialog

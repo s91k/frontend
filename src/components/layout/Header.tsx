@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/menubar";
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
-import { HeaderSearchEntry } from "../search/HeaderSearchEntry";
+import { HeaderSearchButton } from "../search/HeaderSearchButton";
 
 export function Header() {
   const { t } = useTranslation();
@@ -121,7 +121,6 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          <HeaderSearchEntry className="ml-auto mr-2" />
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
@@ -198,6 +197,7 @@ export function Header() {
                 ),
               )}
               <div className="ml-4 h-full flex items-center">
+                <HeaderSearchButton className="mx-2" />
                 <LanguageButtons className={"hidden md:flex mx-4 "} />
                 <NewsletterPopover
                   isOpen={isSignUpOpen}

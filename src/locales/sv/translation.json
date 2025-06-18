@@ -1252,11 +1252,13 @@
     "searchCategoryMunicipality": "Kommun",
     "searchCategoryPage": "Sida",
     "placeholder": "Exempel: Alfa Laval",
+    "headerButtonTitle": "Sök",
     "searchDialog": {
       "title": "Sök",
       "description": "Sök efter företag eller kommuner",
       "emptyText": "Börja skriv för att söka",
-      "loadingText": "Hämtar företag och kommuner..."
+      "loadingText": "Hämtar företag och kommuner...",
+      "shortcutTipText": "Starta sök med Ctrl+K / ⌘+K"
     }
   },
   "dataGuide": {

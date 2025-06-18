@@ -1249,11 +1249,13 @@
     "searchCategoryMunicipality": "Municipality",
     "searchCategoryPage": "Page",
     "placeholder": "Example: Alfa Laval",
+    "headerButtonTitle": "Search",
     "searchDialog": {
       "title": "Search",
       "description": "Search for companies or municipalities",
       "emptyText": "Start typing to search",
-      "loadingText": "Fetching companies and municipalities..."
+      "loadingText": "Fetching companies and municipalities...",
+      "shortcutTipText": "Trigger search by Ctrl+K / ⌘+K"
     }
   },
   "dataGuide": {
