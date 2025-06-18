@@ -1247,10 +1247,18 @@
     "title": "Find a company or municipality",
     "searchCategoryCompany": "Company",
     "searchCategoryMunicipality": "Municipality",
-    "placeholder": "Example: Alfa Laval"
+    "searchCategoryPage": "Page",
+    "placeholder": "Example: Alfa Laval",
+    "searchDialog": {
+      "title": "Search",
+      "description": "Search for companies or municipalities",
+      "emptyText": "Start typing to search",
+      "loadingText": "Fetching companies and municipalities..."
+    }
   },
   "dataGuide": {
     "buttonFallbackTitle": "Learn more about these metrics",
+    "selectItemPrompt": "Select a topic you want to learn more about",
     "items": {
       "totalEmissions": {
         "title": "What our total emissions represent",

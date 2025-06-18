@@ -14,12 +14,11 @@ import { HiddenItemsBadges } from "../HiddenItemsBadges";
 import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
-import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
+import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 export function EmissionsHistory({
   reportingPeriods,
   onYearSelect,
-  className,
   baseYear,
   features = {
     interpolateScope3: true,
@@ -115,8 +114,14 @@ export function EmissionsHistory({
   };
 
   return (
-    <div
-      className={cn("bg-black-2 rounded-level-1 px-4 md:px-16 py-8", className)}
+    <SectionWithHelp
+      helpItems={[
+        "scope1",
+        "scope2",
+        "scope3",
+        "scope3EmissionLevels",
+        "companyMissingData",
+      ]}
     >
       <ChartHeader
         title={t("companies.emissionsHistory.title")}
@@ -149,16 +154,6 @@ export function EmissionsHistory({
         getCategoryName={getCategoryName}
         getCategoryColor={getCategoryColor}
       />
-
-      <ProgressiveDataGuide
-        items={[
-          "scope1",
-          "scope2",
-          "scope3",
-          "scope3EmissionLevels",
-          "companyMissingData",
-        ]}
-      />
-    </div>
+    </SectionWithHelp>
   );
 }
