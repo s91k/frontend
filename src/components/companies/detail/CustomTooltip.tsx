@@ -48,7 +48,7 @@ export const CustomTooltip = ({
         className={cn(
           isMobile ? "max-w-[280px]" : "max-w-[400px]",
           "bg-black-1 px-4 py-3 rounded-level-2",
-          "grid grid-cols-[1fr_auto]",
+          "grid grid-cols-[1fr_auto] text-xs",
         )}
       >
         <div className="text-sm font-medium mb-2 grid grid-cols-subgrid col-span-2">
@@ -104,7 +104,6 @@ export const CustomTooltip = ({
               key={entry.dataKey}
               className={cn(
                 `${entry.dataKey === "total" ? "my-2 font-medium" : "my-0"}`,
-                "text-grey text-xs",
                 "grid grid-cols-subgrid col-span-2 w-full",
                 "even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5",
               )}

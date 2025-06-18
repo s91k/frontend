@@ -45,7 +45,7 @@ export const CustomTooltip: FC<CustomTooltipProps> = ({
           return (
             <div
               key={entry.dataKey}
-              className="text-sm grid grid-cols-subgrid col-span-2 even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5"
+              className="grid grid-cols-subgrid col-span-2 even:bg-black-1 odd:bg-black-2/20 px-1 py-0.5"
             >
               <span className="text-grey mr-2">
                 {sectorInfo.translatedName}
