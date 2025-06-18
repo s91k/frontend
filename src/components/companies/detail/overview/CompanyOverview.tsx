@@ -29,7 +29,7 @@ import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
 import { calculateRateOfChange } from "@/lib/calculations/general";
-import { EmissionsAssessmentButton } from "../assessment/EmissionsAssessmentButton";
+import { EmissionsAssessmentButton } from "../emissions-assessment/EmissionsAssessmentButton";
 import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 interface CompanyOverviewProps {
