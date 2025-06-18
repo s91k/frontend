@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/menubar";
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
-import { HeaderSearchEntry } from "../search/HeaderSearchEntry";
+import { HeaderSearchButton } from "../search/HeaderSearchButton";
 
 export function Header() {
   const { t } = useTranslation();
@@ -121,7 +121,6 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          <HeaderSearchEntry className="ml-auto mr-2" />
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
@@ -198,6 +197,7 @@ export function Header() {
                 ),
               )}
               <div className="ml-4 h-full flex items-center">
+                <HeaderSearchButton className="mx-2" />
                 <LanguageButtons className={"hidden md:flex mx-4 "} />
                 <NewsletterPopover
                   isOpen={isSignUpOpen}
@@ -211,7 +211,11 @@ export function Header() {
           {/* Mobile Fullscreen Menu */}
           {menuOpen && (
             <div className="fixed inset-0 w-full h-full z-100 flex p-8 mt-10 bg-black-2">
-              <div className="flex flex-col gap-6 text-lg">
+              <div className="flex flex-col gap-6 text-lg w-full">
+                <HeaderSearchButton
+                  className="w-full"
+                  onSearchResultClick={toggleMenu}
+                />
                 <LanguageButtons />
                 {NAV_LINKS.map((link) => (
                   <div key={link.path} className="flex flex-col">
