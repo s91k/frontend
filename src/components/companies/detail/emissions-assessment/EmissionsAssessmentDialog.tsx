@@ -6,6 +6,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { paths } from "@/lib/api-types";
+import { formatPercent} from "@/utils/localizeUnit";
+import { useLanguage } from "@/components/LanguageProvider";
 
 type Assessment = paths["/emissions-assessment/"]["post"]["responses"][200]["content"]["application/json"]["assessment"];
 
@@ -20,6 +22,9 @@ export function EmissionsAssessmentDialog({
   onOpenChange,
   assessment,
 }: EmissionsAssessmentDialogProps) {
+
+  const { currentLanguage } = useLanguage();
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl bg-black-2 text-white max-h-[90vh] overflow-hidden flex flex-col">
@@ -35,7 +40,7 @@ export function EmissionsAssessmentDialog({
               <div className={`w-3 h-3 rounded-full ${assessment.isReasonable ? 'bg-green-500' : 'bg-red-500'}`} />
               <Text className="text-lg">
                 {assessment.isReasonable ? 'Reasonable' : 'Unreasonable'} 
-                (Confidence: {Math.round(assessment.confidence * 100)}%)
+                (Confidence: {formatPercent(assessment.confidence, currentLanguage, false)})
               </Text>
             </div>
 
