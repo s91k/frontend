@@ -104,8 +104,8 @@ export function Header() {
       path: `${currentLanguage}/articles`,
       label: t("header.insights"),
       sublinks: [
-        { label: t("header.articles"), path: `${currentLanguage}/articles` },
         { label: t("header.reports"), path: `${currentLanguage}/reports` },
+        { label: t("header.articles"), path: `${currentLanguage}/articles` },
         { label: t("header.learnMore"), path: `${currentLanguage}/learn-more` },
       ],
     },
