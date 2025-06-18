@@ -1,4 +1,4 @@
-import { Building2, Pen, AlertTriangle } from "lucide-react";
+import { Pen } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -12,13 +12,6 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { useState } from "react";
 import {
   useSectorNames,
@@ -38,8 +31,7 @@ import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
 import { calculateRateOfChange } from "@/lib/calculations/general";
 import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
-import { EmissionsAssessmentDialog } from "../assessment/EmissionsAssessmentDialog";
-import { YearSelectionModal } from "../assessment/YearSelectionModal";
+import { EmissionsAssessmentButton } from "../assessment/EmissionsAssessmentButton";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -59,15 +51,9 @@ export function CompanyOverview({
   const { t } = useTranslation();
   const { token } = useAuth();
   const navigate = useNavigate();
-  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
-  const [showYearSelectionModal, setShowYearSelectionModal] = useState(false);
-  const [assessment, setAssessment] = useState<any>(null);
-  const [isLoadingAssessment, setIsLoadingAssessment] = useState(false);
-  const [selectedYears, setSelectedYears] = useState<string[]>([]);
   const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
   const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
-  const [assessmentError, setAssessmentError] = useState<string | null>(null);
 
   const periodYear = new Date(selectedPeriod.endDate).getFullYear();
 
@@ -105,52 +91,6 @@ export function CompanyOverview({
       )
     : t("companies.overview.notReported");
 
-  const handleAssessEmissions = async () => {
-    setIsLoadingAssessment(true);
-    setAssessmentError(null);
-    try {
-      const response = await fetch('/api/emissions-assessment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          wikidataId: company.wikidataId,
-          years: selectedYears
-        }),
-      }); 
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (
-          response.status === 400 &&
-          errorData.message === 'No reporting periods found for the specified years'
-        ) {
-          setAssessmentError('No reporting periods found for the selected years. Please choose different years.');
-          setShowYearSelectionModal(true);
-          return;
-        } else {
-          throw new Error(errorData.message || 'Failed to assess emissions');
-        }
-      }
-      const data = await response.json();
-      setAssessment(data.assessment);
-      setShowAssessmentModal(true);
-    } catch (error: any) {
-      setAssessmentError(error.message || 'Failed to assess emissions');
-    } finally {
-      setIsLoadingAssessment(false);
-    }
-  };
-
-  const handleYearSelection = (year: string) => {
-    setSelectedYears(prev => {
-      if (prev.includes(year)) {
-        return prev.filter(y => y !== year);
-      }
-      return [...prev, year];
-    });
-  };
-
   return (
     <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
       <div className="flex flex-col md:flex-row justify-between items-start mb-4 md:mb-12">
@@ -164,29 +104,16 @@ export function CompanyOverview({
                   size="sm"
                   className="gap-2"
                   onClick={() => navigate("edit")}
-                  disabled={isLoadingAssessment}
                 >
                   Edit
                   <div className="w-5 h-5 rounded-full bg-orange-5/30 text-orange-2 text-xs flex items-center justify-center">
                     <Pen />
                   </div>
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => {
-                    setAssessmentError(null);
-                    setSelectedYears([]);
-                    setShowYearSelectionModal(true);
-                  }}
-                  disabled={isLoadingAssessment}
-                >
-                  {isLoadingAssessment ? "Assessing..." : "Assess emissions"}
-                  <div className="w-5 h-5 rounded-full bg-blue-5/30 text-blue-2 text-xs flex items-center justify-center">
-                    <AlertTriangle />
-                  </div>
-                </Button>
+                <EmissionsAssessmentButton
+                  wikidataId={company.wikidataId}
+                  sortedPeriods={sortedPeriods}
+                />
               </div>
             )}
           </div>
@@ -314,22 +241,6 @@ export function CompanyOverview({
           "companyMissingData",
           "yearOverYearChange",
         ]}
-      />
-
-      <YearSelectionModal
-        isOpen={showYearSelectionModal}
-        onOpenChange={setShowYearSelectionModal}
-        selectedYears={selectedYears}
-        onYearSelection={handleYearSelection}
-        onAssess={handleAssessEmissions}
-        sortedPeriods={sortedPeriods}
-        assessmentError={assessmentError}
-      />
-
-      <EmissionsAssessmentDialog
-        isOpen={showAssessmentModal}
-        onOpenChange={setShowAssessmentModal}
-        assessment={assessment}
       />
     </div>
   );

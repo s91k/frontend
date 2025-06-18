@@ -194,3 +194,20 @@ export async function deleteValidationClaim(wikidataId: string) {
     return {};
   }
 }
+
+export async function assessEmissions(
+  params: paths["/emissions-assessment/"]["post"]["requestBody"]["content"]["application/json"],
+) {
+  const { data, error } = await client.POST("/emissions-assessment/", {
+    body: params,
+  });
+
+  if (error) {
+    if (error.message === 'No reporting periods found for the specified years') {
+      throw new Error('No reporting periods found for the selected years. Please choose different years.');
+    }
+    throw new Error(error.message || 'Failed to assess emissions');
+  }
+
+  return data;
+}

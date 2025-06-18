@@ -5,33 +5,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { paths } from "@/lib/api-types";
+
+type Assessment = paths["/emissions-assessment/"]["post"]["responses"][200]["content"]["application/json"]["assessment"];
 
 interface EmissionsAssessmentDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  assessment: {
-    isReasonable: boolean;
-    confidence: number;
-    issues: Array<{
-      type: string;
-      description: string;
-      severity: "HIGH" | "MEDIUM" | "LOW";
-      suggestedAction: string;
-      reportedNumber: number;
-      correctNumber: number;
-      yearComparison?: {
-        previousYear: string;
-        currentYear: string;
-        reduction: number;
-      };
-    }>;
-    reasoning: string;
-    nextSteps: Array<{
-      type: string;
-      description: string;
-      priority: "HIGH" | "MEDIUM" | "LOW";
-    }>;
-  } | null;
+  assessment: Assessment | null;
 }
 
 export function EmissionsAssessmentDialog({
@@ -78,7 +59,9 @@ export function EmissionsAssessmentDialog({
                         <Text className="font-medium">{issue.type}</Text>
                       </div>
                       <Text className="text-grey mb-2">{issue.description}</Text>
-                      <Text className="text-sm text-grey">Suggested Action: {issue.suggestedAction}</Text>
+                      {issue.suggestedAction && (
+                        <Text className="text-sm text-grey">Suggested Action: {issue.suggestedAction}</Text>
+                      )}
                       {issue.yearComparison && (
                         <div className="mt-2 text-sm text-grey">
                           Comparison: {issue.yearComparison.previousYear} to {issue.yearComparison.currentYear}
