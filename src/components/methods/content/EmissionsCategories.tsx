@@ -18,26 +18,14 @@ export const EmissionsAndCategoriesContent = () => {
   const { t } = useTranslation();
   return (
     <div className="prose prose-invert mx-auto space-y-8">
-      <Section
-        title={t("methodsPage.company.emissionCategories.scope2.title")}
-      >
-        <p>
-          {t("methodsPage.company.emissionCategories.scope2.paragraph1")}
-        </p>
+      <Section title={t("methodsPage.company.emissionCategories.scope2.title")}>
+        <p>{t("methodsPage.company.emissionCategories.scope2.paragraph1")}</p>
       </Section>
 
-      <Section
-        title={t("methodsPage.company.emissionCategories.scope3.title")}
-      >
-        <p>
-          {t("methodsPage.company.emissionCategories.scope3.paragraph1")}
-        </p>
-        <p>
-          {t("methodsPage.company.emissionCategories.scope3.paragraph2")}
-        </p>
-        <p>
-          {t("methodsPage.company.emissionCategories.scope3.paragraph3")}
-        </p>
+      <Section title={t("methodsPage.company.emissionCategories.scope3.title")}>
+        <p>{t("methodsPage.company.emissionCategories.scope3.paragraph1")}</p>
+        <p>{t("methodsPage.company.emissionCategories.scope3.paragraph2")}</p>
+        <p>{t("methodsPage.company.emissionCategories.scope3.paragraph3")}</p>
         <div className="flex justify-center">
           <div className="w-full space-y-6">
             <LinkButton

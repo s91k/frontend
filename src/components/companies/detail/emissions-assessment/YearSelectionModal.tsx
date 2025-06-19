@@ -52,7 +52,9 @@ export function YearSelectionModal({
                   key={year}
                   variant="outline"
                   className={`w-full justify-start transition-colors ${
-                    isSelected ? "bg-blue-5 text-white border-blue-5" : "text-white border-white"
+                    isSelected
+                      ? "bg-blue-5 text-white border-blue-5"
+                      : "text-white border-white"
                   }`}
                   onClick={() => onYearSelection(year)}
                 >
@@ -80,4 +82,4 @@ export function YearSelectionModal({
       </DialogContent>
     </Dialog>
   );
-} 
+}

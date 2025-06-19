@@ -7,8 +7,8 @@ interface StatCardProps {
   value: string | number | undefined;
   unit?: string;
   valueClassName?: string;
-  info?: boolean,
-  infoText?: string
+  info?: boolean;
+  infoText?: string;
 }
 
 export function MunicipalityStatCard({
@@ -23,12 +23,12 @@ export function MunicipalityStatCard({
     <div>
       <div className="flex gap-2">
         <Text className="text-lg md:text-xl">{title}</Text>
-      {info && (
-        <span className="text-grey">
-          <InfoTooltip>
-            <p>{infoText}</p>
-          </InfoTooltip>
-        </span>
+        {info && (
+          <span className="text-grey">
+            <InfoTooltip>
+              <p>{infoText}</p>
+            </InfoTooltip>
+          </span>
         )}
       </div>
       <div className="flex items-baseline space-x-2">

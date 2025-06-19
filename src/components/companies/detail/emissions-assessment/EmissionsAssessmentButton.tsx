@@ -20,23 +20,27 @@ export function EmissionsAssessmentButton({
   const [showYearSelectionModal, setShowYearSelectionModal] = useState(false);
   const [showAssessmentModal, setShowAssessmentModal] = useState(false);
   const [selectedYears, setSelectedYears] = useState<string[]>([]);
-  const { assessment, isLoadingAssessment, assessmentError, assessEmissions } = useEmissionsAssessment();
+  const { assessment, isLoadingAssessment, assessmentError, assessEmissions } =
+    useEmissionsAssessment();
 
   const handleAssessEmissions = () => {
-    assessEmissions({ wikidataId, years: selectedYears }, {
-      onSuccess: () => {
-        setShowAssessmentModal(true);
+    assessEmissions(
+      { wikidataId, years: selectedYears },
+      {
+        onSuccess: () => {
+          setShowAssessmentModal(true);
+        },
+        onError: () => {
+          setShowYearSelectionModal(true);
+        },
       },
-      onError: () => {
-        setShowYearSelectionModal(true);
-      }
-    });
+    );
   };
 
   const handleYearSelection = (year: string) => {
-    setSelectedYears(prev => {
+    setSelectedYears((prev) => {
       if (prev.includes(year)) {
-        return prev.filter(y => y !== year);
+        return prev.filter((y) => y !== year);
       }
       return [...prev, year];
     });
@@ -77,4 +81,4 @@ export function EmissionsAssessmentButton({
       />
     </>
   );
-} 
+}
