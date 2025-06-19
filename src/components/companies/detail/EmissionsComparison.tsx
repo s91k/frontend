@@ -141,7 +141,7 @@ export function EmissionsComparison({ emissions }: EmissionsComparisonProps) {
                   scale="log"
                 />
                 <Tooltip content={<CustomTooltip />} />
-                {chartData.map((data, index) => (
+                {chartData.map((data) => (
                   <Scatter
                     key={data[0].name}
                     name={data[0].name}
