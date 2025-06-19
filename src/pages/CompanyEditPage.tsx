@@ -7,13 +7,21 @@ import { CompanyEditPeriod } from "@/components/companies/edit/CompanyEditPeriod
 import { CompanyEditScope1 } from "@/components/companies/edit/CompanyEditScope1";
 import { CompanyEditScope2 } from "@/components/companies/edit/CompanyEditScope2";
 import { CompanyEditScope3 } from "@/components/companies/edit/CompanyEditScope3";
-import { CompanyDetails, ReportingPeriod } from "@/types/company";
+import { ReportingPeriod } from "@/types/company";
 import { mapCompanyEditFormToRequestBody } from "@/lib/company-edit";
 import { updateReportingPeriods } from "@/lib/api";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
 import { AuthExpiredModal } from "@/components/companies/edit/AuthExpiredModal";
 import { useAuth } from "@/contexts/AuthContext";
+
+const isAuthError = (error: Error) => {
+  if ("status" in error && typeof error.status === "number") {
+    return [401, 403].includes(error.status);
+  }
+
+  return false;
+};
 
 export function CompanyEditPage() {
   const { t } = useTranslation();
@@ -54,13 +62,7 @@ export function CompanyEditPage() {
     );
   }
 
-  if (
-    error &&
-    !(
-      typeof (error as any).status === "number" &&
-      ((error as any).status === 401 || (error as any).status === 403)
-    )
-  ) {
+  if (error && !isAuthError(error)) {
     return (
       <div className="text-center py-24">
         <Text variant="h3" className="text-red-500 mb-4">
