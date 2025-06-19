@@ -191,7 +191,13 @@ const Scope3Breakdown: React.FC<Scope3BreakdownProps> = ({
         };
       })
       .sort((a, b) => b.totalScope3 - a.totalScope3);
-  }, [companies, selectedSectors, selectedYear]);
+  }, [
+    downstreamCategories,
+    companies,
+    selectedSectors,
+    selectedYear,
+    upstreamCategories,
+  ]);
 
   // Update the getCategoryIdByName function to use the allCategories map
   const getCategoryIdByName = (name: string) => {

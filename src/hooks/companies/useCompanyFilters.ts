@@ -68,7 +68,7 @@ export const useSectors = () => {
 
   // Cast the first item to the expected type
   const allSectorsOption = {
-    value: "all" as "all",
+    value: "all" as const,
     label: t("companiesPage.allSectors") as "Alla sektorer",
   };
 

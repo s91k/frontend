@@ -1,6 +1,6 @@
 // FIXME ADD TRANSLATIONS
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -38,6 +38,21 @@ export function NewsletterPopover({
     }
   }, [isOpen]);
 
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      setOpen(newOpen);
+      if (onOpenChange) {
+        onOpenChange(newOpen);
+      }
+
+      // Reset status when closing
+      if (!newOpen) {
+        setStatus("idle");
+      }
+    },
+    [setOpen, onOpenChange, setStatus],
+  );
+
   // Auto-close effect when subscription is successful
   useEffect(() => {
     if (status === "success") {
@@ -57,19 +72,7 @@ export function NewsletterPopover({
         window.clearTimeout(autoCloseTimerRef.current);
       }
     };
-  }, [status]);
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (onOpenChange) {
-      onOpenChange(newOpen);
-    }
-
-    // Reset status when closing
-    if (!newOpen) {
-      setStatus("idle");
-    }
-  };
+  }, [handleOpenChange, status]);
 
   const handleFormSubmit = (
     event: React.SyntheticEvent<HTMLFormElement>,

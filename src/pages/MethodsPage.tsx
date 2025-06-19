@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom";
 
 export function MethodsPage() {
   const { t } = useTranslation();
-  const [selectedMethod, setSelectedMethod] = useState<String>("");
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const { isMobile } = useScreenSize();
@@ -28,9 +28,11 @@ export function MethodsPage() {
       const searchQuery = searchParams.get("view") || "";
 
       const matchingMethod = matchMethodWithSearchQuery(searchQuery);
-      matchingMethod && setSelectedMethod(matchingMethod);
+      if (matchingMethod) {
+        setSelectedMethod(matchingMethod);
+      }
     }
-  }, []);
+  }, [location.search]);
 
   const matchMethodWithSearchQuery = (searchQuery: string) => {
     if (searchQuery === "company") {
@@ -107,11 +109,7 @@ export function MethodsPage() {
             </div>
           </div>
           <main className="lg:w-3/4">
-            <MethodologyContent
-              ref={contentRef}
-              method={selectedMethod}
-              onNavigate={setSelectedMethod}
-            />
+            <MethodologyContent ref={contentRef} method={selectedMethod} />
           </main>
         </div>
       </div>

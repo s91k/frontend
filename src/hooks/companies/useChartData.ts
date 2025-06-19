@@ -84,14 +84,7 @@ export const useChartData = (
 
         return yearData;
       });
-  }, [
-    companies,
-    selectedSectors,
-    selectedSector,
-    chartType,
-    selectedYear,
-    sectorNames,
-  ]);
+  }, [companies, selectedSectors, chartType, sectorNames]);
 
   const pieChartData = useMemo(() => {
     if (selectedSector) {

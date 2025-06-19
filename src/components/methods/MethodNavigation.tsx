@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { methodologySections } from "@/lib/methods/methodologyData";
 import { useScreenSize } from "@/hooks/useScreenSize";

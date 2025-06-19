@@ -13,13 +13,12 @@ import { CalculationsContent } from "./content/CalculationsContent";
 
 interface MethodologyContentProps {
   method: string;
-  onNavigate: (methodId: string) => void;
 }
 
 export const MethodologyContent = forwardRef<
   HTMLDivElement,
   MethodologyContentProps
->(({ method, onNavigate }, ref) => {
+>(({ method }, ref) => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(true);
   const methodData = getMethodById(method);

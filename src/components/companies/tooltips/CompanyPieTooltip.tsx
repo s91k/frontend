@@ -24,16 +24,17 @@ const CompanyPieTooltip: React.FC<CompanyPieTooltipProps> = ({
   const { isMobile } = useScreenSize();
   const [closed, setClosed] = useState(false);
 
+  const name = payload?.[0]?.name;
   // Reset closed state when tooltip is re-activated or payload changes
   useEffect(() => {
     if (active) setClosed(false);
-  }, [active, payload && payload[0]?.name]);
+  }, [active, name]);
 
   if (!active || !payload || !payload.length || closed) {
     return null;
   }
 
-  const { name, value, payload: data } = payload[0];
+  const { value, payload: data } = payload[0];
   const safeValue = value != null ? value : 0;
   const safeTotal = data.total != null ? data.total : 1;
   const percentage = formatPercent(safeValue / safeTotal, currentLanguage);

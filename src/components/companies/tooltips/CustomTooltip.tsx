@@ -8,9 +8,12 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   payload,
   label,
 }) => {
-  if (!active || !payload || !payload.length) return null;
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
 
   // Group payload items by sector and calculate totals
   const sectorTotals: { [key: string]: { total: number; color: string } } = {};
