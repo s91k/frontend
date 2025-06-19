@@ -6,10 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  useSectorNames,
-  SectorCode,
-} from "@/hooks/companies/useCompanyFilters";
+// import { useSectorNames } from "@/hooks/companies/useCompanyFilters";
 import type { RankedCompany } from "@/types/company";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "react-i18next";
@@ -41,12 +38,11 @@ export function CompanyCard({
   wikidataId,
   name,
   description,
-  industry,
   reportingPeriods,
 }: CompanyCardProps) {
   const { t } = useTranslation();
   const { getCategoryColor } = useCategoryMetadata();
-  const sectorNames = useSectorNames();
+  // const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
   const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
 
