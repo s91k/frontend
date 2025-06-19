@@ -91,7 +91,7 @@ export function EmissionsComparison({ emissions }: EmissionsComparisonProps) {
           <Text variant="small" className="text-grey">
             {data.name}
           </Text>
-          <Text variant="large">{data.description}</Text>
+          <Text variant="body">{data.description}</Text>
           {data.value !== emissions && (
             <Text variant="small" className="text-grey">
               {data.value < emissions
