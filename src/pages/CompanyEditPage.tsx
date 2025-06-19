@@ -14,6 +14,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
 import { AuthExpiredModal } from "@/components/companies/edit/AuthExpiredModal";
 import { useAuth } from "@/contexts/AuthContext";
+import { CompanyEditDetails } from "@/components/companies/edit/CompanyEditDetails";
 
 const isAuthError = (error: Error) => {
   if ("status" in error && typeof error.status === "number") {
@@ -178,6 +179,8 @@ export function CompanyEditPage() {
           onYearsSelect={setSelectedYears}
           hasUnsavedChanges={formData.size > 0}
         />
+        <CompanyEditDetails company={company} onSave={refetch} />
+        <div className="mb-20" />
         {selectedPeriods !== null && selectedPeriods.length > 0 && (
           <form onSubmit={handleSubmit} ref={formRef}>
             <div className="overflow-x-auto overflow-y-visible">
