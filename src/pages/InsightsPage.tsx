@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, ArrowUpRight } from "lucide-react";
+import { CalendarDays, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Text } from "@/components/ui/text";
 import { blogMetadata } from "../lib/blog/blogPostsList";
@@ -7,38 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
 import { ContentGridPage } from "@/components/layout/ContentGridPage";
 import { ContentCard } from "@/components/layout/ContentCard";
-
-// Component for blog metadata (category, date, read time)
-function BlogMeta({
-  category,
-  date,
-  readTime,
-}: {
-  category: string;
-  date: string;
-  readTime: string;
-}) {
-  return (
-    <div className="flex items-center gap-4">
-      <span
-        aria-label="Category"
-        className="px-3 py-1 bg-blue-5/50 rounded-full text-blue-2 text-sm"
-      >
-        {category}
-      </span>
-      <div className="flex items-center gap-2 text-grey text-sm">
-        <CalendarDays className="w-4 h-4" />
-        <span aria-label="Date Published">
-          {new Date(date).toLocaleDateString("sv-SE")}
-        </span>
-      </div>
-      <div className="flex items-center gap-2 text-grey text-sm">
-        <Clock className="w-4 h-4" />
-        <span aria-label="Read Time">{readTime}</span>
-      </div>
-    </div>
-  );
-}
 
 export function InsightsPage() {
   const { t } = useTranslation();
