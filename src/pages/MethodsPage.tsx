@@ -109,11 +109,7 @@ export function MethodsPage() {
             </div>
           </div>
           <main className="lg:w-3/4">
-            <MethodologyContent
-              ref={contentRef}
-              method={selectedMethod}
-              onNavigate={setSelectedMethod}
-            />
+            <MethodologyContent ref={contentRef} method={selectedMethod} />
           </main>
         </div>
       </div>
