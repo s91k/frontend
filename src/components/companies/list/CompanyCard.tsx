@@ -65,9 +65,10 @@ export function CompanyCard({
     ? formatEmployeeCount(employeeCount, currentLanguage)
     : t("companies.card.noData");
 
-  const sectorName = industry?.industryGics?.sectorCode
-    ? sectorNames[industry.industryGics.sectorCode as SectorCode]
-    : t("companies.card.unknownSector");
+  // Only used in commented out code
+  // const sectorName = industry?.industryGics?.sectorCode
+  //   ? sectorNames[industry.industryGics.sectorCode as SectorCode]
+  //   : t("companies.card.unknownSector");
 
   // Find the largest scope 3 category
   const scope3Categories = latestPeriod?.emissions?.scope3?.categories || [];
