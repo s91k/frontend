@@ -12,13 +12,11 @@ import { useSectorNames } from "@/hooks/companies/useCompanyFilters";
 interface EmissionsSourcesAnalysisProps {
   companies: RankedCompany[];
   selectedSectors: string[];
-  selectedYear?: string;
 }
 
 const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
   companies,
   selectedSectors,
-  selectedYear: initialYear = "2023",
 }) => {
   const { t } = useTranslation();
   const screenSize = useScreenSize();
@@ -36,7 +34,7 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
     companies,
     effectiveSectors,
     selectedYear,
-  )
+  );
 
   // Generate years array from 2020 to current year
   return (
@@ -50,7 +48,9 @@ const EmissionsSourcesAnalysis: React.FC<EmissionsSourcesAnalysisProps> = ({
       >
         <div
           className={`${
-            screenSize.isMobile ? "flex flex-col gap-1" : "flex items-center gap-2"
+            screenSize.isMobile
+              ? "flex flex-col gap-1"
+              : "flex items-center gap-2"
           }`}
         >
           <h2 className="text-xl font-light text-white">
