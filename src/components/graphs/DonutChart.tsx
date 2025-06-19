@@ -39,15 +39,7 @@ export function DonutChart({ data }: DonutChartProps) {
           paddingAngle={8}
           dataKey="value"
           nameKey="label"
-          label={({
-            cx,
-            cy,
-            midAngle,
-            innerRadius,
-            outerRadius,
-            value,
-            index,
-          }) => {
+          label={({ cx, cy, midAngle, outerRadius, value, index }) => {
             const RADIAN = Math.PI / 180;
             const radius = outerRadius + 30;
             const x = cx + radius * Math.cos(-midAngle * RADIAN);

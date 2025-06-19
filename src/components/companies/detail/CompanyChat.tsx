@@ -26,10 +26,9 @@ interface Message {
 
 interface CompanyChatProps {
   companyName: string;
-  companyId: string;
 }
 
-export function CompanyChat({ companyName, companyId }: CompanyChatProps) {
+export function CompanyChat({ companyName }: CompanyChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -112,7 +111,7 @@ export function CompanyChat({ companyName, companyId }: CompanyChatProps) {
         <div className="flex flex-col h-[calc(100vh-64px)]">
           <ScrollArea className="flex-1 p-6">
             <div className="space-y-6">
-              {messages.map((message, index) => (
+              {messages.map((message) => (
                 <div
                   key={message.id}
                   className={cn(

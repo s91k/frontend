@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
-import { Text } from "@/components/ui/text";
 
 interface BlockMetricProps {
   label: string;
