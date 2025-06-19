@@ -1,4 +1,5 @@
 import {
+  Legend,
   Line,
   LineChart,
   ReferenceLine,
@@ -104,6 +105,14 @@ export default function EmissionsLineChart({
             ifOverflow="extendDomain"
           />
         )}
+
+        <Legend
+          verticalAlign="bottom"
+          align="right"
+          height={36}
+          iconType="line"
+          wrapperStyle={{ fontSize: "12px", color: "var(--grey)" }}
+        />
 
         <XAxis
           dataKey="year"
