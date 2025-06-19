@@ -53,19 +53,11 @@ const githubUrl = (company: RankedCompany, reportUrl?: string | null) => {
 
 type IssueViewProps = {
   issues?: GithubValidationIssue[];
-  company: RankedCompany;
-  period?: ReportingPeriod;
   className?: string;
   error: boolean;
 };
 
-const IssueView = ({
-  issues,
-  company,
-  period,
-  className,
-  error,
-}: IssueViewProps) => {
+const IssueView = ({ issues, className, error }: IssueViewProps) => {
   if (error) {
     return (
       <a href={`${githubProjectUrl}/issues`} className="text-red-400">
@@ -270,8 +262,6 @@ export const ValidationDashboard = () => {
 
               <IssueView
                 issues={issues?.[company.wikidataId]}
-                company={company}
-                period={period as ReportingPeriod}
                 error={!!issuesError}
                 className=""
               />
