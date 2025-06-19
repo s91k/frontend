@@ -21,7 +21,7 @@ export function ProgressiveDataGuideMobile({
   const [openItems, setOpenItems] = useState<Set<DataGuideItemId>>(new Set());
 
   const handleItemToggle = (itemId: DataGuideItemId, isOpen: boolean) => {
-    setOpenItems(prev => {
+    setOpenItems((prev) => {
       const newSet = new Set(prev);
       if (isOpen) {
         newSet.add(itemId);

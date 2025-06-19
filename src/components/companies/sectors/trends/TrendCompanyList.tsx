@@ -16,7 +16,10 @@ interface TrendCompanyListProps {
   >;
 }
 
-const TrendCompanyList: React.FC<TrendCompanyListProps> = ({ category, data }) => {
+const TrendCompanyList: React.FC<TrendCompanyListProps> = ({
+  category,
+  data,
+}) => {
   const { t } = useTranslation();
 
   if (!data || data.length === 0) {
