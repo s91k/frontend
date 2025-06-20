@@ -1,4 +1,4 @@
-import { Building2 } from "lucide-react";
+import { Pen } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Pen } from "lucide-react";
 import {
   useSectorNames,
   SectorCode,
@@ -30,7 +29,8 @@ import { OverviewStatistics } from "./OverviewStatistics";
 import { CompanyOverviewTooltip } from "./CompanyOverviewTooltip";
 import { CompanyDescription } from "./CompanyDescription";
 import { calculateRateOfChange } from "@/lib/calculations/general";
-import { ProgressiveDataGuide } from "@/data-guide/ProgressiveDataGuide";
+import { EmissionsAssessmentButton } from "../emissions-assessment/EmissionsAssessmentButton";
+import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -91,17 +91,25 @@ export function CompanyOverview({
     : t("companies.overview.notReported");
 
   return (
-    <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
+    <SectionWithHelp
+      helpItems={[
+        "totalEmissions",
+        "co2units",
+        "companySectors",
+        "companyMissingData",
+        "yearOverYearChange",
+      ]}
+    >
       <div className="flex items-start justify-between mb-4 md:mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Text className="text-4xl lg:text-6xl">{company.name}</Text>
-            <div className="flex flex-col h-full justify-around">
-              {token && (
+            {token && (
+              <div className="flex flex-row gap-2 mt-2 md:mt-0 md:ml-4">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 mt-2"
+                  className="gap-2"
                   onClick={() => navigate("edit")}
                 >
                   Edit
@@ -109,8 +117,12 @@ export function CompanyOverview({
                     <Pen />
                   </div>
                 </Button>
-              )}
-            </div>
+                <EmissionsAssessmentButton
+                  wikidataId={company.wikidataId}
+                  sortedPeriods={sortedPeriods}
+                />
+              </div>
+            )}
           </div>
           <CompanyDescription description={company.description} />
           <div className="flex flex-row items-center gap-2 my-4">
@@ -146,9 +158,6 @@ export function CompanyOverview({
               </SelectContent>
             </Select>
           </div>
-        </div>
-        <div className="hidden md:flex w-16 h-16 rounded-full bg-blue-5/30 items-center justify-center">
-          <Building2 className="w-8 h-8 text-blue-2" />
         </div>
       </div>
 
@@ -230,16 +239,6 @@ export function CompanyOverview({
         employeesAIGenerated={employeesAIGenerated}
         className="mt-3 md:mt-0"
       />
-
-      <ProgressiveDataGuide
-        items={[
-          "totalEmissions",
-          "co2units",
-          "companySectors",
-          "companyMissingData",
-          "yearOverYearChange",
-        ]}
-      />
-    </div>
+    </SectionWithHelp>
   );
 }

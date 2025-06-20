@@ -6,10 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  useSectorNames,
-  SectorCode,
-} from "@/hooks/companies/useCompanyFilters";
+// import { useSectorNames } from "@/hooks/companies/useCompanyFilters";
 import type { RankedCompany } from "@/types/company";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "react-i18next";
@@ -41,12 +38,11 @@ export function CompanyCard({
   wikidataId,
   name,
   description,
-  industry,
   reportingPeriods,
 }: CompanyCardProps) {
   const { t } = useTranslation();
   const { getCategoryColor } = useCategoryMetadata();
-  const sectorNames = useSectorNames();
+  // const sectorNames = useSectorNames();
   const { currentLanguage } = useLanguage();
   const { isAIGenerated, isEmissionsAIGenerated } = useVerificationStatus();
 
@@ -65,9 +61,10 @@ export function CompanyCard({
     ? formatEmployeeCount(employeeCount, currentLanguage)
     : t("companies.card.noData");
 
-  const sectorName = industry?.industryGics?.sectorCode
-    ? sectorNames[industry.industryGics.sectorCode as SectorCode]
-    : t("companies.card.unknownSector");
+  // Only used in commented out code
+  // const sectorName = industry?.industryGics?.sectorCode
+  //   ? sectorNames[industry.industryGics.sectorCode as SectorCode]
+  //   : t("companies.card.unknownSector");
 
   // Find the largest scope 3 category
   const scope3Categories = latestPeriod?.emissions?.scope3?.categories || [];

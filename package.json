@@ -1,7 +1,7 @@
 {
   "name": "klimatkollen",
   "private": true,
-  "version": "4.4.6-rc.4",
+  "version": "4.5.2-rc.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "test": "vitest",
     "preview": "vite preview",
-    "generate-api": "npx openapi-typescript http://localhost:3000/api/openapi.json -o src/lib/api-types.ts",
+    "generate-api": "npx openapi-typescript https://stage.klimatkollen.se/api/openapi.json -o src/lib/api-types.ts",
+    "generate-api-local": "npx openapi-typescript http://localhost:3000/api/openapi.json -o src/lib/api-types.ts",
     "generate-sitemap": "NODE_OPTIONS='--no-warnings' tsx scripts/generate-sitemap.ts || echo 'Sitemap generation failed, continuing build'"
   },
   "dependencies": {

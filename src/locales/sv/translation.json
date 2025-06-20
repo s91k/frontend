@@ -927,7 +927,10 @@
       "totalEmissions": "Totala utsläpp",
       "baseYear": "Basår",
       "baseYearInfo": "Basår syftar på ett specifikt år som väljs som referenspunkt för att jämföra framtida utsläpp mot.",
-      "total": "Totalt"
+      "total": "Totalt",
+      "approximated": "Approximerat",
+      "trend": "Trend",
+      "carbonLaw": "Parisavtalet"
     },
     "list": {
       "error": {
@@ -1250,10 +1253,20 @@
     "title": "Hitta ett företag eller kommun",
     "searchCategoryCompany": "Företag",
     "searchCategoryMunicipality": "Kommun",
-    "placeholder": "Exempel: Alfa Laval"
+    "searchCategoryPage": "Sida",
+    "placeholder": "Exempel: Alfa Laval",
+    "headerButtonTitle": "Sök",
+    "searchDialog": {
+      "title": "Sök",
+      "description": "Sök efter företag eller kommuner",
+      "emptyText": "Börja skriv för att söka",
+      "loadingText": "Hämtar företag och kommuner...",
+      "shortcutTipText": "Starta sök med Ctrl+K / ⌘+K"
+    }
   },
   "dataGuide": {
     "buttonFallbackTitle": "Lär dig mer om dessa mätvärden",
+    "selectItemPrompt": "Välj ett ämne du vill veta mer om",
     "items": {
       "totalEmissions": {
         "title": "Vad menas med totala utsläpp?",

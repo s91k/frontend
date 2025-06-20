@@ -52,7 +52,6 @@ export function DownloadCard({
         });
         downloadBlob(blob, format);
       } else if (format === "xlsx") {
-
         const text = await response.text();
 
         // Parse CSV using PapaParse

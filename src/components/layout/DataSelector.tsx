@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
-import { t } from "i18next";
 
 interface DataSelectorProps<T> {
   label: string;

@@ -1,4 +1,5 @@
 import {
+  Legend,
   Line,
   LineChart,
   ReferenceLine,
@@ -11,6 +12,11 @@ import { CustomTooltip } from "../CustomTooltip";
 import { ChartData } from "@/types/emissions";
 import { t } from "i18next";
 import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
+import { useMemo } from "react";
+import {
+  calculateLinearRegression,
+  generateApproximatedData,
+} from "@/utils/companyEmissionsCalculations";
 
 interface EmissionsLineChartProps {
   data: ChartData[];
@@ -46,30 +52,75 @@ export default function EmissionsLineChart({
   getCategoryColor,
   currentLanguage,
 }: EmissionsLineChartProps) {
+  const endYear = 2030;
+  const currentYear = new Date().getFullYear();
+
+  const approximatedData = useMemo(() => {
+    if (dataView !== "overview") {
+      return null;
+    }
+
+    const validPoints = data
+      .filter(
+        (d): d is ChartData & { total: number } =>
+          d.total !== undefined && d.total !== null,
+      )
+      .map((d) => ({
+        x: d.year,
+        y: d.total,
+      }))
+      .slice(-2);
+
+    if (validPoints.length < 2) {
+      return null;
+    }
+
+    const regression = calculateLinearRegression(validPoints);
+    if (!regression) {
+      return null;
+    }
+
+    return generateApproximatedData(data, regression);
+  }, [data, dataView]);
+
   return (
     <ResponsiveContainer width="100%" height="100%" className="w-full">
       <LineChart
         data={data}
-        margin={{ top: 20, right: 20, left: 10, bottom: 10 }}
+        margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
         onClick={handleClick}
       >
-        <ReferenceLine
-          label={{
-            value: t("companies.emissionsHistory.baseYear"),
-            position: "top",
-            fill: "white",
-            fontSize: 12,
-            fontWeight: "normal",
-          }}
-          x={companyBaseYear}
-          stroke="var(--grey)"
-          strokeDasharray="4 4"
+        {companyBaseYear && (
+          <ReferenceLine
+            label={{
+              value: t("companies.emissionsHistory.baseYear"),
+              position: "top",
+              fill: "white",
+              fontSize: 12,
+              fontWeight: "normal",
+            }}
+            x={companyBaseYear}
+            stroke="var(--grey)"
+            strokeDasharray="4 4"
+            ifOverflow="extendDomain"
+          />
+        )}
+
+        <Legend
+          verticalAlign="bottom"
+          align="right"
+          height={36}
+          iconType="line"
+          wrapperStyle={{ fontSize: "12px", color: "var(--grey)" }}
         />
+
         <XAxis
           dataKey="year"
           stroke="var(--grey)"
           tickLine={false}
-          axisLine={true}
+          axisLine={false}
+          type="number"
+          domain={[data[0]?.year || 2000, endYear]}
           tick={({ x, y, payload }) => {
             const isBaseYear = payload.value === companyBaseYear;
             return (
@@ -86,20 +137,27 @@ export default function EmissionsLineChart({
           }}
           padding={{ left: 0, right: 0 }}
         />
+
         <YAxis
-          stroke="#878787"
+          stroke="var(--grey)"
           tickLine={false}
-          axisLine={true}
+          axisLine={false}
           tick={{ fontSize: 12 }}
-          width={40}
+          width={60}
           domain={[0, "auto"]}
           padding={{ top: 0, bottom: 0 }}
           tickFormatter={(value) =>
             formatEmissionsAbsoluteCompact(value, currentLanguage)
           }
         />
+
         <Tooltip
-          content={<CustomTooltip companyBaseYear={companyBaseYear} />}
+          content={
+            <CustomTooltip
+              companyBaseYear={companyBaseYear}
+              filterDuplicateValues={dataView === "overview"}
+            />
+          }
         />
 
         {dataView === "overview" && (
@@ -114,8 +172,47 @@ export default function EmissionsLineChart({
               connectNulls
               name={t("companies.emissionsHistory.totalEmissions")}
             />
+            {approximatedData && (
+              <>
+                <ReferenceLine
+                  x={currentYear}
+                  stroke="var(--orange-2)"
+                  strokeWidth={1}
+                  label={{
+                    value: currentYear,
+                    position: "top",
+                    fill: "var(--orange-2)",
+                    fontSize: 12,
+                    fontWeight: "normal",
+                  }}
+                />
+                <Line
+                  type="linear"
+                  dataKey="approximated"
+                  data={approximatedData}
+                  stroke="var(--grey)"
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={false}
+                  activeDot={false}
+                  name={t("companies.emissionsHistory.approximated")}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="carbonLaw"
+                  data={approximatedData}
+                  stroke="var(--green-3)"
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={false}
+                  activeDot={false}
+                  name={t("companies.emissionsHistory.carbonLaw")}
+                />
+              </>
+            )}
           </>
         )}
+
         {dataView === "scopes" && (
           <>
             {!hiddenScopes.includes("scope1") && (
@@ -187,6 +284,11 @@ export default function EmissionsLineChart({
             .filter(
               (key) => key.startsWith("cat") && !key.includes("Interpolated"),
             )
+            .sort((a, b) => {
+              const aCatId = parseInt(a.replace("cat", ""));
+              const bCatId = parseInt(b.replace("cat", ""));
+              return aCatId - bCatId;
+            })
             .map((categoryKey) => {
               const categoryId = parseInt(categoryKey.replace("cat", ""));
               const isInterpolatedKey = `${categoryKey}Interpolated`;
@@ -248,7 +350,11 @@ export default function EmissionsLineChart({
                       />
                     );
                   }}
-                  activeDot={(props) => {
+                  activeDot={(props: {
+                    cx?: number;
+                    cy?: number;
+                    payload?: ChartData;
+                  }) => {
                     const { cx, cy, payload } = props;
 
                     if (!payload) {

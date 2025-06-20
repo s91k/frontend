@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { t } from "i18next";
 import { Municipality } from "@/types/municipality";
-import { isMobile } from "react-device-detect";
 
 interface DataPoint {
   label: string;

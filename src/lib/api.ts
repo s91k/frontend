@@ -204,4 +204,62 @@ export async function getNewsletters(): Promise<object> {
     console.error("Error fetching newsletters:", error);
     return {};
   }
+export async function assessEmissions(
+  params: paths["/emissions-assessment/"]["post"]["requestBody"]["content"]["application/json"],
+) {
+  const { data, error } = await client.POST("/emissions-assessment/", {
+    body: params,
+  });
+
+  if (error) {
+    if (
+      error.message === "No reporting periods found for the specified years"
+    ) {
+      throw new Error(
+        "No reporting periods found for the selected years. Please choose different years.",
+      );
+    }
+    throw new Error(error.message || "Failed to assess emissions");
+  }
+
+  return data;
+}
+
+export async function updateCompanyIndustry(
+  wikidataId: string,
+  subIndustryCode: string,
+  metadata?: { source?: string; comment?: string },
+) {
+  const { data, error } = await client.POST(
+    "/companies/{wikidataId}/industry",
+    {
+      params: { path: { wikidataId } },
+      body: { industry: { subIndustryCode }, metadata },
+    },
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function updateCompanyBaseYear(
+  wikidataId: string,
+  baseYear: number,
+  metadata?: { source?: string; comment?: string },
+) {
+  const { data, error } = await client.POST(
+    "/companies/{wikidataId}/base-year",
+    {
+      params: { path: { wikidataId } },
+      body: { baseYear, metadata },
+    },
+  );
+  if (error) throw error;
+  return data;
+}
+
+// GICS Industry API
+export async function getIndustryGics() {
+  const { data, error } = await client.GET("/industry-gics/", {});
+  if (error) throw error;
+  return data;
 }

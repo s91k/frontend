@@ -36,7 +36,7 @@ export function cleanEmissions(emissions: any): Emissions | null {
     scope3 = null;
   } else {
     // statedTotalEmissions in scope3
-    let scope3Stated = normalizeTotalField(scope3.statedTotalEmissions);
+    const scope3Stated = normalizeTotalField(scope3.statedTotalEmissions);
     // categories: filter and cast
     let categories = Array.isArray(scope3.categories)
       ? scope3.categories

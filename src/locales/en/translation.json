@@ -924,7 +924,10 @@
       "totalEmissions": "Total Emissions",
       "baseYear": "Base year",
       "baseYearInfo": "The base year refers to a specific year chosen as a reference point against which future emissions are compared.",
-      "total": "Total"
+      "total": "Total",
+      "approximated": "Approximated",
+      "trend": "Trend",
+      "carbonLaw": "Paris Agreement"
     },
     "list": {
       "error": {
@@ -1247,10 +1250,20 @@
     "title": "Find a company or municipality",
     "searchCategoryCompany": "Company",
     "searchCategoryMunicipality": "Municipality",
-    "placeholder": "Example: Alfa Laval"
+    "searchCategoryPage": "Page",
+    "placeholder": "Example: Alfa Laval",
+    "headerButtonTitle": "Search",
+    "searchDialog": {
+      "title": "Search",
+      "description": "Search for companies or municipalities",
+      "emptyText": "Start typing to search",
+      "loadingText": "Fetching companies and municipalities...",
+      "shortcutTipText": "Trigger search by Ctrl+K / ⌘+K"
+    }
   },
   "dataGuide": {
     "buttonFallbackTitle": "Learn more about these metrics",
+    "selectItemPrompt": "Select a topic you want to learn more about",
     "items": {
       "totalEmissions": {
         "title": "What our total emissions represent",

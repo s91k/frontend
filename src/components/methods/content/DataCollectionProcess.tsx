@@ -22,42 +22,18 @@ export const DataCollectionProcessContent = () => {
           "methodsPage.company.companyDataCollection.dataPresented.title",
         )}
       >
-        <p>
-          {t(
-            "methodsPage.company.companyDataCollection.paragraph1",
-          )}
-        </p>
-        <p>
-          {t(
-            "methodsPage.company.companyDataCollection.paragraph2",
-          )}
-        </p>
-        <p>
-          {t(
-            "methodsPage.company.companyDataCollection.paragraph3",
-          )}
-        </p>
-        <p>
-          {t(
-            "methodsPage.company.companyDataCollection.paragraph4",
-          )}
-        </p>
-        <p>
-          {t(
-            "methodsPage.company.companyDataCollection.paragraph5",
-          )}
-        </p>
+        <p>{t("methodsPage.company.companyDataCollection.paragraph1")}</p>
+        <p>{t("methodsPage.company.companyDataCollection.paragraph2")}</p>
+        <p>{t("methodsPage.company.companyDataCollection.paragraph3")}</p>
+        <p>{t("methodsPage.company.companyDataCollection.paragraph4")}</p>
+        <p>{t("methodsPage.company.companyDataCollection.paragraph5")}</p>
       </Section>
 
       <Section
-        title={t(
-          "methodsPage.company.companyDataCollection.fiscalYear.title",
-        )}
+        title={t("methodsPage.company.companyDataCollection.fiscalYear.title")}
       >
         <p>
-          {t(
-            "methodsPage.company.companyDataCollection.fiscalYear.paragraph1",
-          )}
+          {t("methodsPage.company.companyDataCollection.fiscalYear.paragraph1")}
         </p>
       </Section>
     </div>

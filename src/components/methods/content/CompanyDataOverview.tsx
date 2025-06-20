@@ -69,11 +69,7 @@ export const CompanyDataOverviewContent = () => {
           </div>
         </div>
       </Section>
-      <p>
-        {t(
-          "methodsPage.company.companyDataOverview.paragraph4",
-        )}
-      </p>
+      <p>{t("methodsPage.company.companyDataOverview.paragraph4")}</p>
     </div>
   );
 };
