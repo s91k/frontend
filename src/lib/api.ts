@@ -195,15 +195,6 @@ export async function deleteValidationClaim(wikidataId: string) {
   }
 }
 
-export async function getNewsletters(): Promise<object> {
-  try {
-    const { data, error } = await client.GET("/newsletters");
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error("Error fetching newsletters:", error);
-    return {};
-  }
 export async function assessEmissions(
   params: paths["/emissions-assessment/"]["post"]["requestBody"]["content"]["application/json"],
 ) {

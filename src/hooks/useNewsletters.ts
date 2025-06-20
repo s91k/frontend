@@ -1,24 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
 
+const fetchNewsletters = async () => {
+    const url = "http://localhost:3000/api/newsletters";
+  try {
+    const response = await fetch(url)
 
-export const useNewsletters = async () => {
-  const [newslettersData, setNewslettersData] = useState([]);
-  const url = "http://localhost:3000/api/newsletters";
-
-  useEffect(() => {
-
-    const fetchNewsletters = () => {
-
+    if (response.ok) {
+      const result = await response.json()
+            console.log(result)
+      return result;
     }
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-    const {data: newsletters, isLoading} = useQuery({
+export const useNewsletters = () => {
+    const {data, isLoading, isError} = useQuery({
         queryFn: () => fetchNewsletters(),
         queryKey: ["newsletters"]
       })
 
-      
-  
-    fetchNewsletters();
-  }, []);
+    return{ data, isLoading, isError};
 };

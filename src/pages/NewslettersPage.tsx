@@ -21,8 +21,10 @@ export function NewsLetterArchivePage() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [displayedNewsletter, setDisplayedNewsletter] =
     useState<NewsletterType>();
+/* 
+  const {data, loading, error} = useNewsletters();
 
-  const newsletterListCalled = useNewsletters();
+  console.log(data) */
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +55,7 @@ export function NewsLetterArchivePage() {
     return foundMonth?.number;
   };
 
-  const structuredData = {
+/*   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: pageTitle,
@@ -66,7 +68,7 @@ export function NewsLetterArchivePage() {
     title: t(article.titleKey),
     excerpt: t(article.excerptKey),
     image: article.image || "",
-  }));
+  })); */
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 md:px-6 text-white gap-4">
