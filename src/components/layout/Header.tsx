@@ -15,6 +15,7 @@ import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
 import { HeaderSearchButton } from "../search/HeaderSearchButton";
 import { useCompanyDetails } from "@/hooks/companies/useCompanyDetails";
+import { useMunicipalityDetails } from "@/hooks/useMunicipalityDetails";
 import { useScreenSize } from "@/hooks/useScreenSize";
 
 export function Header() {
@@ -25,7 +26,7 @@ export function Header() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const { isMobile } = useScreenSize();
-  const [displayCompanyName, setDisplayCompanyName] = useState(false);
+  const [displayViewedItemName, setDisplayViewedItemName] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -37,9 +38,9 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY >= 200) {
-        setDisplayCompanyName(true);
+        setDisplayViewedItemName(true);
       } else {
-        setDisplayCompanyName(false);
+        setDisplayViewedItemName(false);
       }
     };
 
@@ -47,17 +48,18 @@ export function Header() {
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  
-  //Gets the name of the actively viewed company details
+
+  //Gets the name of the actively viewed company or municipality
   const paramSegments = location.pathname.split("/");
-  const companyId = paramSegments.pop() ?? "";
-  const viewedCompany = useCompanyDetails(companyId);
+  const viewedItemId = paramSegments.pop() ?? "";
+  const isCompanyPage = paramSegments.includes("companies");
 
-  if (!companyId) {
-    return null;
-  }
+  const viewedCompany = useCompanyDetails(viewedItemId);
+  const viewedMunicipality = useMunicipalityDetails(viewedItemId);
 
-  const companyName = viewedCompany.company?.name;
+  const viewedItemName = isCompanyPage
+    ? viewedCompany.company?.name
+    : viewedMunicipality.municipality?.name;
 
   const LanguageButtons = ({ className }: { className?: string }) => (
     <div className={cn("flex items-center gap-2", className)}>
@@ -150,7 +152,9 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          {isMobile && displayCompanyName ? <span>{companyName}</span> : null}
+          {isMobile && displayViewedItemName && viewedItemName ? (
+            <span>{viewedItemName}</span>
+          ) : null}
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
