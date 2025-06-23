@@ -53,13 +53,18 @@ export function Header() {
   const paramSegments = location.pathname.split("/");
   const viewedItemId = paramSegments.pop() ?? "";
   const isCompanyPage = paramSegments.includes("companies");
+  const isMunicipalityPage = paramSegments.includes("municipalities");
 
-  const viewedCompany = useCompanyDetails(viewedItemId);
-  const viewedMunicipality = useMunicipalityDetails(viewedItemId);
+  const viewedCompany = useCompanyDetails(isCompanyPage ? viewedItemId : "");
+  const viewedMunicipality = useMunicipalityDetails(
+    isMunicipalityPage ? viewedItemId : "",
+  );
 
   const viewedItemName = isCompanyPage
     ? viewedCompany.company?.name
-    : viewedMunicipality.municipality?.name;
+    : isMunicipalityPage
+      ? viewedMunicipality.municipality?.name
+      : undefined;
 
   const LanguageButtons = ({ className }: { className?: string }) => (
     <div className={cn("flex items-center gap-2", className)}>
