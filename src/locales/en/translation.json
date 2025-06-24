@@ -370,6 +370,17 @@
         "paragraph7": "These local carbon budgets enable comparisons between actual emissions and the reductions needed. Klimatkollen presents carbon budgets for municipalities both as numerical values and as development curves, illustrating the necessary decline in emissions to stay in line with the Paris Agreement.",
         "paragraph8": "In addition to the Tyndall model used by Klimatkollen, there are other approaches to calculating a national carbon budget. For example, see Chalmers <0>here</0>."
       },
+      "carbonLaw": {
+        "title": "Carbon Law",
+        "description": "Understand how Klimatkollen applies Carbon Law to company and municipality data",
+        "paragraph1": "Carbon Law helps companies and governments to have a target for reducing their carbon emissions; it's a rule of thumb all entities of any size can use (world, country, company, municipality, individual, etc.). The original carbon law stated that emissions needed to be reduced by 7% per year starting in 2020, in other words, halving emissions every decade. It is based on the Paris Agreement's goal of limiting global warming to well below 2°C, with a target of 1.5°C and the carbon budgets identified by the IPCC.",
+        "paragraph2": "We use a revised version of the original Carbon Law to display a needed trajectory line on each company's or municipality's historic data graphs. This line shows the required emissions reduction for the company or municipality to stay in line with the Paris Agreement.",
+        "paragraph3": "A revised Carbon Law is necessary due to failure to meet the original carbon law's targets to reduce emissions by 7% per year starting in 2020. Taking into account the carbon budget as it now stands, a steeper trajectory is needed to meet the Paris Agreement's goal. The new rule of thumb is that emissions need to be reduced by 12% per year starting in 2025.",
+        "link": {
+          "title": "Applying Carbon Law From 2025",
+          "text": "Read more about the Applying Carbon Law From 2025 from Klimatkollen's white paper."
+        }
+      },
       "emissionTypes": {
         "title": "Different Types of Emissions",
         "description": "Learn about the various types of emissions and how they are measured",
@@ -704,6 +715,10 @@
     "hitNetZero": "Predicted to hit net zero",
     "never": "Never",
     "emissionsDevelopment": "Emissions development",
+    "graph": {
+      "overview": "Overview",
+      "sectors": "Emission sources"
+    },
     "noParisPath": "The municipality's carbon budget has been exhausted, which means that no Paris Agreement line is shown in the graph below",
     "inTons": "In tons CO₂",
     "futureEmissions": "Future emissions",
@@ -965,13 +980,6 @@
       "readLess": "Read Less",
       "aiGeneratedData": "Includes AI-extracted values. Click to read more."
     },
-    "realEstateScope3History": {
-      "title": "Historical Scope 3 Emissions per Category",
-      "tooltip": "Development of Scope 3 emissions over time by category",
-      "tonsCO2e": "tons CO₂e",
-      "keyTrendsTitle": "Key Trends for the Real Estate Sector",
-      "keyTrendsDescription": "Scope 3 emissions in the real estate sector are often dominated by the categories 'Purchased Goods & Services' (1), 'Capital Goods' (2), and 'Energy-Related Activities' (3). These categories include construction materials, renovations, and energy use in buildings."
-    },
     "sectionedCompanyList": {
       "otherCompanies": "Other Companies",
       "companies": "companies"
@@ -1153,6 +1161,10 @@
     "success": {
       "title": "Changes have been saved!",
       "description": "Changes to the reporting period have been made successfully"
+    },
+    "successDetails": {
+      "title": "Changes have been saved!",
+      "description": "Changes to the base year and/or industry sector have been made successfully"
     },
     "unsavedChanges": {
       "title": "Unsaved Changes",
@@ -1351,6 +1363,19 @@
           "- How customers use the product\n",
           "- How the product is disposed of or recycled\n",
           "- Investments or services the company funds\n\n"
+        ]
+      },
+      "parisAgreementLine": {
+        "title": "What is the Paris Agreement line on the graph?",
+        "content": [
+          "The green line represents the emissions trajectory aligned with the Paris Agreement’s 1.5°C target.",
+          "It shows the pace at which emissions must fall globally in order to stay within the remaining carbon budget",
+          "— a 12% annual reduction starting in 2025. This updated trajectory reflects the reality that global emissions",
+          "didn’t peak in 2020, and that we are now five years behind the original Carbon Law pathway. Klimatkollen uses",
+          "this revised Carbon Law rule of thumb to visualise how far companies are from the needed emissions path.\n\n",
+          "Learn more about our [method](/en/methodology) and read the full",
+          "[white paper](/reports/2025-06-19_ApplyingCarbonLawFrom2025.pdf). Or see some",
+          "[common questions](/en/insights/carbon-law-from-2025)."
         ]
       },
       "companySectors": {

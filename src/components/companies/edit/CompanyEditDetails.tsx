@@ -17,6 +17,7 @@ import { Undo2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useGicsCodes } from "@/hooks/companies/useGicsCodes";
 import { useCompanyEditDetailsSave } from "@/hooks/companies/useCompanyEditDetailsSave";
+import { useToast } from "@/contexts/ToastContext";
 
 export function CompanyEditDetails({
   company,
@@ -26,6 +27,7 @@ export function CompanyEditDetails({
   onSave?: () => void;
 }) {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [subIndustryCode, setSubIndustryCode] = useState(
     company.industry?.industryGics?.subIndustryCode
       ? String(company.industry.industryGics.subIndustryCode)
@@ -109,10 +111,26 @@ export function CompanyEditDetails({
         baseYear,
         comment,
         source,
+        industryVerified,
+        baseYearVerified,
         onSave,
       },
       {
-        onError: (e) => setError(e.message || "Failed to update"),
+        onError: (e) => {
+          setError(e.message || "Failed to update");
+          showToast(
+            t("companyEditPage.error.couldNotSave"),
+            t("companyEditPage.error.tryAgainLater"),
+          );
+        },
+        onSuccess: () => {
+          setComment("");
+          setSource("");
+          showToast(
+            t("companyEditPage.successDetails.title"),
+            t("companyEditPage.successDetails.description"),
+          );
+        },
       },
     );
   };
@@ -122,24 +140,17 @@ export function CompanyEditDetails({
   ).find((opt) => String(opt.code) === String(subIndustryCode));
 
   return (
-    <div style={{ margin: "1em 0" }}>
-      <h3 style={{ marginBottom: 24 }}>Edit Industry & Base Year</h3>
-      <div style={{ marginBottom: 20, display: "flex", alignItems: "center" }}>
-        <span style={{ minWidth: 140, marginRight: 16, fontWeight: 500 }}>
+    <div className="my-4">
+      <h3 className="mb-6 text-lg font-semibold">Edit Industry & Base Year</h3>
+      <div className="mb-5 flex items-center">
+        <span className="min-w-[140px] mr-4 font-medium">
           GICS Sub-Industry
         </span>
-        <div
-          style={{
-            width: 320,
-            maxWidth: "100%",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <div className="w-[320px] max-w-full flex items-center">
           {gicsLoading ? (
-            <div style={{ color: "#aaa", padding: "8px 0" }}>Loading…</div>
+            <div className="text-grey py-2">Loading…</div>
           ) : gicsError ? (
-            <div style={{ color: "red", padding: "8px 0" }}>{gicsError}</div>
+            <div className="text-red-500 py-2">{gicsError}</div>
           ) : (
             <Select
               value={subIndustryCode}
@@ -147,10 +158,10 @@ export function CompanyEditDetails({
             >
               <SelectTrigger
                 className={
-                  "w-full bg-black-1 text-white border border-gray-300" +
+                  "w-full bg-black-1 border-gray-300 text-white" +
                   (subIndustryCode !==
                   (company.industry?.industryGics?.subIndustryCode || "")
-                    ? " border-orange-600"
+                    ? " border-orange-3"
                     : "")
                 }
               >
@@ -185,17 +196,13 @@ export function CompanyEditDetails({
               subIndustryCode ===
               (company.industry?.industryGics?.subIndustryCode || "")
             }
-            style={{
-              marginLeft: 8,
-              background: "none",
-              border: "none",
-              cursor:
-                subIndustryCode ===
-                (company.industry?.industryGics?.subIndustryCode || "")
-                  ? "not-allowed"
-                  : "pointer",
-              padding: 0,
-            }}
+            className={
+              "ml-2 bg-none border-none p-0 " +
+              (subIndustryCode ===
+              (company.industry?.industryGics?.subIndustryCode || "")
+                ? "cursor-not-allowed"
+                : "cursor-pointer")
+            }
             aria-label="Undo industry change"
           >
             <Undo2
@@ -203,38 +210,31 @@ export function CompanyEditDetails({
                 subIndustryCode ===
                 (company.industry?.industryGics?.subIndustryCode || "")
                   ? "text-grey"
-                  : "text-white hover:text-orange-600"
+                  : "text-white hover:text-orange-3"
               }
             />
           </button>
           <IconCheckbox
             checked={industryVerified}
-            disabled={industryIsDisabled}
+            disabled={industryIsDisabled || loading}
             badgeIconClass={industryBadgeIconClass}
-            style={{ marginLeft: 8 }}
-            onCheckedChange={(checked) => setIndustryVerified(checked === true)}
+            className="ml-2"
+            onCheckedChange={(checked) => {
+              setIndustryVerified(checked === true);
+            }}
           />
         </div>
-        {selectedGics && (
-          <div
-            style={{
-              fontSize: 12,
-              color: "#555",
-              marginTop: 4,
-              marginBottom: 32,
-            }}
-          >
-            <b>{selectedGics.sector}</b> &gt; <b>{selectedGics.group}</b> &gt;{" "}
-            <b>{selectedGics.industry}</b>
-            <br />
-            <i>{selectedGics.description}</i>
-          </div>
-        )}
       </div>
-      <div style={{ marginBottom: 24, display: "flex", alignItems: "center" }}>
-        <span style={{ minWidth: 140, marginRight: 16, fontWeight: 500 }}>
-          Base Year
-        </span>
+      {selectedGics && (
+        <div className="text-sm text-grey mt-2 mb-8 ml-[156px] max-w-[600px] leading-[1.5]">
+          <b>{selectedGics.sector}</b> &gt; <b>{selectedGics.group}</b> &gt;{" "}
+          <b>{selectedGics.industry}</b>
+          <br />
+          <span className="italic">{selectedGics.description}</span>
+        </div>
+      )}
+      <div className="mb-6 flex items-center">
+        <span className="min-w-[140px] mr-4 font-medium">Base Year</span>
         <Input
           type="number"
           value={baseYear}
@@ -245,38 +245,35 @@ export function CompanyEditDetails({
               ? " border-orange-600"
               : "")
           }
-          style={{ marginLeft: 0, marginTop: 2 }}
         />
         <button
           type="button"
           onClick={() => setBaseYear(String(company.baseYear?.year || ""))}
           disabled={String(baseYear) === String(company.baseYear?.year || "")}
-          style={{
-            marginLeft: 8,
-            background: "none",
-            border: "none",
-            cursor:
-              String(baseYear) === String(company.baseYear?.year || "")
-                ? "not-allowed"
-                : "pointer",
-            padding: 0,
-          }}
+          className={
+            "ml-2 bg-none border-none p-0 " +
+            (String(baseYear) === String(company.baseYear?.year || "")
+              ? "cursor-not-allowed"
+              : "cursor-pointer")
+          }
           aria-label="Undo base year change"
         >
           <Undo2
             className={
               String(baseYear) === String(company.baseYear?.year || "")
                 ? "text-grey"
-                : "text-white hover:text-orange-600"
+                : "text-white hover:text-orange-3"
             }
           />
         </button>
         <IconCheckbox
           checked={baseYearVerified}
-          disabled={baseYearIsDisabled}
+          disabled={baseYearIsDisabled || loading}
           badgeIconClass={baseYearBadgeIconClass}
-          style={{ marginLeft: 8 }}
-          onCheckedChange={(checked) => setBaseYearVerified(checked === true)}
+          className="ml-2"
+          onCheckedChange={(checked) => {
+            setBaseYearVerified(checked === true);
+          }}
         />
       </div>
       <div className="w-full ps-4 pe-2 mt-10">
@@ -298,7 +295,7 @@ export function CompanyEditDetails({
         />
       </div>
       {(error || mutationError) && (
-        <div style={{ color: "red" }}>{error || mutationError?.message}</div>
+        <div className="text-red-500">{error || mutationError?.message}</div>
       )}
       <button
         onClick={handleSave}

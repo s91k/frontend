@@ -118,6 +118,7 @@ export function EmissionsHistory({
         "scope1",
         "scope2",
         "scope3",
+        "parisAgreementLine",
         "scope3EmissionLevels",
         "companyMissingData",
       ]}
