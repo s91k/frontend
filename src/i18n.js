@@ -6,8 +6,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 // TODO: These should be lazy loaded instead
 import en from "./locales/en/translation.json";
 import sv from "./locales/sv/translation.json";
-import enDataGuide from "./locales/en/dataguide.json";
-import svDataGuide from "./locales/sv/translation.json";
+import enDataGuideItems from "./locales/en/dataguideItems.json";
+import svDataGuideItems from "./locales/sv/dataguideItems.json";
 
 i18n
   .use(LanguageDetector)
@@ -16,11 +16,11 @@ i18n
     resources: {
       en: {
         translation: en,
-        dataguide: enDataGuide,
+        dataguideItems: enDataGuideItems,
       },
       sv: {
         translation: sv,
-        dataguide: svDataGuide,
+        dataguideItems: svDataGuideItems,
       },
     },
     lng: "sv",
