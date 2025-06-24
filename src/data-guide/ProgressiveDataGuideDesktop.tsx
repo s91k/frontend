@@ -12,7 +12,7 @@ interface ProgressiveDataGuideDesktopProps {
 export function ProgressiveDataGuideDesktop({
   items,
 }: ProgressiveDataGuideDesktopProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("dataguide");
   const [activeItemId, setActiveItemId] = useState<DataGuideItemId>(items[0]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);

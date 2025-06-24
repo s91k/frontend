@@ -13,7 +13,7 @@ export const DataGuideMarkdown = ({
   className,
   item,
 }: DataGuideMarkdownProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("dataguide");
   return (
     <Markdown
       className={cn(className)}

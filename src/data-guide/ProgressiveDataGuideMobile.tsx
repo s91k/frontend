@@ -17,7 +17,7 @@ interface ProgressiveDataGuideMobileProps {
 export function ProgressiveDataGuideMobile({
   items,
 }: ProgressiveDataGuideMobileProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("dataguide");
   const [openItems, setOpenItems] = useState<Set<DataGuideItemId>>(new Set());
 
   const handleItemToggle = (itemId: DataGuideItemId, isOpen: boolean) => {
