@@ -448,7 +448,7 @@
         }
       },
       "emissionCategories": {
-        "title": "Utsläpps och utsläppskategorier",
+        "title": "Utsläpp och utsläppskategorier",
         "description": "Förstå olika typer av utsläpp och hur de kategoriseras",
         "paragraph1": "Företag rapporterar sina utsläpp enligt GHG-protokollets tre scope:",
         "scope2": {
