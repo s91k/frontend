@@ -3,7 +3,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Import translation files, only Swedish for the moment being
+// TODO: These should be lazy loaded instead
 import en from "./locales/en/translation.json";
 import sv from "./locales/sv/translation.json";
 import enDataGuide from "./locales/en/dataguide.json";

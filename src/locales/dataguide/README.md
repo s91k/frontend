@@ -118,7 +118,7 @@ const dataGuide = t('dataGuide', { returnObjects: true });
 
 // After (new way)
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation('dataguide'); // Load dataguide namespace
+const { t } = useTranslation('dataguideItems'); // Load dataguide namespace
 const dataGuide = t('', { returnObjects: true }); // Get entire object
 ```
 
