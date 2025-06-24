@@ -31,6 +31,7 @@ import { CompanyDescription } from "./CompanyDescription";
 import { calculateRateOfChange } from "@/lib/calculations/general";
 import { EmissionsAssessmentButton } from "../emissions-assessment/EmissionsAssessmentButton";
 import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
+import { getCompanyDescription } from "@/utils/companyDescription";
 
 interface CompanyOverviewProps {
   company: CompanyDetails;
@@ -73,6 +74,9 @@ export function CompanyOverview({
     : company.industry?.industryGics?.sv?.sectorName ||
       company.industry?.industryGics?.en?.sectorName ||
       t("companies.overview.unknownSector");
+
+  // Get the translated company description
+  const description = getCompanyDescription(company, currentLanguage);
 
   const yearOverYearChange = calculateRateOfChange(
     selectedPeriod?.emissions?.calculatedTotalEmissions,
@@ -124,7 +128,7 @@ export function CompanyOverview({
               </div>
             )}
           </div>
-          <CompanyDescription description={company.description} />
+          <CompanyDescription description={description} />
           <div className="flex flex-row items-center gap-2 my-4">
             <Text
               variant="body"
