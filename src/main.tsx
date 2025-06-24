@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
@@ -19,11 +19,9 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <LanguageProvider>
-          <React.Suspense fallback="Loading">
-            <Layout>
-              <App />
-            </Layout>
-          </React.Suspense>
+          <Layout>
+            <App />
+          </Layout>
         </LanguageProvider>
       </AuthProvider>
     ),
