@@ -46,6 +46,11 @@ export const dataGuideHelpItems = defineHelpItems({
     titleKey: "dataGuide.items.scope3.title",
     contentKey: "dataGuide.items.scope3.content",
   },
+  parisAgreementLine: {
+    id: "parisAgreementLine",
+    titleKey: "dataGuide.items.parisAgreementLine.title",
+    contentKey: "dataGuide.items.parisAgreementLine.content",
+  },
   companySectors: {
     id: "companySectors",
     titleKey: "dataGuide.items.companySectors.title",
