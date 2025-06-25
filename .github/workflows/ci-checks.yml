@@ -102,6 +102,10 @@ jobs:
         run: |
           npx prettier --check . > prettier-output.txt || true
 
+      # Ensure prettier-output.txt exists (avoid grep error)
+      - name: Ensure prettier-output.txt exists
+        run: '[ -f prettier-output.txt ] || touch prettier-output.txt'
+
       # Annotate Prettier errors in GitHub UI if any are found (non-blocking)
       - name: Annotate Prettier errors
         if: always()
