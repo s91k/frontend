@@ -181,9 +181,9 @@
     ]
   },
   "municipalityWhyDataDelay": {
-    "title": "Untitled",
+    "title": "Why is the latest data a few years old?",
     "content": [
-      ""
+      "Official emissions data in Sweden is usually 1.5-2 years delayed. It takes time to collect, verify, and publish emissions from many sectors. That’s why we estimate current emissions using recent trends."
     ]
   },
   "parisAgreementLine": {

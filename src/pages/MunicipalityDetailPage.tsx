@@ -21,6 +21,7 @@ import MunicipalitySectorLegend from "@/components/municipalities/sectorChart/Mu
 import { useMunicipalitySectorEmissions } from "@/hooks/useMunicipalitySectorEmissions";
 import { MunicipalityEmissions } from "@/components/municipalities/MunicipalityEmissions";
 import { YearSelector } from "@/components/layout/YearSelector";
+import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 export function MunicipalityDetailPage() {
   const { t } = useTranslation();
@@ -154,7 +155,20 @@ export function MunicipalityDetailPage() {
       </PageSEO>
 
       <div className="space-y-16 max-w-[1400px] mx-auto">
-        <div className="bg-black-2 rounded-level-1 p-8 md:p-16">
+        <SectionWithHelp
+          helpItems={[
+            "municipalityTotalEmissions",
+            "municipalityEmissionEstimatations",
+            "municipalityWhyDataDelay",
+            "municipalityCarbonBudgetExpiryData",
+            "municipalityHowCarbonBudgetWasCalculated",
+            "municipalityWhatIsCarbonBudget",
+            "municipalityPredicatedNetZeroDate",
+            "municipalityWhenCarbonBudgetRunsOut",
+            "municipalityDeeperChanges",
+            "municipalityCanWeExtendCarbonBudget",
+          ]}
+        >
           <Text className="text-4xl md:text-8xl">{municipality.name}</Text>
           <Text className="text-grey">{municipality.region}</Text>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16 mt-8">
@@ -203,7 +217,7 @@ export function MunicipalityDetailPage() {
               )}
             />
           </div>
-        </div>
+        </SectionWithHelp>
 
         <MunicipalityEmissions
           municipality={municipality}
@@ -212,54 +226,52 @@ export function MunicipalityDetailPage() {
         />
 
         {sectorEmissions?.sectors && availableYears.length > 0 && (
-          <div className={cn("bg-black-2 rounded-level-1 py-8 md:py-16")}>
-            <div className="px-8 md:px-16">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                <Text className="text-2xl md:text-4xl">
-                  {t("municipalityDetailPage.sectorEmissions")}
-                </Text>
-
-                <YearSelector
-                  selectedYear={selectedYear}
-                  onYearChange={setSelectedYear}
-                  availableYears={availableYears}
-                  translateNamespace="municipalityDetailPage"
-                />
-              </div>
-
-              <Text className="text-grey">
-                {t("municipalityDetailPage.sectorEmissionsYear", {
-                  year: currentYear,
-                })}
+          <SectionWithHelp helpItems={["municipalityEmissionSources"]}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              <Text className="text-2xl md:text-4xl">
+                {t("municipalityDetailPage.sectorEmissions")}
               </Text>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-                <MunicipalitySectorPieChart
-                  sectorEmissions={sectorEmissions}
-                  year={currentYear}
+              <YearSelector
+                selectedYear={selectedYear}
+                onYearChange={setSelectedYear}
+                availableYears={availableYears}
+                translateNamespace="municipalityDetailPage"
+              />
+            </div>
+
+            <Text className="text-grey">
+              {t("municipalityDetailPage.sectorEmissionsYear", {
+                year: currentYear,
+              })}
+            </Text>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+              <MunicipalitySectorPieChart
+                sectorEmissions={sectorEmissions}
+                year={currentYear}
+                filteredSectors={filteredSectors}
+                onFilteredSectorsChange={setFilteredSectors}
+              />
+              {Object.keys(sectorEmissions.sectors[currentYear] || {}).length >
+                0 && (
+                <MunicipalitySectorLegend
+                  data={Object.entries(
+                    sectorEmissions.sectors[currentYear] || {},
+                  ).map(([sector, value]) => ({
+                    name: sector,
+                    value,
+                    color: "",
+                  }))}
+                  total={Object.values(
+                    sectorEmissions.sectors[currentYear] || {},
+                  ).reduce((sum, value) => sum + value, 0)}
                   filteredSectors={filteredSectors}
                   onFilteredSectorsChange={setFilteredSectors}
                 />
-                {Object.keys(sectorEmissions.sectors[currentYear] || {})
-                  .length > 0 && (
-                  <MunicipalitySectorLegend
-                    data={Object.entries(
-                      sectorEmissions.sectors[currentYear] || {},
-                    ).map(([sector, value]) => ({
-                      name: sector,
-                      value,
-                      color: "",
-                    }))}
-                    total={Object.values(
-                      sectorEmissions.sectors[currentYear] || {},
-                    ).reduce((sum, value) => sum + value, 0)}
-                    filteredSectors={filteredSectors}
-                    onFilteredSectorsChange={setFilteredSectors}
-                  />
-                )}
-              </div>
+              )}
             </div>
-          </div>
+          </SectionWithHelp>
         )}
 
         <MunicipalitySection
@@ -295,6 +307,12 @@ export function MunicipalityDetailPage() {
               ),
               valueClassName: "text-orange-2",
             },
+          ]}
+          helpItems={[
+            "municipalityDeeperChanges",
+            "municipalityReductionNeededForParisAgreement",
+            "municipalityConsumptionEmissionPerPerson",
+            "municipalityLocalVsConsumption",
           ]}
         />
 
@@ -357,6 +375,13 @@ export function MunicipalityDetailPage() {
               ),
               valueClassName: "text-orange-2",
             },
+          ]}
+          helpItems={[
+            "municipalityClimatePlans",
+            "municipalityProcurement",
+            "municipalityElectricCarShare",
+            "municipalityChargingPoints",
+            "municipalityBicyclePaths",
           ]}
         />
       </div>
