@@ -160,7 +160,7 @@ export function MunicipalityDetailPage() {
             "municipalityTotalEmissions",
             "municipalityEmissionEstimatations",
             "municipalityWhyDataDelay",
-            "municipalityCarbonBudgetExpiryData",
+            "municipalityCarbonBudgetExpiryDate",
             "municipalityHowCarbonBudgetWasCalculated",
             "municipalityWhatIsCarbonBudget",
             "municipalityPredicatedNetZeroDate",
