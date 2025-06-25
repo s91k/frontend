@@ -45,6 +45,7 @@ Content paragraph 3 with [links](https://example.com) and more text.
 - Use camelCase for file names (e.g., `totalEmissions.md`, `yearOverYearChange.md`)
 - The filename (without `.md`) becomes the key used to reference the item in the application
 - Keep filenames descriptive but concise
+- All the keys are used for Typescript type in `src/data-guide/items.ts` to give type system support for using the items.
 
 ### Content Guidelines
 
@@ -83,23 +84,19 @@ The build process generates JSON files with this structure:
 
 ```json
 {
-  "buttonFallbackTitle": "Learn more about these metrics",
-  "selectItemPrompt": "Select a topic you want to learn more about",
-  "items": {
-    "totalEmissions": {
-      "title": "What our total emissions represent",
-      "content": [
-        "First paragraph of content...",
-        "Second paragraph of content...",
-        "Third paragraph of content..."
-      ]
-    },
-    "yearOverYearChange": {
-      "title": "What the year-over-year change shows",
-      "content": [
-        "Content paragraphs..."
-      ]
-    }
+  "totalEmissions": {
+    "title": "What our total emissions represent",
+    "content": [
+      "First paragraph of content...",
+      "Second paragraph of content...",
+      "Third paragraph of content..."
+    ]
+  },
+  "yearOverYearChange": {
+    "title": "What the year-over-year change shows",
+    "content": [
+      "Content paragraphs..."
+    ]
   }
 }
 ```
@@ -111,12 +108,6 @@ The build process generates JSON files with this structure:
 Instead of importing from the main translation file, load the data guide separately:
 
 ```typescript
-// Before (old way)
-import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
-const dataGuide = t('dataGuide', { returnObjects: true });
-
-// After (new way)
 import { useTranslation } from 'react-i18next';
 const { t } = useTranslation('dataguideItems'); // Load dataguide namespace
 const dataGuide = t('', { returnObjects: true }); // Get entire object
@@ -126,23 +117,21 @@ const dataGuide = t('', { returnObjects: true }); // Get entire object
 
 ```typescript
 // Get a specific item
-const totalEmissionsGuide = t('items.totalEmissions', { returnObjects: true });
+const totalEmissionsGuide = t('totalEmissions', { returnObjects: true });
 
 // Get the title
-const title = t('items.totalEmissions.title');
+const title = t('totalEmissions.title');
 
 // Get the content array
-const content = t('items.totalEmissions.content', { returnObjects: true });
+const content = t('totalEmissions.content', { returnObjects: true });
 ```
 
 ## Migration from JSON
 
 The content was originally stored in the main translation files under `dataGuide`. A migration script extracted this content into markdown files.
 
-### Migration Scripts
+### Scripts
 
-- `scripts/migrate-dataguide.js` - Extracts content from JSON to markdown files (one-time use)
-- `scripts/cleanup-translation-dataguide.js` - Removes dataGuide section from original translation files
 - `scripts/build-dataguide.js` - Builds markdown files into JSON format
 
 ## Editing Content
