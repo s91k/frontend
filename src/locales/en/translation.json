@@ -215,7 +215,8 @@
   "reportsPage": {
     "title": "Reports",
     "description": "In-depth analyses and reports on Sweden's climate transition.",
-    "readMore": "Read more"
+    "readMore": "Read more",
+    "openReport": "Open Report"
   },
   "blogDetailPage": {
     "loading": "Loading...",
@@ -968,9 +969,9 @@
       "sector": "Sector",
       "selectYear": "Select Year",
       "latestYear": "Latest Year",
-      "totalEmissions": "Total Emissions",
+      "totalEmissions": "Reported Emissions",
       "tonsCO2e": "tons CO₂e",
-      "changeSinceLastYear": "Change Since Last Year",
+      "changeSinceLastYear": "Change Since Previous Year",
       "noData": "No Data",
       "turnover": "Turnover",
       "employees": "Employees",

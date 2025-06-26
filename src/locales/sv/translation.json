@@ -215,7 +215,8 @@
   "reportsPage": {
     "title": "Rapporter",
     "description": "Fördjupande analyser och rapporter om klimatomställningen i Sverige.",
-    "readMore": "Läs mer"
+    "readMore": "Läs mer",
+    "openReport": "Öppna rapport"
   },
   "blogDetailPage": {
     "loading": "Laddar...",
@@ -968,9 +969,9 @@
       "sector": "Sektor",
       "selectYear": "Välj år",
       "latestYear": "Senaste året",
-      "totalEmissions": "Totala utsläpp",
+      "totalEmissions": "Rapporterade utsläpp",
       "tonsCO2e": "ton CO₂e",
-      "changeSinceLastYear": "Förändring sedan förra året",
+      "changeSinceLastYear": "Förändring sedan föregående år",
       "noData": "Ingen data",
       "turnover": "Omsättning",
       "employees": "Anställda",
