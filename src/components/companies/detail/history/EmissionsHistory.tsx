@@ -91,6 +91,15 @@ export function EmissionsHistory({
   // Add state for hidden categories
   const [hiddenCategories, setHiddenCategories] = useState<number[]>([]);
 
+  const currentYear = new Date().getFullYear();
+  const defaultEndYear = currentYear + 5;
+  const [xAxisEndYear, setXAxisEndYear] = useState(defaultEndYear);
+  const minYear = defaultEndYear;
+  const maxYear = 2100;
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setXAxisEndYear(Number(e.target.value));
+  };
+
   // Validate input data
   if (!reportingPeriods?.length) {
     return (
@@ -144,8 +153,42 @@ export function EmissionsHistory({
           getCategoryName={getCategoryName}
           getCategoryColor={getCategoryColor}
           currentLanguage={currentLanguage}
+          xAxisEndYear={xAxisEndYear}
         />
       </div>
+      {dataView === "overview" && (
+        <div className="w-full flex flex-col items-center mt-4">
+          <label
+            htmlFor="x-axis-slider"
+            className="mb-2 text-sm text-grey text-center"
+          >
+            Visa framtida år till:{" "}
+            <span className="font-semibold text-white">{xAxisEndYear}</span>
+          </label>
+          <input
+            id="x-axis-slider"
+            type="range"
+            min={minYear}
+            max={maxYear}
+            value={xAxisEndYear}
+            onChange={handleSliderChange}
+            className="w-2/3 max-w-lg h-2 bg-black-1 rounded-lg appearance-none cursor-pointer accent-blue-5 mx-auto"
+            style={{ accentColor: "#13364e" }}
+          />
+          <div className="flex justify-between w-2/3 max-w-lg mt-1 text-xs text-grey mx-auto">
+            <span>{minYear}</span>
+            <span>{maxYear}</span>
+          </div>
+          <button
+            type="button"
+            className="mt-3 px-3 py-1 rounded bg-blue-5 text-white hover:bg-blue-4 transition"
+            onClick={() => setXAxisEndYear(2050)}
+            disabled={xAxisEndYear === 2050}
+          >
+            Gå till 2050
+          </button>
+        </div>
+      )}
       <HiddenItemsBadges
         hiddenScopes={hiddenScopes}
         hiddenCategories={hiddenCategories}

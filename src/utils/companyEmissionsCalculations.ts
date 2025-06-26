@@ -28,6 +28,7 @@ export const calculateLinearRegression = (data: { x: number; y: number }[]) => {
 export const generateApproximatedData = (
   data: ChartData[],
   regression: { slope: number; intercept: number },
+  xAxisEndYear?: number,
 ) => {
   const lastReportedYear = data
     .filter(
@@ -37,18 +38,31 @@ export const generateApproximatedData = (
     .reduce((lastYear, d) => Math.max(lastYear, d.year), 0);
 
   const approximatedStartYear = data[0].year;
-  const endYear = 2030;
+  const defaultEndYear = 2030;
+  const endYear = xAxisEndYear ?? defaultEndYear;
   const currentYear = new Date().getFullYear();
 
   const currentYearApproximatedValue =
     regression.slope * currentYear + regression.intercept;
 
+  const reductionRate = 0.1172;
+
+  // Find the year when carbonLaw would reach zero or below
+  let zeroYear = endYear;
+  for (let y = currentYear; y <= endYear; y++) {
+    const value =
+      currentYearApproximatedValue *
+      Math.pow(1 - reductionRate, y - currentYear);
+    if (value <= 0) {
+      zeroYear = y;
+      break;
+    }
+  }
+
   const allYears = Array.from(
     { length: endYear - approximatedStartYear + 1 },
     (_, i) => approximatedStartYear + i,
   );
-
-  const reductionRate = 0.1172;
 
   return allYears.map((year) => {
     const shouldShowApproximated = year >= lastReportedYear;
@@ -56,15 +70,19 @@ export const generateApproximatedData = (
       ? regression.slope * year + regression.intercept
       : null;
 
+    let carbonLaw = null;
+    if (year >= currentYear && year <= zeroYear) {
+      const value =
+        currentYearApproximatedValue *
+        Math.pow(1 - reductionRate, year - currentYear);
+      carbonLaw = value > 0 ? value : null;
+    }
+
     return {
       year,
       approximated: year <= currentYear ? approximatedValue : null,
       total: data.find((d) => d.year === year)?.total,
-      carbonLaw:
-        year >= currentYear
-          ? currentYearApproximatedValue *
-            Math.pow(1 - reductionRate, year - currentYear)
-          : null,
+      carbonLaw,
     };
   });
 };

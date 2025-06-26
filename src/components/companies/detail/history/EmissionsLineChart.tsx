@@ -37,6 +37,7 @@ interface EmissionsLineChartProps {
   getCategoryName: (id: number) => string;
   getCategoryColor: (id: number) => string;
   currentLanguage: "sv" | "en";
+  xAxisEndYear?: number;
 }
 
 export default function EmissionsLineChart({
@@ -51,6 +52,7 @@ export default function EmissionsLineChart({
   getCategoryName,
   getCategoryColor,
   currentLanguage,
+  xAxisEndYear,
 }: EmissionsLineChartProps) {
   const endYear = 2030;
   const currentYear = new Date().getFullYear();
@@ -80,8 +82,8 @@ export default function EmissionsLineChart({
       return null;
     }
 
-    return generateApproximatedData(data, regression);
-  }, [data, dataView]);
+    return generateApproximatedData(data, regression, xAxisEndYear);
+  }, [data, dataView, xAxisEndYear]);
 
   return (
     <ResponsiveContainer width="100%" height="100%" className="w-full">
@@ -120,7 +122,7 @@ export default function EmissionsLineChart({
           tickLine={false}
           axisLine={false}
           type="number"
-          domain={[data[0]?.year || 2000, endYear]}
+          domain={[data[0]?.year || 2000, xAxisEndYear ?? endYear]}
           tick={({ x, y, payload }) => {
             const isBaseYear = payload.value === companyBaseYear;
             return (
