@@ -179,7 +179,10 @@ export function MunicipalityDetailPage() {
               value={
                 !municipality.budgetRunsOut
                   ? t("municipalityDetailPage.budgetHolds")
-                  : municipality.budgetRunsOut.toString()
+                  : localizeUnit(
+                      new Date(municipality.budgetRunsOut),
+                      currentLanguage,
+                    )
               }
               valueClassName={
                 !municipality.budgetRunsOut ? "text-green-3" : "text-pink-3"
