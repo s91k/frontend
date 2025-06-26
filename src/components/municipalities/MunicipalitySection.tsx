@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import { DataGuideItemId } from "@/data-guide/items";
+import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 interface MunicipalitySectionProps {
   title: string;
@@ -9,16 +11,16 @@ interface MunicipalitySectionProps {
     value: ReactNode;
     valueClassName?: string;
   }>;
-  className?: string;
+  helpItems: DataGuideItemId[];
 }
 
 export function MunicipalitySection({
   title,
   items,
-  className,
+  helpItems,
 }: MunicipalitySectionProps) {
   return (
-    <div className={cn("bg-black-2 rounded-level-1 p-8 md:p-16", className)}>
+    <SectionWithHelp helpItems={helpItems}>
       <Text className="text-2xl md:text-4xl">{title}</Text>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 mt-8">
         {items.map((item, index) => (
@@ -30,6 +32,6 @@ export function MunicipalitySection({
           </div>
         ))}
       </div>
-    </div>
+    </SectionWithHelp>
   );
 }
