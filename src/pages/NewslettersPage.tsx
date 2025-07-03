@@ -5,7 +5,6 @@ import { useState, useEffect, useRef } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterNavigation } from "@/components/newsletters/NewsletterNavigation";
 import {
-  newsletterList,
   NewsletterType,
   monthsToNumberedValue,
 } from "@/lib/newsletterArchive/newsletterData";
@@ -16,54 +15,39 @@ export function NewsLetterArchivePage() {
   const canonicalUrl = "https://klimatkollen.se/insights/newsletter-archive";
   const pageTitle = t("newsletterArchivePage.title");
   const pageDescription = t("newsletterArchivePage.description");
-  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const { isMobile } = useScreenSize();
-  const contentRef = useRef<HTMLDivElement>(null);
   const [displayedNewsletter, setDisplayedNewsletter] =
     useState<NewsletterType>();
-/* 
-  const {data, loading, error} = useNewsletters();
+  /*  */
 
-  console.log(data) */
+  const { data, loading, error } = useNewsletters();
+  console.log(data);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     window.scrollTo(0, 0);
   }, [selectedMonth]);
-
+ */
   useEffect(() => {
-    const sortedNewsletterList = [...newsletterList].sort((a, b) => {
-      const yearA = parseInt(a.yearPosted);
-      const yearB = parseInt(b.yearPosted);
-
-      const monthA = convertMonthToNumber(a.monthPosted) ?? 0;
-      const monthB = convertMonthToNumber(b.monthPosted) ?? 0;
-
-      const sortValueA = yearA * 100 + monthA;
-      const sortValueB = yearB * 100 + monthB;
-
-      return sortValueB - sortValueA;
-    });
-
-    setDisplayedNewsletter(sortedNewsletterList[0]);
-    setSelectedMonth(sortedNewsletterList[0].url);
+    if (data) setDisplayedNewsletter(data[0].long_archive_url);
+    console.log(displayedNewsletter)
   }, []);
 
-  const convertMonthToNumber = (month: string) => {
+  /*   const convertMonthToNumber = (month: string) => {
     const foundMonth = monthsToNumberedValue.find(
       (listedMonth) => listedMonth.name === month,
     );
     return foundMonth?.number;
-  };
+  }; */
 
-/*   const structuredData = {
+  /*   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: pageTitle,
     description: pageDescription,
     url: canonicalUrl,
-  };
+  }; */
 
-  const items = articleMetaData.map((article) => ({
+  /*   const items = articleMetaData.map((article) => ({
     id: article.id,
     title: t(article.titleKey),
     excerpt: t(article.excerptKey),
@@ -80,16 +64,15 @@ export function NewsLetterArchivePage() {
         className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative lg:flex-row gap-8`}
       >
         <NewsletterNavigation
-          selectedMonth={selectedMonth}
-          onMonthChange={setSelectedMonth}
-          contentRef={contentRef}
+          newsletterList={data}
           setDisplayedNewsletter={setDisplayedNewsletter}
+          displayedNewsletter={displayedNewsletter}
         />
 
-        {displayedNewsletter?.url && (
+        {displayedNewsletter && (
           <iframe
             className="rounded-md min-h-screen w-full bg-black-2"
-            src={`${displayedNewsletter.url}`}
+            src={`${displayedNewsletter}`}
             height={800}
             width={1000}
           ></iframe>
