@@ -4,6 +4,8 @@ interface CampaignProps {
   id: string;
   send_time: string;
   long_archive_url: string;
+  preview_text: string;
+  subject_line: string;
 }
 
 const fetchNewsletters = async () => {
