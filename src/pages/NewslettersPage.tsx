@@ -21,7 +21,6 @@ export function NewsLetterArchivePage() {
   /*  */
 
   const { data, loading, error } = useNewsletters();
-  console.log(data);
 
   /*   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,15 +28,7 @@ export function NewsLetterArchivePage() {
  */
   useEffect(() => {
     if (data) setDisplayedNewsletter(data[0].long_archive_url);
-    console.log(displayedNewsletter)
-  }, []);
-
-  /*   const convertMonthToNumber = (month: string) => {
-    const foundMonth = monthsToNumberedValue.find(
-      (listedMonth) => listedMonth.name === month,
-    );
-    return foundMonth?.number;
-  }; */
+  }, [data]);
 
   /*   const structuredData = {
     "@context": "https://schema.org",

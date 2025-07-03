@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
+import { useNavigate } from "react-router-dom";
 
 interface NewsletterNavigationProps {
   newsletterList: Array<T>;
@@ -17,6 +17,7 @@ export function NewsletterNavigation({
 }: NewsletterNavigationProps) {
   const { t } = useTranslation();
   const { isMobile } = useScreenSize();
+  const navigate = useNavigate();
   console.log(newsletterList);
 
   return (
@@ -33,6 +34,7 @@ export function NewsletterNavigation({
               <button
                 onClick={() => {
                   setDisplayedNewsletter?.(newsletter.long_archive_url);
+                  navigate(`?view=${newsletter.id}`);
                 }}
                 className="flex flex-col gap-[5px] justify-between items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors duration-200 rounded-lg"
               >
