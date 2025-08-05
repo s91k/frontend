@@ -1,0 +1,27 @@
+interface ItemPaginationProps<T> {
+  content: T[];
+  itemsPerPage?: number;
+}
+
+function itemPagination<T>({
+  content,
+  itemsPerPage = 5,
+}: ItemPaginationProps<T>) {
+  console.log(content);
+  const totalItems = content.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  let paginatedContent = {};
+
+  for (let i = 0; i < totalPages; i++) {
+    const startIndex = i * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const populatedPage = content.slice(startIndex, endIndex);
+
+    paginatedContent["page" + (i + 1)] = populatedPage;
+  }
+
+  return paginatedContent;
+}
+
+export default itemPagination;
