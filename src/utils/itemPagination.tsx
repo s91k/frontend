@@ -7,7 +7,6 @@ function itemPagination<T>({
   content,
   itemsPerPage = 5,
 }: ItemPaginationProps<T>) {
-  console.log(content);
   const totalItems = content.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -19,7 +18,7 @@ function itemPagination<T>({
     const populatedPage = content.slice(startIndex, endIndex);
 
     populatedPage["hasPreviousPage"] = i !== 0;
-    populatedPage["hasNextPage"] = i !== totalPages -1 ;
+    populatedPage["hasNextPage"] = i !== totalPages - 1;
 
     paginatedContent["page" + (i + 1)] = populatedPage;
   }

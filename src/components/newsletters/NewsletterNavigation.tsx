@@ -53,6 +53,10 @@ export function NewsletterNavigation({
 
   console.log(paginatedContent);
 
+  if (displayedNewsLetter) {
+    console.log(displayedNewsLetter);
+  }
+
   return (
     <>
       {paginatedContent && (
@@ -64,7 +68,7 @@ export function NewsletterNavigation({
               paginatedContent["page" + currentPage].map((item) => {
                 return (
                   <PaginationLink
-                    className="flex flex-col h-full gap-[5px] items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg"
+                    className={` flex flex-col h-full gap-[5px] items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
                     onClick={() => {
                       setDisplayedNewsletter?.(item.long_archive_url);
                       navigate(`?view=${item.id}`);
