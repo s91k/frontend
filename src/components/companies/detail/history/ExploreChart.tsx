@@ -10,11 +10,11 @@ import {
 } from "recharts";
 import { CustomTooltip } from "../CustomTooltip";
 import { ChartData } from "@/types/emissions";
-import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
-import { calculateLinearRegression } from "@/utils/companyEmissionsCalculations";
+import { formatEmissionsAbsoluteCompact } from "@/utils/formatting/localization";
+import { calculateLinearRegression } from "@/lib/calculations/trends/regression";
 
 // Patch: redefine generateApproximatedData to return carbonLaw as number | undefined
-import * as companyEmissionsCalculations from "@/utils/companyEmissionsCalculations";
+import * as companyEmissionsCalculations from "@/utils/calculations/emissions";
 const generateApproximatedData = (
   ...args: Parameters<
     typeof companyEmissionsCalculations.generateApproximatedData
@@ -24,6 +24,7 @@ const generateApproximatedData = (
   return result.map((d) => ({
     ...d,
     carbonLaw: d.carbonLaw === null ? undefined : d.carbonLaw,
+    approximated: d.approximated ?? null,
   }));
 };
 
@@ -72,7 +73,7 @@ export function ExploreChart({
           d.total !== null &&
           d.year >= companyBaseYear,
       )
-      .map((d) => ({ x: d.year, y: d.total as number }));
+      .map((d) => ({ year: d.year, value: d.total as number }));
     if (regressionPoints.length >= 2) {
       const regression = calculateLinearRegression(regressionPoints);
       if (regression) {
@@ -92,7 +93,6 @@ export function ExploreChart({
             d.year <= currentYear &&
             d.approximated !== null,
         );
-        console.log("step2TrendSegment", step2TrendSegment);
       }
     }
   }
@@ -112,7 +112,7 @@ export function ExploreChart({
           d.total !== null &&
           d.year >= companyBaseYear,
       )
-      .map((d) => ({ x: d.year, y: d.total as number }));
+      .map((d) => ({ year: d.year, value: d.total as number }));
     if (regressionPoints.length >= 2) {
       const regression = calculateLinearRegression(regressionPoints);
       if (regression) {
@@ -190,7 +190,7 @@ export function ExploreChart({
           d.total !== null &&
           d.year >= companyBaseYear,
       )
-      .map((d) => ({ x: d.year, y: d.total as number }));
+      .map((d) => ({ year: d.year, value: d.total as number }));
     if (regressionPoints.length >= 2) {
       const regression = calculateLinearRegression(regressionPoints);
       if (regression) {
@@ -255,7 +255,7 @@ export function ExploreChart({
           d.total !== null &&
           d.year >= companyBaseYear,
       )
-      .map((d) => ({ x: d.year, y: d.total as number }));
+      .map((d) => ({ year: d.year, value: d.total as number }));
     if (regressionPoints.length >= 2) {
       const regression = calculateLinearRegression(regressionPoints);
       if (regression) {
@@ -358,7 +358,7 @@ export function ExploreChart({
           d.total !== null &&
           d.year >= companyBaseYear,
       )
-      .map((d) => ({ x: d.year, y: d.total as number }));
+      .map((d) => ({ year: d.year, value: d.total as number }));
 
     if (regressionPoints.length >= 2) {
       const regression = calculateLinearRegression(regressionPoints);

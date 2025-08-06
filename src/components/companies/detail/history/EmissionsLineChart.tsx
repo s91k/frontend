@@ -1,3 +1,5 @@
+// TODO Clean and refactor this file, much to large atm
+
 import {
   Legend,
   Line,
@@ -10,22 +12,19 @@ import {
 } from "recharts";
 import { CustomTooltip } from "../CustomTooltip";
 import { ChartData } from "@/types/emissions";
-import { t } from "i18next";
-import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
-import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { formatEmissionsAbsoluteCompact } from "@/utils/formatting/localization";
+import { useMemo, useState, useEffect } from "react";
 import {
-  calculateLinearRegression,
   calculateWeightedLinearRegression,
-  generateApproximatedData,
-  generateSophisticatedApproximatedData,
   fitExponentialRegression,
   calculateWeightedExponentialRegression,
-  calculateRecentExponentialRegression,
-} from "@/utils/companyEmissionsCalculations";
+} from "@/lib/calculations/trends/regression";
+import { generateApproximatedData } from "@/utils/calculations/emissions";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ExploreChart } from "./ExploreChart";
-import { exploreButtonFeatureFlagEnabled } from "@/utils/feature-flag";
+import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 
 interface EmissionsLineChartProps {
   data: ChartData[];
@@ -48,13 +47,16 @@ interface EmissionsLineChartProps {
   currentLanguage: "sv" | "en";
   exploreMode: boolean;
   setExploreMode: (val: boolean) => void;
-  calculationMethod?:
-    | "simple"
-    | "linear"
-    | "exponential"
-    | "weighted"
-    | "weightedExponential"
-    | "recentExponential";
+  setMethodExplanation?: (explanation: string | null) => void;
+  trendAnalysis?: {
+    method: string;
+    explanation: string;
+    explanationParams?: Record<string, string | number>;
+    coefficients?:
+      | { slope: number; intercept: number }
+      | { a: number; b: number };
+    cleanData?: { year: number; value: number }[];
+  } | null;
 }
 
 function hasTotalEmissions(d: ChartData): d is ChartData & { total: number } {
@@ -75,8 +77,10 @@ export default function EmissionsLineChart({
   currentLanguage,
   exploreMode,
   setExploreMode,
-  calculationMethod = "simple",
+  setMethodExplanation,
+  trendAnalysis,
 }: EmissionsLineChartProps) {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const shortEndYear = currentYear + 5;
   const longEndYear = 2050;
@@ -133,203 +137,203 @@ export default function EmissionsLineChart({
   function getLastTwoEmissionsPoints(data: ChartData[]) {
     return data
       .filter(hasTotalEmissions)
-      .map((d) => ({ x: d.year, y: d.total as number }))
+      .map((d) => ({ year: d.year, value: d.total as number }))
       .slice(-2);
+  }
+
+  function generateApproximatedDataWithCoefficients(
+    data: ChartData[],
+    coefficients:
+      | { slope: number; intercept: number }
+      | { a: number; b: number },
+    method: string,
+    endYear: number,
+    baseYear?: number,
+    cleanData?: { year: number; value: number }[],
+  ): ChartData[] | null {
+    if (!data.length) return null;
+
+    const firstYear = data[0].year;
+    const allYears = Array.from(
+      { length: endYear - firstYear + 1 },
+      (_, i) => firstYear + i,
+    );
+
+    // Use clean data timeline if available, otherwise use original data
+    const timelineData =
+      cleanData ||
+      data
+        .filter((d) => hasTotalEmissions(d))
+        .map((d) => ({ year: d.year, value: d.total as number }));
+
+    // Use the actual last year with data from the original data, not the clean data
+    const lastYearWithData = Math.max(
+      ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
+    );
+    const currentYear = new Date().getFullYear();
+
+    return allYears.map((year) => {
+      const actualData = data.find((d) => d.year === year);
+
+      // Calculate approximated value based on method and coefficients
+      let approximatedValue: number | null = null;
+      if (year >= lastYearWithData) {
+        // Get the actual last data point value (not from clean data)
+        const lastDataValue =
+          data
+            .filter((d) => hasTotalEmissions(d))
+            .sort((a, b) => b.year - a.year)[0]?.total || 0;
+
+        if (year === lastYearWithData) {
+          // Use the actual last data point value
+          approximatedValue = lastDataValue;
+        } else {
+          // Apply the calculated slope/growth rate from the last actual data point
+          const yearsFromLast = year - lastYearWithData;
+
+          if ("slope" in coefficients && "intercept" in coefficients) {
+            // Linear coefficients - apply slope from last data point
+            approximatedValue = Math.max(
+              0,
+              lastDataValue + coefficients.slope * yearsFromLast,
+            );
+          } else if ("a" in coefficients && "b" in coefficients) {
+            // Exponential coefficients - apply growth rate from last data point
+            const growthFactor = Math.exp(coefficients.b * yearsFromLast);
+            const expValue = lastDataValue * growthFactor;
+            // Cap exponential values to prevent extreme values
+            const maxReasonableValue = 1000000; // 1 million tCO2e
+            const minReasonableValue = 0.1; // 0.1 tCO2e
+            approximatedValue = Math.max(
+              minReasonableValue,
+              Math.min(expValue, maxReasonableValue),
+            );
+          }
+        }
+      }
+
+      // Calculate Paris line value (Carbon Law)
+      let parisValue: number | null = null;
+      if (year >= 2025) {
+        // Use the trendline value at 2025 as the starting point for Paris Agreement line
+        let emissions2025: number;
+        const actual2025Data = data.find((d) => d.year === 2025)?.total;
+
+        if (actual2025Data !== undefined && actual2025Data !== null) {
+          // Use actual 2025 data if available
+          emissions2025 = actual2025Data;
+        } else {
+          // Use the trendline value at 2025 (same calculation as approximated value)
+          if (year === 2025) {
+            // For 2025, use the same logic as the approximated value
+            const lastDataValue =
+              data
+                .filter((d) => hasTotalEmissions(d))
+                .sort((a, b) => b.year - a.year)[0]?.total || 0;
+            const lastYearWithData = Math.max(
+              ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
+            );
+            const yearsFromLast = 2025 - lastYearWithData;
+
+            if ("slope" in coefficients && "intercept" in coefficients) {
+              emissions2025 = Math.max(
+                0,
+                lastDataValue + coefficients.slope * yearsFromLast,
+              );
+            } else if ("a" in coefficients && "b" in coefficients) {
+              const growthFactor = Math.exp(coefficients.b * yearsFromLast);
+              const expValue = lastDataValue * growthFactor;
+              const maxReasonableValue = 1000000; // 1 million tCO2e
+              const minReasonableValue = 0.1; // 0.1 tCO2e
+              emissions2025 = Math.max(
+                minReasonableValue,
+                Math.min(expValue, maxReasonableValue),
+              );
+            } else {
+              emissions2025 = lastDataValue;
+            }
+          } else {
+            // For years after 2025, calculate from the trendline
+            const lastDataValue =
+              data
+                .filter((d) => hasTotalEmissions(d))
+                .sort((a, b) => b.year - a.year)[0]?.total || 0;
+            const lastYearWithData = Math.max(
+              ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
+            );
+            const yearsFromLast = 2025 - lastYearWithData;
+
+            if ("slope" in coefficients && "intercept" in coefficients) {
+              emissions2025 = Math.max(
+                0,
+                lastDataValue + coefficients.slope * yearsFromLast,
+              );
+            } else if ("a" in coefficients && "b" in coefficients) {
+              const growthFactor = Math.exp(coefficients.b * yearsFromLast);
+              const expValue = lastDataValue * growthFactor;
+              const maxReasonableValue = 1000000; // 1 million tCO2e
+              const minReasonableValue = 0.1; // 0.1 tCO2e
+              emissions2025 = Math.max(
+                minReasonableValue,
+                Math.min(expValue, maxReasonableValue),
+              );
+            } else {
+              emissions2025 = lastDataValue;
+            }
+          }
+        }
+
+        const reductionRate = 0.1172; // 12% annual reduction
+        const calculatedValue =
+          emissions2025 * Math.pow(1 - reductionRate, year - 2025);
+        parisValue = calculatedValue > 0 ? calculatedValue : null;
+      }
+
+      return {
+        year,
+        total: actualData?.total,
+        approximated: approximatedValue,
+        carbonLaw: parisValue,
+        isAIGenerated: actualData?.isAIGenerated,
+        scope1: actualData?.scope1,
+        scope2: actualData?.scope2,
+        scope3: actualData?.scope3,
+        scope3Categories: actualData?.scope3Categories,
+        originalValues: actualData?.originalValues,
+      };
+    });
   }
 
   const approximatedData = useMemo(() => {
     if (dataView !== "overview") {
       return null;
     }
-    if (calculationMethod === "linear") {
-      return generateSophisticatedApproximatedData(
+
+    // Don't show trendline if method is "none"
+    if (trendAnalysis?.method === "none") {
+      return null;
+    }
+
+    // Use coefficients from trend analysis if available
+    if (trendAnalysis?.coefficients) {
+      return generateApproximatedDataWithCoefficients(
         data,
-        chartEndYear,
-        "linear",
-        companyBaseYear,
-      );
-    } else if (calculationMethod === "exponential") {
-      return generateSophisticatedApproximatedData(
-        data,
-        chartEndYear,
-        "exponential",
-        companyBaseYear,
-      );
-    } else if (calculationMethod === "weighted") {
-      // Weighted method (linear regression, exponential weights)
-      const regressionPoints = (() => {
-        if (companyBaseYear) {
-          const baseYearPoints = data
-            .filter((d) => hasTotalEmissions(d) && d.year >= companyBaseYear)
-            .map((d) => ({ x: d.year, y: d.total as number }));
-          if (baseYearPoints.length < 2) {
-            return getLastTwoEmissionsPoints(data);
-          }
-          return baseYearPoints;
-        } else {
-          return getLastTwoEmissionsPoints(data);
-        }
-      })();
-      if (regressionPoints.length < 2) {
-        return null;
-      }
-      const regression = calculateWeightedLinearRegression(regressionPoints);
-      if (!regression) {
-        return null;
-      }
-      return generateApproximatedData(
-        data,
-        regression,
+        trendAnalysis.coefficients,
+        trendAnalysis.method,
         chartEndYear,
         companyBaseYear,
-      );
-    } else if (calculationMethod === "weightedExponential") {
-      // Weighted exponential regression
-      const regressionPoints = (() => {
-        if (companyBaseYear) {
-          const baseYearPoints = data
-            .filter((d) => hasTotalEmissions(d) && d.year >= companyBaseYear)
-            .map((d) => ({ x: d.year, y: d.total as number }));
-          if (baseYearPoints.length < 2) {
-            return getLastTwoEmissionsPoints(data);
-          }
-          return baseYearPoints;
-        } else {
-          return getLastTwoEmissionsPoints(data);
-        }
-      })();
-      if (regressionPoints.length < 2) {
-        return null;
-      }
-      const expFit = calculateWeightedExponentialRegression(
-        regressionPoints,
-        0.7,
-      );
-      if (!expFit) {
-        return null;
-      }
-      // Anchor at last data point
-      const lastYear = regressionPoints[regressionPoints.length - 1].x;
-      const lastValue = regressionPoints[regressionPoints.length - 1].y;
-      const fitValueAtLast = expFit.a * Math.exp(expFit.b * lastYear);
-      const scale =
-        lastValue && fitValueAtLast ? lastValue / fitValueAtLast : 1;
-      const allYears = Array.from(
-        { length: chartEndYear - data[0].year + 1 },
-        (_, i) => data[0].year + i,
-      );
-      const currentYear = new Date().getFullYear();
-      const reductionRate = 0.1172;
-      return allYears.map((year) => {
-        let approximatedValue = null;
-        if (year > lastYear) {
-          approximatedValue = scale * expFit.a * Math.exp(expFit.b * year);
-          if (approximatedValue < 0) approximatedValue = 0;
-        } else if (year === lastYear) {
-          approximatedValue = lastValue;
-        }
-        let parisValue = null;
-        if (year >= currentYear) {
-          const currentYearValue =
-            scale * expFit.a * Math.exp(expFit.b * currentYear);
-          const calculatedValue =
-            currentYearValue * Math.pow(1 - reductionRate, year - currentYear);
-          parisValue = calculatedValue > 0 ? calculatedValue : null;
-        }
-        return {
-          year,
-          approximated: approximatedValue,
-          total: data.find((d) => d.year === year)?.total,
-          carbonLaw: parisValue,
-        };
-      });
-    } else if (calculationMethod === "recentExponential") {
-      // Recent exponential regression (last 4 years)
-      const regressionPoints = (() => {
-        if (companyBaseYear) {
-          const baseYearPoints = data
-            .filter((d) => hasTotalEmissions(d) && d.year >= companyBaseYear)
-            .map((d) => ({ x: d.year, y: d.total as number }));
-          if (baseYearPoints.length < 2) {
-            return getLastTwoEmissionsPoints(data);
-          }
-          return baseYearPoints;
-        } else {
-          return getLastTwoEmissionsPoints(data);
-        }
-      })();
-      if (regressionPoints.length < 2) {
-        return null;
-      }
-      const expFit = calculateRecentExponentialRegression(regressionPoints, 4);
-      if (!expFit) {
-        return null;
-      }
-      // Anchor at last data point
-      const lastYear = regressionPoints[regressionPoints.length - 1].x;
-      const lastValue = regressionPoints[regressionPoints.length - 1].y;
-      const fitValueAtLast = expFit.a * Math.exp(expFit.b * lastYear);
-      const scale =
-        lastValue && fitValueAtLast ? lastValue / fitValueAtLast : 1;
-      const allYears = Array.from(
-        { length: chartEndYear - data[0].year + 1 },
-        (_, i) => data[0].year + i,
-      );
-      const currentYear = new Date().getFullYear();
-      const reductionRate = 0.1172;
-      return allYears.map((year) => {
-        let approximatedValue = null;
-        if (year > lastYear) {
-          approximatedValue = scale * expFit.a * Math.exp(expFit.b * year);
-          if (approximatedValue < 0) approximatedValue = 0;
-        } else if (year === lastYear) {
-          approximatedValue = lastValue;
-        }
-        let parisValue = null;
-        if (year >= currentYear) {
-          const currentYearValue =
-            scale * expFit.a * Math.exp(expFit.b * currentYear);
-          const calculatedValue =
-            currentYearValue * Math.pow(1 - reductionRate, year - currentYear);
-          parisValue = calculatedValue > 0 ? calculatedValue : null;
-        }
-        return {
-          year,
-          approximated: approximatedValue,
-          total: data.find((d) => d.year === year)?.total,
-          carbonLaw: parisValue,
-        };
-      });
-    } else {
-      // Simple (original) method
-      const regressionPoints = (() => {
-        if (companyBaseYear) {
-          const baseYearPoints = data
-            .filter((d) => hasTotalEmissions(d) && d.year >= companyBaseYear)
-            .map((d) => ({ x: d.year, y: d.total as number }));
-          if (baseYearPoints.length < 2) {
-            return getLastTwoEmissionsPoints(data);
-          }
-          return baseYearPoints;
-        } else {
-          return getLastTwoEmissionsPoints(data);
-        }
-      })();
-      if (regressionPoints.length < 2) {
-        return null;
-      }
-      const regression = calculateLinearRegression(regressionPoints);
-      if (!regression) {
-        return null;
-      }
-      return generateApproximatedData(
-        data,
-        regression,
-        chartEndYear,
-        companyBaseYear,
+        trendAnalysis.cleanData,
       );
     }
-  }, [data, dataView, companyBaseYear, chartEndYear, calculationMethod]);
+
+    // Fallback to simple method if no coefficients available
+    return generateApproximatedData(
+      data,
+      { slope: 0, intercept: 0 },
+      chartEndYear,
+      companyBaseYear,
+    );
+  }, [data, dataView, chartEndYear, companyBaseYear, trendAnalysis]);
 
   // Generate ticks based on the current end year
   const generateTicks = () => {
@@ -341,11 +345,17 @@ export default function EmissionsLineChart({
     }
   };
 
-  // Trend line explanation for step 2
-  const trendExplanation = t("companies.emissionsHistory.trendInfo", {
-    percentage: /* insert percentage or leave blank for now */ "...",
-    baseYear: companyBaseYear || "",
-  });
+  // Call setMethodExplanation when explanation changes
+  useEffect(() => {
+    if (setMethodExplanation && trendAnalysis) {
+      const translatedExplanation = trendAnalysis.explanationParams
+        ? t(trendAnalysis.explanation, trendAnalysis.explanationParams)
+        : t(trendAnalysis.explanation);
+      setMethodExplanation(translatedExplanation || null);
+    } else if (setMethodExplanation) {
+      setMethodExplanation(null);
+    }
+  }, [trendAnalysis, setMethodExplanation, t]);
 
   // Calculate global min/max Y values for consistent Y-axis scaling
   const allYValues = [
@@ -451,8 +461,8 @@ export default function EmissionsLineChart({
                                       d.year >= companyBaseYear,
                                   )
                                   .map((d) => ({
-                                    x: d.year,
-                                    y: d.total as number,
+                                    year: d.year,
+                                    value: d.total as number,
                                   }))
                               : getLastTwoEmissionsPoints(data);
 
@@ -462,130 +472,68 @@ export default function EmissionsLineChart({
 
                             let percentageChange = 0;
 
-                            if (calculationMethod === "simple") {
-                              // Simple method: average annual change
-                              let totalChange = 0;
-                              let totalYears = 0;
-                              for (
-                                let i = 1;
-                                i < regressionPoints.length;
-                                i++
+                            if (trendAnalysis?.method === "none") {
+                              return undefined;
+                            }
+
+                            if (trendAnalysis?.coefficients) {
+                              if (
+                                "slope" in trendAnalysis.coefficients &&
+                                "intercept" in trendAnalysis.coefficients
                               ) {
-                                totalChange +=
-                                  regressionPoints[i].y -
-                                  regressionPoints[i - 1].y;
-                                totalYears +=
-                                  regressionPoints[i].x -
-                                  regressionPoints[i - 1].x;
+                                // Linear coefficients
+                                const slope = trendAnalysis.coefficients.slope;
+                                const avgEmissions =
+                                  regressionPoints.reduce(
+                                    (sum, point) => sum + point.value,
+                                    0,
+                                  ) / regressionPoints.length;
+                                percentageChange =
+                                  avgEmissions > 0
+                                    ? (slope / avgEmissions) * 100
+                                    : 0;
+                              } else if (
+                                "a" in trendAnalysis.coefficients &&
+                                "b" in trendAnalysis.coefficients
+                              ) {
+                                // Exponential coefficients
+                                const b = trendAnalysis.coefficients.b;
+                                percentageChange = (Math.exp(b) - 1) * 100;
                               }
-                              const slope =
-                                totalYears !== 0 ? totalChange / totalYears : 0;
+                            } else {
+                              // Fallback to old calculation if no coefficients available
+                              if (trendAnalysis?.method === "simple") {
+                                // Simple method: average annual change
+                                let totalChange = 0;
+                                let totalYears = 0;
+                                for (
+                                  let i = 1;
+                                  i < regressionPoints.length;
+                                  i++
+                                ) {
+                                  totalChange +=
+                                    regressionPoints[i].value -
+                                    regressionPoints[i - 1].value;
+                                  totalYears +=
+                                    regressionPoints[i].year -
+                                    regressionPoints[i - 1].year;
+                                }
+                                const slope =
+                                  totalYears !== 0
+                                    ? totalChange / totalYears
+                                    : 0;
 
-                              // Calculate percentage change
-                              const avgEmissions =
-                                regressionPoints.reduce(
-                                  (sum, point) => sum + point.y,
-                                  0,
-                                ) / regressionPoints.length;
-                              percentageChange =
-                                avgEmissions > 0
-                                  ? (slope / avgEmissions) * 100
-                                  : 0;
-                            } else if (calculationMethod === "linear") {
-                              // Sophisticated method: linear regression
-                              const regression =
-                                calculateLinearRegression(regressionPoints);
-                              if (!regression) {
-                                return undefined;
+                                // Calculate percentage change
+                                const avgEmissions =
+                                  regressionPoints.reduce(
+                                    (sum, point) => sum + point.value,
+                                    0,
+                                  ) / regressionPoints.length;
+                                percentageChange =
+                                  avgEmissions > 0
+                                    ? (slope / avgEmissions) * 100
+                                    : 0;
                               }
-
-                              const avgEmissions =
-                                regressionPoints.reduce(
-                                  (sum, point) => sum + point.y,
-                                  0,
-                                ) / regressionPoints.length;
-                              percentageChange =
-                                avgEmissions > 0
-                                  ? (regression.slope / avgEmissions) * 100
-                                  : 0;
-                            } else if (calculationMethod === "exponential") {
-                              // Exponential method: exponential fit
-                              const expFit =
-                                fitExponentialRegression(regressionPoints);
-                              if (!expFit) {
-                                return undefined;
-                              }
-
-                              // Calculate the average annual percentage change from exponential fit
-                              const avgEmissions =
-                                regressionPoints.reduce(
-                                  (sum, point) => sum + point.y,
-                                  0,
-                                ) / regressionPoints.length;
-
-                              // For exponential, calculate the percentage change at the midpoint
-                              const midYear =
-                                (regressionPoints[0].x +
-                                  regressionPoints[regressionPoints.length - 1]
-                                    .x) /
-                                2;
-                              const midValue =
-                                expFit.a * Math.exp(expFit.b * midYear);
-                              const nextYearValue =
-                                expFit.a * Math.exp(expFit.b * (midYear + 1));
-                              const annualChange = nextYearValue - midValue;
-                              percentageChange =
-                                midValue > 0
-                                  ? (annualChange / midValue) * 100
-                                  : 0;
-                            } else if (calculationMethod === "weighted") {
-                              // Weighted method: weighted linear regression
-                              const regression =
-                                calculateWeightedLinearRegression(
-                                  regressionPoints,
-                                );
-                              if (!regression) {
-                                return undefined;
-                              }
-
-                              const avgEmissions =
-                                regressionPoints.reduce(
-                                  (sum, point) => sum + point.y,
-                                  0,
-                                ) / regressionPoints.length;
-                              percentageChange =
-                                avgEmissions > 0
-                                  ? (regression.slope / avgEmissions) * 100
-                                  : 0;
-                            } else if (
-                              calculationMethod === "weightedExponential"
-                            ) {
-                              // Weighted Exponential method: weighted exponential regression
-                              const regression =
-                                calculateWeightedExponentialRegression(
-                                  regressionPoints,
-                                  0.7,
-                                );
-                              if (!regression) {
-                                return undefined;
-                              }
-                              // For exponential y = a * exp(bx), percent change per year = (exp(b) - 1) * 100
-                              percentageChange =
-                                (Math.exp(regression.b) - 1) * 100;
-                            } else if (
-                              calculationMethod === "recentExponential"
-                            ) {
-                              // Recent Exponential method: recent exponential regression
-                              const regression =
-                                calculateRecentExponentialRegression(
-                                  regressionPoints,
-                                  4,
-                                );
-                              if (!regression) {
-                                return undefined;
-                              }
-                              percentageChange =
-                                (Math.exp(regression.b) - 1) * 100;
                             }
 
                             return {
@@ -879,7 +827,7 @@ export default function EmissionsLineChart({
                 companyBaseYear={companyBaseYear}
                 currentLanguage={currentLanguage}
                 trendExplanation={
-                  exploreStep === 2 ? trendExplanation : undefined
+                  exploreStep === 2 ? trendAnalysis?.explanation : undefined
                 }
                 yDomain={[yMin, yMax]}
               />
