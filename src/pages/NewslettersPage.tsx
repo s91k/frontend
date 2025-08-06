@@ -15,14 +15,9 @@ export function NewsLetterArchivePage() {
   const { isMobile } = useScreenSize();
   const [displayedNewsletter, setDisplayedNewsletter] =
     useState<NewsletterType>() || null;
-  /*  */
 
   const { data, loading, error } = useNewsletters();
 
-  /*   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [selectedMonth]);
- */
   useEffect(() => {
     if (data) setDisplayedNewsletter(data[0].long_archive_url);
   }, [data]);
@@ -60,7 +55,7 @@ export function NewsLetterArchivePage() {
         {displayedNewsletter && (
           <iframe
             className="rounded-md min-h-screen w-full bg-black-2"
-            src={`${displayedNewsletter}`}
+            src={`${displayedNewsletter}#view=FitH`}
             height={800}
             width={1000}
           ></iframe>
