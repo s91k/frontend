@@ -47,21 +47,26 @@ export function NewsletterNavigation({
     <>
       {paginatedContent && (
         <Pagination
-          className={`${isMobile ? "max-h-80" : "max-h-[585px]"} flex flex-col bg-black-2 rounded-md p-2 lg:max-w-[280px] justify-between`}
+          className={`${isMobile ? "h-[575px] p-2" : "h-[585px] p-2"} flex flex-col bg-black-2 rounded-md lg:max-w-[280px] justify-between`}
         >
-          <PaginationContent className="flex h-3/4 flex-col divide-y divide-black-1 items-center text-left">
+          <PaginationContent
+            className={`${isMobile ? "min-h-[300px]" : "h-3/4"} flex flex-col divide-y divide-black-1 items-baseline text-left`}
+          >
             {paginatedContent &&
               paginatedContent["page" + currentPage].map((item) => {
                 return (
                   <PaginationLink
-                    className={`${displayedNewsLetter === item.long_archive_url ? "bg-black-1" : null} flex flex-col h-full max-h-[125px] gap-[5px] items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
+                    className={`
+                      ${displayedNewsLetter === item.long_archive_url ? "bg-black-1" : null}
+                      ${isMobile ? "max-h-[100px]" : "max-h-[125px]"}
+                       flex flex-col h-full gap-[5px] w-full p-3 my-1 text-left items-start text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
                     onClick={() => {
                       setDisplayedNewsletter?.(item.long_archive_url);
                       navigate(`?view=${item.id}`);
                     }}
                   >
                     <span
-                      className="flex text-sm font-medium text-white self-start
+                      className="flex text-sm font-medium text-white
 "
                     >
                       {item.send_time.slice(0, item.send_time.indexOf("T"))}
@@ -71,7 +76,7 @@ export function NewsletterNavigation({
                 );
               })}
           </PaginationContent>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4">
             {paginatedContent["page" + currentPage].hasPreviousPage && (
               <PaginationPrevious
                 onClick={() => setCurrentPage(currentPage - 1)}
