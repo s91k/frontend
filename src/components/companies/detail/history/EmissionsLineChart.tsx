@@ -21,10 +21,11 @@ import {
   calculateWeightedExponentialRegression,
 } from "@/lib/calculations/trends/regression";
 import { generateApproximatedData } from "@/utils/calculations/emissions";
+import { ExploreChart } from "./ExploreChart";
+import { ChartControls } from "./ChartControls";
+import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ExploreChart } from "./ExploreChart";
-import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 
 interface EmissionsLineChartProps {
   data: ChartData[];
@@ -876,53 +877,16 @@ export default function EmissionsLineChart({
         )}
       </div>
       {/* Chart view toggle buttons below the chart/legend */}
-      {!exploreMode && (
-        <div className="relative mt-2 px-4 w-full">
-          {/* Year toggle buttons positioned absolutely */}
-          <div className="absolute left-0 top-0">
-            {chartEndYear === longEndYear && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setChartEndYear(shortEndYear)}
-                className="bg-black-2 border-black-1 text-white hover:bg-black-1"
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                {shortEndYear}
-              </Button>
-            )}
-          </div>
-          <div className="absolute right-0 top-0">
-            {chartEndYear === shortEndYear && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setChartEndYear(longEndYear)}
-                className="bg-black-2 border-black-1 text-white hover:bg-black-1"
-              >
-                {longEndYear}
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            )}
-          </div>
-          {/* Explore button centered independently */}
-          {exploreButtonFeatureFlagEnabled() && (
-            <div className="flex justify-center items-center">
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => {
-                  setExploreMode(true);
-                  setExploreStep(initialExploreStep);
-                }}
-                className="bg-green-3 text-black font-semibold shadow-md hover:bg-green-2"
-              >
-                Explore the Data
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+      <ChartControls
+        chartEndYear={chartEndYear}
+        shortEndYear={shortEndYear}
+        longEndYear={longEndYear}
+        setChartEndYear={setChartEndYear}
+        exploreMode={exploreMode}
+        setExploreMode={setExploreMode}
+        setExploreStep={setExploreStep}
+        initialExploreStep={initialExploreStep}
+      />
     </div>
   );
 }
