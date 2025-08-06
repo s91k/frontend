@@ -9,8 +9,6 @@ interface ChartControlsProps {
   setChartEndYear: (year: number) => void;
   exploreMode: boolean;
   setExploreMode: (val: boolean) => void;
-  setExploreStep: (step: number) => void;
-  initialExploreStep: number;
 }
 
 export function ChartControls({
@@ -20,8 +18,6 @@ export function ChartControls({
   setChartEndYear,
   exploreMode,
   setExploreMode,
-  setExploreStep,
-  initialExploreStep,
 }: ChartControlsProps) {
   if (exploreMode) {
     return null;
@@ -64,7 +60,6 @@ export function ChartControls({
             size="sm"
             onClick={() => {
               setExploreMode(true);
-              setExploreStep(initialExploreStep);
             }}
             className="bg-green-3 text-black font-semibold shadow-md hover:bg-green-2"
           >
