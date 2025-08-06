@@ -17,10 +17,8 @@ import { ExploreMode } from "./ExploreMode";
 import { ChartControls } from "./ChartControls";
 import { ScopeLine } from "./ScopeLine";
 import { CategoryLine } from "./CategoryLine";
-import {
-  generateApproximatedData,
-  getLastTwoEmissionsPoints,
-} from "@/lib/calculations/trends/approximatedData";
+import { generateApproximatedData } from "@/lib/calculations/trends/approximatedData";
+import { calculateTrendPercentageChange } from "@/lib/calculations/trends/trendPercentages";
 import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 
 interface EmissionsLineChartProps {
@@ -54,10 +52,6 @@ interface EmissionsLineChartProps {
       | { a: number; b: number };
     cleanData?: { year: number; value: number }[];
   } | null;
-}
-
-function hasTotalEmissions(d: ChartData): d is ChartData & { total: number } {
-  return d.total !== undefined && d.total !== null;
 }
 
 export default function EmissionsLineChart({
@@ -232,102 +226,30 @@ export default function EmissionsLineChart({
                     trendData={
                       exploreButtonFeatureFlagEnabled() &&
                       approximatedData &&
-                      dataView === "overview"
+                      dataView === "overview" &&
+                      trendAnalysis?.coefficients &&
+                      trendAnalysis?.cleanData &&
+                      trendAnalysis.cleanData.length >= 2
                         ? (() => {
-                            // Calculate the regression points based on base year logic
-                            const regressionPoints = companyBaseYear
-                              ? data
-                                  .filter(
-                                    (d) =>
-                                      hasTotalEmissions(d) &&
-                                      d.year >= companyBaseYear,
-                                  )
-                                  .map((d) => ({
-                                    year: d.year,
-                                    value: d.total as number,
-                                  }))
-                              : getLastTwoEmissionsPoints(data);
-
-                            if (regressionPoints.length < 2) {
-                              return undefined;
-                            }
-
-                            let percentageChange = 0;
-
-                            if (trendAnalysis?.method === "none") {
-                              return undefined;
-                            }
-
-                            if (trendAnalysis?.coefficients) {
-                              if (
-                                "slope" in trendAnalysis.coefficients &&
-                                "intercept" in trendAnalysis.coefficients
-                              ) {
-                                // Linear coefficients
-                                const slope = trendAnalysis.coefficients.slope;
-                                const avgEmissions =
-                                  regressionPoints.reduce(
-                                    (sum, point) => sum + point.value,
-                                    0,
-                                  ) / regressionPoints.length;
-                                percentageChange =
-                                  avgEmissions > 0
-                                    ? (slope / avgEmissions) * 100
-                                    : 0;
-                              } else if (
-                                "a" in trendAnalysis.coefficients &&
-                                "b" in trendAnalysis.coefficients
-                              ) {
-                                // Exponential coefficients
-                                const b = trendAnalysis.coefficients.b;
-                                percentageChange = (Math.exp(b) - 1) * 100;
-                              }
-                            } else {
-                              // Fallback to old calculation if no coefficients available
-                              if (trendAnalysis?.method === "simple") {
-                                // Simple method: average annual change
-                                let totalChange = 0;
-                                let totalYears = 0;
-                                for (
-                                  let i = 1;
-                                  i < regressionPoints.length;
-                                  i++
-                                ) {
-                                  totalChange +=
-                                    regressionPoints[i].value -
-                                    regressionPoints[i - 1].value;
-                                  totalYears +=
-                                    regressionPoints[i].year -
-                                    regressionPoints[i - 1].year;
-                                }
-                                const slope =
-                                  totalYears !== 0
-                                    ? totalChange / totalYears
-                                    : 0;
-
-                                // Calculate percentage change
-                                const avgEmissions =
-                                  regressionPoints.reduce(
-                                    (sum, point) => sum + point.value,
-                                    0,
-                                  ) / regressionPoints.length;
-                                percentageChange =
-                                  avgEmissions > 0
-                                    ? (slope / avgEmissions) * 100
-                                    : 0;
-                              }
-                            }
+                            const cleanData = trendAnalysis.cleanData;
+                            const avgEmissions =
+                              cleanData.reduce(
+                                (sum, point) => sum + point.value,
+                                0,
+                              ) / cleanData.length;
+                            const percentageChange =
+                              calculateTrendPercentageChange(
+                                trendAnalysis.coefficients,
+                                avgEmissions,
+                              );
 
                             return {
                               slope: percentageChange,
                               baseYear:
                                 companyBaseYear || data[0]?.year || 2000,
-                              lastReportedYear: data
-                                .filter(hasTotalEmissions)
-                                .reduce(
-                                  (lastYear, d) => Math.max(lastYear, d.year),
-                                  0,
-                                ),
+                              lastReportedYear: Math.max(
+                                ...cleanData.map((d) => d.year),
+                              ),
                             };
                           })()
                         : undefined
