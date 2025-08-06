@@ -23,6 +23,7 @@ import {
 import { generateApproximatedData } from "@/utils/calculations/emissions";
 import { ExploreChart } from "./ExploreChart";
 import { ChartControls } from "./ChartControls";
+import { ScopeLine } from "./ScopeLine";
 import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -613,67 +614,21 @@ export default function EmissionsLineChart({
 
               {dataView === "scopes" && (
                 <>
-                  {!hiddenScopes.includes("scope1") && (
-                    <Line
-                      type="monotone"
-                      dataKey="scope1.value"
-                      stroke="var(--pink-3)"
-                      strokeWidth={2}
-                      dot={{
-                        r: 4,
-                        fill: "var(--pink-3)",
-                        cursor: "pointer",
-                        onClick: () => handleScopeToggle("scope1"),
-                      }}
-                      activeDot={{
-                        r: 6,
-                        fill: "var(--pink-3)",
-                        cursor: "pointer",
-                      }}
-                      name="Scope 1"
-                    />
-                  )}
-                  {!hiddenScopes.includes("scope2") && (
-                    <Line
-                      type="monotone"
-                      dataKey="scope2.value"
-                      stroke="var(--green-2)"
-                      strokeWidth={2}
-                      dot={{
-                        r: 4,
-                        fill: "var(--green-2)",
-                        cursor: "pointer",
-                        onClick: () => handleScopeToggle("scope2"),
-                      }}
-                      activeDot={{
-                        r: 6,
-                        fill: "var(--green-2)",
-                        cursor: "pointer",
-                      }}
-                      name="Scope 2"
-                    />
-                  )}
-                  {!hiddenScopes.includes("scope3") && (
-                    <Line
-                      type="monotone"
-                      dataKey="scope3.value"
-                      stroke="var(--blue-2)"
-                      strokeWidth={2}
-                      dot={{
-                        r: 4,
-                        fill: "var(--blue-2)",
-                        cursor: "pointer",
-                        onClick: () => handleScopeToggle("scope3"),
-                      }}
-                      activeDot={{
-                        r: 6,
-                        fill: "var(--blue-2)",
-                        cursor: "pointer",
-                        onClick: () => handleScopeToggle("scope3"),
-                      }}
-                      name="Scope 3"
-                    />
-                  )}
+                  <ScopeLine
+                    scope="scope1"
+                    isHidden={hiddenScopes.includes("scope1")}
+                    onToggle={handleScopeToggle}
+                  />
+                  <ScopeLine
+                    scope="scope2"
+                    isHidden={hiddenScopes.includes("scope2")}
+                    onToggle={handleScopeToggle}
+                  />
+                  <ScopeLine
+                    scope="scope3"
+                    isHidden={hiddenScopes.includes("scope3")}
+                    onToggle={handleScopeToggle}
+                  />
                 </>
               )}
 
