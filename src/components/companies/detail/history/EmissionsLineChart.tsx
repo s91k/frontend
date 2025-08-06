@@ -20,10 +20,14 @@ import {
   fitExponentialRegression,
   calculateWeightedExponentialRegression,
 } from "@/lib/calculations/trends/regression";
-import { generateApproximatedData } from "@/utils/calculations/emissions";
 import { ExploreChart } from "./ExploreChart";
 import { ChartControls } from "./ChartControls";
 import { ScopeLine } from "./ScopeLine";
+import { CategoryLine } from "./CategoryLine";
+import {
+  generateApproximatedData,
+  getLastTwoEmissionsPoints,
+} from "@/lib/calculations/trends/approximatedData";
 import { exploreButtonFeatureFlagEnabled } from "@/utils/ui/featureFlags";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -137,177 +141,7 @@ export default function EmissionsLineChart({
   const initialExploreStep = 0;
   const [exploreStep, setExploreStep] = useState(initialExploreStep);
 
-  // Helper to get last two periods with emissions
-  function getLastTwoEmissionsPoints(data: ChartData[]) {
-    return data
-      .filter(hasTotalEmissions)
-      .map((d) => ({ year: d.year, value: d.total as number }))
-      .slice(-2);
-  }
-
-  function generateApproximatedDataWithCoefficients(
-    data: ChartData[],
-    coefficients:
-      | { slope: number; intercept: number }
-      | { a: number; b: number },
-    method: string,
-    endYear: number,
-    baseYear?: number,
-    cleanData?: { year: number; value: number }[],
-  ): ChartData[] | null {
-    if (!data.length) return null;
-
-    const firstYear = data[0].year;
-    const allYears = Array.from(
-      { length: endYear - firstYear + 1 },
-      (_, i) => firstYear + i,
-    );
-
-    // Use clean data timeline if available, otherwise use original data
-    const timelineData =
-      cleanData ||
-      data
-        .filter((d) => hasTotalEmissions(d))
-        .map((d) => ({ year: d.year, value: d.total as number }));
-
-    // Use the actual last year with data from the original data, not the clean data
-    const lastYearWithData = Math.max(
-      ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
-    );
-    const currentYear = new Date().getFullYear();
-
-    return allYears.map((year) => {
-      const actualData = data.find((d) => d.year === year);
-
-      // Calculate approximated value based on method and coefficients
-      let approximatedValue: number | null = null;
-      if (year >= lastYearWithData) {
-        // Get the actual last data point value (not from clean data)
-        const lastDataValue =
-          data
-            .filter((d) => hasTotalEmissions(d))
-            .sort((a, b) => b.year - a.year)[0]?.total || 0;
-
-        if (year === lastYearWithData) {
-          // Use the actual last data point value
-          approximatedValue = lastDataValue;
-        } else {
-          // Apply the calculated slope/growth rate from the last actual data point
-          const yearsFromLast = year - lastYearWithData;
-
-          if ("slope" in coefficients && "intercept" in coefficients) {
-            // Linear coefficients - apply slope from last data point
-            approximatedValue = Math.max(
-              0,
-              lastDataValue + coefficients.slope * yearsFromLast,
-            );
-          } else if ("a" in coefficients && "b" in coefficients) {
-            // Exponential coefficients - apply growth rate from last data point
-            const growthFactor = Math.exp(coefficients.b * yearsFromLast);
-            const expValue = lastDataValue * growthFactor;
-            // Cap exponential values to prevent extreme values
-            const maxReasonableValue = 1000000; // 1 million tCO2e
-            const minReasonableValue = 0.1; // 0.1 tCO2e
-            approximatedValue = Math.max(
-              minReasonableValue,
-              Math.min(expValue, maxReasonableValue),
-            );
-          }
-        }
-      }
-
-      // Calculate Paris line value (Carbon Law)
-      let parisValue: number | null = null;
-      if (year >= 2025) {
-        // Use the trendline value at 2025 as the starting point for Paris Agreement line
-        let emissions2025: number;
-        const actual2025Data = data.find((d) => d.year === 2025)?.total;
-
-        if (actual2025Data !== undefined && actual2025Data !== null) {
-          // Use actual 2025 data if available
-          emissions2025 = actual2025Data;
-        } else {
-          // Use the trendline value at 2025 (same calculation as approximated value)
-          if (year === 2025) {
-            // For 2025, use the same logic as the approximated value
-            const lastDataValue =
-              data
-                .filter((d) => hasTotalEmissions(d))
-                .sort((a, b) => b.year - a.year)[0]?.total || 0;
-            const lastYearWithData = Math.max(
-              ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
-            );
-            const yearsFromLast = 2025 - lastYearWithData;
-
-            if ("slope" in coefficients && "intercept" in coefficients) {
-              emissions2025 = Math.max(
-                0,
-                lastDataValue + coefficients.slope * yearsFromLast,
-              );
-            } else if ("a" in coefficients && "b" in coefficients) {
-              const growthFactor = Math.exp(coefficients.b * yearsFromLast);
-              const expValue = lastDataValue * growthFactor;
-              const maxReasonableValue = 1000000; // 1 million tCO2e
-              const minReasonableValue = 0.1; // 0.1 tCO2e
-              emissions2025 = Math.max(
-                minReasonableValue,
-                Math.min(expValue, maxReasonableValue),
-              );
-            } else {
-              emissions2025 = lastDataValue;
-            }
-          } else {
-            // For years after 2025, calculate from the trendline
-            const lastDataValue =
-              data
-                .filter((d) => hasTotalEmissions(d))
-                .sort((a, b) => b.year - a.year)[0]?.total || 0;
-            const lastYearWithData = Math.max(
-              ...data.filter((d) => hasTotalEmissions(d)).map((d) => d.year),
-            );
-            const yearsFromLast = 2025 - lastYearWithData;
-
-            if ("slope" in coefficients && "intercept" in coefficients) {
-              emissions2025 = Math.max(
-                0,
-                lastDataValue + coefficients.slope * yearsFromLast,
-              );
-            } else if ("a" in coefficients && "b" in coefficients) {
-              const growthFactor = Math.exp(coefficients.b * yearsFromLast);
-              const expValue = lastDataValue * growthFactor;
-              const maxReasonableValue = 1000000; // 1 million tCO2e
-              const minReasonableValue = 0.1; // 0.1 tCO2e
-              emissions2025 = Math.max(
-                minReasonableValue,
-                Math.min(expValue, maxReasonableValue),
-              );
-            } else {
-              emissions2025 = lastDataValue;
-            }
-          }
-        }
-
-        const reductionRate = 0.1172; // 12% annual reduction
-        const calculatedValue =
-          emissions2025 * Math.pow(1 - reductionRate, year - 2025);
-        parisValue = calculatedValue > 0 ? calculatedValue : null;
-      }
-
-      return {
-        year,
-        total: actualData?.total,
-        approximated: approximatedValue,
-        carbonLaw: parisValue,
-        isAIGenerated: actualData?.isAIGenerated,
-        scope1: actualData?.scope1,
-        scope2: actualData?.scope2,
-        scope3: actualData?.scope3,
-        scope3Categories: actualData?.scope3Categories,
-        originalValues: actualData?.originalValues,
-      };
-    });
-  }
-
+  // Generate approximated data using the consolidated function
   const approximatedData = useMemo(() => {
     if (dataView !== "overview") {
       return null;
@@ -320,13 +154,13 @@ export default function EmissionsLineChart({
 
     // Use coefficients from trend analysis if available
     if (trendAnalysis?.coefficients) {
-      return generateApproximatedDataWithCoefficients(
+      return generateApproximatedData(
         data,
-        trendAnalysis.coefficients,
-        trendAnalysis.method,
+        undefined, // regression
         chartEndYear,
         companyBaseYear,
-        trendAnalysis.cleanData,
+        trendAnalysis.coefficients, // coefficients
+        trendAnalysis.cleanData, // cleanData
       );
     }
 
@@ -657,110 +491,15 @@ export default function EmissionsLineChart({
                       : "0";
 
                     return (
-                      <Line
+                      <CategoryLine
                         key={categoryKey}
-                        type="monotone"
-                        dataKey={categoryKey}
-                        stroke={getCategoryColor(categoryId)}
-                        strokeWidth={2}
+                        categoryKey={categoryKey}
+                        categoryId={categoryId}
+                        isHidden={hiddenCategories.includes(categoryId)}
                         strokeDasharray={strokeDasharray}
-                        dot={(props) => {
-                          const { cx, cy, payload } = props;
-
-                          if (!payload) {
-                            return (
-                              <circle
-                                cx={cx}
-                                cy={cy}
-                                r={0}
-                                className="stroke-2 cursor-pointer"
-                              />
-                            );
-                          }
-
-                          const value = payload.originalValues?.[categoryKey];
-
-                          if (
-                            value === null ||
-                            value === undefined ||
-                            isNaN(value)
-                          ) {
-                            return (
-                              <circle
-                                cx={cx}
-                                cy={cy}
-                                r={0}
-                                className="stroke-2 cursor-pointer"
-                              />
-                            );
-                          }
-
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={4}
-                              className="stroke-2 cursor-pointer"
-                              style={{
-                                fill: getCategoryColor(categoryId),
-                                stroke: getCategoryColor(categoryId),
-                              }}
-                              cursor="pointer"
-                              onClick={() => handleCategoryToggle(categoryId)}
-                            />
-                          );
-                        }}
-                        activeDot={(props: {
-                          cx?: number;
-                          cy?: number;
-                          payload?: any;
-                        }) => {
-                          const { cx, cy, payload } = props;
-
-                          if (!payload) {
-                            return (
-                              <circle
-                                cx={cx}
-                                cy={cy}
-                                r={0}
-                                className="stroke-2 cursor-pointer"
-                              />
-                            );
-                          }
-
-                          const value = payload.originalValues?.[categoryKey];
-
-                          if (
-                            value === null ||
-                            value === undefined ||
-                            isNaN(value)
-                          ) {
-                            return (
-                              <circle
-                                cx={cx}
-                                cy={cy}
-                                r={0}
-                                className="stroke-2 cursor-pointer"
-                              />
-                            );
-                          }
-
-                          return (
-                            <circle
-                              cx={cx}
-                              cy={cy}
-                              r={6}
-                              className="stroke-2 cursor-pointer"
-                              style={{
-                                fill: getCategoryColor(categoryId),
-                                stroke: getCategoryColor(categoryId),
-                              }}
-                              cursor="pointer"
-                              onClick={() => handleCategoryToggle(categoryId)}
-                            />
-                          );
-                        }}
-                        name={getCategoryName(categoryId)}
+                        getCategoryColor={getCategoryColor}
+                        getCategoryName={getCategoryName}
+                        onToggle={handleCategoryToggle}
                       />
                     );
                   })}
