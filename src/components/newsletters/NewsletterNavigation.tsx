@@ -1,5 +1,4 @@
-import { useTranslation } from "react-i18next";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,6 @@ export function NewsletterNavigation({
   displayedNewsLetter,
   setDisplayedNewsletter,
 }: NewsletterNavigationProps) {
-  const { t } = useTranslation();
   const { isMobile } = useScreenSize();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);

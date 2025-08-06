@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { articleMetaData } from "@/lib/learn-more/articleList";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterNavigation } from "@/components/newsletters/NewsletterNavigation";
 import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
 import { useNewsletters } from "@/hooks/useNewsletters";
+import { PageSEO } from "@/components/SEO/PageSEO";
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
@@ -30,37 +30,48 @@ export function NewsLetterArchivePage() {
     url: canonicalUrl,
   };
 
-  /*   const items = articleMetaData.map((article) => ({
-    id: article.id,
-    title: t(article.titleKey),
-    excerpt: t(article.excerptKey),
-    image: article.image || "",
-  })); */
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-pulse">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-64 bg-black-2 rounded-level-2" />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 md:px-6 text-white gap-4">
-      <PageHeader
-        title={t("newsletterArchivePage.title")}
-        description={t("newsletterArchivePage.description")}
-      ></PageHeader>
-      <div
-        className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative lg:flex-row gap-8`}
-      >
-        <NewsletterNavigation
-          newsletterList={data}
-          setDisplayedNewsletter={setDisplayedNewsletter}
-          displayedNewsLetter={displayedNewsletter}
-        />
+    <>
+      <PageSEO
+        title={pageTitle}
+        description={pageDescription}
+        canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
+      />
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 text-white gap-4">
+        <PageHeader
+          title={t("newsletterArchivePage.title")}
+          description={t("newsletterArchivePage.description")}
+        ></PageHeader>
+        <div
+          className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative lg:flex-row gap-8`}
+        >
+          <NewsletterNavigation
+            newsletterList={data}
+            setDisplayedNewsletter={setDisplayedNewsletter}
+            displayedNewsLetter={displayedNewsletter}
+          />
 
-        {displayedNewsletter && (
-          <iframe
-            className="rounded-md min-h-screen w-full bg-black-2"
-            src={`${displayedNewsletter}#view=FitH`}
-            height={800}
-            width={1000}
-          ></iframe>
-        )}
+          {displayedNewsletter && (
+            <iframe
+              className="rounded-md min-h-screen w-full bg-black-2"
+              src={`${displayedNewsletter}#view=FitH`}
+              height={800}
+              width={1000}
+            ></iframe>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
