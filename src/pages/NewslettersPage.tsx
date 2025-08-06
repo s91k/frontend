@@ -4,10 +4,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { useState, useEffect, useRef } from "react";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { NewsletterNavigation } from "@/components/newsletters/NewsletterNavigation";
-import {
-  NewsletterType,
-  monthsToNumberedValue,
-} from "@/lib/newsletterArchive/newsletterData";
+import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
 import { useNewsletters } from "@/hooks/useNewsletters";
 
 export function NewsLetterArchivePage() {
@@ -17,7 +14,7 @@ export function NewsLetterArchivePage() {
   const pageDescription = t("newsletterArchivePage.description");
   const { isMobile } = useScreenSize();
   const [displayedNewsletter, setDisplayedNewsletter] =
-    useState<NewsletterType>();
+    useState<NewsletterType>() || null;
   /*  */
 
   const { data, loading, error } = useNewsletters();
@@ -30,13 +27,13 @@ export function NewsLetterArchivePage() {
     if (data) setDisplayedNewsletter(data[0].long_archive_url);
   }, [data]);
 
-  /*   const structuredData = {
+  const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: pageTitle,
     description: pageDescription,
     url: canonicalUrl,
-  }; */
+  };
 
   /*   const items = articleMetaData.map((article) => ({
     id: article.id,
@@ -57,7 +54,7 @@ export function NewsLetterArchivePage() {
         <NewsletterNavigation
           newsletterList={data}
           setDisplayedNewsletter={setDisplayedNewsletter}
-          displayedNewsletter={displayedNewsletter}
+          displayedNewsLetter={displayedNewsletter}
         />
 
         {displayedNewsletter && (

@@ -32,14 +32,6 @@ export function NewsletterNavigation({
     NewsletterType[]
   > | null>(null);
 
-  /*   useEffect(() => {
-    if (!newsletterList) {
-      return;
-    } else {
-      setDisplayedNavLinks(newsletterList.slice(0, pageSize));
-    }
-  }, [newsletterList]); */
-
   useEffect(() => {
     if (newsletterList) {
       const paginatedItems = itemPagination({
@@ -50,12 +42,6 @@ export function NewsletterNavigation({
       }
     }
   }, [newsletterList]);
-
-  console.log(paginatedContent);
-
-  if (displayedNewsLetter) {
-    console.log(displayedNewsLetter);
-  }
 
   return (
     <>
@@ -68,7 +54,7 @@ export function NewsletterNavigation({
               paginatedContent["page" + currentPage].map((item) => {
                 return (
                   <PaginationLink
-                    className={` flex flex-col h-full max-h-[100px] gap-[5px] items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
+                    className={`${displayedNewsLetter === item.long_archive_url ? "bg-black-1" : null} flex flex-col h-full max-h-[125px] gap-[5px] items-left w-full p-3 my-1 text-left text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
                     onClick={() => {
                       setDisplayedNewsletter?.(item.long_archive_url);
                       navigate(`?view=${item.id}`);
