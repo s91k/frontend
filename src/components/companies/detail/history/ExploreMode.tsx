@@ -54,13 +54,9 @@ export function ExploreMode({
         "This section highlights the period from the base year to the latest reported data.",
     },
     {
-      label: "Approximated values",
-      description:
-        "Here we show the estimated values from the last reporting period to the current year.",
-    },
-    {
       label: "Projection outwards",
-      description: "This step shows the future trend line projection.",
+      description:
+        "This step shows the future trend line projection and explains the trend analysis method used.",
     },
     {
       label: "Paris line",
