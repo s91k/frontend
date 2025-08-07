@@ -54,7 +54,7 @@ export function NewsLetterArchivePage() {
           description={t("newsletterArchivePage.description")}
         ></PageHeader>
         <div
-          className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative lg:flex-row gap-8`}
+          className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative md:flex-col lg:flex-row gap-8`}
         >
           <NewsletterNavigation
             newsletterList={data}

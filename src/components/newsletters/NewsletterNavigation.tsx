@@ -51,9 +51,10 @@ export function NewsletterNavigation({
             className={`${isMobile ? "min-h-[300px]" : "h-3/4"} flex flex-col divide-y divide-black-1 items-baseline text-left`}
           >
             {paginatedContent &&
-              paginatedContent["page" + currentPage].map((item) => {
+              paginatedContent["page" + currentPage].map((item, index) => {
                 return (
                   <PaginationLink
+                    key={index}
                     className={`
                       ${displayedNewsLetter === item.long_archive_url ? "bg-black-1" : null}
                       ${isMobile ? "max-h-[100px]" : "max-h-[125px]"}
