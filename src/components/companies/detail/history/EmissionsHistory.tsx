@@ -1,11 +1,9 @@
 import { useState, useMemo } from "react";
 import { Text } from "@/components/ui/text";
-import {
-  EmissionPeriod,
-  interpolateScope3Categories,
-} from "@/lib/calculations/emissions";
+import { EmissionPeriod } from "@/types/emissions";
+import { interpolateScope3Categories } from "@/utils/data/chartData";
 import type { EmissionsHistoryProps, DataView } from "@/types/emissions";
-import { getChartData } from "../../../../utils/getChartData";
+import { getChartData } from "../../../../utils/data/chartData";
 import { useTranslation } from "react-i18next";
 import { useCategoryMetadata } from "@/hooks/companies/useCategories";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -14,6 +12,7 @@ import ChartHeader from "./ChartHeader";
 import EmissionsLineChart from "./EmissionsLineChart";
 import { useVerificationStatus } from "@/hooks/useVerificationStatus";
 import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
+import { selectBestTrendLineMethod } from "@/lib/calculations/trends/analysis";
 
 export function EmissionsHistory({
   reportingPeriods,
@@ -68,6 +67,19 @@ export function EmissionsHistory({
     [processedPeriods, isAIGenerated, isEmissionsAIGenerated],
   );
 
+  // Calculate trend analysis for unified coefficients
+  const trendAnalysis = useMemo(() => {
+    if (dataView !== "overview") return null;
+
+    const emissionsData = chartData
+      .filter((d) => d.total !== undefined && d.total !== null)
+      .map((d) => ({ year: d.year, total: d.total as number }));
+
+    if (emissionsData.length < 2) return null;
+
+    return selectBestTrendLineMethod(emissionsData, companyBaseYear);
+  }, [chartData, dataView, companyBaseYear]);
+
   const handleClick = (data: {
     activePayload?: Array<{ payload: { year: number; total: number } }>;
   }) => {
@@ -88,8 +100,15 @@ export function EmissionsHistory({
     );
   };
 
-  // Add state for hidden categories
   const [hiddenCategories, setHiddenCategories] = useState<number[]>([]);
+
+  // Explore mode state
+  const [exploreMode, setExploreMode] = useState(false);
+
+  // Add state for method explanation
+  const [methodExplanation, setMethodExplanation] = useState<string | null>(
+    null,
+  );
 
   // Validate input data
   if (!reportingPeriods?.length) {
@@ -113,46 +132,91 @@ export function EmissionsHistory({
   };
 
   return (
-    <SectionWithHelp
-      helpItems={[
-        "scope1",
-        "scope2",
-        "scope3",
-        "scope3EmissionLevels",
-        "companyMissingData",
-      ]}
-    >
-      <ChartHeader
-        title={t("companies.emissionsHistory.title")}
-        tooltipContent={t("companies.emissionsHistory.tooltip")}
-        unit={t("companies.emissionsHistory.unit")}
-        dataView={dataView}
-        setDataView={setDataView}
-        hasScope3Categories={hasScope3Categories}
-      />
-      <div className="h-[300px] md:h-[400px]">
-        <EmissionsLineChart
-          data={chartData}
-          companyBaseYear={companyBaseYear}
-          dataView={dataView}
-          hiddenScopes={hiddenScopes}
-          hiddenCategories={hiddenCategories}
-          handleClick={handleClick}
-          handleScopeToggle={handleScopeToggle}
-          handleCategoryToggle={handleCategoryToggle}
-          getCategoryName={getCategoryName}
-          getCategoryColor={getCategoryColor}
-          currentLanguage={currentLanguage}
-        />
-      </div>
-      <HiddenItemsBadges
-        hiddenScopes={hiddenScopes}
-        hiddenCategories={hiddenCategories}
-        onScopeToggle={handleScopeToggle}
-        onCategoryToggle={handleCategoryToggle}
-        getCategoryName={getCategoryName}
-        getCategoryColor={getCategoryColor}
-      />
-    </SectionWithHelp>
+    <div>
+      {!exploreMode && (
+        <SectionWithHelp
+          helpItems={[
+            "scope1",
+            "scope2",
+            "scope3",
+            "parisAgreementLine",
+            "scope3EmissionLevels",
+            "companyMissingData",
+          ]}
+        >
+          <ChartHeader
+            title={t("companies.emissionsHistory.title")}
+            tooltipContent={t("companies.emissionsHistory.tooltip")}
+            unit={t("companies.emissionsHistory.unit")}
+            dataView={dataView}
+            setDataView={setDataView}
+            hasScope3Categories={hasScope3Categories}
+          />
+          <div className="h-[300px] md:h-[400px]">
+            <EmissionsLineChart
+              data={chartData}
+              companyBaseYear={companyBaseYear}
+              dataView={dataView}
+              hiddenScopes={hiddenScopes}
+              hiddenCategories={hiddenCategories}
+              handleClick={handleClick}
+              handleScopeToggle={handleScopeToggle}
+              handleCategoryToggle={handleCategoryToggle}
+              getCategoryName={getCategoryName}
+              getCategoryColor={getCategoryColor}
+              currentLanguage={currentLanguage}
+              exploreMode={exploreMode}
+              setExploreMode={setExploreMode}
+              setMethodExplanation={setMethodExplanation}
+              trendAnalysis={trendAnalysis}
+            />
+          </div>
+          <HiddenItemsBadges
+            hiddenScopes={hiddenScopes}
+            hiddenCategories={hiddenCategories}
+            onScopeToggle={handleScopeToggle}
+            onCategoryToggle={handleCategoryToggle}
+            getCategoryName={getCategoryName}
+            getCategoryColor={getCategoryColor}
+          />
+
+          {/* Method Description */}
+          {methodExplanation && (
+            <div className="bg-black-2 rounded-lg p-4 max-w-4xl mx-auto">
+              <Text
+                variant="body"
+                className="text-sm text-grey mb-2 font-medium"
+              >
+                {t("companies.emissionsHistory.trend")}
+              </Text>
+              <Text variant="body" className="text-xs text-grey">
+                {methodExplanation}
+              </Text>
+            </div>
+          )}
+        </SectionWithHelp>
+      )}
+      {exploreMode && (
+        <div className="w-full h-full flex-1">
+          <EmissionsLineChart
+            data={chartData}
+            companyBaseYear={companyBaseYear}
+            dataView={dataView}
+            hiddenScopes={hiddenScopes}
+            hiddenCategories={hiddenCategories}
+            handleClick={handleClick}
+            handleScopeToggle={handleScopeToggle}
+            handleCategoryToggle={handleCategoryToggle}
+            getCategoryName={getCategoryName}
+            getCategoryColor={getCategoryColor}
+            currentLanguage={currentLanguage}
+            exploreMode={exploreMode}
+            setExploreMode={setExploreMode}
+            setMethodExplanation={setMethodExplanation}
+            trendAnalysis={trendAnalysis}
+          />
+        </div>
+      )}
+    </div>
   );
 }

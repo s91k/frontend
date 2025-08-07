@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { formatEmissionsAbsolute, formatPercent } from "@/utils/localizeUnit";
+import { formatEmissionsAbsolute, formatPercent } from "@/utils/formatting/localization";
 import { useLanguage } from "@/components/LanguageProvider";
 import {
   Tooltip,
@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useMunicipalitySectors } from "@/hooks/useMunicipalitySectors";
+import { useMunicipalitySectors } from "@/hooks/municipalities/useMunicipalitySectors";
 
 interface LegendProps {
   data: Array<{

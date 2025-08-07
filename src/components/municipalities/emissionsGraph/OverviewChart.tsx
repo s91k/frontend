@@ -11,17 +11,9 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
-import { formatEmissionsAbsoluteCompact } from "@/utils/localizeUnit";
+import { formatEmissionsAbsoluteCompact } from "@/utils/formatting/localization";
 import { CustomTooltip } from "./CustomTooltip";
-
-interface DataPoint {
-  year: number;
-  total?: number;
-  trend?: number;
-  paris?: number;
-  gap?: number;
-  approximated?: number;
-}
+import { DataPoint } from "@/types/municipality";
 
 interface OverviewChartProps {
   projectedData: DataPoint[];
