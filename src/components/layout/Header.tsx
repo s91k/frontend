@@ -1,5 +1,5 @@
 import { BarChart3, ChevronDown, Menu, X, Mail } from "lucide-react";
-import { Link, useLocation, matchPath, PathParam } from "react-router-dom";
+import { Link, useLocation, matchPath } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,31 +31,6 @@ export function Header() {
       setIsSignUpOpen(true);
     }
   }, [location]);
-
-  useEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY >= 200) {
-        setDisplayCompanyName(true);
-      } else {
-        setDisplayCompanyName(false);
-      }
-    };
-
-    window.addEventListener("scroll", onScroll);
-
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  
-  //Gets the name of the actively viewed company details
-  const paramSegments = location.pathname.split("/");
-  const companyId = paramSegments.pop() ?? "";
-  const viewedCompany = useCompanyDetails(companyId);
-
-  if (!companyId) {
-    return null;
-  }
-
-  const companyName = viewedCompany.company?.name;
 
   const LanguageButtons = ({ className }: { className?: string }) => (
     <div className={cn("flex items-center gap-2", className)}>
@@ -162,7 +137,6 @@ export function Header() {
           >
             Klimatkollen
           </Link>
-          {isMobile && displayCompanyName ? <span>{companyName}</span> : null}
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
