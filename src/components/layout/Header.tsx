@@ -1,5 +1,5 @@
 import { BarChart3, ChevronDown, Menu, X, Mail } from "lucide-react";
-import { Link, useLocation, matchPath } from "react-router-dom";
+import { Link, useLocation, matchPath, PathParam } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ import {
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
 import { HeaderSearchButton } from "../search/HeaderSearchButton";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Header() {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+  const { user } = useAuth();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -29,6 +31,31 @@ export function Header() {
       setIsSignUpOpen(true);
     }
   }, [location]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY >= 200) {
+        setDisplayCompanyName(true);
+      } else {
+        setDisplayCompanyName(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  
+  //Gets the name of the actively viewed company details
+  const paramSegments = location.pathname.split("/");
+  const companyId = paramSegments.pop() ?? "";
+  const viewedCompany = useCompanyDetails(companyId);
+
+  if (!companyId) {
+    return null;
+  }
+
+  const companyName = viewedCompany.company?.name;
 
   const LanguageButtons = ({ className }: { className?: string }) => (
     <div className={cn("flex items-center gap-2", className)}>
@@ -111,6 +138,20 @@ export function Header() {
     },
   ];
 
+  // Internal links for signed-in users
+  const INTERNAL_LINKS = [
+    {
+      label: "Validation Dashboard",
+      path: "/internal-pages/validation-dashboard",
+    },
+    { label: "Requests Dashboard", path: "/internal-pages/requests-dashboard" },
+    { label: "Internal Dashboard", path: "/internal-pages/internal-dashboard" },
+    {
+      label: "Trend Analysis Dashboard",
+      path: "/internal-pages/trend-analysis-dashboard",
+    },
+  ];
+
   return (
     <>
       <header className="fixed w-screen overflow-x-hidden overflow-y-hidden top-0 left-0 right-0 z-50 bg-black-2 h-10 lg:h-12">
@@ -121,6 +162,7 @@ export function Header() {
           >
             Klimatkollen
           </Link>
+          {isMobile && displayCompanyName ? <span>{companyName}</span> : null}
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
@@ -195,6 +237,26 @@ export function Header() {
                     <span>{item.label}</span>
                   </Link>
                 ),
+              )}
+              {user && (
+                <MenubarMenu>
+                  <MenubarTrigger className="flex items-center gap-2 px-3 py-3 h-full transition-all text-sm cursor-pointer text-grey hover:text-white">
+                    <span>Internal</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    {INTERNAL_LINKS.map((link) => (
+                      <MenubarItem key={link.path}>
+                        <Link
+                          to={link.path}
+                          className="flex justify-between w-full"
+                        >
+                          {link.label}
+                        </Link>
+                      </MenubarItem>
+                    ))}
+                  </MenubarContent>
+                </MenubarMenu>
               )}
               <div className="ml-4 h-full flex items-center">
                 <HeaderSearchButton className="mx-2" />

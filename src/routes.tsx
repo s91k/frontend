@@ -28,6 +28,11 @@ import { ValidationDashboard } from "./pages/ValidationDashboard";
 import { NewsLetterArchivePage } from "./pages/NewslettersPage";
 import { InternalDashboard } from "./pages/internal-dashboard/InternalDashboard";
 import { AllHelpItems } from "./data-guide/AllHelpItems";
+import { ValidationDashboard } from "./pages/internal-pages/ValidationDashboard";
+import { InternalDashboard } from "./pages/internal-pages/InternalDashboard";
+import { ReportLandingPage } from "./pages/ReportLandingPage";
+import { RequestsDashboard } from "./pages/internal-pages/RequestsDashboard";
+import { TrendAnalysisDashboard } from "./pages/internal-pages/TrendAnalysisDashboard";
 
 export function AppRoutes() {
   const { currentLanguage } = useLanguage();
@@ -58,23 +63,31 @@ export function AppRoutes() {
         path={`${basePath}/foretag/:slug-:id`}
         element={<CompanyDetailPage />}
       />
+
+      {/* Protected Routes*/}
       <Route element={<ProtectedRoute />}>
         <Route
           path={`${basePath}/companies/:id/edit`}
           element={<CompanyEditPage />}
         />
-      </Route>
-      <Route element={<ProtectedRoute />}>
         <Route
-          path={`${basePath}/validation-dashboard`}
+          path={`${basePath}/internal-pages/validation-dashboard`}
           element={<ValidationDashboard />}
         />
         <Route
-          path={`${basePath}/internal-dashboard`}
+          path={`${basePath}/internal-pages/requests-dashboard`}
+          element={<RequestsDashboard />}
+        />
+        <Route
+          path={`${basePath}/internal-pages/internal-dashboard`}
           element={<InternalDashboard />}
         />
-        <Route path={`${basePath}/all-help-items`} element={<AllHelpItems />} />
+        <Route
+          path={`${basePath}/internal-pages/trend-analysis-dashboard`}
+          element={<TrendAnalysisDashboard />}
+        />
       </Route>
+
       {/* Municipalities routes */}
       <Route
         path={`${basePath}/municipalities`}
@@ -89,12 +102,18 @@ export function AppRoutes() {
         element={<MunicipalityDetailPage />}
       />
 
-      {/* Other pages */}
+      {/* About Pages */}
       <Route path={`${basePath}/about`} element={<AboutPage />} />
       <Route path={`${basePath}/methodology`} element={<MethodsPage />} />
       <Route path={`${basePath}/support`} element={<SupportPage />} />
+
+      {/* Insights Pages */}
       <Route path={`${basePath}/articles`} element={<InsightsPage />} />
       <Route path={`${basePath}/reports`} element={<ReportsPage />} />
+      <Route
+        path={`${basePath}/reports/:reportId`}
+        element={<ReportLandingPage />}
+      />
       <Route path={`${basePath}/insights/:id`} element={<BlogDetailPage />} />
       <Route path={`${basePath}/learn-more`} element={<LearnMoreOverview />} />
       <Route
@@ -106,6 +125,8 @@ export function AppRoutes() {
         path={`${basePath}/learn-more/:id`}
         element={<LearnMoreArticle />}
       />
+
+      {/* Other Pages */}
       <Route path={`${basePath}/privacy`} element={<PrivacyPage />} />
       <Route path={`${basePath}/products`} element={<ProductsPage />} />
       <Route
@@ -115,10 +136,8 @@ export function AppRoutes() {
 
       {/* Error pages */}
       <Route path={`${basePath}/error/:code`} element={<ErrorPage />} />
-
       {/* This catch-all should now only handle invalid routes */}
       <Route path={`${basePath}/*`} element={<NotFoundPage />} />
-
       <Route path={`${basePath}/403`} element={<UnauthorizedErrorPage />} />
       <Route path="auth/callback" element={<AuthCallback />} />
     </Routes>
