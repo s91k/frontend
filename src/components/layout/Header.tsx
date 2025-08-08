@@ -1,5 +1,5 @@
 import { BarChart3, ChevronDown, Menu, X, Mail } from "lucide-react";
-import { Link, useLocation, matchPath, PathParam } from "react-router-dom";
+import { Link, useLocation, matchPath } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,9 +14,8 @@ import {
 import { NewsletterPopover } from "../NewsletterPopover";
 import { useLanguage } from "../LanguageProvider";
 import { HeaderSearchButton } from "../search/HeaderSearchButton";
-import { useCompanyDetails } from "@/hooks/companies/useCompanyDetails";
-import { useMunicipalityDetails } from "@/hooks/useMunicipalityDetails";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import useHeaderTitle from "@/hooks/useHeaderTitle";
 
 export function Header() {
   const { t } = useTranslation();
@@ -26,7 +25,7 @@ export function Header() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const { isMobile } = useScreenSize();
-  const [displayViewedItemName, setDisplayViewedItemName] = useState(false);
+  const { headerTitle, showTitle, setShowTitle } = useHeaderTitle();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -38,33 +37,16 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY >= 200) {
-        setDisplayViewedItemName(true);
+        setShowTitle(true);
       } else {
-        setDisplayViewedItemName(false);
+        setShowTitle(false);
       }
     };
 
     window.addEventListener("scroll", onScroll);
 
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  //Gets the name of the actively viewed company or municipality
-  const paramSegments = location.pathname.split("/");
-  const viewedItemId = paramSegments.pop() ?? "";
-  const isCompanyPage = paramSegments.includes("companies");
-  const isMunicipalityPage = paramSegments.includes("municipalities");
-
-  const viewedCompany = useCompanyDetails(isCompanyPage ? viewedItemId : "");
-  const viewedMunicipality = useMunicipalityDetails(
-    isMunicipalityPage ? viewedItemId : "",
-  );
-
-  const viewedItemName = isCompanyPage
-    ? viewedCompany.company?.name
-    : isMunicipalityPage
-      ? viewedMunicipality.municipality?.name
-      : undefined;
+  }, [headerTitle, showTitle, setShowTitle]);
 
   const LanguageButtons = ({ className }: { className?: string }) => (
     <div className={cn("flex items-center gap-2", className)}>
@@ -150,16 +132,19 @@ export function Header() {
   return (
     <>
       <header className="fixed w-screen overflow-x-hidden overflow-y-hidden top-0 left-0 right-0 z-50 bg-black-2 h-10 lg:h-12">
-        <div className="container mx-auto px-4 flex items-center justify-between pt-2 lg:pt-0">
+        <div className="container relative mx-auto px-4 flex items-center justify-between pt-2 lg:pt-0">
           <Link
             to="/"
             className="flex items-center gap-2 text-base font-medium"
           >
             Klimatkollen
           </Link>
-          {isMobile && displayViewedItemName && viewedItemName ? (
-            <span>{viewedItemName}</span>
-          ) : null}
+          {showTitle && (
+            <span className="absolute left-1/2 transform -translate-x-1/2">
+              {isMobile && headerTitle}
+            </span>
+          )}
+
           <button
             className="lg:hidden text-white"
             onClick={toggleMenu}
