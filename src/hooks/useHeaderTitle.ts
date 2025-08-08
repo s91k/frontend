@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCompanyDetails } from "./companies/useCompanyDetails";
-import { useMunicipalityDetails } from "./useMunicipalityDetails";
+import { useMunicipalityDetails } from "./municipalities/useMunicipalityDetails";
 
 const useHeaderTitle = () => {
   const [showTitle, setShowTitle] = useState(false);
