@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { MunicipalityEmissionsGraph } from "./emissionsGraph/MunicipalityEmissionsGraph";
 import { Municipality, DataPoint, SectorEmissions } from "@/types/municipality";
 import { DataViewSelector } from "./DataViewSelector";
+import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 
 type DataView = "overview" | "sectors";
 
@@ -29,27 +30,30 @@ export const MunicipalityEmissions: FC<MunicipalityEmissionsProps> = ({
     !!sectorEmissions && Object.keys(sectorEmissions).length > 0;
 
   return (
-    <div className={cn("bg-black-2 rounded-level-1 pt-8 md:pt-16", className)}>
-      <div className="px-8 md:px-16">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div>
-            <Text className="text-2xl md:text-4xl">
-              {t("municipalityDetailPage.emissionsDevelopment")}
-            </Text>
-            <Text className="text-grey mb-4">
-              {t("municipalityDetailPage.inTons")}
-            </Text>
-            {!municipality.neededEmissionChangePercent && (
-              <p className="mb-4">{t("municipalityDetailPage.noParisPath")}</p>
-            )}
-          </div>
-
-          <DataViewSelector
-            dataView={dataView}
-            setDataView={setDataView}
-            hasSectorData={hasSectorData}
-          />
+    <SectionWithHelp
+      helpItems={[
+        "parisAgreementLine",
+        "municipalityImportanceOfEmissionSources",
+      ]}
+    >
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div>
+          <Text className="text-2xl md:text-4xl">
+            {t("municipalityDetailPage.emissionsDevelopment")}
+          </Text>
+          <Text className="text-grey mb-4">
+            {t("municipalityDetailPage.inTons")}
+          </Text>
+          {!municipality.neededEmissionChangePercent && (
+            <p className="mb-4">{t("municipalityDetailPage.noParisPath")}</p>
+          )}
         </div>
+
+        <DataViewSelector
+          dataView={dataView}
+          setDataView={setDataView}
+          hasSectorData={hasSectorData}
+        />
       </div>
 
       <div className="mt-8 h-[400px] mr-4 md:mr-8">
@@ -61,6 +65,6 @@ export const MunicipalityEmissions: FC<MunicipalityEmissionsProps> = ({
           setHiddenSectors={setHiddenSectors}
         />
       </div>
-    </div>
+    </SectionWithHelp>
   );
 };

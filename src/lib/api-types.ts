@@ -187,6 +187,10 @@ export interface paths {
                                 startDate: string;
                                 endDate: string;
                                 reportURL: string | null;
+                                emissionsTrend?: {
+                                    absolute: number | null;
+                                    adjusted: number | null;
+                                };
                                 emissions: {
                                     calculatedTotalEmissions: number;
                                     scope1: {
@@ -544,6 +548,10 @@ export interface paths {
                                         };
                                     } | null;
                                 } | null;
+                                emissionsTrend?: {
+                                    absolute: number | null;
+                                    adjusted: number | null;
+                                };
                             }[];
                             industry: {
                                 id: string;
@@ -699,6 +707,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -868,6 +877,10 @@ export interface paths {
                                 startDate: string;
                                 endDate: string;
                                 reportURL: string | null;
+                                emissionsTrend?: {
+                                    absolute: number | null;
+                                    adjusted: number | null;
+                                };
                                 emissions: {
                                     calculatedTotalEmissions: number;
                                     scope1: {
@@ -1431,6 +1444,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -1678,6 +1692,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -1775,6 +1790,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -1876,6 +1892,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -1964,6 +1981,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -2061,6 +2079,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
@@ -2162,6 +2181,7 @@ export interface paths {
                             source?: string;
                             comment?: string;
                         };
+                        verified?: boolean;
                     };
                 };
             };
