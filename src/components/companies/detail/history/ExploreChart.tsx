@@ -14,6 +14,7 @@ import { formatEmissionsAbsoluteCompact } from "@/utils/formatting/localization"
 import { generateApproximatedData } from "@/lib/calculations/trends/approximatedData";
 import { selectBestTrendLineMethod } from "@/lib/calculations/trends/analysis";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ExploreChartProps {
   data: ChartData[];
@@ -44,6 +45,8 @@ export function ExploreChart({
   parisExplanation,
   trendAnalysis,
 }: ExploreChartProps) {
+  const { t } = useTranslation();
+
   // Calculate all common data once for reuse across all steps
   const exploreData = useMemo(() => {
     if (!companyBaseYear) return null;
@@ -193,7 +196,7 @@ export function ExploreChart({
     companyBaseYear && (
       <ReferenceLine
         label={{
-          value: "Base Year",
+          value: t("companies.emissionsHistory.baseYearLabel"),
           position: "top",
           dx: 25,
           fill: "white",
@@ -487,11 +490,11 @@ export function ExploreChart({
       if (step4Difference2050 < 0) {
         step4AreaColor = "var(--green-3)"; // green
         step4LabelColor = "var(--green-3)";
-        step4LabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step4Difference2050), currentLanguage)} t under Paris target`;
+        step4LabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step4Difference2050), currentLanguage)} t ${t("companies.emissionsHistory.underParisTarget")}`;
       } else {
         step4AreaColor = "var(--pink-5)"; // pink
         step4LabelColor = "var(--pink-3)";
-        step4LabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step4Difference2050), currentLanguage)} t over Paris target`;
+        step4LabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step4Difference2050), currentLanguage)} t ${t("companies.emissionsHistory.overParisTarget")}`;
       }
     }
   }
@@ -540,10 +543,10 @@ export function ExploreChart({
 
       if (step5TotalAreaDifference < 0) {
         step5AreaLabelColor = "var(--green-3)"; // green
-        step5AreaLabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step5TotalAreaDifference), currentLanguage)} t total emissions saved vs Paris target`;
+        step5AreaLabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step5TotalAreaDifference), currentLanguage)} t ${t("companies.emissionsHistory.totalEmissionsSaved")}`;
       } else {
         step5AreaLabelColor = "var(--pink-3)"; // orange
-        step5AreaLabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step5TotalAreaDifference), currentLanguage)} t total emissions excess vs Paris target`;
+        step5AreaLabelText = `${formatEmissionsAbsoluteCompact(Math.abs(step5TotalAreaDifference), currentLanguage)} t ${t("companies.emissionsHistory.totalEmissionsExcess")}`;
       }
     }
   }
@@ -829,7 +832,7 @@ export function ExploreChart({
                 {/* Paris Carbon Budget */}
                 <div className="bg-green-4/20 rounded-lg p-2 backdrop-blur-sm">
                   <div className="text-green-3 text-xs font-medium mb-1">
-                    Estimated Emissions For Paris Aligned Path
+                    {t("companies.emissionsHistory.parisAlignedPathLabel")}
                   </div>
                   <div className="text-white text-sm font-bold">
                     {formatEmissionsAbsoluteCompact(
@@ -842,14 +845,14 @@ export function ExploreChart({
                     t
                   </div>
                   <div className="text-green-3 text-xs mt-1">
-                    2025-2050 cumulative
+                    {t("companies.emissionsHistory.cumulativePeriod")}
                   </div>
                 </div>
 
                 {/* Company Emissions */}
                 <div className="bg-orange-4/20 rounded-lg p-2 backdrop-blur-sm">
                   <div className="text-orange-3 text-xs font-medium mb-1">
-                    Estimated Company Emissions
+                    {t("companies.emissionsHistory.companyEmissionsLabel")}
                   </div>
                   <div className="text-white text-sm font-bold">
                     {formatEmissionsAbsoluteCompact(
@@ -862,7 +865,7 @@ export function ExploreChart({
                     t
                   </div>
                   <div className="text-orange-3 text-xs mt-1">
-                    2025-2050 cumulative
+                    {t("companies.emissionsHistory.cumulativePeriod")}
                   </div>
                 </div>
 
@@ -883,7 +886,7 @@ export function ExploreChart({
                         : "text-pink-3"
                     }`}
                   >
-                    Budget Status
+                    {t("companies.emissionsHistory.budgetStatusLabel")}
                   </div>
                   <div className="text-white text-sm font-bold">
                     {step5TotalAreaDifference !== null &&
@@ -906,8 +909,8 @@ export function ExploreChart({
                   >
                     {step5TotalAreaDifference !== null &&
                     step5TotalAreaDifference < 0
-                      ? "Under budget"
-                      : "Over budget"}
+                      ? t("companies.emissionsHistory.underBudget")
+                      : t("companies.emissionsHistory.overBudget")}
                   </div>
                 </div>
               </div>

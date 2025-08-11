@@ -41,7 +41,7 @@ export function ExploreMode({
     ...(hasDataBeforeBaseYear
       ? [
           {
-            label: "Data before the base year",
+            label: t("companies.emissionsHistory.exploreStep0Label"),
             description: t(
               "companies.emissionsHistory.exploreStep0Description",
             ),
@@ -49,28 +49,24 @@ export function ExploreMode({
         ]
       : []),
     {
-      label: "Base year to latest reporting period",
-      description:
-        "This section highlights the period from the base year to the latest reported data.",
+      label: t("companies.emissionsHistory.exploreStep1Label"),
+      description: t("companies.emissionsHistory.exploreStep1Description"),
     },
     {
-      label: "Projection outwards",
-      description:
-        "This step shows the future trend line projection and explains the trend analysis method used.",
+      label: t("companies.emissionsHistory.exploreStep2Label"),
+      description: t("companies.emissionsHistory.exploreStep2Description"),
     },
     {
-      label: "Paris line",
-      description: "This step shows the Paris Agreement reduction path.",
+      label: t("companies.emissionsHistory.exploreStep3Label"),
+      description: t("companies.emissionsHistory.exploreStep3Description"),
     },
     {
-      label: "Difference shading",
-      description:
-        "Shaded areas under each line show cumulative emissions. Green = Paris path, Orange = Company path, with live totals.",
+      label: t("companies.emissionsHistory.exploreStep4Label"),
+      description: t("companies.emissionsHistory.exploreStep4Description"),
     },
     {
-      label: "Total area analysis",
-      description:
-        "Shows the cumulative emissions difference over time. The total area between trend and Paris lines represents the overall impact from current year to 2050.",
+      label: t("companies.emissionsHistory.exploreStep5Label"),
+      description: t("companies.emissionsHistory.exploreStep5Description"),
     },
   ];
 
@@ -98,7 +94,10 @@ export function ExploreMode({
           companyBaseYear={companyBaseYear}
           currentLanguage={currentLanguage}
           trendExplanation={
-            exploreStep === 2 ? trendAnalysis?.explanation : undefined
+            exploreStep === 2
+              ? trendAnalysis?.explanation ||
+                t("companies.emissionsHistory.trendExplanationFallback")
+              : undefined
           }
           yDomain={yDomain}
           trendAnalysis={trendAnalysis}
@@ -114,7 +113,7 @@ export function ExploreMode({
           disabled={exploreStep === 0}
         >
           <ChevronLeft className="h-4 w-4 mr-1" />
-          Back
+          {t("companies.emissionsHistory.exploreBackButton")}
         </Button>
         <Button
           variant="outline"
@@ -124,7 +123,7 @@ export function ExploreMode({
           }
           disabled={exploreStep === exploreSteps.length - 1}
         >
-          Next
+          {t("companies.emissionsHistory.exploreNextButton")}
           <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
         <Button
@@ -136,7 +135,7 @@ export function ExploreMode({
           }}
           className="ml-2"
         >
-          Exit
+          {t("companies.emissionsHistory.exploreExitButton")}
         </Button>
       </div>
     </div>
