@@ -10,6 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import { Page } from "@/utils/itemPagination";
 
 interface NewsletterNavigationProps {
   newsletterList: Array<NewsletterType>;
@@ -27,7 +28,7 @@ export function NewsletterNavigation({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [paginatedContent, setPaginatedContent] = useState<Record<
     string,
-    NewsletterType[]
+    Page<NewsletterType>
   > | null>(null);
 
   useEffect(() => {
@@ -51,29 +52,31 @@ export function NewsletterNavigation({
             className={`${isMobile ? "min-h-[300px]" : "h-3/4"} flex flex-col divide-y divide-black-1 items-baseline text-left`}
           >
             {paginatedContent &&
-              paginatedContent["page" + currentPage].map((item, index) => {
-                return (
-                  <PaginationLink
-                    key={index}
-                    className={`
-                      ${displayedNewsLetter === item.long_archive_url ? "bg-black-1" : null}
+              paginatedContent["page" + currentPage].items.map(
+                (item, index) => {
+                  return (
+                    <PaginationLink
+                      key={index}
+                      className={`
+                      ${displayedNewsLetter.long_archive_url === item.long_archive_url ? "bg-black-1" : null}
                       ${isMobile ? "max-h-[100px]" : "max-h-[125px]"}
                        flex flex-col h-full gap-[5px] w-full p-3 my-1 text-left items-start text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
-                    onClick={() => {
-                      setDisplayedNewsletter?.(item.long_archive_url);
-                      navigate(`?view=${item.id}`);
-                    }}
-                  >
-                    <span
-                      className="flex text-sm font-medium text-white
-"
+                      onClick={() => {
+                        setDisplayedNewsletter?.(item);
+                        navigate(`?view=${item.id}`);
+                      }}
                     >
-                      {item.send_time.slice(0, item.send_time.indexOf("T"))}
-                    </span>
-                    {item.settings.subject_line}
-                  </PaginationLink>
-                );
-              })}
+                      <span
+                        className="flex text-sm font-medium text-white
+"
+                      >
+                        {item.send_time.slice(0, item.send_time.indexOf("T"))}
+                      </span>
+                      {item.settings.subject_line}
+                    </PaginationLink>
+                  );
+                },
+              )}
           </PaginationContent>
           <div className="flex justify-center mt-4">
             {paginatedContent["page" + currentPage].hasPreviousPage && (

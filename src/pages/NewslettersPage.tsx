@@ -6,6 +6,7 @@ import { NewsletterNavigation } from "@/components/newsletters/NewsletterNavigat
 import { NewsletterType } from "@/lib/newsletterArchive/newsletterData";
 import { useNewsletters } from "@/hooks/useNewsletters";
 import { PageSEO } from "@/components/SEO/PageSEO";
+import { Text } from "@/components/ui/text";
 
 export function NewsLetterArchivePage() {
   const { t } = useTranslation();
@@ -14,13 +15,18 @@ export function NewsLetterArchivePage() {
   const pageDescription = t("newsletterArchivePage.description");
   const { isMobile } = useScreenSize();
   const [displayedNewsletter, setDisplayedNewsletter] =
-    useState<NewsletterType>() || null;
-
-  const { data, loading, error } = useNewsletters();
+    useState<NewsletterType | null>(null);
+  const { data, isLoading, isError } = useNewsletters();
 
   useEffect(() => {
-    if (data) setDisplayedNewsletter(data[0].long_archive_url);
+    if (data) {
+      if (data && data.length > 0) {
+        setDisplayedNewsletter(data[0]);
+      }
+    }
   }, [data]);
+
+  console.log(displayedNewsletter);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -30,15 +36,8 @@ export function NewsLetterArchivePage() {
     url: canonicalUrl,
   };
 
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-pulse">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-64 bg-black-2 rounded-level-2" />
-        ))}
-      </div>
-    );
-  }
+  if (isLoading) return <Text>{t("newsletterArchivePage.loading")}</Text>;
+  if (isError) return <Text>{t("newsletterArchivePage.error")}</Text>;
 
   return (
     <>
@@ -49,10 +48,7 @@ export function NewsLetterArchivePage() {
         structuredData={structuredData}
       />
       <div className="max-w-[1200px] mx-auto px-4 md:px-6 text-white gap-4">
-        <PageHeader
-          title={t("newsletterArchivePage.title")}
-          description={t("newsletterArchivePage.description")}
-        ></PageHeader>
+        <PageHeader title={pageTitle} description={pageDescription} />
         <div
           className={`${isMobile ? "flex flex-col" : "flex"} mt-6 relative md:flex-col lg:flex-row gap-8`}
         >
@@ -65,10 +61,10 @@ export function NewsLetterArchivePage() {
           {displayedNewsletter && (
             <iframe
               className="rounded-md min-h-screen w-full bg-black-2"
-              src={`${displayedNewsletter}#view=FitH`}
+              src={`${displayedNewsletter.long_archive_url}#view=FitH`}
               height={800}
               width={1000}
-            ></iframe>
+            />
           )}
         </div>
       </div>
