@@ -65,7 +65,7 @@ export function ExploreMode({
     {
       label: "Difference shading",
       description:
-        "Red/green shading shows the difference between the trend and Paris lines, representing the tCO₂ gap.",
+        "Shaded areas under each line show cumulative emissions. Green = Paris path, Orange = Company path, with live totals.",
     },
     {
       label: "Total area analysis",
@@ -101,6 +101,7 @@ export function ExploreMode({
             exploreStep === 2 ? trendAnalysis?.explanation : undefined
           }
           yDomain={yDomain}
+          trendAnalysis={trendAnalysis}
         />
       </div>
 

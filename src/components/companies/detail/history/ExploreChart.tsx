@@ -1,5 +1,4 @@
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -7,6 +6,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   Area,
+  ComposedChart,
 } from "recharts";
 import { CustomTooltip } from "../CustomTooltip";
 import { ChartData } from "@/types/emissions";
@@ -23,6 +23,15 @@ interface ExploreChartProps {
   trendExplanation?: string;
   yDomain: [number, number];
   parisExplanation?: string;
+  trendAnalysis?: {
+    method: string;
+    explanation: string;
+    explanationParams?: Record<string, string | number>;
+    coefficients?:
+      | { slope: number; intercept: number }
+      | { a: number; b: number };
+    cleanData?: { year: number; value: number }[];
+  } | null;
 }
 
 export function ExploreChart({
@@ -33,29 +42,32 @@ export function ExploreChart({
   trendExplanation,
   yDomain,
   parisExplanation,
+  trendAnalysis,
 }: ExploreChartProps) {
   // Calculate all common data once for reuse across all steps
   const exploreData = useMemo(() => {
     if (!companyBaseYear) return null;
 
+    // For now, let's always calculate locally to ensure consistency
+    // TODO: Re-enable trendAnalysis prop once we fix the data structure issues
     const emissionsData = data
       .filter((d) => d.total !== undefined && d.total !== null)
       .map((d) => ({ year: d.year, total: d.total as number }));
 
     if (emissionsData.length < 2) return null;
 
-    const trendAnalysis = selectBestTrendLineMethod(
+    const calculatedTrendAnalysis = selectBestTrendLineMethod(
       emissionsData,
       companyBaseYear,
     );
     const lastReportedYear = Math.max(...emissionsData.map((d) => d.year));
 
     return {
-      trendAnalysis,
-      cleanData: trendAnalysis?.cleanData || [],
+      trendAnalysis: calculatedTrendAnalysis,
+      cleanData: calculatedTrendAnalysis?.cleanData || [],
       baseYear: companyBaseYear,
       lastReportedYear,
-      coefficients: trendAnalysis?.coefficients,
+      coefficients: calculatedTrendAnalysis?.coefficients,
     };
   }, [data, companyBaseYear]);
 
@@ -70,7 +82,7 @@ export function ExploreChart({
   const generateApproximatedDataForStep = (endYear: number) => {
     if (!exploreData?.coefficients) return null;
 
-    return generateApproximatedData(
+    const result = generateApproximatedData(
       data,
       undefined, // regression
       endYear,
@@ -78,6 +90,44 @@ export function ExploreChart({
       exploreData.coefficients,
       exploreData.cleanData,
     );
+
+    console.log("generateApproximatedDataForStep Debug:", {
+      endYear,
+      baseYear: exploreData.baseYear,
+      coefficients: exploreData.coefficients,
+      cleanDataLength: exploreData.cleanData?.length,
+      resultYears: result?.map((d) => ({
+        year: d.year,
+        approximated: d.approximated,
+        carbonLaw: d.carbonLaw,
+      })),
+    });
+
+    return result;
+  };
+
+  // Helper function to ensure trend line continuity
+  const ensureTrendContinuity = (
+    trendData: { year: number; approximated: number | undefined }[],
+    lastReportedYear: number,
+    lastReportedValue: number | undefined,
+  ) => {
+    if (!trendData.length || !lastReportedValue) return trendData;
+
+    // Check if we need to add the last reported year to ensure continuity
+    const hasLastReportedYear = trendData.some(
+      (d) => d.year === lastReportedYear,
+    );
+
+    if (!hasLastReportedYear) {
+      // Add the last reported year at the beginning to ensure continuity
+      trendData.unshift({
+        year: lastReportedYear,
+        approximated: lastReportedValue,
+      });
+    }
+
+    return trendData;
   };
 
   const buildAreaData = (
@@ -96,9 +146,9 @@ export function ExploreChart({
         approximated: trend,
         carbonLaw: paris,
         diff,
-        // For area between lines, we need to create a single area that represents the difference
-        areaValue: Math.abs(diff || 0),
-        areaColor: diff !== undefined && diff < 0 ? "green" : "orange",
+        // For shading under lines, we'll use the actual values
+        trendArea: trend,
+        parisArea: paris,
       };
     });
   };
@@ -114,24 +164,6 @@ export function ExploreChart({
       4: parisExplanation && (
         <div className="text-center text-sm text-green-3 mb-4 max-w-2xl mx-auto">
           {parisExplanation}
-        </div>
-      ),
-      5: (
-        <div className="text-center text-sm text-gray-400 mb-4 max-w-2xl mx-auto">
-          The difference at 2050 is calculated as:{" "}
-          <strong>Trend line value - Paris target value</strong>. A negative
-          value (green area) means the company is projected to be under the
-          Paris target. A positive value (orange area) means the company is
-          projected to exceed the Paris target.
-        </div>
-      ),
-      6: (
-        <div className="text-center text-sm text-gray-400 mb-4 max-w-2xl mx-auto">
-          The total area difference shows cumulative emissions over time. The
-          area between the trend line and Paris target line represents the total
-          emissions difference from current year to 2050. Green areas (below
-          Paris line) reduce the total, orange areas (above Paris line) increase
-          it.
         </div>
       ),
     };
@@ -203,23 +235,6 @@ export function ExploreChart({
     connectNulls: true,
   });
 
-  // Helper function for common Area component props
-  const getCommonAreaProps = (
-    dataKey: string,
-    fill: string,
-    fillOpacity: number = 0.8,
-  ) => ({
-    type: "monotone" as const,
-    dataKey,
-    stroke: "none",
-    fill,
-    fillOpacity,
-    isAnimationActive: true,
-    animationDuration: 1000,
-    connectNulls: true,
-    yAxisId: 0,
-  });
-
   // For step 0, filter data to only before or at base year (for white line only)
   let step0Data = data;
   if (step === 0 && companyBaseYear) {
@@ -233,6 +248,17 @@ export function ExploreChart({
         d.year >= exploreData.baseYear &&
         d.year <= exploreData.lastReportedYear,
     );
+
+    console.log("Step 1/2 Green Segment Debug:", {
+      step,
+      baseYear: exploreData.baseYear,
+      lastReportedYear: exploreData.lastReportedYear,
+      step1GreenSegment: step1GreenSegment.map((d) => ({
+        year: d.year,
+        total: d.total,
+      })),
+      allDataYears: data.map((d) => d.year).sort((a, b) => a - b),
+    });
   }
   //   // For step 2, calculate the extended trend segment from last reported year to current year + 5
   let step2TrendSegment: { year: number; approximated: number | undefined }[] =
@@ -241,7 +267,17 @@ export function ExploreChart({
     const { endYearShort } = getCommonYears();
     const approximatedData = generateApproximatedDataForStep(endYearShort);
     if (approximatedData) {
-      // Only keep the segment from lastReportedYear to endYear
+      console.log("Step 2 Debug:", {
+        lastReportedYear: exploreData.lastReportedYear,
+        endYearShort,
+        approximatedDataYears: approximatedData.map((d) => ({
+          year: d.year,
+          approximated: d.approximated,
+        })),
+        baseYear: exploreData.baseYear,
+      });
+
+      // Include the last reported year to ensure continuity, then continue to endYear
       step2TrendSegment = approximatedData
         .filter(
           (d) =>
@@ -254,6 +290,30 @@ export function ExploreChart({
           year: d.year,
           approximated: d.approximated === null ? undefined : d.approximated,
         }));
+
+      // Ensure continuity using the helper function
+      const lastReportedValue = data.find(
+        (d) => d.year === exploreData.lastReportedYear,
+      )?.total;
+      step2TrendSegment = ensureTrendContinuity(
+        step2TrendSegment,
+        exploreData.lastReportedYear,
+        lastReportedValue,
+      );
+
+      console.log("Step 2 Trend Segment:", step2TrendSegment);
+      console.log("Step 2 Complete Debug:", {
+        step,
+        lastReportedYear: exploreData.lastReportedYear,
+        lastReportedValue,
+        endYearShort,
+        step2TrendSegment,
+        originalData: data.filter(
+          (d) =>
+            d.year >= exploreData.lastReportedYear - 1 &&
+            d.year <= exploreData.lastReportedYear + 1,
+        ),
+      });
     }
   }
 
@@ -297,6 +357,16 @@ export function ExploreChart({
     // Orange line: only values after lastReportedYear, from approximatedData
     const approximatedData = generateApproximatedDataForStep(endYearShort);
     if (approximatedData) {
+      console.log("Step 3 Debug:", {
+        lastReportedYear: exploreData.lastReportedYear,
+        endYearShort,
+        approximatedDataYears: approximatedData.map((d) => ({
+          year: d.year,
+          approximated: d.approximated,
+        })),
+        step3FullDomain,
+      });
+
       step3OrangeLine = step3FullDomain.map((year) => {
         const found = approximatedData.find((d) => d.year === year);
         return {
@@ -307,6 +377,38 @@ export function ExploreChart({
               : undefined,
         };
       });
+
+      console.log("Step 3 Orange Line Debug:", {
+        step,
+        lastReportedYear: exploreData.lastReportedYear,
+        endYearShort,
+        step3OrangeLine: step3OrangeLine.filter(
+          (d) => d.approximated !== undefined,
+        ),
+        approximatedDataYears: approximatedData.map((d) => ({
+          year: d.year,
+          approximated: d.approximated,
+        })),
+      });
+
+      // Ensure continuity by adding the last reported year if it's missing
+      const lastReportedValue = data.find(
+        (d) => d.year === exploreData.lastReportedYear,
+      )?.total;
+      if (lastReportedValue !== undefined && lastReportedValue !== null) {
+        const firstOrangeLineYear = step3OrangeLine.find(
+          (d) => d.approximated !== undefined,
+        )?.year;
+        if (
+          firstOrangeLineYear &&
+          firstOrangeLineYear > exploreData.lastReportedYear
+        ) {
+          step3OrangeLine.unshift({
+            year: exploreData.lastReportedYear,
+            approximated: lastReportedValue,
+          });
+        }
+      }
       // Paris line segment: current year to projection end
       const { currentYear } = getCommonYears();
       step3ParisSegment = approximatedData
@@ -332,8 +434,8 @@ export function ExploreChart({
     approximated?: number;
     carbonLaw?: number;
     diff?: number;
-    diffTop?: number;
-    diffBottom?: number;
+    trendArea?: number;
+    parisArea?: number;
   }[] = [];
   let step4AreaColor: string = "var(--orange-5)"; // default orange
   let step4LabelText: string = "";
@@ -397,8 +499,8 @@ export function ExploreChart({
   // Step 5: Area under curves calculation (current year to 2050)
   let step5AreaData: {
     year: number;
-    trend: number | undefined;
-    paris: number | undefined;
+    approximated: number | undefined;
+    carbonLaw: number | undefined;
     areaDiff: number | undefined;
   }[] = [];
   let step5TotalAreaDifference: number | null = null;
@@ -427,8 +529,8 @@ export function ExploreChart({
 
           step5AreaData.push({
             year,
-            trend: trendValue,
-            paris: parisValue,
+            approximated: trendValue,
+            carbonLaw: parisValue,
             areaDiff: areaDiff,
           });
         }
@@ -449,81 +551,59 @@ export function ExploreChart({
   return (
     <>
       {renderStepDescription(step)}
-      <ResponsiveContainer width="100%" height="100%" className="w-full">
-        <LineChart
-          data={
-            step === 5 && step5AreaData.length > 0
-              ? step5AreaData
-              : step === 4 && step4AreaData.length > 0
-                ? step4AreaData
-                : step === 3 && companyBaseYear
-                  ? step3GreyLine
-                  : data
-          }
-          margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
-        >
-          <XAxis
-            dataKey="year"
-            stroke="var(--grey)"
-            tickLine={false}
-            axisLine={false}
-            type="number"
-            domain={getXAxisDomain()}
-            tick={{ fontSize: 12, fill: "var(--grey)" }}
-          />
-          <YAxis
-            stroke="var(--grey)"
-            tickLine={false}
-            axisLine={false}
-            tick={{ fontSize: 12 }}
-            width={60}
-            domain={yDomain}
-            tickFormatter={(value) =>
-              formatEmissionsAbsoluteCompact(value, currentLanguage)
+      <div className="relative w-full h-full">
+        <ResponsiveContainer width="100%" height="100%" className="w-full">
+          <ComposedChart
+            data={
+              step === 5 && step5AreaData.length > 0
+                ? step5AreaData
+                : step === 4 && step4AreaData.length > 0
+                  ? step4AreaData
+                  : step === 3 && companyBaseYear
+                    ? step3GreyLine
+                    : data
             }
-          />
-          <Tooltip
-            content={<CustomTooltip companyBaseYear={companyBaseYear} />}
-          />
+            margin={{
+              top: 20,
+              right: 0,
+              left: 0,
+              bottom: step === 5 ? 120 : 0,
+            }}
+          >
+            <XAxis
+              dataKey="year"
+              stroke="var(--grey)"
+              tickLine={false}
+              axisLine={false}
+              type="number"
+              domain={getXAxisDomain()}
+              tick={{ fontSize: 12, fill: "var(--grey)" }}
+            />
+            <YAxis
+              stroke="var(--grey)"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontSize: 12 }}
+              width={60}
+              domain={yDomain}
+              tickFormatter={(value) =>
+                formatEmissionsAbsoluteCompact(value, currentLanguage)
+              }
+            />
+            <Tooltip
+              content={<CustomTooltip companyBaseYear={companyBaseYear} />}
+            />
 
-          {/* Step 0: Show data before base year highlighted, line stops at base year */}
-          {step === 0 && (
-            <>
-              {/* Base year reference line */}
-              {renderBaseYearReferenceLine()}
-              <Line
-                type="monotone"
-                data={step0Data}
-                dataKey="total"
-                stroke="white"
-                strokeWidth={2}
-                dot={(props) => {
-                  const { cx, cy } = props;
-                  return (
-                    <circle cx={cx} cy={cy} r={4} fill="white" stroke="white" />
-                  );
-                }}
-                isAnimationActive={true}
-                animationDuration={1000}
-                connectNulls
-              />
-            </>
-          )}
-          {/* Step 1: Show full line in grey, overlay green segment with dots for base year to last reported year */}
-          {step === 1 && (
-            <>
-              {/* Base year reference line */}
-              {renderBaseYearReferenceLine()}
-              {/* Full line in grey, no dots */}
-              <Line {...getCommonLineProps("total", "var(--grey)", false)} />
-              {/* Green segment with dots for base year to last reported year */}
-              {companyBaseYear && step1GreenSegment.length > 0 && (
+            {/* Step 0: Show data before base year highlighted, line stops at base year */}
+            {step === 0 && (
+              <>
+                {/* Base year reference line */}
+                {renderBaseYearReferenceLine()}
                 <Line
-                  key={`step1-green-${step}`}
                   type="monotone"
-                  data={step1GreenSegment}
+                  data={step0Data}
                   dataKey="total"
-                  stroke="var(--orange-3)"
+                  stroke="white"
                   strokeWidth={2}
                   dot={(props) => {
                     const { cx, cy } = props;
@@ -532,8 +612,8 @@ export function ExploreChart({
                         cx={cx}
                         cy={cy}
                         r={4}
-                        fill="var(--orange-3)"
-                        stroke="var(--orange-3)"
+                        fill="white"
+                        stroke="white"
                       />
                     );
                   }}
@@ -541,162 +621,300 @@ export function ExploreChart({
                   animationDuration={1000}
                   connectNulls
                 />
-              )}
-            </>
-          )}
-          {/* Step 2: Show full line in grey, overlay green segment, overlay orange trend segment from last reported year to current year + 5 */}
-          {step === 2 && (
-            <>
-              {/* Base year reference line */}
-              {renderBaseYearReferenceLine()}
-              {/* Grey context line: base year to last reported year, no dots */}
-              {companyBaseYear && step1GreenSegment.length > 0 && (
+              </>
+            )}
+            {/* Step 1: Show full line in grey, overlay green segment with dots for base year to last reported year */}
+            {step === 1 && (
+              <>
+                {/* Base year reference line */}
+                {renderBaseYearReferenceLine()}
+                {/* Full line in grey, no dots - but only up to last reported year */}
                 <Line
                   {...getCommonLineProps("total", "var(--grey)", false)}
-                  data={step1GreenSegment}
-                />
-              )}
-              {companyBaseYear && step2TrendSegment.length > 0 && (
-                <Line
-                  key={`step2-orange-${step}`}
-                  type="monotone"
-                  data={step2TrendSegment}
-                  dataKey="approximated"
-                  stroke="var(--orange-3)"
-                  strokeWidth={2}
-                  dot={false}
-                  isAnimationActive={true}
-                  animationDuration={1000}
-                  connectNulls
-                />
-              )}
-            </>
-          )}
-          {/* Step 3: Show grey line for reported values, orange for trend/approximated, and highlight the Paris line (green) from current year to projection end */}
-          {step === 3 && (
-            <>
-              {/* Base year reference line */}
-              {renderBaseYearReferenceLine()}
-              {/* Vertical line for current year */}
-              {renderCurrentYearReferenceLine()}
-              {/* Grey context line: base year to last reported year, no dots, always shown for full X domain */}
-              {companyBaseYear && step3GreyLine.length > 0 && (
-                <Line
-                  {...getCommonLineProps("total", "var(--grey)", false)}
-                  data={step3GreyLine}
-                />
-              )}
-              {/* Orange trend segment: last reported year to current year + 5 */}
-              {companyBaseYear && step3OrangeLine.length > 0 && (
-                <Line
-                  {...getCommonLineProps(
-                    "approximated",
-                    "var(--orange-3)",
-                    false,
+                  data={data.filter(
+                    (d) =>
+                      d.year <=
+                      (exploreData?.lastReportedYear ||
+                        new Date().getFullYear()),
                   )}
-                  data={step3OrangeLine}
                 />
-              )}
-              {/* Paris line: current year to projection end, green, no dots */}
-              {step3ParisSegment.length > 0 && (
-                <Line
-                  {...getCommonLineProps("carbonLaw", "var(--green-3)")}
-                  data={step3ParisSegment}
-                />
-              )}
-            </>
-          )}
-          {/* Step 4: Show trend and Paris lines from current year to 2050, annotate the difference at 2050, and shade the area between them */}
-          {step === 4 && (
-            <>
-              {/* Vertical line for current year */}
-              {renderCurrentYearReferenceLine()}
-              {/* Shaded area between trend and Paris lines */}
-              {step4AreaData.length > 0 && (
-                <Area
-                  {...getCommonAreaProps(
-                    "areaValue",
-                    step4Difference2050 !== null && step4Difference2050 < 0
-                      ? "var(--green-3)"
-                      : "var(--orange-3)",
-                    0.3,
-                  )}
-                  baseValue={0}
-                />
-              )}
-              {/* Paris line: green, no dots */}
-              {step4ParisSegment.length > 0 && (
-                <Line
-                  {...getCommonLineProps("carbonLaw", "var(--green-4)")}
-                  data={step4ParisSegment}
-                />
-              )}
-              {/* Trend line: muted orange, no dots */}
-              {step4TrendSegment.length > 0 && (
+                {/* Debug: Log what data is being shown */}
+                {console.log("Step 1 Debug:", {
+                  step,
+                  lastReportedYear: exploreData?.lastReportedYear,
+                  filteredData: data.filter(
+                    (d) =>
+                      d.year <=
+                      (exploreData?.lastReportedYear ||
+                        new Date().getFullYear()),
+                  ),
+                  step1GreenSegment,
+                })}
+                {/* Green segment with dots for base year to last reported year */}
+                {companyBaseYear && step1GreenSegment.length > 0 && (
+                  <Line
+                    key={`step1-green-${step}`}
+                    type="monotone"
+                    data={step1GreenSegment}
+                    dataKey="total"
+                    stroke="var(--orange-3)"
+                    strokeWidth={2}
+                    dot={(props) => {
+                      const { cx, cy } = props;
+                      return (
+                        <circle
+                          cx={cx}
+                          cy={cy}
+                          r={4}
+                          fill="var(--orange-3)"
+                          stroke="var(--orange-3)"
+                        />
+                      );
+                    }}
+                    isAnimationActive={true}
+                    animationDuration={1000}
+                    connectNulls
+                  />
+                )}
+              </>
+            )}
+            {/* Step 2: Show full line in grey, overlay green segment, overlay orange trend segment from last reported year to current year + 5 */}
+            {step === 2 && (
+              <>
+                {/* Base year reference line */}
+                {renderBaseYearReferenceLine()}
+                {/* Grey context line: base year to last reported year, no dots */}
+                {companyBaseYear && step1GreenSegment.length > 0 && (
+                  <Line
+                    {...getCommonLineProps("total", "var(--grey)", false)}
+                    data={step1GreenSegment}
+                  />
+                )}
+                {companyBaseYear && step2TrendSegment.length > 0 && (
+                  <Line
+                    key={`step2-orange-${step}`}
+                    type="monotone"
+                    data={step2TrendSegment}
+                    dataKey="approximated"
+                    stroke="var(--orange-3)"
+                    strokeWidth={2}
+                    dot={false}
+                    isAnimationActive={true}
+                    animationDuration={1000}
+                    connectNulls
+                  />
+                )}
+              </>
+            )}
+            {/* Step 3: Show grey line for reported values, orange for trend/approximated, and highlight the Paris line (green) from current year to projection end */}
+            {step === 3 && (
+              <>
+                {/* Base year reference line */}
+                {renderBaseYearReferenceLine()}
+                {/* Vertical line for current year */}
+                {renderCurrentYearReferenceLine()}
+                {/* Grey context line: base year to last reported year, no dots, always shown for full X domain */}
+                {companyBaseYear && step3GreyLine.length > 0 && (
+                  <Line
+                    {...getCommonLineProps("total", "var(--grey)", false)}
+                    data={step3GreyLine}
+                  />
+                )}
+                {/* Orange trend segment: last reported year to current year + 5 */}
+                {companyBaseYear && step3OrangeLine.length > 0 && (
+                  <Line
+                    {...getCommonLineProps(
+                      "approximated",
+                      "var(--orange-3)",
+                      false,
+                    )}
+                    data={step3OrangeLine}
+                  />
+                )}
+                {/* Paris line: current year to projection end, green, no dots */}
+                {step3ParisSegment.length > 0 && (
+                  <Line
+                    {...getCommonLineProps("carbonLaw", "var(--green-3)")}
+                    data={step3ParisSegment}
+                  />
+                )}
+              </>
+            )}
+            {/* Step 4: Show trend and Paris lines from current year to 2050, annotate the difference at 2050 */}
+            {step === 4 && (
+              <>
+                {/* Vertical line for current year */}
+                {renderCurrentYearReferenceLine()}
+
+                {/* Paris line: green, no dots */}
+                {step4ParisSegment.length > 0 && (
+                  <Line
+                    {...getCommonLineProps("carbonLaw", "var(--green-4)")}
+                    data={step4ParisSegment}
+                  />
+                )}
+
+                {/* Trend line: orange, no dots */}
+                {step4TrendSegment.length > 0 && (
+                  <Line
+                    {...getCommonLineProps("approximated", "var(--orange-4)")}
+                    data={step4TrendSegment}
+                  />
+                )}
+
+                {/* Difference annotation at 2050 */}
+                {step4Difference2050 !== null && (
+                  <ReferenceLine
+                    x={getCommonYears().endYear2050}
+                    stroke="var(--grey)"
+                    strokeDasharray="3 3"
+                    label={{
+                      value: step4LabelText,
+                      position: "left",
+                      fill: step4LabelColor,
+                      fontSize: 12,
+                      fontWeight: "bold",
+                    }}
+                  />
+                )}
+              </>
+            )}
+            {/* Step 5: Show area under curves with total cumulative difference */}
+            {step === 5 && (
+              <>
+                {/* Vertical line for current year */}
+                {renderCurrentYearReferenceLine()}
+
+                {/* Shaded area under Paris line */}
+                {step5AreaData.length > 0 && (
+                  <Area
+                    type="monotone"
+                    dataKey="carbonLaw"
+                    stroke="var(--green-3)"
+                    fill="var(--green-3)"
+                    stackId="1"
+                    fillOpacity={0.8}
+                  />
+                )}
+
+                {/* Shaded area under trend line */}
+                {step5AreaData.length > 0 && (
+                  <Area
+                    type="monotone"
+                    dataKey="approximated"
+                    stroke="var(--orange-3)"
+                    fill="var(--orange-3)"
+                    stackId="2"
+                    fillOpacity={0.4}
+                  />
+                )}
+
+                {/* Paris line: green, no dots */}
+                <Line {...getCommonLineProps("carbonLaw", "var(--green-4)")} />
+                {/* Trend line: orange, no dots */}
                 <Line
                   {...getCommonLineProps("approximated", "var(--orange-4)")}
-                  data={step4TrendSegment}
                 />
-              )}
-              {/* Difference annotation at 2050 */}
-              {step4Difference2050 !== null && (
-                <ReferenceLine
-                  x={2050}
-                  stroke="var(--grey)"
-                  strokeDasharray="3 3"
-                  label={{
-                    value: step4LabelText,
-                    position: "left",
-                    fill: step4LabelColor,
-                    fontSize: 12,
-                    fontWeight: "bold",
-                  }}
-                />
-              )}
-            </>
-          )}
-          {/* Step 5: Show area under curves with total cumulative difference */}
-          {step === 5 && (
-            <>
-              {/* Vertical line for current year */}
-              {renderCurrentYearReferenceLine()}
-              {/* Shaded area between trend and Paris lines */}
-              {step5AreaData.length > 0 && (
-                <Area
-                  {...getCommonAreaProps(
-                    "areaDiff",
+              </>
+            )}
+          </ComposedChart>
+        </ResponsiveContainer>
+
+        {/* Information boxes for step 5 */}
+        {step === 5 && step5AreaData.length > 0 && (
+          <div className="absolute bottom-0 left-0 right-0 z-10 bg-black-2/80 backdrop-blur-sm">
+            <div className="flex flex-col gap-3 p-4">
+              {/* Cumulative emissions summary */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                {/* Paris Carbon Budget */}
+                <div className="bg-green-4/20 rounded-lg p-2 backdrop-blur-sm">
+                  <div className="text-green-3 text-xs font-medium mb-1">
+                    Estimated Emissions For Paris Aligned Path
+                  </div>
+                  <div className="text-white text-sm font-bold">
+                    {formatEmissionsAbsoluteCompact(
+                      step5AreaData.reduce(
+                        (sum, d) => sum + (d.carbonLaw || 0),
+                        0,
+                      ),
+                      currentLanguage,
+                    )}{" "}
+                    t
+                  </div>
+                  <div className="text-green-3 text-xs mt-1">
+                    2025-2050 cumulative
+                  </div>
+                </div>
+
+                {/* Company Emissions */}
+                <div className="bg-orange-4/20 rounded-lg p-2 backdrop-blur-sm">
+                  <div className="text-orange-3 text-xs font-medium mb-1">
+                    Estimated Company Emissions
+                  </div>
+                  <div className="text-white text-sm font-bold">
+                    {formatEmissionsAbsoluteCompact(
+                      step5AreaData.reduce(
+                        (sum, d) => sum + (d.approximated || 0),
+                        0,
+                      ),
+                      currentLanguage,
+                    )}{" "}
+                    t
+                  </div>
+                  <div className="text-orange-3 text-xs mt-1">
+                    2025-2050 cumulative
+                  </div>
+                </div>
+
+                {/* Budget Status */}
+                <div
+                  className={`bg-gradient-to-br ${
                     step5TotalAreaDifference !== null &&
+                    step5TotalAreaDifference < 0
+                      ? "bg-green-4/20"
+                      : "bg-pink-4/20"
+                  } rounded-lg p-2 backdrop-blur-sm`}
+                >
+                  <div
+                    className={`text-xs font-medium mb-1 ${
+                      step5TotalAreaDifference !== null &&
                       step5TotalAreaDifference < 0
-                      ? "var(--green-3)"
-                      : "var(--orange-3)",
-                    0.3,
-                  )}
-                  baseValue={0}
-                />
-              )}
-              {/* Paris line: green, no dots */}
-              <Line {...getCommonLineProps("paris", "var(--green-4)")} />
-              {/* Trend line: orange, no dots */}
-              <Line {...getCommonLineProps("trend", "var(--orange-4)")} />
-              {/* Total area difference annotation */}
-              {step5TotalAreaDifference !== null && (
-                <ReferenceLine
-                  x={2050}
-                  stroke="var(--grey)"
-                  strokeDasharray="3 3"
-                  label={{
-                    value: step5AreaLabelText,
-                    position: "left",
-                    fill: step5AreaLabelColor,
-                    fontSize: 12,
-                    fontWeight: "bold",
-                  }}
-                />
-              )}
-            </>
-          )}
-        </LineChart>
-      </ResponsiveContainer>
+                        ? "text-green-3"
+                        : "text-pink-3"
+                    }`}
+                  >
+                    Budget Status
+                  </div>
+                  <div className="text-white text-sm font-bold">
+                    {step5TotalAreaDifference !== null &&
+                    step5TotalAreaDifference < 0
+                      ? "-"
+                      : "+"}
+                    {formatEmissionsAbsoluteCompact(
+                      Math.abs(step5TotalAreaDifference || 0),
+                      currentLanguage,
+                    )}{" "}
+                    t
+                  </div>
+                  <div
+                    className={`text-xs mt-1 ${
+                      step5TotalAreaDifference !== null &&
+                      step5TotalAreaDifference < 0
+                        ? "text-green-3"
+                        : "text-pink-3"
+                    }`}
+                  >
+                    {step5TotalAreaDifference !== null &&
+                    step5TotalAreaDifference < 0
+                      ? "Under budget"
+                      : "Over budget"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
