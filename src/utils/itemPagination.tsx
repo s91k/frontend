@@ -30,8 +30,6 @@ function itemPagination<T>({
     };
   }
 
-  console.log(paginatedContent);
-
   return paginatedContent;
 }
 
