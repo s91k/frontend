@@ -38,8 +38,7 @@ function InsightsList({
                 <span>{municipality.name}</span>
               </div>
               <span className={`${textColor} font-semibold`}>
-                {(municipality[dataPointKey] as number).toFixed(1)}
-                {unit}
+                {municipality[dataPointKey] != null ? (municipality[dataPointKey] as number).toFixed(1) + unit : "-"}
               </span>
             </div>
           </Link>

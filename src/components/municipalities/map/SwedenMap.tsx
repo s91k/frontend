@@ -67,9 +67,18 @@ function SwedenMap({
   const maxValue = Math.max(...values);
 
   const sortedMunicipalities = [...municipalityData].sort((a, b) => {
-    const aValue = a[selectedKPI.key] as number;
-    const bValue = b[selectedKPI.key] as number;
-    return selectedKPI.higherIsBetter ? bValue - aValue : aValue - bValue;
+    const aValue = a[selectedKPI.key] ?? null;
+    const bValue = b[selectedKPI.key] ?? null;
+
+    if(aValue === null && bValue === null){
+      return 0;
+    } else if(aValue === null){
+      return 1;
+    } else if(bValue === null){
+      return -1;
+    }
+
+    return selectedKPI.higherIsBetter ? (bValue as number) - (aValue as number) : (aValue as number) - (bValue as number);
   });
 
   const handleZoomIn = () => {

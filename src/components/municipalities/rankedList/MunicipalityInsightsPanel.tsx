@@ -37,11 +37,20 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
     );
   }
 
-  const sortedData = [...validData].sort((a, b) =>
-    selectedKPI.higherIsBetter
-      ? (b[selectedKPI.key] as number) - (a[selectedKPI.key] as number)
-      : (a[selectedKPI.key] as number) - (b[selectedKPI.key] as number),
-  );
+  const sortedData = [...municipalityData].sort((a, b) => {
+    const aValue = a[selectedKPI.key] ?? null;
+    const bValue = b[selectedKPI.key] ?? null;
+
+    if(aValue === null && bValue === null){
+      return 0;
+    } else if(aValue === null){
+      return 1;
+    } else if(bValue === null){
+      return -1;
+    }
+
+    return selectedKPI.higherIsBetter ? (bValue as number) - (aValue as number) : (aValue as number) - (bValue as number);
+  });
 
   const topMunicipalities = sortedData.slice(0, 5);
   const bottomMunicipalities = sortedData.slice(-5).reverse();
