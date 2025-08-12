@@ -5,7 +5,7 @@ import {
   Geography,
   ZoomableGroup,
 } from "react-simple-maps";
-import { Municipality } from "@/types/municipality";
+import { KPIValue, Municipality, getSortedMunicipalKPIValues } from "@/types/municipality";
 import { MapZoomControls } from "./MapZoomControls";
 import { MapGradientLegend } from "./MapLegendGradient";
 import { MapTooltip } from "./MapTooltip";
@@ -14,18 +14,10 @@ import { MUNICIPALITY_MAP_COLORS } from "./constants";
 import { isMobile } from "react-device-detect";
 import { t } from "i18next";
 
-interface MunicipalityKPI {
-  label: string;
-  key: keyof Municipality;
-  unit: string;
-  description?: string;
-  higherIsBetter: boolean;
-}
-
 interface SwedenMapProps {
   geoData: FeatureCollection;
   municipalityData: Municipality[];
-  selectedKPI: MunicipalityKPI;
+  selectedKPI: KPIValue;
   onMunicipalityClick: (name: string) => void;
 }
 
@@ -66,20 +58,7 @@ function SwedenMap({
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
 
-  const sortedMunicipalities = [...municipalityData].sort((a, b) => {
-    const aValue = a[selectedKPI.key] ?? null;
-    const bValue = b[selectedKPI.key] ?? null;
-
-    if(aValue === null && bValue === null){
-      return 0;
-    } else if(aValue === null){
-      return 1;
-    } else if(bValue === null){
-      return -1;
-    }
-
-    return selectedKPI.higherIsBetter ? (bValue as number) - (aValue as number) : (aValue as number) - (bValue as number);
-  });
+  const sortedMunicipalities = getSortedMunicipalKPIValues(municipalityData, selectedKPI);
 
   const handleZoomIn = () => {
     if (position.zoom >= 4) {
