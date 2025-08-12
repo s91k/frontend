@@ -15,7 +15,7 @@ import { Page } from "@/utils/itemPagination";
 interface NewsletterNavigationProps {
   newsletterList: Array<NewsletterType>;
   setDisplayedNewsletter: (newsletter: NewsletterType) => void;
-  displayedNewsLetter: NewsletterType;
+  displayedNewsLetter: NewsletterType | null;
 }
 
 export function NewsletterNavigation({
@@ -58,7 +58,7 @@ export function NewsletterNavigation({
                     <PaginationLink
                       key={index}
                       className={`
-                      ${displayedNewsLetter.long_archive_url === item.long_archive_url ? "bg-black-1" : null}
+                      ${displayedNewsLetter?.long_archive_url === item.long_archive_url ? "bg-black-1" : null}
                       ${isMobile ? "max-h-[100px]" : "max-h-[125px]"}
                        flex flex-col h-full gap-[5px] w-full p-3 my-1 text-left items-start text-sm font-medium text-grey hover:bg-black-1 transition-colors cursor-pointer duration-200 rounded-lg`}
                       onClick={() => {

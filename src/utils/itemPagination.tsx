@@ -3,7 +3,11 @@ interface ItemPaginationProps<T> {
   itemsPerPage?: number;
 }
 
-export type Page<T> = { items: T[]; hasPreviousPage: boolean; hasNextPage: boolean };
+export type Page<T> = {
+  items: T[];
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
 
 function itemPagination<T>({
   content,

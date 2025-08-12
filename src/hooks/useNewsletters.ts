@@ -1,15 +1,20 @@
+import { baseUrl } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 interface CampaignProps {
   id: string;
   send_time: string;
   long_archive_url: string;
-  preview_text: string;
-  subject_line: string;
+  settings: {
+    preview_text: string;
+    subject_line: string;
+  };
 }
 
 const fetchNewsletters = async () => {
   const url = "http://localhost:3000/api/newsletters";
+  /*       const response = await fetch(`${baseUrl}/newsletters/`);
+   */
   try {
     const response = await fetch(url);
 

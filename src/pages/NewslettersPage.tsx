@@ -26,8 +26,6 @@ export function NewsLetterArchivePage() {
     }
   }, [data]);
 
-  console.log(displayedNewsletter);
-
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
