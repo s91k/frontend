@@ -488,7 +488,7 @@
         "paragraph2": "Företagsdata hämtas från deras egna årsredovisningar och hållbarhetsrapporter.",
         "links": {
           "smhi": {
-            "title": "Nationell utsläppsdatabas",
+            "title": "Nationella emissionsdatabasen",
             "text": "Växthusgasutsläpp i kommunerna",
             "link": "https://nationellaemissionsdatabasen.smhi.se/"
           },
@@ -513,8 +513,8 @@
             "link": "https://www.nvdb.se/sv"
           },
           "sei": {
-            "title": "Stockholm Environment Institute",
-            "text": "Hushållens konsumtionsbaserade utsläpp. Licens: CC BY-NC-ND 4.0 enligt Konsumtionskompassen. Stockholm Environment Institute.",
+            "title": "Stockholm Environment Institute (SEI)",
+            "text": "Hushållens konsumtionsbaserade utsläpp. Konsumtionskompassen, 2025. CC BY-NC-ND 4.0",
             "link": "https://konsumtionskompassen.se/"
           },
           "powerCircle": {
@@ -524,7 +524,8 @@
           },
           "klimatplaner": {
             "title": "Klimatplaner",
-            "text": "Insamlade av medlemmar i Klimatklubben och Naturskyddsföreningen"
+            "text": "Insamlade av medlemmar i Klimatklubben och Naturskyddsföreningen",
+            "link": "https://docs.google.com/spreadsheets/d/13CMqmfdd6QUD6agKFyVhwZUol4PKzvy253_EwtsFyvw/edit?fbclid=IwAR0v0cq0_xhFVlhhVn5fP-TNkOPVRXbOTKzTVWI_PMr_yU2rXOLjcN6jSps#gid=0"
           },
           "upphandlingsmyndigheten": {
             "title": "Upphandlingsmyndigheten",
