@@ -8,8 +8,6 @@ export type NewsletterType = {
   };
 };
 
-
-
 export type NewsletterArchiveList = {
   newsletters: NewsletterType[];
 };

@@ -16,7 +16,7 @@ function itemPagination<T>({
   const totalItems = content.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const paginatedContent: Record<string, Page<MyItemType>> = {};
+  const paginatedContent: Record<string, Page<T>> = {};
 
   for (let i = 0; i < totalPages; i++) {
     const startIndex = i * itemsPerPage;
