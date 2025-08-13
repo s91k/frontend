@@ -72,6 +72,7 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
           totalCount={municipalityData.length}
           dataPointKey={selectedKPI.key}
           unit={selectedKPI.unit}
+          nullValues={selectedKPI.nullValues}
           textColor="text-blue-3"
         />
 
@@ -82,6 +83,7 @@ function InsightsPanel({ municipalityData, selectedKPI }: InsightsPanelProps) {
           isBottomRanking={true}
           dataPointKey={selectedKPI.key}
           unit={selectedKPI.unit}
+          nullValues={selectedKPI.nullValues}
           textColor="text-pink-3"
         />
       </div>
