@@ -1296,7 +1296,7 @@
   },
   "newsletterArchivePage": {
     "title": "Nyhetsbrevsarkiv",
-    "description": "Titta igenom alla tidigare släppta nyhetsbrev",
+    "description": "Läs tidigare nyhetsbrev",
     "loading": "Laddar...",
     "error": "Fel vid inläsning av data"
   }

@@ -1296,7 +1296,7 @@
   },
   "newsletterArchivePage": {
     "title": "Newsletter archive",
-    "description": "Browse through all of the released newsletters",
+    "description": "Read previous newsletters",
     "loading": "Loading...",
     "error": "Error loading data"
   }
