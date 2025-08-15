@@ -12,8 +12,6 @@ export const useNewsletters = () => {
         .reverse(),
   });
 
-  console.log(data);
-
   return {
     data: data || [],
     isLoading,
