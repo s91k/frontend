@@ -35,7 +35,7 @@ export const OverviewChart: FC<OverviewChartProps> = ({ projectedData }) => {
           wrapperStyle={{
             fontSize: "12px",
             color: "var(--grey)",
-            paddingLeft: "24px",
+            paddingLeft: "50px",
           }}
         />
         <Tooltip

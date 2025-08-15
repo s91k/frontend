@@ -106,7 +106,7 @@ export const SectorsChart: FC<SectorsChartProps> = ({
           verticalAlign="bottom"
           align="right"
           iconType="line"
-          wrapperStyle={{ fontSize: "12px", color: "var(--grey)", paddingLeft: "24px" }}
+          wrapperStyle={{ fontSize: "12px", color: "var(--grey)", paddingLeft: "50px" }}
           formatter={(value) => {
             const sectorInfo = getSectorInfo?.(value) || {
               translatedName: value,
