@@ -551,14 +551,15 @@
   "supportPage": {
     "header": {
       "title": "Stöd Klimatkollen",
-      "description": "Hjälp oss att fortsätta vårt arbete att spåra och främja klimatåtaganden i Sverige. Det finns flera sätt du kan stödja vårt arbete."
+      "description": "Hjälp oss att fortsätta vårt arbete med att samla in och sprida klimatdata, så att fler får koll på hur det går med klimatomställningen. Det finns flera sätt att stötta"
     },
     "donations": {
-      "title": "Direkta donationer",
-      "description": "Stöd vårt arbete genom ekonomiskt bidrag",
+      "title": "Skänk pengar",
+      "description": "Stöd vårt arbete med ett ekonomiskt bidrag",
       "details": [
-        "Bankgiro: 5793-3178",
         "Swish: 123 384 67 48",
+        "Bankgiro: 5793-3178",
+        "IBAN: SE-96 8000 0832 7973 4619 5055",
         "Din donation bidrar till att upprätthålla vår infrastruktur och datainsamlingsarbete"
       ],
       "action": {
@@ -571,13 +572,13 @@
       }
     },
     "openSource": {
-      "title": "Bidrag till öppen källkod",
-      "description": "Hjälp oss att utveckla Klimatkollen genom att bidra med kod",
+      "title": "Hjälp oss koda",
+      "description": "Om du är utvecklare kan du bidra med kod",
       "details": [
         "Källkoden är öppen och tillgänglig på GitHub",
-        "Bidra till dataanalysverktyg",
-        "Hjälp till att förbättra användargränssnittet",
-        "Lägg till nya funktioner och funktionalitet"
+        "Bidra till vårt verktyg för dataanalys",
+        "Hjälp oss förbättra användargränssnittet",
+        "Lägg till nya funktioner"
       ],
       "action": {
         "text": "Se på GitHub",
@@ -586,12 +587,12 @@
     },
     "volunteer": {
       "title": "Bli volontär",
-      "description": "Gå med i vår gemenskap och bidra med dina färdigheter",
+      "description": "Bidra med din tid och dina färdigheter",
       "details": [
-        "Hjälp till med att verifiera och analysera data",
-        "Hjälp till med översättningar och innehåll",
-        "Stöd gemenskapsengagemang",
-        "Delta i klimatmedvetna initiativ"
+        "Hjälp till med research och dataanalys",
+        "Skapa innehåll och spridning i sociala medier",
+        "Ordna evenemang och stärk vårt nätverk",
+        "Ge oss råd och tips för att växa"
       ],
       "action": {
         "text": "Gå med i vår Discord",
@@ -599,13 +600,13 @@
       }
     },
     "partnerships": {
-      "title": "Partnerskap",
-      "description": "Samarbeta med oss för att expandera vår påverkan",
+      "title": "Bli vår nya partner",
+      "description": "Samarbeta med oss för öppenhet och ansvarsutkrävande",
       "details": [
-        "Partnerskap för datadelning",
-        "Forskningssamarbeten",
-        "Gemensamma klimatinitiativ",
-        "Kunskapsutbytesprogram"
+        "Har ni klimatdata om kommuner eller företag?",
+        "Kan ni hjälpa oss att ta Klimatkollen till fler länder?",
+        "Bedriver ni forskning inom AI och klimat?",
+        "Borde vi göra projekt tillsammans?"
       ],
       "action": {
         "text": "Bli partner",
@@ -617,13 +618,13 @@
       }
     },
     "organizationSupport": {
-      "title": "Stöd företag",
-      "description": "Stöd som organisation av alla storlekar",
+      "title": "Bli Stödföretag",
+      "description": "Stötta vårt arbete med öppen klimatdata för allmänheten.",
       "details": [
-        "Sponsormöjligheter med fast avgift",
-        "Partnerskap för dataverifiering",
-        "Teknologi- och resursdelning",
-        "Stöd klimatdatatransparens"
+        "Vår logotyp på er webbplats",
+        "Er logotyp på vår webbplats",
+        "Bli del av rörelsen för öppen klimatdata",
+        "25 000 kronor per år"
       ],
       "action": {
         "text": "Stöd företag",

@@ -551,15 +551,16 @@
   "supportPage": {
     "header": {
       "title": "Support Klimatkollen",
-      "description": "Help us continue our mission of tracking and promoting climate action in Sweden. There are several ways you can support our work."
+      "description": "Help us continue collecting and sharing climate data so that more people can understand how the transition to a sustainable future is progressing. There are many ways you can support our mission."
     },
     "donations": {
-      "title": "Direct Donations",
-      "description": "Support our work through financial contributions",
+      "title": "Donate money",
+      "description": "Help us keep our work going with a financial contribution",
       "details": [
-        "Bankgiro: 5793-3178",
         "Swish: 123 384 67 48",
-        "Your donation helps maintain our infrastructure and data collection"
+        "Bankgiro: 5793-3178",
+        "IBAN: SE-96 8000 0832 7973 4619 5055",
+        "Your donation helps maintain our infrastructure and data collection efforts"
       ],
       "action": {
         "text": "Make a Donation",
@@ -567,17 +568,17 @@
       },
       "email": {
         "subject": "Donation Inquiry - Klimatkollen",
-        "body": "Hi,\n\nI would like to make a donation to Klimatkollen.\n\nAmount:\n\nLooking forward to helping with climate data transparency.\n\nBest regards,"
+        "body": "Hello,\n\nI would like to make a donation to Klimatkollen.\n\nAmount:\n\nThank you for helping us continue our work with climate data.\n\nBest regards,"
       }
     },
     "openSource": {
-      "title": "Open Source Contributions",
-      "description": "Help improve our platform through code contributions",
+      "title": "Contribute Code",
+      "description": "Are you a developer? You can help by contributing code",
       "details": [
-        "Our codebase is open source on GitHub",
-        "Contribute to data analysis tools",
-        "Help improve user interface and experience",
-        "Add new features and functionality"
+        "Our source code is open and available on GitHub",
+        "Contribute to our data analysis tools",
+        "Help improve the user interface",
+        "Add new features and enhancements"
       ],
       "action": {
         "text": "View on GitHub",
@@ -585,13 +586,13 @@
       }
     },
     "volunteer": {
-      "title": "Volunteer",
-      "description": "Join our community and contribute your skills",
+      "title": "Volunteer With Us",
+      "description": "Give your time and skills to make a difference",
       "details": [
-        "Help with data verification and analysis",
-        "Assist with translations and content",
-        "Support community engagement",
-        "Participate in climate awareness initiatives"
+        "Assist with research and data analysis",
+        "Create content and manage social media",
+        "Organize events and strengthen our network",
+        "Offer advice and guidance to help us grow"
       ],
       "action": {
         "text": "Join our Discord",
@@ -599,61 +600,62 @@
       }
     },
     "partnerships": {
-      "title": "Partnerships",
-      "description": "Collaborate with us to expand our impact",
+      "title": "Partner With Us",
+      "description": "Collaborate with Klimatkollen to promote transparency and accountability",
       "details": [
-        "Data sharing partnerships",
-        "Research collaborations",
-        "Joint climate initiatives",
-        "Knowledge exchange programs"
+        "Do you have climate data on municipalities or companies?",
+        "Can you help us expand Klimatkollen to other countries?",
+        "Are you conducting research in AI and climate?",
+        "Interested in exploring a joint project?"
       ],
       "action": {
         "text": "Become a Partner",
         "link": "mailto:hej@klimatkollen.se"
       },
       "email": {
-        "subject": "Partnership Inquiry - [Organisation Name]",
-        "body": "Hi,\n\nI am interested in partnering with Klimatkollen.\n\nOrganisation Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
+        "subject": "Partnership Inquiry - [Organization Name]",
+        "body": "Hello,\n\nI am interested in exploring a partnership with Klimatkollen.\n\nOrganization Name:\nArea of Interest:\nProposed Collaboration:\n\nLooking forward to discussing potential partnership opportunities.\n\nBest regards,"
       }
     },
     "organizationSupport": {
-      "title": "Support Companies",
-      "description": "Support as an organisation of any size",
+      "title": "Support as a Company",
+      "description": "Help us provide open climate data to the public",
       "details": [
-        "Fixed fee sponsorship opportunities",
-        "Data verification partnerships",
-        "Technology and resource sharing",
-        "Support climate data transparency"
+        "Display our logo on your website",
+        "Show your logo on our website",
+        "Join the movement for open climate data",
+        "25,000 SEK per year"
       ],
       "action": {
-        "text": "Support Companies",
+        "text": "Support Us",
         "link": "mailto:hej@klimatkollen.se"
       },
       "email": {
-        "subject": "Support Company Inquiry - [Company Name]",
-        "body": "Hi,\n\nI am interested in learning more about the company support opportunity with Klimatkollen.\n\nOrganisation Name:\n\nLooking forward to discussing a collaboration.\n\nBest regards,"
+        "subject": "Corporate Support Inquiry - [Company Name]",
+        "body": "Hello,\n\nI would like to learn more about corporate support opportunities with Klimatkollen.\n\nOrganization Name:\n\nLooking forward to discussing potential collaboration.\n\nBest regards,"
       },
       "readMore": {
-        "text": "Read more",
+        "text": "Learn More",
         "content": {
-          "header": "Become a Supporting Company – Take a Stand for Open Climate Data",
+          "header": "Become a Supporting Company – Stand Up for Open Climate Data",
           "intro": [
-            "By publishing open climate data, Klimatkollen contributes to transparency and increased support for the Paris Agreement in politics and business. Because if we don't know how emissions are progressing – and how they should be progressing – we won't be able to do what's necessary to reduce them in line with the Paris Agreement.",
-            "Klimatkollen is a data-driven nonprofit building a movement around open climate data. We collaborate with businesses, academia, and civil society to increase impact. For us, AI, open data, broad communication, and civic engagement are key.",
-            "Be part of the open climate data movement – become a supporting company today!"
+            "By publishing open climate data, Klimatkollen promotes transparency and strengthens support for the Paris Agreement in both politics and business. Without knowing how emissions are progressing – and how they should be – we cannot take the necessary actions to reduce them effectively.",
+            "Klimatkollen is a data-driven non-profit organization building a movement around open climate data.",
+            "We collaborate with businesses, academia, and civil society to maximize impact. AI, open data, broad communication, and citizen engagement are at the core of our approach.",
+            "Join the movement for open climate data – become a supporting company today!"
           ],
-          "benefitsHeader": "As a supporting company, you get:",
+          "benefitsHeader": "As a supporting company, you will receive:",
           "benefits": [
-            "Our logo on your website, showing your commitment to open climate data",
-            "Your logo on our website, visible among other corporate supporters",
-            "Notifications when we publish new data about your company",
-            "The opportunity to comment on your company's climate data on our website",
-            "Automatic updating of your climate data to your company's Wikipedia page"
+            "Your commitment highlighted with our logo on your website",
+            "Visibility among other corporate supporters on our website",
+            "Notifications when new data about your company is published",
+            "Automatic updates of your climate data to your company’s Wikipedia page"
           ],
-          "cost": "SEK 25,000 / year (including VAT)"
+          "cost": "25,000 SEK / year (including VAT)"
         }
       }
     },
+
     "contact": {
       "title": "Contact Us",
       "description": "Have questions about supporting Klimatkollen, or want to find other ways to volunteer? We'd love to hear from you.",
@@ -1319,7 +1321,7 @@
     "exponentialMethodBetterFit": "Exponential trend used because it fits the data significantly better than linear trend. Suggests emissions are changing at accelerating or decelerating rate.",
     "recentExponentialMethodStrongPattern": "Recent exponential trend used because last 4 years show strong exponential pattern that is significantly better than linear. Focuses on most recent trend pattern.",
     "linearMethodDefault": "Linear trend used as default because data is sufficiently complete or does not show strong non-linear behavior or significant outliers."
-},
+  },
   "newsletterArchivePage": {
     "title": "Newsletter archive",
     "description": "Read previous newsletters",
