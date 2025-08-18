@@ -551,7 +551,7 @@
   "supportPage": {
     "header": {
       "title": "Support Klimatkollen",
-      "description": "Help us continue collecting and sharing climate data so that more people can understand how the transition to a sustainable future is progressing. There are many ways you can support our mission."
+      "description": "Help us continue collecting and sharing climate data so that more people can understand how the transition to a sustainable future is progressing. There are many ways you can support us."
     },
     "donations": {
       "title": "Donate money",
@@ -603,7 +603,7 @@
       "title": "Partner With Us",
       "description": "Collaborate with Klimatkollen to promote transparency and accountability",
       "details": [
-        "Do you have climate data on municipalities or companies?",
+        "Do you have climate data about municipalities or companies?",
         "Can you help us expand Klimatkollen to other countries?",
         "Are you conducting research in AI and climate?",
         "Interested in exploring a joint project?"
