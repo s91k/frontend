@@ -60,9 +60,10 @@ export function CompanyCard({
       : null;
 
   const employeeCount = latestPeriod?.economy?.employees?.value;
-  const formattedEmployeeCount = employeeCount
-    ? formatEmployeeCount(employeeCount, currentLanguage)
-    : t("companies.card.noData");
+  const formattedEmployeeCount =
+    employeeCount !== null && employeeCount !== undefined
+      ? formatEmployeeCount(employeeCount, currentLanguage)
+      : null;
 
   // Only used in commented out code
   // const sectorName = industry?.industryGics?.sectorCode
@@ -92,6 +93,8 @@ export function CompanyCard({
   const yearOverYearAIGenerated =
     isEmissionsAIGenerated(latestPeriod) ||
     (previousPeriod && isEmissionsAIGenerated(previousPeriod));
+
+  console.log(latestPeriod?.economy?.turnover);
 
   return (
     <div className="relative rounded-level-2 @container">
@@ -167,7 +170,7 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {currentEmissions != null && currentEmissions != 0 ? (
+              {currentEmissions != null && currentEmissions !== 0 ? (
                 <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
@@ -235,34 +238,44 @@ export function CompanyCard({
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-black-1">
-          {latestPeriod?.economy?.turnover && (
-            <div>
-              <Text
-                variant="body"
-                className="flex items-center gap-2 text-grey mb-2 text-lg"
-              >
-                <Wallet className="w-4 h-4" />
-                <span>{t("companies.card.turnover")}</span>
-              </Text>
+          <div>
+            <Text
+              variant="body"
+              className="flex items-center gap-2 text-grey mb-2 text-lg"
+            >
+              <Wallet className="w-4 h-4" />
+              <span>{t("companies.card.turnover")}</span>
+            </Text>
+            {latestPeriod?.economy?.turnover ? (
               <Text variant="h6">
-                {latestPeriod.economy.turnover.value
-                  ? localizeUnit(
+                {latestPeriod.economy.turnover.value !== null &&
+                latestPeriod.economy.turnover.value !== undefined &&
+                latestPeriod.economy.turnover.value !== 0 ? (
+                  <Text variant="h6">
+                    {localizeUnit(
                       latestPeriod.economy.turnover.value / 1e9,
                       currentLanguage,
-                    )
-                  : t("companies.card.noData")}{" "}
-                mdr
-                <span className="text-lg text-grey ml-1">
-                  {latestPeriod.economy.turnover.currency}
-                </span>
-                {turnoverAIGenerated && (
-                  <span className="ml-2">
-                    <AiIcon size="sm" />
-                  </span>
+                    )}{" "}
+                    mdr{" "}
+                    <span className="text-lg text-grey ml-1">
+                      {latestPeriod.economy.turnover.currency}
+                    </span>
+                    {turnoverAIGenerated && (
+                      <span className="ml-2">
+                        <AiIcon size="sm" />
+                      </span>
+                    )}
+                  </Text>
+                ) : (
+                  <Text variant="h6">{t("companies.card.noData")}</Text>
                 )}
               </Text>
-            </div>
-          )}
+            ) : (
+              <Text variant="h6" className="text-grey">
+                {t("companies.card.noData")}
+              </Text>
+            )}{" "}
+          </div>
 
           <div>
             <Text
@@ -272,7 +285,7 @@ export function CompanyCard({
               <Users className="w-4 h-4" />{" "}
               <span>{t("companies.card.employees")}</span>
             </Text>
-            {latestPeriod?.economy && (
+            {latestPeriod?.economy?.employees ? (
               <Text variant="h6">
                 {formattedEmployeeCount}
                 {employeesAIGenerated && (
@@ -280,6 +293,11 @@ export function CompanyCard({
                     <AiIcon size="sm" />
                   </span>
                 )}
+              </Text>
+            ) : (
+              <Text variant="h6" className="text-grey">
+                {" "}
+                {t("companies.card.noData")}
               </Text>
             )}
           </div>
