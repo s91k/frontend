@@ -52,7 +52,10 @@ export function CompanyCard({
   const currentEmissions = latestPeriod?.emissions?.calculatedTotalEmissions;
   const previousEmissions = previousPeriod?.emissions?.calculatedTotalEmissions;
   const emissionsChange =
-    previousEmissions != null && currentEmissions != null
+    previousEmissions != null &&
+    currentEmissions != null &&
+    previousEmissions != 0 &&
+    currentEmissions != 0
       ? ((currentEmissions - previousEmissions) / previousEmissions) * 100
       : null;
 
@@ -164,7 +167,7 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {currentEmissions != null ? (
+              {currentEmissions != null && currentEmissions != 0 ? (
                 <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
@@ -212,7 +215,7 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {emissionsChange !== null ? (
+              {emissionsChange !== null && Number.isFinite(emissionsChange) ? (
                 <span
                   className={cn(
                     emissionsChange < 0 ? "text-orange-2" : "text-pink-3",
