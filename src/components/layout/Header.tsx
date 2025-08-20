@@ -38,7 +38,7 @@ export function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      if (window.scrollY >= 200) {
+      if (window.scrollY >= 125) {
         setShowTitle(true);
       } else {
         setShowTitle(false);
@@ -126,7 +126,10 @@ export function Header() {
       sublinks: [
         { label: t("header.reports"), path: `${currentLanguage}/reports` },
         { label: t("header.articles"), path: `${currentLanguage}/articles` },
-        { label: t("header.newsletterArchive"), path: `${currentLanguage}/newsletter-archive`},
+        {
+          label: t("header.newsletterArchive"),
+          path: `${currentLanguage}/newsletter-archive`,
+        },
         { label: t("header.learnMore"), path: `${currentLanguage}/learn-more` },
       ],
     },
