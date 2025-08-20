@@ -256,7 +256,9 @@ export function CompanyCard({
                       latestPeriod.economy.turnover.value / 1e9,
                       currentLanguage,
                     )}{" "}
-                    mdr{" "}
+                    <span className="text-lg text-grey ml-1">
+                      {t("companies.card.turnoverAmount")}
+                    </span>
                     <span className="text-lg text-grey ml-1">
                       {latestPeriod.economy.turnover.currency}
                     </span>
@@ -267,7 +269,9 @@ export function CompanyCard({
                     )}
                   </Text>
                 ) : (
-                  <Text variant="h6">{t("companies.card.noData")}</Text>
+                  <Text variant="h6" className="text-grey">
+                    {t("companies.card.noData")}
+                  </Text>
                 )}
               </Text>
             ) : (
