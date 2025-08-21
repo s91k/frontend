@@ -198,8 +198,8 @@ export function CompanyOverview({
               </span>
             </Text>
             {totalEmissionsAIGenerated && (
-              <span className="ml-2">
-                <AiIcon size="md" />
+              <span className="ml-2 absolute">
+                <AiIcon size="md" className="absolute top-0" />
               </span>
             )}
           </div>
@@ -227,8 +227,8 @@ export function CompanyOverview({
               </span>
             )}
             {yearOverYearAIGenerated && (
-              <span className="ml-2">
-                <AiIcon size="md" />
+              <span className="ml-2 absolute">
+                <AiIcon size="md" className="absolute top-0" />
               </span>
             )}
           </Text>
