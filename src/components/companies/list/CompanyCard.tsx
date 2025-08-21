@@ -49,13 +49,13 @@ export function CompanyCard({
   const latestPeriod = reportingPeriods[0];
   const previousPeriod = reportingPeriods[1];
 
-  const currentEmissions = latestPeriod?.emissions?.calculatedTotalEmissions;
-  const previousEmissions = previousPeriod?.emissions?.calculatedTotalEmissions;
+  const currentEmissions =
+    latestPeriod?.emissions?.calculatedTotalEmissions || null;
+  const previousEmissions =
+    previousPeriod?.emissions?.calculatedTotalEmissions || null;
+
   const emissionsChange =
-    previousEmissions != null &&
-    currentEmissions != null &&
-    previousEmissions != 0 &&
-    currentEmissions != 0
+    currentEmissions && previousEmissions
       ? ((currentEmissions - previousEmissions) / previousEmissions) * 100
       : null;
 
@@ -65,10 +65,7 @@ export function CompanyCard({
       ? formatEmployeeCount(employeeCount, currentLanguage)
       : null;
 
-  // Only used in commented out code
-  // const sectorName = industry?.industryGics?.sectorCode
-  //   ? sectorNames[industry.industryGics.sectorCode as SectorCode]
-  //   : t("companies.card.unknownSector");
+  const latestPeriodEconomyTurnover = latestPeriod?.economy?.turnover || null;
 
   // Find the largest scope 3 category
   const scope3Categories = latestPeriod?.emissions?.scope3?.categories || [];
@@ -94,8 +91,6 @@ export function CompanyCard({
     isEmissionsAIGenerated(latestPeriod) ||
     (previousPeriod && isEmissionsAIGenerated(previousPeriod));
 
-  console.log(latestPeriod?.economy?.turnover);
-
   return (
     <div className="relative rounded-level-2 @container">
       <Link
@@ -105,42 +100,6 @@ export function CompanyCard({
         <div className="flex items-start justify-between rounded-level-2">
           <div className="space-y-2">
             <h2 className="text-3xl font-light">{name}</h2>
-            {/* {rankings && (
-            <div className="flex flex-wrap gap-4 text-sm text-grey">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span>#{rankings.overall} totalt</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ranking bland alla företag</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span>#{rankings.sector} inom {sectorName}</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ranking inom {sectorName.toLowerCase()}-sektorn</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span>#{rankings.category} i kategorin</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ranking inom företag av liknande storlek</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          )} */}
             <p className="text-grey text-sm line-clamp-2">{description}</p>
           </div>
           <div
@@ -170,7 +129,7 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {currentEmissions != null && currentEmissions !== 0 ? (
+              {currentEmissions ? (
                 <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
@@ -197,7 +156,7 @@ export function CompanyCard({
                     <Info className="w-4 h-4" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-80">
-                    {emissionsChange != null ? (
+                    {emissionsChange ? (
                       emissionsChange <= -80 || emissionsChange >= 80 ? (
                         <>
                           <p>{t("companies.card.emissionsChangeRateInfo")}</p>
@@ -218,7 +177,7 @@ export function CompanyCard({
               </TooltipProvider>
             </div>
             <div className="text-3xl font-light">
-              {emissionsChange !== null && Number.isFinite(emissionsChange) ? (
+              {emissionsChange ? (
                 <span
                   className={cn(
                     emissionsChange < 0 ? "text-orange-2" : "text-pink-3",
@@ -246,39 +205,31 @@ export function CompanyCard({
               <Wallet className="w-4 h-4" />
               <span>{t("companies.card.turnover")}</span>
             </Text>
-            {latestPeriod?.economy?.turnover ? (
-              <Text variant="h6">
-                {latestPeriod.economy.turnover.value !== null &&
-                latestPeriod.economy.turnover.value !== undefined &&
-                latestPeriod.economy.turnover.value !== 0 ? (
-                  <Text variant="h6">
-                    {localizeUnit(
-                      latestPeriod.economy.turnover.value / 1e9,
-                      currentLanguage,
-                    )}{" "}
-                    <span className="text-lg text-grey ml-1">
-                      {t("companies.card.turnoverAmount")}
+            <>
+              {latestPeriodEconomyTurnover ? (
+                <Text variant="h6">
+                  {localizeUnit(
+                    latestPeriodEconomyTurnover.value / 1e9,
+                    currentLanguage,
+                  )}{" "}
+                  <span className="text-lg text-grey ml-1">
+                    {t("companies.card.turnoverAmount")}
+                  </span>
+                  <span className="text-lg text-grey ml-1">
+                    {latestPeriodEconomyTurnover.currency}
+                  </span>
+                  {turnoverAIGenerated && (
+                    <span className="ml-2">
+                      <AiIcon size="sm" />
                     </span>
-                    <span className="text-lg text-grey ml-1">
-                      {latestPeriod.economy.turnover.currency}
-                    </span>
-                    {turnoverAIGenerated && (
-                      <span className="ml-2">
-                        <AiIcon size="sm" />
-                      </span>
-                    )}
-                  </Text>
-                ) : (
-                  <Text variant="h6" className="text-grey">
-                    {t("companies.card.noData")}
-                  </Text>
-                )}
-              </Text>
-            ) : (
-              <Text variant="h6" className="text-grey">
-                {t("companies.card.noData")}
-              </Text>
-            )}{" "}
+                  )}
+                </Text>
+              ) : (
+                <Text variant="h6" className="text-grey">
+                  {t("companies.card.noData")}
+                </Text>
+              )}
+            </>
           </div>
 
           <div>
