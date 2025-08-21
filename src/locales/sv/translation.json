@@ -924,6 +924,7 @@
       "emissionsChangeRateInfo": "Förändringstakt för utsläpp jämfört med föregående rapporteringsperiod.",
       "emissionsChangeRateInfoExtended": "Det här värdet är ovanligt högt på grund av inkonsekvent rapportering mellan de två senaste perioderna, vilket gör att procentförändringen inte speglar den faktiska utvecklingen.",
       "turnover": "Omsättning",
+      "turnoverAmount": "mdr",
       "employees": "Anställda",
       "companyReport": "Hållbarhetsrapport",
       "missingReport": "Saknar report",

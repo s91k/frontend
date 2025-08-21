@@ -925,6 +925,7 @@
       "emissionsChangeRateInfo": "Change rate of emissions compared to the previous reporting period.",
       "emissionsChangeRateInfoExtended": "This value is so large due to inconsistencies in reported data between the last two reporting periods, thus this value is not representative of actual changes.",
       "turnover": "Turnover",
+      "turnoverAmount": "bn",
       "employees": "Employees",
       "companyReport": "Sustainability Report",
       "missingReport": "Missing Report",
