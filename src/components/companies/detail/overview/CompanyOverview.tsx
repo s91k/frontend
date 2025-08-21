@@ -173,36 +173,35 @@ export function CompanyOverview({
           >
             {t("companies.overview.totalEmissions")} {periodYear}
           </Text>
-          <div className="flex items-baseline gap-4">
-            <Text
-              className={cn(
-                "text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none",
-                selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                  ? "text-grey"
-                  : "text-orange-2",
-              )}
-            >
-              {!selectedPeriod.emissions ||
+
+          <Text
+            className={cn(
+              "text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none",
               selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                ? t("companies.overview.noData")
-                : formatEmissionsAbsolute(
-                    selectedPeriod.emissions.calculatedTotalEmissions,
-                    currentLanguage,
-                  )}
-              <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
-                {t(
-                  selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                    ? " "
-                    : "emissionsUnit",
+                ? "text-grey"
+                : "text-orange-2",
+            )}
+          >
+            {!selectedPeriod.emissions ||
+            selectedPeriod.emissions?.calculatedTotalEmissions === 0
+              ? t("companies.overview.noData")
+              : formatEmissionsAbsolute(
+                  selectedPeriod.emissions.calculatedTotalEmissions,
+                  currentLanguage,
                 )}
-              </span>
-            </Text>
+            <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
+              {t(
+                selectedPeriod.emissions?.calculatedTotalEmissions === 0
+                  ? " "
+                  : "emissionsUnit",
+              )}
+            </span>
             {totalEmissionsAIGenerated && (
               <span className="ml-2 absolute">
-                <AiIcon size="md" className="absolute top-0" />
+                <AiIcon size="md" className="absolute top-0 " />
               </span>
             )}
-          </div>
+          </Text>
         </div>
 
         <div className="flex-1">
