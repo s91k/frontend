@@ -205,31 +205,30 @@ export function CompanyCard({
               <Wallet className="w-4 h-4" />
               <span>{t("companies.card.turnover")}</span>
             </Text>
-            <>
-              {latestPeriodEconomyTurnover ? (
-                <Text variant="h6">
-                  {localizeUnit(
-                    latestPeriodEconomyTurnover.value / 1e9,
-                    currentLanguage,
-                  )}{" "}
-                  <span className="text-lg text-grey ml-1">
-                    {t("companies.card.turnoverAmount")}
+
+            {latestPeriodEconomyTurnover?.value ? (
+              <Text variant="h6">
+                {localizeUnit(
+                  latestPeriodEconomyTurnover.value / 1e9,
+                  currentLanguage,
+                )}{" "}
+                <span className="text-lg text-grey ml-1">
+                  {t("companies.card.turnoverAmount")}
+                </span>
+                <span className="text-lg text-grey ml-1">
+                  {latestPeriodEconomyTurnover.currency}
+                </span>
+                {turnoverAIGenerated && (
+                  <span className="ml-2">
+                    <AiIcon size="sm" />
                   </span>
-                  <span className="text-lg text-grey ml-1">
-                    {latestPeriodEconomyTurnover.currency}
-                  </span>
-                  {turnoverAIGenerated && (
-                    <span className="ml-2">
-                      <AiIcon size="sm" />
-                    </span>
-                  )}
-                </Text>
-              ) : (
-                <Text variant="h6" className="text-grey">
-                  {t("companies.card.noData")}
-                </Text>
-              )}
-            </>
+                )}
+              </Text>
+            ) : (
+              <Text variant="h6" className="text-grey">
+                {t("companies.card.noData")}
+              </Text>
+            )}
           </div>
 
           <div>
