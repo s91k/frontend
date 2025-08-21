@@ -136,8 +136,8 @@ export function CompanyCard({
                     {t("emissionsUnit")}
                   </span>
                   {totalEmissionsAIGenerated && (
-                    <span className="ml-2">
-                      <AiIcon size="sm" />
+                    <span className="ml-2 absolute">
+                      <AiIcon size="sm" className="absolute top-0" />
                     </span>
                   )}
                 </span>
@@ -185,8 +185,8 @@ export function CompanyCard({
                 >
                   {formatPercentChange(emissionsChange, currentLanguage)}
                   {yearOverYearAIGenerated && (
-                    <span className="ml-2">
-                      <AiIcon size="sm" />
+                    <span className="ml-2 absolute">
+                      <AiIcon size="sm" className="absolute top-0" />
                     </span>
                   )}
                 </span>
@@ -219,8 +219,8 @@ export function CompanyCard({
                   {latestPeriodEconomyTurnover.currency}
                 </span>
                 {turnoverAIGenerated && (
-                  <span className="ml-2">
-                    <AiIcon size="sm" />
+                  <span className="ml-2 absolute">
+                    <AiIcon size="sm" className="absolute top-0" />
                   </span>
                 )}
               </Text>
@@ -243,8 +243,8 @@ export function CompanyCard({
               <Text variant="h6">
                 {formattedEmployeeCount}
                 {employeesAIGenerated && (
-                  <span className="ml-2">
-                    <AiIcon size="sm" />
+                  <span className="ml-2 absolute">
+                    <AiIcon size="sm" className="absolute top-0" />
                   </span>
                 )}
               </Text>
