@@ -45,7 +45,7 @@ export function InsightsPage() {
     title: post.title,
     excerpt: post.excerpt,
     image: post.image || "/images/default-blog-image.jpg",
-    category: post.category,
+    category: t("insightCategories." + post.category),
     date: post.date,
     readTime: post.readTime,
     language: post.language,
@@ -71,7 +71,7 @@ export function InsightsPage() {
                 aria-label="Category"
                 className="px-3 py-1 bg-blue-5/50 rounded-full text-blue-2 text-sm"
               >
-                {featuredPost.category}
+                {t("insightCategories." + featuredPost.category)}
               </span>
               <div className="flex items-center gap-2 text-grey text-sm">
                 <CalendarDays className="w-4 h-4" />

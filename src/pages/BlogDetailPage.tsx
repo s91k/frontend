@@ -133,7 +133,7 @@ export function BlogDetailPage() {
       <div className={`space-y-${isMobile ? "4" : "8"}`}>
         <div className="flex flex-wrap items-center gap-4">
           <span className="px-3 py-1 bg-blue-5/50 rounded-full text-blue-2 text-sm">
-            {blogPost.metadata.category}
+            {t("insightCategories." + blogPost.metadata.category)}
           </span>
           <div className="flex items-center gap-2 text-grey text-sm">
             <CalendarDays className="w-4 h-4" />

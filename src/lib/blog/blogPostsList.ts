@@ -1,9 +1,9 @@
 import { ContentMeta } from "@/types/content";
 
 export enum CategoryEnum {
-  Methodology = "Metodik",
-  Analysis = "Analys",
-  Guide = "Guide",
+  Methodology = "methodology",
+  Analysis = "analysis",
+  Guide = "guide",
 }
 
 export const blogMetadata: ContentMeta[] = [

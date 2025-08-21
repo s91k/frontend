@@ -8,7 +8,7 @@ export const reports: ContentMeta[] = [
     date: "2025-03-11",
     excerpt: "En analys av 150 bolags klimatredovisningar",
     readTime: "15 min",
-    category: "Rapport",
+    category: "report",
     author: {
       name: "Alexandra Palmquist",
       avatar: "/people/alex.jpg",
@@ -25,7 +25,7 @@ export const reports: ContentMeta[] = [
     date: "2024-06-01",
     excerpt: "En analys av 150 svenska storbolags klimatredovisning 2023",
     readTime: "15 min",
-    category: "Rapport",
+    category: "report",
     author: {
       name: "Alexandra Palmquist",
       avatar: "/people/alex.jpg",
@@ -43,7 +43,7 @@ export const reports: ContentMeta[] = [
     excerpt:
       "An analysis of 150 major Swedish companies' climate reporting 2023",
     readTime: "15 min",
-    category: "Report",
+    category: "report",
     author: {
       name: "Alexandra Palmquist",
       avatar: "/people/alex.jpg",
@@ -62,7 +62,7 @@ export const reports: ContentMeta[] = [
     excerpt:
       "A typology of data quality problems in corporate reporting of GHG emissions. A report by Green Data, Indicators, Algorithms (Green DIA), funded by the Bavarian Research Institute for Digital Transformation (bidt) and Klimatkollen.",
     readTime: "15 min",
-    category: "Report",
+    category: "report",
     author: {
       name: "Green DIA",
     },
@@ -79,7 +79,7 @@ export const reports: ContentMeta[] = [
     excerpt:
       "I årets version av rapporten Bolagsklimatkollen analyserar vi 235 storbolags klimatredovisning för 2024. Rapporten är ett samarbete mellan 2050 Consulting och Klimatkollen.",
     readTime: "15 min",
-    category: "Report",
+    category: "report",
     author: {
       name: "Frida Berry Eklund",
       avatar: "/people/frida.jpg",
@@ -97,7 +97,7 @@ export const reports: ContentMeta[] = [
     excerpt:
       "Summary of Klimatkollen's investigations for adjustments to the Carbon Law target trajectory, based on 2024 emissions and updated carbon budgets.",
     readTime: "7 min",
-    category: "Report",
+    category: "report",
     author: {
       name: "Frida Berry Eklund",
       avatar: "/people/frida.jpg",
