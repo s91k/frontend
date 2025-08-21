@@ -113,7 +113,7 @@ export function CompanyCard({
           </div>
         </div>
         <div className="flex flex-col gap-4 @xl:grid grid-cols-2">
-          <div className="space-y-2">
+          <div className="space-y-2 h-[80px]">
             <div className="flex items-center gap-2 text-grey mb-2 text-lg">
               <TrendingDown className="w-4 h-4" />
               {t("companies.card.emissions")}
@@ -128,8 +128,8 @@ export function CompanyCard({
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <div className="text-3xl font-light">
-              {currentEmissions ? (
+            <div className="text-3xl flex font-light h-[44px]">
+              {currentEmissions != null ? (
                 <span className="text-orange-2">
                   {formatEmissionsAbsolute(currentEmissions, currentLanguage)}
                   <span className="text-lg text-grey ml-1">
@@ -146,7 +146,7 @@ export function CompanyCard({
               )}
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 h-[80px]">
             <div className="flex items-center gap-2 text-grey mb-2 text-lg">
               <TrendingDown className="w-4 h-4" />
               <span>{t("companies.card.emissionsChangeRate")}</span>
