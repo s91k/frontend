@@ -94,6 +94,9 @@ export function CompanyOverview({
       )
     : t("companies.overview.notReported");
 
+  const calculatedTotalEmissions =
+    selectedPeriod.emissions?.calculatedTotalEmissions || null;
+
   return (
     <SectionWithHelp
       helpItems={[
@@ -177,24 +180,17 @@ export function CompanyOverview({
           <Text
             className={cn(
               "text-3xl md:text-4xl lg:text-6xl font-light tracking-tighter leading-none",
-              selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                ? "text-grey"
-                : "text-orange-2",
+              !calculatedTotalEmissions ? "text-grey" : "text-orange-2",
             )}
           >
-            {!selectedPeriod.emissions ||
-            selectedPeriod.emissions?.calculatedTotalEmissions === 0
+            {!calculatedTotalEmissions
               ? t("companies.overview.noData")
               : formatEmissionsAbsolute(
-                  selectedPeriod.emissions.calculatedTotalEmissions,
+                  calculatedTotalEmissions,
                   currentLanguage,
                 )}
             <span className="text-lg lg:text-2xl md:text-lg sm:text-sm ml-2 text-grey">
-              {t(
-                selectedPeriod.emissions?.calculatedTotalEmissions === 0
-                  ? " "
-                  : "emissionsUnit",
-              )}
+              {t(calculatedTotalEmissions ? " " : "emissionsUnit")}
             </span>
             {totalEmissionsAIGenerated && (
               <span className="ml-2 absolute">
