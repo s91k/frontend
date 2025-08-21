@@ -100,7 +100,9 @@ export function CompanyCard({
         <div className="flex items-start justify-between rounded-level-2">
           <div className="space-y-2">
             <h2 className="text-3xl font-light">{name}</h2>
-            <p className="text-grey text-sm line-clamp-2">{description}</p>
+            <p className="text-grey text-sm line-clamp-2 min-h-[40px]">
+              {description}
+            </p>
           </div>
           <div
             className="w-12 h-12 rounded-full flex shrink-0 items-center justify-center"
