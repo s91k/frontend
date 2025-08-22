@@ -16,7 +16,7 @@ export const reports: ContentMeta[] = [
     link: "/reports/2025-03-17_StorfoeretagensHistoriskaUtslaepp.pdf",
     image: "/images/reportImages/2024_report_sv2.png",
     displayLanguages: ["sv"],
-    language: "Svenska",
+    language: "sv",
   },
   {
     id: "2",
@@ -33,7 +33,7 @@ export const reports: ContentMeta[] = [
     link: "/reports/2024-06-Bolagsklimatkollen.pdf",
     image: "/images/reportImages/2023_bolagsklimatkollen2.png",
     displayLanguages: ["sv"],
-    language: "Svenska",
+    language: "sv",
   },
   {
     id: "3",
@@ -51,7 +51,7 @@ export const reports: ContentMeta[] = [
     link: "/reports/2024-08_CorporateClimateChecker.pdf",
     image: "/images/reportImages/2023_corportateclimatechecker2.png",
     displayLanguages: ["en"],
-    language: "English",
+    language: "en",
   },
   {
     id: "4",
@@ -69,7 +69,7 @@ export const reports: ContentMeta[] = [
     link: "/reports/Typology_of_Data_Quality_Problems_in_Corporate_Reporting.docx.pdf",
     image: "/images/reportImages/typology-of-errors.png",
     displayLanguages: ["en", "all"],
-    language: "English",
+    language: "en",
   },
   {
     id: "5",
@@ -87,7 +87,7 @@ export const reports: ContentMeta[] = [
     link: "/reports/2025-06-23_Bolagsklimatkollen.pdf",
     image: "/images/reportImages/2024_bolagsklimatkollen.png",
     displayLanguages: ["sv", "all"],
-    language: "Svenska",
+    language: "sv",
   },
   {
     id: "6",
@@ -105,6 +105,6 @@ export const reports: ContentMeta[] = [
     link: "/reports/2025-06-19_ApplyingCarbonLawFrom2025.pdf",
     image: "/images/reportImages/2025_Carbon_Law.png",
     displayLanguages: ["en", "all"],
-    language: "English",
+    language: "en",
   },
 ];

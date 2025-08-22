@@ -1335,5 +1335,9 @@
     "analysis": "Analysis",
     "guide": "Guide",
     "methodology": "Methodology"
+  },
+  "language": {
+    "sv": "Swedish",
+    "en": "English"
   }
 }

@@ -85,7 +85,7 @@ export function InsightsPage() {
               </div>
               <div className="flex items-center gap-2 text-grey text-sm">
                 <Globe2 className="w-4 h-4" />
-                <span aria-label="Language">{featuredPost.language}</span>
+                <span aria-label="Language">{t("language." + featuredPost.language)}</span>
               </div>
             </div>
             <Text

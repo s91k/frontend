@@ -63,7 +63,7 @@ export function ContentCard({ item, basePath }: ContentCardProps) {
             {item.language && (
               <div className="flex items-center gap-2 text-grey text-sm">
                 <Globe2 className="w-4 h-4" />
-                <span aria-label="Language">{item.language}</span>
+                <span aria-label="Language">{t("language." + item.language)}</span>
               </div>
             )}
           </div>

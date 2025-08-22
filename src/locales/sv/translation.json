@@ -1334,5 +1334,9 @@
     "analysis": "Analys",
     "guide": "Guide",
     "methodology": "Metodik"
+  },
+  "language": {
+    "sv": "Svenska",
+    "en": "Engelska"
   }
 }
