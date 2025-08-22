@@ -13,6 +13,8 @@ import { blogMetadata } from "../lib/blog/blogPostsList";
 import { useTranslation } from "react-i18next";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ContentMeta } from "@/types/content";
+import { localizeUnit } from "@/utils/formatting/localization";
+import { useLanguage } from "@/components/LanguageProvider";
 
 // Import Markdown files
 const markdownFiles = import.meta.glob("/src/lib/blog/posts/*.md", {
@@ -31,6 +33,7 @@ export function BlogDetailPage() {
   const [copied, setCopied] = useState(false);
   const location = useLocation();
   const { isMobile } = useScreenSize();
+  const { currentLanguage } = useLanguage();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -138,7 +141,7 @@ export function BlogDetailPage() {
           <div className="flex items-center gap-2 text-grey text-sm">
             <CalendarDays className="w-4 h-4" />
             <span>
-              {new Date(blogPost.metadata.date).toLocaleDateString("sv-SE")}
+              {localizeUnit(new Date(blogPost.metadata.date), currentLanguage)}
             </span>
           </div>
           <div className="flex items-center gap-2 text-grey text-sm">

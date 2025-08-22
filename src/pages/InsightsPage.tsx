@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/components/LanguageProvider";
 import { ContentGridPage } from "@/components/layout/ContentGridPage";
 import { ContentCard } from "@/components/layout/ContentCard";
+import { localizeUnit } from "@/utils/formatting/localization";
 
 export function InsightsPage() {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ export function InsightsPage() {
               <div className="flex items-center gap-2 text-grey text-sm">
                 <CalendarDays className="w-4 h-4" />
                 <span aria-label="Date Published">
-                  {new Date(featuredPost.date).toLocaleDateString("sv-SE")}
+                  {localizeUnit(new Date(featuredPost.date), currentLanguage)}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-grey text-sm">
