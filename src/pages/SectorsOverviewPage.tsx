@@ -9,8 +9,10 @@ import { FilterPopover } from "@/components/explore/FilterPopover";
 import { FilterBadges } from "@/components/companies/list/FilterBadges";
 import { useCompanyFilters } from "@/hooks/companies/useCompanyFilters";
 import { useSectorNames } from "@/hooks/companies/useCompanySectors";
+import { useParams } from "react-router-dom";
 
 export function SectorsOverviewPage() {
+  const { code } = useParams<{code?: string}>()
   const { t } = useTranslation();
   const screenSize = useScreenSize();
   const { companies, companiesLoading, companiesError } = useCompanies();
@@ -93,9 +95,10 @@ export function SectorsOverviewPage() {
       ) : (
         <SectorGraphs
           companies={filteredCompanies}
-          selectedSectors={Object.keys(sectorNames).filter(
+          sectors={Object.keys(sectorNames).filter(
             (key) => key !== "all",
           )}
+          selectedSector={code ?? null}
         />
       )}
     </>

@@ -81,7 +81,7 @@ function ComparisonRoutes({ basePath }: { basePath: string }) {
 function CompanyRoutes({ basePath }: { basePath: string }) {
   return (
     <>
-      <Route path={`${basePath}/sectors`} element={<SectorsOverviewPage />} />
+      <Route path={`${basePath}/sectors/:code?`} element={<SectorsOverviewPage />} />
       <Route
         path={`${basePath}/companies`}
         element={<CompaniesOverviewPage />}

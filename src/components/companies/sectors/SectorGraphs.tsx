@@ -6,26 +6,29 @@ import SectorEmissionsChart from "@/components/companies/sectors/charts/SectorEm
 
 interface SectorGraphsProps {
   companies: RankedCompany[];
-  selectedSectors?: CompanySector[];
+  sectors?: CompanySector[];
+  selectedSector: CompanySector | null;
 }
 
 const SectorGraphs: React.FC<SectorGraphsProps> = ({
   companies,
-  selectedSectors = [],
+  sectors = [],
+  selectedSector,
 }) => {
   // Convert selectedSectors to string[] for SectorEmissionsChart
-  const sectorCodes = selectedSectors.filter((sector) => sector !== "all");
+  const sectorCodes = sectors.filter((sector) => sector !== "all");
   const sectorNames = useSectorNames();
 
   return (
     <div className="bg-black space-y-4">
       <SectorEmissionsChart
         companies={companies}
-        selectedSectors={
+        sectors={
           sectorCodes.length > 0
             ? sectorCodes
             : Object.keys(sectorNames).filter((key) => key !== "all")
         }
+        selectedSector={selectedSector}
       />
     </div>
   );

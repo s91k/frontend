@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -16,10 +16,14 @@ import ChartHeader from "./ChartHeader";
 import SectorChartInsights from "./SectorChartInsights";
 import { useSectorChartInsights } from "@/hooks/companies/useSectorChartInsights";
 import { useChartMotion } from "@/hooks/useChartMotion";
+import { CompanySector } from "@/lib/constants/sectors";
+import { useLanguage } from "@/components/LanguageProvider";
+import { localizedPath } from "@/utils/routing";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
-  selectedSectors: string[];
+  sectors: CompanySector[];
+  selectedSector: CompanySector | null;
 }
 
 interface PieChartClickData {
@@ -34,20 +38,20 @@ interface PieChartClickData {
 
 const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   companies,
-  selectedSectors,
+  sectors,
+  selectedSector,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
   const { reduceMotion, fadeDuration, ease } = useChartMotion();
-
-  const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const screenSize = useScreenSize();
 
   const reportingYear = getSectorsReportingYear().toString();
 
   const { pieChartData, totalEmissions } = useChartData(
     companies,
-    selectedSectors,
+    sectors,
     selectedSector,
     reportingYear,
   );
@@ -61,9 +65,9 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
 
   const handlePieClick = (data: PieChartClickData) => {
     if (!selectedSector && data?.sectorCode) {
-      setSelectedSector(data.sectorCode);
+      navigate(localizedPath(currentLanguage, `/sectors/${data.sectorCode}${location.search}`));
     } else if (selectedSector && data?.wikidataId) {
-      navigate(`/companies/${data.wikidataId}`);
+      navigate(localizedPath(currentLanguage, `/companies/${data.wikidataId}`));
     }
   };
 
@@ -91,7 +95,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
         <ChartHeader
           selectedSector={selectedSector}
           totalEmissions={totalEmissions}
-          onSectorClear={() => setSelectedSector(null)}
+          onSectorClear={() => navigate(localizedPath(currentLanguage, `/sectors`))}
         />
 
         <div>
@@ -116,15 +120,8 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   <SectorPieLegend
                     data={pieChartDataWithColor}
                     total={totalEmissions}
-                    onItemClick={(entry) => {
-                      if (entry.wikidataId) {
-                        navigate(`/companies/${entry.wikidataId as string}`);
-                      } else if (entry.sectorCode) {
-                        handlePieClick({
-                          sectorCode: entry.sectorCode as string,
-                        });
-                      }
-                    }}
+                    onItemClick={(entry) => { handlePieClick(entry) }
+                    }
                     getActionTooltip={() =>
                       t(`companyDetailPage.sectorGraphs.${actionTooltipKey}`)
                     }
