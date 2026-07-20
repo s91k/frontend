@@ -12,13 +12,13 @@ import SectorPieChart, {
 } from "@/components/charts/sectorChart/SectorPieChart";
 import SectorPieLegend from "@/components/charts/sectorChart/SectorPieLegend";
 import { DetailPieSectorGrid } from "@/components/detail/DetailGrid";
-import ChartHeader from "./ChartHeader";
 import SectorChartInsights from "./SectorChartInsights";
 import { useSectorChartInsights } from "@/hooks/companies/useSectorChartInsights";
 import { useChartMotion } from "@/hooks/useChartMotion";
 import { CompanySector } from "@/lib/constants/sectors";
 import { useLanguage } from "@/components/LanguageProvider";
 import { localizedPath } from "@/utils/routing";
+import EmissionsTotalDisplay from "./EmissionsTotalDisplay";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
@@ -65,7 +65,12 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
 
   const handlePieClick = (data: PieChartClickData) => {
     if (!selectedSector && data?.sectorCode) {
-      navigate(localizedPath(currentLanguage, `/sectors/${data.sectorCode}${location.search}`));
+      navigate(
+        localizedPath(
+          currentLanguage,
+          `/sectors/${data.sectorCode}${location.search}`,
+        ),
+      );
     } else if (selectedSector && data?.wikidataId) {
       navigate(localizedPath(currentLanguage, `/companies/${data.wikidataId}`));
     }
@@ -92,11 +97,12 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   return (
     <>
       <div className="bg-black-2 rounded-lg border p-6 w-full space-y-6">
-        <ChartHeader
-          selectedSector={selectedSector}
-          totalEmissions={totalEmissions}
-          onSectorClear={() => navigate(localizedPath(currentLanguage, `/sectors`))}
-        />
+        <div className="flex flex-col">
+          <EmissionsTotalDisplay
+            totalEmissions={totalEmissions}
+            isSectorView={!!selectedSector}
+          />
+        </div>
 
         <div>
           {totalEmissions > 0 ? (
@@ -120,8 +126,9 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
                   <SectorPieLegend
                     data={pieChartDataWithColor}
                     total={totalEmissions}
-                    onItemClick={(entry) => { handlePieClick(entry) }
-                    }
+                    onItemClick={(entry) => {
+                      handlePieClick(entry);
+                    }}
                     getActionTooltip={() =>
                       t(`companyDetailPage.sectorGraphs.${actionTooltipKey}`)
                     }

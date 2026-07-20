@@ -443,6 +443,7 @@
   "sectorsOverviewPage": {
     "title": "Branschöversikt",
     "description": "Översikt över utsläpp och omställning på branschnivå",
+    "overview": "Översikt",
     "errorTitle": "Det gick inte att hämta företagsinformation",
     "errorDescription": "Försök igen senare",
     "noCompaniesFound": "Inga företag hittades",

@@ -392,6 +392,7 @@
   "sectorsOverviewPage": {
     "title": "Sector Overview",
     "description": "Overview of emissions and transition at the sector level",
+    "overview": "Overview",
     "errorTitle": "Failed to retrieve company information",
     "errorDescription": "Please try again later",
     "noCompaniesFound": "No companies found",
