@@ -1145,17 +1145,50 @@
     "bicycleMetrePerCapita": "Bicycle path metres per capita"
   },
   "sector": {
-    "energy": "Energy",
-    "materials": "Materials",
-    "industrials": "Industrials",
-    "consumerDiscretionary": "Consumer Discretionary",
-    "consumerStaples": "Consumer Staples",
-    "healthCare": "Healthcare",
-    "financials": "Financials",
-    "informationTechnology": "Information Technology",
-    "communicationServices": "Communication Services",
-    "utilities": "Utilities",
-    "realEstate": "Real Estate"
+    "energy": {
+      "name": "Energy",
+      "title": "Energy Sector"
+    },
+    "materials": {
+      "name": "Materials",
+      "title": "Materials Sector"
+    },
+    "industrials": {
+      "name": "Industrials",
+      "title": "Industrials Sector"
+    },
+    "consumerDiscretionary": {
+      "name": "Consumer Discretionary",
+      "title": "Consumer Discretionary Sector"
+    },
+    "consumerStaples": {
+      "name": "Consumer Staples",
+      "title": "Consumer Staples Sector"
+    },
+    "healthCare": {
+      "name": "Healthcare",
+      "title": "Healthcare Sector"
+    },
+    "financials": {
+      "name": "Financials",
+      "title": "Financials Sector"
+    },
+    "informationTechnology": {
+      "name": "Information Technology",
+      "title": "Information Technology Sector"
+    },
+    "communicationServices": {
+      "name": "Communication Services",
+      "title": "Communication Services Sector"
+    },
+    "utilities": {
+      "name": "Utilities",
+      "title": "Utilities Sector"
+    },
+    "realEstate": {
+      "name": "Real Estate",
+      "title": "Real Estate Sector"
+    }
   },
   "scope": {
     "scope1": "Direct emissions from sources owned or controlled by the organisation.",

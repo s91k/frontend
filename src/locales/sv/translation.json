@@ -1196,17 +1196,50 @@
     "bicycleMetrePerCapita": "Cykelvägsmeter per invånare"
   },
   "sector": {
-    "energy": "Energi",
-    "materials": "Material",
-    "industrials": "Industri",
-    "consumerDiscretionary": "Sällanköpsvaror",
-    "consumerStaples": "Dagligvaror",
-    "healthCare": "Hälsovård",
-    "financials": "Finans",
-    "informationTechnology": "IT",
-    "communicationServices": "Kommunikation",
-    "utilities": "Kraftförsörjning",
-    "realEstate": "Fastigheter"
+    "energy": {
+      "name": "Energi",
+      "title": "Energi\u00ADbranschen"
+    },
+    "materials": {
+      "name": "Material",
+      "title": "Material\u00ADbranschen"
+    },
+    "industrials": {
+      "name": "Industri",
+      "title": "Industri\u00ADbranschen"
+    },
+    "consumerDiscretionary": {
+      "name": "Sällanköpsvaror",
+      "title": "Sällanköpsvaru\u00ADbranschen"
+    },
+    "consumerStaples": {
+      "name": "Dagligvaror",
+      "title": "Dagligvaru\u00ADbranschen"
+    },
+    "healthCare": {
+      "name": "Hälsovård",
+      "title": "Hälsovårds\u00ADbranschen"
+    },
+    "financials": {
+      "name": "Finans",
+      "title": "Finans\u00ADbranschen"
+    },
+    "informationTechnology": {
+      "name": "IT",
+      "title": "IT-branschen"
+    },
+    "communicationServices": {
+      "name": "Kommunikation",
+      "title": "Kommunikations\u00ADbranschen"
+    },
+    "utilities": {
+      "name": "Kraftförsörjning",
+      "title": "Kraftförsörjnings\u00ADbranschen"
+    },
+    "realEstate": {
+      "name": "Fastigheter",
+      "title": "Fastighets\u00ADbranschen"
+    }
   },
   "scope": {
     "scope1": "Utsläpp från egna källor eller kontrollerade av organisationen.",

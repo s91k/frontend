@@ -8,22 +8,19 @@ import SectorGraphs from "@/components/companies/sectors/SectorGraphs";
 import { FilterPopover } from "@/components/explore/FilterPopover";
 import { FilterBadges } from "@/components/companies/list/FilterBadges";
 import { useCompanyFilters } from "@/hooks/companies/useCompanyFilters";
-import { useSectorNames } from "@/hooks/companies/useCompanySectors";
-import { useNavigate, useParams } from "react-router-dom";
+import { useSectorTitles } from "@/hooks/companies/useCompanySectors";
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { localizedPath } from "@/utils/routing";
-import { useLanguage } from "@/components/LanguageProvider";
+import { LocalizedLink } from "@/components/LocalizedLink";
 
 export function SectorsOverviewPage() {
   const { code } = useParams<{ code?: string }>();
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { currentLanguage } = useLanguage();
   const screenSize = useScreenSize();
   const { companies, companiesLoading, companiesError } = useCompanies();
   const [filterOpen, setFilterOpen] = useState(false);
-  const sectorNames = useSectorNames();
+  const sectorTitles = useSectorTitles();
 
   const { filteredCompanies, filterGroups, activeFilters } = useCompanyFilters(
     companies,
@@ -55,7 +52,13 @@ export function SectorsOverviewPage() {
 
   return (
     <>
-      <PageHeader variant="title-only" title={t("sectorsOverviewPage.title")} />
+      <PageHeader
+        variant="title-only"
+        title={
+          (code && sectorTitles[code as keyof typeof sectorTitles]) ??
+          t("sectorsOverviewPage.title")
+        }
+      />
 
       {/* Filters Section */}
       <div
@@ -69,17 +72,16 @@ export function SectorsOverviewPage() {
         {/* Wrapper for Filters and Badges */}
         <div className={cn("flex flex-wrap items-center gap-2 mb-2 md:mb-4")}>
           {code && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                navigate(localizedPath(currentLanguage, `/sectors${location.search}`))
-              }
-              className="bg-black-2 border-black-1 text-white hover:bg-black-1"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              {t("sectorsOverviewPage.overview")}
-            </Button>
+            <LocalizedLink to={`/sectors${location.search}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-black-2 border-black-1 text-white hover:bg-black-1"
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                {t("sectorsOverviewPage.overview")}
+              </Button>
+            </LocalizedLink>
           )}
 
           {/* Filter Button */}
@@ -115,7 +117,7 @@ export function SectorsOverviewPage() {
       ) : (
         <SectorGraphs
           companies={filteredCompanies}
-          sectors={Object.keys(sectorNames).filter((key) => key !== "all")}
+          sectors={Object.keys(sectorTitles)}
           selectedSector={code ?? null}
         />
       )}
