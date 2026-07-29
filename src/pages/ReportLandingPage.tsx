@@ -1,13 +1,15 @@
 import { useParams } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { reports } from "@/lib/constants/reports";
+import { reports, getReportPdfLink, getReportExcerpt, getReportTitle } from "@/lib/constants/reports";
 import { PageSEO } from "@/components/SEO/PageSEO";
 import { DEFAULT_OG_IMAGE } from "@/utils/seo";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export function ReportLandingPage() {
   const { reportId } = useParams<{ reportId: string }>();
   const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
   // Find the report by matching the PDF filename (without extension)
   const report = reports.find((r) => {
     if (!r.link) {
@@ -21,10 +23,16 @@ export function ReportLandingPage() {
     return pdfFile === reportId;
   });
 
-  const title = report?.title || "Klimatkollen Rapport";
-  const description = report?.excerpt || "Läs rapporten från Klimatkollen.";
+  const title = report
+    ? getReportTitle(report, currentLanguage)
+    : "Klimatkollen Rapport";
+  const description = report
+    ? getReportExcerpt(report, currentLanguage)
+    : "Läs rapporten från Klimatkollen.";
   const image = report?.image || DEFAULT_OG_IMAGE;
-  const pdfUrl = report?.link || `/reports/${reportId}.pdf`;
+  const pdfUrl = report
+    ? getReportPdfLink(report, currentLanguage)
+    : `/reports/${reportId}.pdf`;
   const canonicalUrl = `https://klimatkollen.se/reports/${reportId}`;
 
   return (
@@ -49,7 +57,11 @@ export function ReportLandingPage() {
             <h1 className="text-2xl font-semibold transition-colors">
               {title}
             </h1>
-            {report?.excerpt && <p className="text-grey">{report.excerpt}</p>}
+            {report && (
+              <p className="text-grey">
+                {getReportExcerpt(report, currentLanguage)}
+              </p>
+            )}
             <div className="flex justify-center">
               <a
                 href={pdfUrl}

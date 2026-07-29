@@ -1,5 +1,29 @@
 import { ContentMeta } from "@/types/content";
 
+export function getReportPdfLink(
+  report: ContentMeta,
+  language: "en" | "sv",
+): string {
+  if (language === "en" && report.linkEn) return report.linkEn;
+  return report.link ?? "";
+}
+
+export function getReportTitle(
+  report: ContentMeta,
+  language: "en" | "sv",
+): string {
+  if (language === "en" && report.titleEn) return report.titleEn;
+  return report.title;
+}
+
+export function getReportExcerpt(
+  report: ContentMeta,
+  language: "en" | "sv",
+): string {
+  if (language === "en" && report.excerptEn) return report.excerptEn;
+  return report.excerpt;
+}
+
 export const reports: ContentMeta[] = [
   {
     id: "1",
@@ -109,18 +133,22 @@ export const reports: ContentMeta[] = [
   },
   {
     id: "7",
-    title: "Klimatkollens klimatpåverkan 2025",
+    title: "Klimatkollens klimatbokslut 2025",
+    titleEn: "Klimatkollen climate statement 2025",
     slug: "klimatkollens-klimatpaverkan-2025",
     date: "2026-06-22",
     excerpt:
       "En redovisning av Klimatkollens egna växthusgasutsläpp och klimatpåverkan för 2025.",
+    excerptEn:
+      "A report on Klimatkollen's own greenhouse gas emissions and climate impact for 2025.",
     readTime: "3 min",
     category: "report",
     author: {
       name: "Catharina Bratt",
       avatar: "/people/catharina.jpeg",
     },
-    link: "/reports/2025-06-23_Klimatkollens_klimatpaverkan.pdf",
+    link: "/reports/2025_Klimatkollens_klimatbokslut_SV.pdf",
+    linkEn: "/reports/2025_Klimatkollens_klimatbokslut_EN.pdf",
     image: "/images/reportImages/2025_klimatkollens_klimatpaverkan.png",
     displayLanguages: ["sv", "en"],
     language: "sv",

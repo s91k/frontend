@@ -166,9 +166,9 @@
     },
     "emissionsSection": {
       "title": "Our Emissions",
-      "paragraph1": "As an organisation working for climate transparency, we believe it is important to be open about our own climate impact. We are working to measure and reduce the emissions associated with our operations.",
-      "paragraph2": "This includes emissions from travel, digital infrastructure, office activities and other parts of our work. We review our footprint regularly and look for ways to reduce it over time.",
-      "reportLink": "To see our full emissions breakdown, read our report <0>here</0>."
+      "paragraph1": "As we work for climate transparency and show emissions from other organisations, we think it's important to be open about our own climate impact. We work continuously to measure the emissions linked to our operations and look for ways to reduce them. We report emissions in accordance with the EU's Corporate Sustainability Reporting Directive (CSRD).",
+      "paragraph2": "Klimatkollen's greenhouse gas emissions come mainly from travel and AI services, but also from meals, office operations and other parts of our work. To see our full emissions report, including a description of our methodology, read our report <0>here</0>.",
+      "paragraph3": "If you have questions about our climate reporting, get in touch with us at <0>hej@klimatkollen.se</0>."
     },
     "financingSection": {
       "title": "How We Are Funded",

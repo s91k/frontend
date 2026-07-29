@@ -1,8 +1,10 @@
 export type ContentMeta = {
   id: string;
   title: string;
+  titleEn?: string;
   slug?: string;
   excerpt: string;
+  excerptEn?: string;
   date: string;
   readTime: string;
   category: string;
@@ -10,6 +12,7 @@ export type ContentMeta = {
   displayLanguages: string[]; // for filtering/visibility (e.g. ["all", "sv", "en"])
   language: "en" | "sv"; // for display of language article is written in (e.g. "English", "Svenska")
   link?: string;
+  linkEn?: string;
   author?: {
     name: string;
     avatar?: string;
