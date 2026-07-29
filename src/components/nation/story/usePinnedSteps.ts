@@ -16,6 +16,7 @@ export type PinMode = "before" | "pinned" | "after";
 export function usePinnedSteps(stepCount: number, stepVh = 90) {
   const ref = useRef<HTMLElement>(null);
   const [step, setStep] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [mode, setMode] = useState<PinMode>("before");
   const [stageBounds, setStageBounds] = useState({ left: 0, width: 0 });
   const sectionVh = stepCount * stepVh;
@@ -33,15 +34,16 @@ export function usePinnedSteps(stepCount: number, stepVh = 90) {
       if (rect.top > 0) nextMode = "before";
       else if (scrolled >= pinDistance) nextMode = "after";
 
-      const progress =
+      const nextProgress =
         pinDistance > 0 ? Math.min(Math.max(scrolled / pinDistance, 0), 1) : 0;
       const nextStep = Math.min(
-        Math.max(Math.floor(progress * stepCount), 0),
+        Math.max(Math.floor(nextProgress * stepCount), 0),
         stepCount - 1,
       );
 
       setStageBounds({ left: rect.left, width: rect.width });
       setMode(nextMode);
+      setProgress(nextProgress);
       setStep(nextStep);
     };
 
@@ -71,5 +73,5 @@ export function usePinnedSteps(stepCount: number, stepVh = 90) {
             right: 0,
           };
 
-  return { ref, step, mode, sectionVh, stageStyle };
+  return { ref, step, progress, mode, sectionVh, stageStyle };
 }
