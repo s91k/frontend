@@ -1582,12 +1582,14 @@
     "story": {
       "unit": {
         "mton": "Mton",
+        "millionTon": "miljoner ton",
         "millionTco2e": "miljoner ton CO₂e"
       },
       "intro": {
+        "eyebrow": "Valet 2026",
         "title": "Sveriges utsläpp",
         "paragraph1": "Vi får ofta höra att Sveriges utsläpp minskat med en tredjedel samtidigt som ekonomin har fördubblats. Men stämmer det verkligen?",
-        "paragraph2": "Det vi oftast hör om är territoriella utsläpp, det vill säga fossila växthusgasutsläpp inom Sveriges gränser. Det är det måttet som används för att följa upp Sveriges klimatmål.",
+        "paragraph2": "Det vi oftast hör om är territoriella utsläpp, det vill säga fossila växthusgasutsläpp inom Sveriges gränser. Det måttet används för att följa upp Sveriges klimatmål.",
         "paragraph3": "Men Sveriges utsläpp är egentligen större än så. Låt oss titta på det, steg för steg.",
         "previewRatio": "större än det vi brukar prata om"
       },
@@ -1597,6 +1599,8 @@
       },
       "journey": {
         "dataYear": "Siffrorna avser {{year}}.",
+        "stepCounter": "Steg {{current}} av {{total}}",
+        "totalLabel": "Totalt",
         "step1": {
           "label": "Territoriella utsläpp",
           "text": "Först har vi alltså utsläpp innanför Sveriges gränser. Här ingår bland annat utsläpp från industrin, inrikestransporter, jordbruk, uppvärmning och avfall."
@@ -1607,12 +1611,11 @@
         },
         "step3": {
           "label": "Konsumtion utomlands",
-          "text": "Men svenskar orsakar också utsläpp genom vår konsumtion utomlands. Här inkluderas utsläpp från tillverkning och transport av importerade varor till svensk hushållskonsumtion, offentlig verksamhet och investeringar. Svenskarnas utrikesflyg ingår här, men utsläpp från varor som produceras i Sverige men exporteras till andra länder räknas bort."
+          "text": "Men svenskar orsakar också utsläpp genom vår konsumtion utomlands. Här inkluderas utsläpp från tillverkning och transport av importerade varor till svensk hushållskonsumtion, offentlig verksamhet och investeringar. Svenskarnas utrikesflyg ingår här, men utsläpp från varor som produceras i Sverige och exporteras till andra länder räknas bort."
         },
         "step4": {
           "label": "Privat e-handel",
-          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis när vi klickar hem prylar från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton).",
-          "badge": "+326 000 ton ≈ Gävle"
+          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis när vi klickar hem prylar från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
         },
         "step5": {
           "label": "Biogena utsläpp",
@@ -1620,6 +1623,7 @@
         }
       },
       "bathtub": {
+        "eyebrow": "Badkarseffekten",
         "text": "Atmosfären reagerar på mängden växthusgaser totalt – och de stannar kvar och ansamlas över tid. Lite som ett badkar, där kranen står på. Innan kranen dras åt helt, kommer vattennivån att fortsätta stiga. Och atmosfären har redan passerat gränsen för 1,5 graders uppvärmning. Därför är det avgörande viktigt hur snabbt vi minskar utsläppen ner mot noll.",
         "question": "Hur har det gått med det sedan 1990?",
         "levelCaption": "{{value}} Mton ansamlat sedan 1990",
@@ -1634,11 +1638,12 @@
         "consumptionAbroad": "Konsumtionsbaserade utomlands"
       },
       "interlude": {
-        "eyebrow": "Slutsats",
+        "eyebrow": "Insikt",
         "title": "Vi diskuterar bara en del av Sveriges utsläpp",
         "body": "Den vanliga siffran vi hör om ger en överdrivet positiv bild. Om vi räknar in även andra utsläpp som Sverige kan påverka får vi en mer heltäckande bild – som berättar en annan historia."
       },
       "stacked": {
+        "layerCounter": "Lager {{current}} av {{total}}",
         "title": "Sveriges utsläpp sedan 1990",
         "layerCaption1": "Först har vi de territoriella utsläppen – fossila utsläpp inom Sveriges gränser.",
         "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utanför landets gränser.",
@@ -1647,11 +1652,14 @@
       },
       "conclusion": {
         "eyebrow": "Slutsats",
-        "title": "Sveriges utsläpp är större än vad vi tror och har inte minskat så mycket som vi tror",
+        "title": "Sveriges utsläpp är större än vi tror och har minskat mindre än vi tror",
         "usualLabel": "Det vi vanligtvis diskuterar",
         "fullLabel": "Sveriges egentliga utsläpp",
         "since1990": "sedan 1990",
-        "methodologyLink": "Läs mer om hur vi räknar på Sveriges utsläpp"
+        "methodologyLink": "Läs mer om hur vi räknar på Sveriges utsläpp",
+        "ctaLead": "Vill du gräva vidare i siffrorna?",
+        "ctaNation": "Utforska Sveriges data",
+        "ctaMunicipalities": "Hur ser det ut där du bor?"
       }
     }
   },

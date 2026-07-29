@@ -89,7 +89,7 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
             }
           : { duration: 0.35 }
       }
-      className={`fixed inset-x-0 bottom-6 md:bottom-10 z-50 mx-auto flex w-fit items-center justify-center text-white/90 transition-colors hover:text-white ${visible ? "" : "pointer-events-none"}`}
+      className={`fixed inset-x-0 bottom-6 md:bottom-10 z-50 mx-auto flex w-fit items-center justify-center text-grey transition-colors hover:text-white ${visible ? "" : "pointer-events-none"}`}
     >
       <ChevronDown className="h-9 w-9" strokeWidth={2.25} aria-hidden />
     </motion.button>

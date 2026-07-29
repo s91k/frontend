@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { NationBathtub } from "@/components/nation/story/NationBathtub";
 import { NationConclusion } from "@/components/nation/story/NationConclusion";
 import { NationEmissionsJourney } from "@/components/nation/story/NationEmissionsJourney";
@@ -18,6 +18,18 @@ type NationStoryPageProps = {
   nation: NationStoryDetails;
   metrics: NationStoryMetrics;
 };
+
+/** Thin reading-progress bar just below the fixed site header. */
+function StoryProgressBar() {
+  const { scrollYProgress } = useScroll();
+  return (
+    <motion.div
+      aria-hidden
+      className="fixed top-12 left-0 right-0 z-40 h-0.5 origin-left bg-gradient-to-r from-orange-3 to-pink-3"
+      style={{ scaleX: scrollYProgress }}
+    />
+  );
+}
 
 function FullScreenSection({ children }: { children: React.ReactNode }) {
   return (
@@ -39,30 +51,60 @@ export function NationStoryPage({
 
   return (
     <div className="bg-black text-white pb-16 md:pb-24">
-      {/* Intro */}
+      <StoryProgressBar />
+
+      {/* Intro hero – exactly one viewport: eyebrow, headline, lede, silhouette */}
       <section
         data-story-section
-        className="relative flex items-start justify-center min-h-[100svh] px-4 md:px-8 pt-1 md:pt-2 pb-12 md:pb-14"
+        className="relative min-h-[100svh] md:h-[100svh] flex flex-col items-center justify-center px-4 md:px-8 pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden"
       >
-        <div className="max-w-3xl mx-auto text-center space-y-2 md:space-y-3">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg"
-            alt=""
-            className="h-7 w-10 md:h-10 md:w-16 mx-auto object-contain opacity-90 rounded-sm"
-          />
-          <h1 className={`${NATION_STORY_TYPE.title} text-white`}>
+        {/* Subtle depth behind the hero, using existing surface colors only */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
+        />
+        <div className="relative max-w-5xl mx-auto text-center space-y-4 md:space-y-6">
+          <p
+            className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
+          >
+            {t("nation.story.intro.eyebrow")}
+          </p>
+          <h1 className="text-4xl md:text-6xl font-light tracking-tight text-white">
             {t("nation.story.intro.title")}
           </h1>
-          <p className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}>
+          <p
+            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
+          >
             {t("nation.story.intro.paragraph1")}
           </p>
           <NationIntroPunch metrics={metrics} />
-          <p className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}>
+        </div>
+      </section>
+
+      {/* Short transition: the explanation that follows the hero's punch */}
+      <section
+        data-story-section
+        className="relative min-h-[50vh] md:min-h-[60vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
+      >
+        <div className="max-w-2xl mx-auto text-center space-y-5 md:space-y-6">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
+          >
             {t("nation.story.intro.paragraph2")}
-          </p>
-          <p className={`${NATION_STORY_TYPE.body} text-white font-medium`}>
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className={`${NATION_STORY_TYPE.emphasis} text-white`}
+          >
             {t("nation.story.intro.paragraph3")}
-          </p>
+          </motion.p>
         </div>
       </section>
 
@@ -78,7 +120,7 @@ export function NationStoryPage({
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.4 }}
             className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
           >
@@ -87,7 +129,7 @@ export function NationStoryPage({
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.45, delay: 0.05 }}
             className={`${NATION_STORY_TYPE.title} leading-tight`}
           >
@@ -96,7 +138,7 @@ export function NationStoryPage({
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
           >
@@ -112,9 +154,14 @@ export function NationStoryPage({
       <section
         ref={conclusionRef}
         data-story-section
-        className="relative min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-10"
+        className="relative min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-10 overflow-hidden"
       >
-        <div className="w-full max-w-4xl mx-auto">
+        {/* Same depth backdrop as the hero – the story ends where it began */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
+        />
+        <div className="relative w-full max-w-4xl mx-auto">
           <NationConclusion metrics={metrics} />
         </div>
       </section>

@@ -1532,12 +1532,14 @@
     "story": {
       "unit": {
         "mton": "Mt",
+        "millionTon": "million tonnes",
         "millionTco2e": "million tonnes CO₂e"
       },
       "intro": {
+        "eyebrow": "Election 2026",
         "title": "Sweden's emissions",
         "paragraph1": "We often hear that Sweden's emissions have fallen by a third while the economy has doubled. But is that really true?",
-        "paragraph2": "What we usually hear about are territorial emissions – fossil greenhouse gas emissions within Sweden's borders. That is the measure used to track Sweden's climate goals.",
+        "paragraph2": "What we usually hear about are territorial emissions – fossil greenhouse gas emissions within Sweden's borders. That measure is used to track Sweden's climate goals.",
         "paragraph3": "But Sweden's emissions are actually larger than that. Let's look at it, step by step.",
         "previewRatio": "larger than what we usually talk about"
       },
@@ -1547,6 +1549,8 @@
       },
       "journey": {
         "dataYear": "Figures refer to {{year}}.",
+        "stepCounter": "Step {{current}} of {{total}}",
+        "totalLabel": "Total",
         "step1": {
           "label": "Territorial emissions",
           "text": "First, we have emissions within Sweden's borders. This includes emissions from industry, domestic transport, agriculture, heating and waste, among other sources."
@@ -1561,8 +1565,7 @@
         },
         "step4": {
           "label": "Private e-commerce",
-          "text": "We have also quantified emissions from private e-commerce imports – for example when we order goods from Amazon and Shein. These emissions are not included in official statistics today. They amount to an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes).",
-          "badge": "+326,000 t ≈ Gävle"
+          "text": "We have also quantified emissions from private e-commerce imports – for example when we order goods from Amazon and Shein. These emissions are not included in official statistics today. They amount to an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
         },
         "step5": {
           "label": "Biogenic emissions",
@@ -1570,6 +1573,7 @@
         }
       },
       "bathtub": {
+        "eyebrow": "The bathtub effect",
         "text": "The atmosphere responds to the total amount of greenhouse gases – and they stay and accumulate over time. A bit like a bathtub with the tap running: until the tap is fully closed, the water level will keep rising. And the atmosphere has already passed the threshold for 1.5°C of warming. That is why how quickly we cut emissions toward zero is critically important.",
         "question": "How has that gone since 1990?",
         "levelCaption": "{{value}} Mt accumulated since 1990",
@@ -1584,11 +1588,12 @@
         "consumptionAbroad": "Consumption-based emissions abroad"
       },
       "interlude": {
-        "eyebrow": "Conclusion",
+        "eyebrow": "Insight",
         "title": "We only discuss part of Sweden's emissions",
         "body": "The usual figure we hear about gives an overly positive picture. When we also include other emissions that Sweden can influence, we get a more complete picture – one that tells a different story."
       },
       "stacked": {
+        "layerCounter": "Layer {{current}} of {{total}}",
         "title": "Sweden's emissions since 1990",
         "layerCaption1": "First we have territorial emissions – fossil emissions within Sweden's borders.",
         "layerCaption2": "Now we add emissions from Swedish shipping and airlines outside the country's borders.",
@@ -1597,11 +1602,14 @@
       },
       "conclusion": {
         "eyebrow": "Conclusion",
-        "title": "Sweden's emissions are larger than we think and have not fallen as much as we think",
+        "title": "Sweden's emissions are larger than we think and have fallen less than we think",
         "usualLabel": "What we usually discuss",
         "fullLabel": "Sweden's actual emissions",
         "since1990": "since 1990",
-        "methodologyLink": "Read more about how we calculate Sweden’s emissions"
+        "methodologyLink": "Read more about how we calculate Sweden’s emissions",
+        "ctaLead": "Want to dig deeper into the numbers?",
+        "ctaNation": "Explore Sweden's data",
+        "ctaMunicipalities": "How does your municipality compare?"
       }
     }
   },
