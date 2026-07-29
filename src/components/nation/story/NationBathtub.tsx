@@ -27,19 +27,24 @@ function sampleBathtubYears(
   return sampled;
 }
 
-/** Cumulative level interpolated continuously across the full yearly series. */
-function levelAtProgress(
-  data: NationBathtubDataPoint[],
+/** Cumulative level interpolated between milestone steps for the current scroll segment. */
+function levelAtStepProgress(
+  steps: NationBathtubDataPoint[],
+  step: number,
   progress: number,
+  stepCount: number,
 ): number {
-  if (data.length === 0) return 0;
-  const position = progress * (data.length - 1);
-  const index = Math.floor(position);
-  const fraction = position - index;
-  const from = data[index];
-  const to = data[Math.min(index + 1, data.length - 1)];
+  if (steps.length === 0) return 0;
+  const current = steps[step];
+  if (!current) return 0;
+
+  const stepProgress = Math.min(Math.max(progress * stepCount - step, 0), 1);
+  const previousCumulative =
+    step === 0 ? 0 : (steps[step - 1]?.cumulativeMton ?? 0);
+
   return (
-    from.cumulativeMton + (to.cumulativeMton - from.cumulativeMton) * fraction
+    previousCumulative +
+    stepProgress * (current.cumulativeMton - previousCumulative)
   );
 }
 
@@ -203,18 +208,18 @@ function TubGraphic({ idPrefix, waterTop, className }: TubGraphicProps) {
           transition={waterTransition}
           fill={svgLocalUrl(gradientId)}
         />
-        {/* Elliptical surface gives the water a 3D lens matching the rim */}
-        <motion.ellipse
-          cx={260}
-          fill="var(--blue-2)"
-          fillOpacity={0.32}
-          stroke="var(--blue-2)"
-          strokeWidth="2"
-          initial={false}
-          animate={{ cy: waterTop, rx: surfaceRx, ry: surfaceRy }}
-          transition={waterTransition}
-        />
       </g>
+      {/* Surface sits above the fill and outside the clip so it stays visible when full */}
+      <motion.ellipse
+        cx={260}
+        fill="var(--blue-2)"
+        fillOpacity={0.32}
+        stroke="var(--blue-2)"
+        strokeWidth="2"
+        initial={false}
+        animate={{ cy: waterTop, rx: surfaceRx, ry: surfaceRy }}
+        transition={waterTransition}
+      />
 
       {/* Basin walls and rounded floor */}
       <path
@@ -288,18 +293,19 @@ export function NationBathtub({ data }: NationBathtubProps) {
   // useId can include ":" which is awkward in url(#…) fragments
   const idPrefix = `tub-${useId().replace(/:/g, "")}`;
   const steps = useMemo(() => sampleBathtubYears(data), [data]);
+  const stepCount = Math.max(steps.length, 1);
   const maxCumulative = data.at(-1)?.cumulativeMton ?? 1;
 
   const { ref, step, progress, sectionVh, stageStyle } = usePinnedSteps(
-    Math.max(steps.length, 1),
+    stepCount,
     70,
   );
 
   const current = steps[step] ?? steps[0];
   if (!current) return null;
 
-  // Water rises continuously with scroll; captions advance in milestones.
-  const level = levelAtProgress(data, progress);
+  // Water rises smoothly within each milestone segment so fill matches captions.
+  const level = levelAtStepProgress(steps, step, progress, stepCount);
   const fillRatio = Math.min(level / maxCumulative, 1);
   const waterTop = TUB_INNER_BOTTOM - fillRatio * TUB_WATER_HEIGHT;
 
