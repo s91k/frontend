@@ -1,7 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { ContentGridPage } from "@/components/layout/ContentGridPage";
 import { ContentCard } from "@/components/layout/ContentCard";
-import { reports, getReportPdfLink, getReportExcerpt, getReportTitle } from "@/lib/constants/reports";
+import {
+  reports,
+  getReportPdfLink,
+  getReportExcerpt,
+  getReportTitle,
+} from "@/lib/constants/reports";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export function ReportsPage() {

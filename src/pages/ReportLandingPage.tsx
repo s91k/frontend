@@ -1,7 +1,12 @@
 import { useParams } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { reports, getReportPdfLink, getReportExcerpt, getReportTitle } from "@/lib/constants/reports";
+import {
+  reports,
+  getReportPdfLink,
+  getReportExcerpt,
+  getReportTitle,
+} from "@/lib/constants/reports";
 import { PageSEO } from "@/components/SEO/PageSEO";
 import { DEFAULT_OG_IMAGE } from "@/utils/seo";
 import { useLanguage } from "@/components/LanguageProvider";
