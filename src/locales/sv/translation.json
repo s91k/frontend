@@ -166,9 +166,9 @@
     },
     "emissionsSection": {
       "title": "Våra utsläpp",
-      "paragraph1": "Som en organisation som arbetar för klimattransparens tycker vi att det är viktigt att vara öppna med vår egen klimatpåverkan. Vi arbetar löpande med att mäta och minska de utsläpp som är kopplade till vår verksamhet.",
-      "paragraph2": "Det omfattar bland annat utsläpp från resor, digital infrastruktur, kontorsverksamhet och andra delar av vårt arbete. Vi går igenom vårt klimatavtryck regelbundet och letar efter sätt att minska det över tid.",
-      "reportLink": "För att se vår fullständiga utsläppsredovisning, läs vår rapport <0>här</0>."
+      "paragraph1": "Då vi arbetar för klimattransparens och visar utsläpp från andra verksamheter, tycker vi att det är viktigt att vara öppna med vår egen klimatpåverkan. Vi arbetar löpande med att mäta utsläpp som är kopplade till vår verksamhet och letar sätt att minska dem på. Utsläppen redovisar vi i enlighet med EU:s Corporate Sustainability Reporting Directive (CSRD).",
+      "paragraph2": "Klimatkollens utsläpp av växthusgaser kommer främst från resor och AI-tjänster, men också från måltider, kontorsverksamhet och andra delar av vårt arbete. För att se vår fullständiga utsläppsredovisning inklusive metodbeskrivning, läs vår rapport <0>här</0>.",
+      "paragraph3": "Om du har frågor om vår klimatredovisning, hör av dig till oss på <0>hej@klimatkollen.se</0>."
     },
     "financingSection": {
       "title": "Så finansieras vi",
