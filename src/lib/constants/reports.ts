@@ -25,7 +25,10 @@ export function getReportExcerpt(
 }
 
 function pdfBasename(link?: string): string | undefined {
-  return link?.split("/").pop()?.replace(/\.pdf$/, "");
+  return link
+    ?.split("/")
+    .pop()
+    ?.replace(/\.pdf$/, "");
 }
 
 /** Resolve a report from a route segment, PDF basename, slug, or legacy landing path. */
@@ -37,16 +40,15 @@ export function findReportByReportId(
   return reports.find((report) => {
     if (report.id === reportId || report.slug === reportId) return true;
 
-    const basenames = [pdfBasename(report.link), pdfBasename(report.linkEn)].filter(
-      (basename): basename is string => Boolean(basename),
-    );
+    const basenames = [
+      pdfBasename(report.link),
+      pdfBasename(report.linkEn),
+    ].filter((basename): basename is string => Boolean(basename));
     if (basenames.includes(reportId)) return true;
 
-    // Legacy static landing route for the klimatbokslut report
-    return (
-      report.id === "7" &&
-      reportId === "2025-06-23_Klimatkollens_klimatpaverkan"
-    );
+    if (report.legacyReportIds?.includes(reportId)) return true;
+
+    return false;
   });
 }
 
@@ -161,7 +163,11 @@ export const reports: ContentMeta[] = [
     id: "7",
     title: "Klimatkollens klimatbokslut 2025",
     titleEn: "Klimatkollen climate statement 2025",
-    slug: "klimatkollens-klimatpaverkan-2025",
+    slug: "klimatkollens-klimatbokslut-2025",
+    legacyReportIds: [
+      "2025-06-23_Klimatkollens_klimatpaverkan",
+      "klimatkollens-klimatpaverkan-2025",
+    ],
     date: "2026-06-22",
     excerpt:
       "En redovisning av Klimatkollens egna växthusgasutsläpp och klimatpåverkan för 2025.",
