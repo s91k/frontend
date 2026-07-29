@@ -138,71 +138,71 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
           </div>
 
           <div style={{ width: "100%", height: chartHeight }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={getStoryChartMargin(isMobile)}>
-                  <XAxis
-                    {...getXAxisProps(
-                      "year",
-                      [NATION_BASELINE_YEAR, latestYear],
-                      xAxisTicks,
-                    )}
-                  />
-                  <YAxis
-                    stroke="var(--grey)"
-                    tickLine={false}
-                    axisLine={false}
-                    width={isMobile ? 36 : 56}
-                    tick={{ fill: "var(--grey)", fontSize: isMobile ? 10 : 12 }}
-                    tickFormatter={(value: number) =>
-                      formatMton(value, currentLanguage, 0)
-                    }
-                    domain={[0, "auto"]}
-                    {...(!isMobile
-                      ? {
-                          label: {
-                            value: t("nation.story.unit.mton"),
-                            angle: -90,
-                            position: "insideLeft" as const,
-                            style: {
-                              fill: "var(--grey)",
-                              fontSize: 12,
-                              textAnchor: "middle",
-                            },
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data} margin={getStoryChartMargin(isMobile)}>
+                <XAxis
+                  {...getXAxisProps(
+                    "year",
+                    [NATION_BASELINE_YEAR, latestYear],
+                    xAxisTicks,
+                  )}
+                />
+                <YAxis
+                  stroke="var(--grey)"
+                  tickLine={false}
+                  axisLine={false}
+                  width={isMobile ? 36 : 56}
+                  tick={{ fill: "var(--grey)", fontSize: isMobile ? 10 : 12 }}
+                  tickFormatter={(value: number) =>
+                    formatMton(value, currentLanguage, 0)
+                  }
+                  domain={[0, "auto"]}
+                  {...(!isMobile
+                    ? {
+                        label: {
+                          value: t("nation.story.unit.mton"),
+                          angle: -90,
+                          position: "insideLeft" as const,
+                          style: {
+                            fill: "var(--grey)",
+                            fontSize: 12,
+                            textAnchor: "middle",
                           },
-                        }
-                      : {})}
-                  />
-                  <Tooltip
-                    content={
-                      <ChartTooltip
-                        unit={t("nation.story.unit.mton")}
-                        customFormatter={(value) =>
-                          formatMton(value, currentLanguage, 1)
-                        }
-                      />
-                    }
-                    wrapperStyle={{ outline: "none", zIndex: 60 }}
-                  />
-                  {LAYERS.slice(0, visibleLayers).map((layer) => (
-                    <Area
-                      key={layer.dataKey}
-                      type="monotone"
-                      dataKey={layer.dataKey}
-                      stackId="emissions"
-                      stroke={layer.color}
-                      strokeWidth={NATION_STORY_CHART.strokeWidth}
-                      fill={layer.color}
-                      fillOpacity={NATION_STORY_CHART.fillOpacity}
-                      name={t(layer.translationKey)}
-                      connectNulls={false}
-                      isAnimationActive
-                      animationDuration={1000}
-                      animationEasing="ease-out"
+                        },
+                      }
+                    : {})}
+                />
+                <Tooltip
+                  content={
+                    <ChartTooltip
+                      unit={t("nation.story.unit.mton")}
+                      customFormatter={(value) =>
+                        formatMton(value, currentLanguage, 1)
+                      }
                     />
-                  ))}
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+                  }
+                  wrapperStyle={{ outline: "none", zIndex: 60 }}
+                />
+                {LAYERS.slice(0, visibleLayers).map((layer) => (
+                  <Area
+                    key={layer.dataKey}
+                    type="monotone"
+                    dataKey={layer.dataKey}
+                    stackId="emissions"
+                    stroke={layer.color}
+                    strokeWidth={NATION_STORY_CHART.strokeWidth}
+                    fill={layer.color}
+                    fillOpacity={NATION_STORY_CHART.fillOpacity}
+                    name={t(layer.translationKey)}
+                    connectNulls={false}
+                    isAnimationActive
+                    animationDuration={1000}
+                    animationEasing="ease-out"
+                  />
+                ))}
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Legend in the story's own styling: revealed layers inline,
               each with its latest-year contribution */}

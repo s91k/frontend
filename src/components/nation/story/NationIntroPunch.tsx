@@ -60,7 +60,9 @@ function StatCallout({
       transition={{ duration: 0.5, delay }}
       className="text-center md:text-left"
     >
-      <p className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}>
+      <p
+        className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
+      >
         {label}
       </p>
       <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>
@@ -145,7 +147,11 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
                 height: OUTLINE_BOTTOM - fillTop + 6,
               }}
               viewport={{ once: true, amount: 0.35 }}
-              transition={reducedMotion ? { duration: 0 } : { ...FILL_SPRING, delay: 0.35 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { ...FILL_SPRING, delay: 0.35 }
+              }
             />
             <motion.line
               x1={0}
@@ -160,7 +166,11 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
               }
               whileInView={{ y1: fillTop, y2: fillTop, opacity: 1 }}
               viewport={{ once: true, amount: 0.35 }}
-              transition={reducedMotion ? { duration: 0 } : { ...FILL_SPRING, delay: 0.35 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { ...FILL_SPRING, delay: 0.35 }
+              }
             />
           </g>
         </svg>

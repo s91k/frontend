@@ -384,7 +384,9 @@ export function NationBathtub({ data }: NationBathtubProps) {
             >
               {current.year}
             </motion.p>
-            <p className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.body}`}>
+            <p
+              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.body}`}
+            >
               {t("nation.story.bathtub.levelCaption", {
                 value: formatMton(current.cumulativeMton, currentLanguage, 0),
               })}
