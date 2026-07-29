@@ -24,6 +24,32 @@ export function getReportExcerpt(
   return report.excerpt;
 }
 
+function pdfBasename(link?: string): string | undefined {
+  return link?.split("/").pop()?.replace(/\.pdf$/, "");
+}
+
+/** Resolve a report from a route segment, PDF basename, slug, or legacy landing path. */
+export function findReportByReportId(
+  reportId: string | undefined,
+): ContentMeta | undefined {
+  if (!reportId) return undefined;
+
+  return reports.find((report) => {
+    if (report.id === reportId || report.slug === reportId) return true;
+
+    const basenames = [pdfBasename(report.link), pdfBasename(report.linkEn)].filter(
+      (basename): basename is string => Boolean(basename),
+    );
+    if (basenames.includes(reportId)) return true;
+
+    // Legacy static landing route for the klimatbokslut report
+    return (
+      report.id === "7" &&
+      reportId === "2025-06-23_Klimatkollens_klimatpaverkan"
+    );
+  });
+}
+
 export const reports: ContentMeta[] = [
   {
     id: "1",

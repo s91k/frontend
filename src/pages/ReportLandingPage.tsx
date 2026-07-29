@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
-  reports,
+  findReportByReportId,
   getReportPdfLink,
   getReportExcerpt,
   getReportTitle,
@@ -15,18 +15,7 @@ export function ReportLandingPage() {
   const { reportId } = useParams<{ reportId: string }>();
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
-  // Find the report by matching the PDF filename (without extension)
-  const report = reports.find((r) => {
-    if (!r.link) {
-      return false;
-    }
-    // Extract the filename without extension from the link
-    const pdfFile = r.link
-      .split("/")
-      .pop()
-      ?.replace(/\.pdf$/, "");
-    return pdfFile === reportId;
-  });
+  const report = findReportByReportId(reportId);
 
   const title = report
     ? getReportTitle(report, currentLanguage)
