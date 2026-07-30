@@ -47,7 +47,8 @@ type StorySectionState = {
  * story is a sequence of scenes that advance on scroll. Multi-step chapters
  * (onion, bathtub, stacked chart) show their inner steps as a segmented bar
  * while active. Reads the `data-story-*` attributes the sections already
- * expose; hides once the conclusion is in view.
+ * expose; hides once the conclusion is in view. Mobile only – desktop uses
+ * the top reading-progress bar instead.
  */
 function StoryStepDots({ endRef }: { endRef: RefObject<HTMLElement | null> }) {
   const endReached = useStoryEndReached(endRef);
@@ -93,7 +94,7 @@ function StoryStepDots({ endRef }: { endRef: RefObject<HTMLElement | null> }) {
       initial={false}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.35 }}
-      className={`fixed right-2 md:right-5 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 md:gap-2.5 ${visible ? "" : "pointer-events-none"}`}
+      className={`md:hidden fixed right-2 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 ${visible ? "" : "pointer-events-none"}`}
     >
       {state.sections.map((section, index) => {
         const isActive = index === state.active;
