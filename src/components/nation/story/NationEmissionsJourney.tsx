@@ -171,7 +171,11 @@ export function NationEmissionsJourney({
     prevExitRef.current = exitProgress;
 
     if (exitProgress === 0) {
+      // Back above the zone: re-arm and make sure no stale ride keeps
+      // driving the scroll (e.g. after a scrollbar drag fought it upward).
       rideDoneRef.current = false;
+      rideControlsRef.current?.stop();
+      rideControlsRef.current = null;
       return;
     }
     if (reducedMotion || rideDoneRef.current) return;
@@ -183,6 +187,8 @@ export function NationEmissionsJourney({
     const tubSection = ref.current?.nextElementSibling;
     if (!(tubSection instanceof HTMLElement)) return;
     rideDoneRef.current = true;
+    // Single flight: never let two rides drive the scroll at once.
+    rideControlsRef.current?.stop();
 
     // Land where the tub has fully entered: tub top + its enter zone.
     const target =
@@ -200,17 +206,21 @@ export function NationEmissionsJourney({
     const cancelIfUpward = (event: WheelEvent) => {
       if (event.deltaY < 0) controls.stop();
     };
-    const cancelOnTouch = () => controls.stop();
+    // Any new pointer contact (touch, click, scrollbar grab) hands control back.
+    const cancelOnPointer = () => controls.stop();
     const cancelIfUpwardKey = (event: KeyboardEvent) => {
       if (["ArrowUp", "PageUp", "Home"].includes(event.key)) controls.stop();
     };
     window.addEventListener("wheel", cancelIfUpward, { passive: true });
-    window.addEventListener("touchstart", cancelOnTouch, { passive: true });
+    window.addEventListener("touchstart", cancelOnPointer, { passive: true });
+    window.addEventListener("pointerdown", cancelOnPointer, { passive: true });
     window.addEventListener("keydown", cancelIfUpwardKey);
     const cleanup = () => {
       window.removeEventListener("wheel", cancelIfUpward);
-      window.removeEventListener("touchstart", cancelOnTouch);
+      window.removeEventListener("touchstart", cancelOnPointer);
+      window.removeEventListener("pointerdown", cancelOnPointer);
       window.removeEventListener("keydown", cancelIfUpwardKey);
+      if (rideControlsRef.current === controls) rideControlsRef.current = null;
     };
     controls.then(cleanup, cleanup);
   }, [exitProgress, reducedMotion, ref]);

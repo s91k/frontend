@@ -10,6 +10,26 @@ type StoryScrollHintProps = {
 };
 
 /**
+ * Scroll to a section's start, past any enter zone it declares via
+ * `data-story-enter-vh`, so pinned scenes land fully visible instead of at
+ * the zone's opacity-0 beginning.
+ */
+function scrollToStorySectionStart(section: HTMLElement) {
+  const enterVh = Number(section.dataset.storyEnterVh ?? "0");
+  if (enterVh > 0) {
+    window.scrollTo({
+      top:
+        window.scrollY +
+        section.getBoundingClientRect().top +
+        (enterVh / 100) * window.innerHeight,
+      behavior: "smooth",
+    });
+    return;
+  }
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/**
  * Advance one pin-step inside a multi-step section, or jump to the next
  * `[data-story-section]` when on its last step. Avoids the “black gap”
  * that a fixed scrollBy leaves at the end of tall pinned sections.
@@ -45,7 +65,7 @@ function scrollToNextStoryBeat() {
 
     const next = sections[currentIndex + 1];
     if (next) {
-      next.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToStorySectionStart(next);
       return;
     }
   }
@@ -54,7 +74,7 @@ function scrollToNextStoryBeat() {
     (section) => section.getBoundingClientRect().top > probeY,
   );
   if (nextBelow) {
-    nextBelow.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToStorySectionStart(nextBelow);
     return;
   }
 

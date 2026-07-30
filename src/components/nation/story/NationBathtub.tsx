@@ -421,6 +421,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
       data-story-step={step}
       data-story-steps={steps.length}
       data-story-step-vh={BATHTUB_STEP_VH}
+      data-story-enter-vh={BATHTUB_ENTER_VH}
       className="relative"
       style={{ height: `${sectionVh}vh` }}
     >
