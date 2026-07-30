@@ -1,7 +1,8 @@
 import { useRef, type RefObject } from "react";
 import { ChevronDown } from "lucide-react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useStoryEndReached } from "@/components/nation/story/useStoryEndReached";
 
 type StoryScrollHintProps = {
   /** Hide the hint once this element (typically the conclusion) enters the viewport. */
@@ -64,7 +65,7 @@ function scrollToNextStoryBeat() {
 export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
   const { t } = useTranslation();
   const ref = useRef<HTMLButtonElement>(null);
-  const endReached = useInView(endRef, { amount: 0.35 });
+  const endReached = useStoryEndReached(endRef);
   const visible = !endReached;
 
   return (
@@ -78,20 +79,24 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
       initial={false}
       animate={
         visible
-          ? { opacity: [0.55, 1, 0.55], y: [0, 10, 0] }
+          ? { opacity: [0.4, 1, 0.4], y: [0, 12, 0] }
           : { opacity: 0, y: 0 }
       }
       transition={
         visible
           ? {
-              opacity: { repeat: Infinity, duration: 1.4, ease: "easeInOut" },
-              y: { repeat: Infinity, duration: 1.4, ease: "easeInOut" },
+              opacity: { repeat: Infinity, duration: 1.2, ease: "easeInOut" },
+              y: { repeat: Infinity, duration: 1.2, ease: "easeInOut" },
             }
           : { duration: 0.35 }
       }
-      className={`fixed inset-x-0 bottom-6 md:bottom-10 z-50 mx-auto flex w-fit items-center justify-center text-grey transition-colors hover:text-white ${visible ? "" : "pointer-events-none"}`}
+      className={`fixed inset-x-0 bottom-5 md:bottom-8 z-50 mx-auto flex w-fit items-center justify-center text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 ${visible ? "" : "pointer-events-none"}`}
     >
-      <ChevronDown className="h-9 w-9" strokeWidth={2.25} aria-hidden />
+      <ChevronDown
+        className="h-10 w-10 md:h-11 md:w-11"
+        strokeWidth={2.5}
+        aria-hidden
+      />
     </motion.button>
   );
 }

@@ -6,6 +6,7 @@ import {
   type NationBathtubDataPoint,
 } from "@/utils/data/nationStoryMetrics";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import {
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
@@ -13,16 +14,20 @@ import {
 import { svgLocalUrl } from "@/components/nation/story/svgLocalUrl";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 
-/** Sample years so the caption advances in readable 5-year milestones. */
+/**
+ * Sample years so the caption advances in decade milestones
+ * (1990, 2000, 2010, 2020 + the latest year) – four scrolls to the end.
+ */
 function sampleBathtubYears(
   data: NationBathtubDataPoint[],
 ): NationBathtubDataPoint[] {
   if (data.length === 0) return [];
   const sampled: NationBathtubDataPoint[] = [];
   for (const point of data) {
-    const isMilestone = (point.year - data[0].year) % 5 === 0;
+    const isMilestone = (point.year - data[0].year) % 10 === 0;
     const isLast = point === data.at(-1);
-    if (isMilestone || isLast) sampled.push(point);
+    if ((isMilestone || isLast) && !sampled.includes(point))
+      sampled.push(point);
   }
   return sampled;
 }
@@ -108,14 +113,45 @@ const WATER_SPRING = {
   mass: 0.8,
 };
 
+/** Scroll distance per bathtub milestone step. */
+const BATHTUB_STEP_VH = 70;
+/**
+ * Extra pinned scroll before the steps: the tub eases in while the faucet
+ * drip (the droplet handed over from the onion scene) is already falling.
+ * The onion scene's auto-scroll ride ends exactly at the end of this zone.
+ */
+export const BATHTUB_ENTER_VH = 70;
+
+const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+
+type TubCaption = {
+  /** small line above the figure, e.g. "Sverige har totalt släppt ut" */
+  prefix: string;
+  /** the accumulated figure incl. unit, e.g. "4 712 Mton CO₂e" */
+  value: string;
+  /** small line below the figure, e.g. "sedan 1990" */
+  suffix: string;
+};
+
 type TubGraphicProps = {
   idPrefix: string;
   /** SVG y coordinate of the current water surface. */
   waterTop: number;
+  /** Accumulated-total caption rendered inside the basin. */
+  caption: TubCaption;
+  /** Larger relative type on small screens where the whole SVG shrinks. */
+  compact?: boolean;
   className?: string;
 };
 
-function TubGraphic({ idPrefix, waterTop, className }: TubGraphicProps) {
+function TubGraphic({
+  idPrefix,
+  waterTop,
+  caption,
+  compact = false,
+  className,
+}: TubGraphicProps) {
   const reducedMotion = useReducedMotion();
   const clipId = `${idPrefix}-clip`;
   const gradientId = `${idPrefix}-gradient`;
@@ -221,6 +257,39 @@ function TubGraphic({ idPrefix, waterTop, className }: TubGraphicProps) {
         transition={waterTransition}
       />
 
+      {/* Accumulated total inside the basin – the screenshot-friendly figure */}
+      <g style={{ fontFamily: "inherit" }}>
+        <text
+          x={260}
+          y={compact ? 122 : 126}
+          textAnchor="middle"
+          fill="rgba(255,255,255,0.9)"
+          fontSize={compact ? 21 : 15}
+        >
+          {caption.prefix}
+        </text>
+        <text
+          x={260}
+          y={compact ? 162 : 164}
+          textAnchor="middle"
+          fill="#ffffff"
+          fontSize={compact ? 42 : 32}
+          fontWeight={500}
+          style={{ fontVariantNumeric: "tabular-nums" }}
+        >
+          {caption.value}
+        </text>
+        <text
+          x={260}
+          y={compact ? 192 : 190}
+          textAnchor="middle"
+          fill="rgba(255,255,255,0.9)"
+          fontSize={compact ? 21 : 15}
+        >
+          {caption.suffix}
+        </text>
+      </g>
+
       {/* Basin walls and rounded floor */}
       <path
         d={TUB_BODY_PATH}
@@ -290,19 +359,29 @@ function TubGraphic({ idPrefix, waterTop, className }: TubGraphicProps) {
 export function NationBathtub({ data }: NationBathtubProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+  const { isMobile } = useScreenSize();
+  const reducedMotion = useReducedMotion();
   // useId can include ":" which is awkward in url(#…) fragments
   const idPrefix = `tub-${useId().replace(/:/g, "")}`;
   const steps = useMemo(() => sampleBathtubYears(data), [data]);
   const stepCount = Math.max(steps.length, 1);
   const maxCumulative = data.at(-1)?.cumulativeMton ?? 1;
 
-  const { ref, step, progress, sectionVh, stageStyle } = usePinnedSteps(
-    stepCount,
-    70,
-  );
+  const { ref, step, progress, enterProgress, sectionVh, stageStyle } =
+    usePinnedSteps(stepCount, BATHTUB_STEP_VH, {
+      enterVh: BATHTUB_ENTER_VH,
+    });
 
   const current = steps[step] ?? steps[0];
   if (!current) return null;
+
+  // Enter morph (scroll-lerped): the tub and copy ease in from below while
+  // the faucet drip carries over the droplet from the onion scene. `progress`
+  // covers the steps span only, so the water stays at zero until this is done.
+  // Opacity completes early in the zone to keep the black gap after the
+  // falling droplet short.
+  const enterT = reducedMotion ? 1 : smoothstep(clamp01(enterProgress));
+  const enterOpacity = reducedMotion ? 1 : clamp01(enterT / 0.65);
 
   // Water rises smoothly within each milestone segment so fill matches captions.
   const level = levelAtStepProgress(steps, step, progress, stepCount);
@@ -328,32 +407,46 @@ export function NationBathtub({ data }: NationBathtubProps) {
           toYear: chunkToYear,
         });
 
+  // Accumulated-total caption drawn inside the tub water.
+  const tubCaption: TubCaption = {
+    prefix: t("nation.story.bathtub.waterCaptionPrefix"),
+    value: `${formatMton(current.cumulativeMton, currentLanguage, 0)} ${t("nation.story.unit.mtonCo2e")}`,
+    suffix: t("nation.story.bathtub.waterCaptionSuffix"),
+  };
+
   return (
     <section
       ref={ref}
       data-story-section
       data-story-step={step}
       data-story-steps={steps.length}
-      data-story-step-vh={70}
+      data-story-step-vh={BATHTUB_STEP_VH}
       className="relative"
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] flex items-center px-4 md:px-8 py-3 md:py-0"
+        className="h-[100svh] flex items-center px-4 md:px-8 pt-14 pb-6 md:pt-0 md:pb-28"
         style={stageStyle}
       >
-        <div className="w-full max-w-3xl mx-auto space-y-4 md:space-y-6">
+        <div
+          className="w-full max-w-3xl mx-auto space-y-4 md:space-y-6"
+          style={{
+            opacity: enterOpacity,
+            transform: `translateY(${(1 - enterT) * 24}px) scale(${0.94 + 0.06 * enterT})`,
+            transformOrigin: "50% 40%",
+          }}
+        >
           {/* Copy above the tub on all breakpoints */}
           <div className="max-w-2xl mx-auto text-center space-y-2.5 md:space-y-3">
-            <motion.p
+            <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.4 }}
-              className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
+              className="text-2xl md:text-3xl font-light tracking-tight text-white"
             >
               {t("nation.story.bathtub.eyebrow")}
-            </motion.p>
+            </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -377,11 +470,17 @@ export function NationBathtub({ data }: NationBathtubProps) {
           <TubGraphic
             idPrefix={idPrefix}
             waterTop={waterTop}
-            className="w-56 md:w-full max-w-lg mx-auto h-auto"
+            caption={tubCaption}
+            compact={isMobile}
+            className="w-64 md:w-full max-w-lg mx-auto h-auto"
           />
 
-          {/* Milestone captions below the tub */}
+          {/* Milestone captions below the tub: the year and this decade's addition.
+              The accumulated total lives inside the tub water. */}
           <div className="text-center space-y-0.5 md:space-y-1 min-h-[3.5rem] md:min-h-[4.5rem]">
+            <p className="sr-only">
+              {`${tubCaption.prefix} ${tubCaption.value} ${tubCaption.suffix}`}
+            </p>
             <motion.p
               key={current.year}
               initial={{ opacity: 0, y: 6 }}
@@ -390,13 +489,6 @@ export function NationBathtub({ data }: NationBathtubProps) {
             >
               {current.year}
             </motion.p>
-            <p
-              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.body}`}
-            >
-              {t("nation.story.bathtub.levelCaption", {
-                value: formatMton(current.cumulativeMton, currentLanguage, 0),
-              })}
-            </p>
             <p
               className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
             >

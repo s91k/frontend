@@ -99,7 +99,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] flex items-center px-4 md:px-8 py-3 md:py-0 overflow-hidden"
+        className="h-[100svh] flex items-center px-4 md:px-8 pt-14 pb-6 md:py-0 overflow-hidden"
         style={stageStyle}
       >
         {/* Same depth backdrop as the hero and journey chapters */}
@@ -234,11 +234,6 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                 </motion.span>
               ))}
             </div>
-            <p
-              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
-            >
-              {t("nation.story.journey.dataYear", { year: latestYear })}
-            </p>
           </div>
         </div>
       </div>
