@@ -44,9 +44,12 @@ type JourneyStep = {
  */
 const E_COMMERCE_MTON = 0.326;
 
-/** Small additions like e-commerce need a decimal to not round to zero. */
+/**
+ * Small additions need decimals to not round to zero – three of them, so the
+ * e-commerce delta (0.326 Mton) matches the 326 000 tonnes cited in the copy.
+ */
 function deltaDecimals(delta: number): number {
-  return delta > 0 && delta < 1 ? 1 : 0;
+  return delta > 0 && delta < 1 ? 3 : 0;
 }
 
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
@@ -198,11 +201,16 @@ export function NationEmissionsJourney({
       if (event.deltaY < 0) controls.stop();
     };
     const cancelOnTouch = () => controls.stop();
+    const cancelIfUpwardKey = (event: KeyboardEvent) => {
+      if (["ArrowUp", "PageUp", "Home"].includes(event.key)) controls.stop();
+    };
     window.addEventListener("wheel", cancelIfUpward, { passive: true });
     window.addEventListener("touchstart", cancelOnTouch, { passive: true });
+    window.addEventListener("keydown", cancelIfUpwardKey);
     const cleanup = () => {
       window.removeEventListener("wheel", cancelIfUpward);
       window.removeEventListener("touchstart", cancelOnTouch);
+      window.removeEventListener("keydown", cancelIfUpwardKey);
     };
     controls.then(cleanup, cleanup);
   }, [exitProgress, reducedMotion, ref]);
