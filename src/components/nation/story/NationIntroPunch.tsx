@@ -1,6 +1,11 @@
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -42,6 +47,7 @@ type StatCalloutProps = {
   unitLong: string;
   colorClass: string;
   delay: number;
+  className?: string;
 };
 
 function StatCallout({
@@ -51,6 +57,7 @@ function StatCallout({
   unitLong,
   colorClass,
   delay,
+  className,
 }: StatCalloutProps) {
   return (
     <motion.div
@@ -58,7 +65,7 @@ function StatCallout({
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.5, delay }}
-      className="text-center md:text-left"
+      className={`text-center md:text-left ${className ?? ""}`}
     >
       <p
         className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
@@ -90,6 +97,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const reducedMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
   const clipId = `sweden-fill-clip-${useId().replace(/:/g, "")}`;
 
   const reportedValue = metrics.territorialLatestMton;
@@ -98,11 +106,29 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const full = formatMton(fullValue, currentLanguage, 0);
   const fillRatio = reportedValue / fullValue;
   const fillTop = OUTLINE_BOTTOM - fillRatio * OUTLINE_HEIGHT;
-  const unitShort = t("nation.story.unit.mton");
-  const unitLong = t("nation.story.unit.millionTon");
+  const unitShort = t("nation.story.unit.mtonCo2e");
+  const unitLong = t("nation.story.unit.millionTco2e");
+
+  // Scroll-lerped drain: as the hero scrolls out, the orange fill sinks back
+  // down and empties – one scroll later the onion's first orange circle grows
+  // from zero, so the reported share visually pours from the map into it.
+  // Pushing the clipped fill group down reads as the level draining; it
+  // composes with the one-shot rise (attribute animation vs transform) and
+  // refills when scrolling back up.
+  const { scrollYProgress: drainProgress } = useScroll({
+    target: rootRef,
+    offset: ["end 85%", "end 25%"],
+  });
+  const drainDistance = OUTLINE_BOTTOM - fillTop + 6;
+  const drainY = useTransform(
+    drainProgress,
+    [0, 1],
+    reducedMotion ? [0, 0] : [0, drainDistance],
+  );
 
   return (
     <motion.div
+      ref={rootRef}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.35 }}
@@ -133,45 +159,47 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
 
           {/* Reported share rises like water inside the silhouette */}
           <g clipPath={svgLocalUrl(clipId)}>
-            <motion.rect
-              x={0}
-              width={100}
-              fill={NATION_STORY_COLORS.territorial}
-              initial={
-                reducedMotion
-                  ? { y: fillTop, height: OUTLINE_BOTTOM - fillTop + 6 }
-                  : { y: OUTLINE_BOTTOM, height: 0 }
-              }
-              whileInView={{
-                y: fillTop,
-                height: OUTLINE_BOTTOM - fillTop + 6,
-              }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
-            />
-            <motion.line
-              x1={0}
-              x2={100}
-              stroke="var(--orange-1)"
-              strokeWidth="1"
-              strokeOpacity="0.8"
-              initial={
-                reducedMotion
-                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-              }
-              whileInView={{ y1: fillTop, y2: fillTop, opacity: 1 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
-            />
+            <motion.g style={{ y: drainY }}>
+              <motion.rect
+                x={0}
+                width={100}
+                fill={NATION_STORY_COLORS.territorial}
+                initial={
+                  reducedMotion
+                    ? { y: fillTop, height: OUTLINE_BOTTOM - fillTop + 6 }
+                    : { y: OUTLINE_BOTTOM, height: 0 }
+                }
+                whileInView={{
+                  y: fillTop,
+                  height: OUTLINE_BOTTOM - fillTop + 6,
+                }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : { ...FILL_SPRING, delay: 0.35 }
+                }
+              />
+              <motion.line
+                x1={0}
+                x2={100}
+                stroke="var(--orange-1)"
+                strokeWidth="1"
+                strokeOpacity="0.8"
+                initial={
+                  reducedMotion
+                    ? { y1: fillTop, y2: fillTop, opacity: 1 }
+                    : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
+                }
+                whileInView={{ y1: fillTop, y2: fillTop, opacity: 1 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : { ...FILL_SPRING, delay: 0.35 }
+                }
+              />
+            </motion.g>
           </g>
         </svg>
       </div>
@@ -185,6 +213,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           unitLong={unitLong}
           colorClass="text-pink-3"
           delay={0.15}
+          className="order-2 md:order-1"
         />
         <StatCallout
           label={t("nation.story.conclusion.usualLabel")}
@@ -193,6 +222,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           unitLong={unitLong}
           colorClass="text-orange-3"
           delay={0.3}
+          className="order-1 md:order-2"
         />
       </div>
     </motion.div>

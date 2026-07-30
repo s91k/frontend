@@ -1,5 +1,13 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useReducedMotion,
+  type AnimationPlaybackControls,
+} from "framer-motion";
+import { BATHTUB_ENTER_VH } from "@/components/nation/story/NationBathtub";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -28,17 +36,48 @@ type JourneyStep = {
   ring?: boolean;
 };
 
+/**
+ * Private e-commerce estimate (~326 000 t CO₂e). Shown as its own tally row,
+ * but excluded from the running total: the amount is too small to move the
+ * rounded 159 Mton figure and is presented as an addition outside official
+ * statistics.
+ */
+const E_COMMERCE_MTON = 0.326;
+
+/**
+ * Small additions need decimals to not round to zero – three of them, so the
+ * e-commerce delta (0.326 Mton) matches the 326 000 tonnes cited in the copy.
+ */
+function deltaDecimals(delta: number): number {
+  return delta > 0 && delta < 1 ? 3 : 0;
+}
+
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
 const DESKTOP_MAX_DIAMETER = 300;
 const MOBILE_MAX_DIAMETER = 148;
 /** Scroll distance per journey step – higher = more time to watch each layer grow. */
 const JOURNEY_STEP_VH = 115;
-/** Gentle spring so each new onion layer visibly expands. */
+/**
+ * Extra pinned scroll after the last step for the exit morph: the finished
+ * bubble compresses into a water drop and falls toward the bathtub scene.
+ * Entering this zone triggers an auto-scroll ride through the whole hand-off,
+ * so the zone mainly sets the morph's pacing during that ride.
+ */
+const JOURNEY_EXIT_VH = 90;
+/** Size the bubble shrinks to before falling – matches the tub's faucet drip. */
+const DROPLET_DIAMETER = 14;
+
+const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+/**
+ * Layer diameters are lerped from scroll progress; this spring only smooths
+ * between scroll events, so it tracks tighter than the old step-change spring.
+ */
 const LAYER_GROW_TRANSITION = {
   type: "spring" as const,
-  stiffness: 48,
-  damping: 16,
-  mass: 1.6,
+  stiffness: 90,
+  damping: 22,
+  mass: 0.8,
 };
 
 function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
@@ -81,7 +120,7 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
       textKey: "nation.story.journey.step4.text",
       color: NATION_STORY_COLORS.eCommerceRing,
       total: production + consumption,
-      delta: 0,
+      delta: E_COMMERCE_MTON,
       layer: false,
       ring: true,
     },
@@ -113,16 +152,97 @@ export function NationEmissionsJourney({
   const maxTotal = steps[steps.length - 1].total;
   const maxDiameter = isMobile ? MOBILE_MAX_DIAMETER : DESKTOP_MAX_DIAMETER;
 
-  const { ref, step, sectionVh, stageStyle } = usePinnedSteps(
-    steps.length,
-    JOURNEY_STEP_VH,
-  );
+  const { ref, step, progress, exitProgress, sectionVh, stageStyle } =
+    usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
+      exitVh: JOURNEY_EXIT_VH,
+    });
+
+  // Auto-scroll ride: scrolling into the exit zone takes over and carries the
+  // page through the droplet morph and the bathtub's enter fade in one
+  // continuous motion, so a slow swipe can't strand the reader in the gap
+  // between the falling drop and the tub. Scrolling up (or a new touch)
+  // cancels the ride; it re-arms once the reader is back above the zone.
+  const prevExitRef = useRef(0);
+  const rideDoneRef = useRef(false);
+  const rideControlsRef = useRef<AnimationPlaybackControls | null>(null);
+
+  useEffect(() => {
+    const prevExit = prevExitRef.current;
+    prevExitRef.current = exitProgress;
+
+    if (exitProgress === 0) {
+      // Back above the zone: re-arm and make sure no stale ride keeps
+      // driving the scroll (e.g. after a scrollbar drag fought it upward).
+      rideDoneRef.current = false;
+      rideControlsRef.current?.stop();
+      rideControlsRef.current = null;
+      return;
+    }
+    if (reducedMotion || rideDoneRef.current) return;
+    // Only trigger on a downward crossing into the zone, not when arriving
+    // from the bathtub side or after a programmatic jump deep into the zone.
+    if (!(prevExit <= 0.02 && exitProgress > 0.02 && exitProgress < 0.5))
+      return;
+
+    const tubSection = ref.current?.nextElementSibling;
+    if (!(tubSection instanceof HTMLElement)) return;
+    rideDoneRef.current = true;
+    // Single flight: never let two rides drive the scroll at once.
+    rideControlsRef.current?.stop();
+
+    // Land where the tub has fully entered: tub top + its enter zone.
+    const target =
+      window.scrollY +
+      tubSection.getBoundingClientRect().top +
+      (BATHTUB_ENTER_VH / 100) * window.innerHeight;
+
+    const controls = animate(window.scrollY, target, {
+      duration: 2,
+      ease: [0.45, 0, 0.25, 1],
+      onUpdate: (value) => window.scrollTo(0, value),
+    });
+    rideControlsRef.current = controls;
+
+    const cancelIfUpward = (event: WheelEvent) => {
+      if (event.deltaY < 0) controls.stop();
+    };
+    // Any new pointer contact (touch, click, scrollbar grab) hands control back.
+    const cancelOnPointer = () => controls.stop();
+    const cancelIfUpwardKey = (event: KeyboardEvent) => {
+      if (["ArrowUp", "PageUp", "Home"].includes(event.key)) controls.stop();
+    };
+    window.addEventListener("wheel", cancelIfUpward, { passive: true });
+    window.addEventListener("touchstart", cancelOnPointer, { passive: true });
+    window.addEventListener("pointerdown", cancelOnPointer, { passive: true });
+    window.addEventListener("keydown", cancelIfUpwardKey);
+    const cleanup = () => {
+      window.removeEventListener("wheel", cancelIfUpward);
+      window.removeEventListener("touchstart", cancelOnPointer);
+      window.removeEventListener("pointerdown", cancelOnPointer);
+      window.removeEventListener("keydown", cancelIfUpwardKey);
+      if (rideControlsRef.current === controls) rideControlsRef.current = null;
+    };
+    controls.then(cleanup, cleanup);
+  }, [exitProgress, reducedMotion, ref]);
+
+  // Stop a running ride if the story unmounts mid-flight.
+  useEffect(() => () => rideControlsRef.current?.stop(), []);
 
   const current = steps[step];
+  // Scroll position within the current step (0–1), smoothstepped so layers
+  // grow gently with the scroll instead of jumping per step.
+  const rawStepProgress = clamp01(progress * steps.length - step);
+  const stepProgress = smoothstep(rawStepProgress);
   const newestLayerKey = steps
     .slice(0, step + 1)
     .filter((s) => s.layer)
     .at(-1)?.key;
+  // Total of the layer beneath the one currently growing – its start diameter.
+  const previousLayerTotal =
+    steps
+      .slice(0, step)
+      .filter((s) => s.layer)
+      .at(-1)?.total ?? 0;
 
   // All layer-circles revealed so far, largest drawn first (behind) so each
   // colour shows as a ring around the previous – i.e. the types stacked up.
@@ -138,10 +258,44 @@ export function NationEmissionsJourney({
   const diameterFor = (total: number) =>
     Math.sqrt(total / maxTotal) * maxDiameter;
 
+  // Diameter of the circle as currently drawn: lerped while the current
+  // step's layer is growing, full-size otherwise.
+  const currentStartDiameter =
+    previousLayerTotal > 0 ? diameterFor(previousLayerTotal) : 0;
+  const currentDrawnDiameter =
+    current.layer && !reducedMotion
+      ? currentStartDiameter +
+        (diameterFor(current.total) - currentStartDiameter) * stepProgress
+      : diameterFor(current.total);
+
   // Distance from the bubble center to just outside the current circle's
-  // edge along the 45° upper-right diagonal.
+  // edge along the 45° upper-right diagonal (past the dashed ring when shown).
   const deltaChipOffset =
-    diameterFor(current.total) / 2 / Math.SQRT2 + (isMobile ? 8 : 12);
+    (currentDrawnDiameter + (current.ring ? (isMobile ? 16 : 26) : 0)) /
+      2 /
+      Math.SQRT2 +
+    (isMobile ? 8 : 12);
+
+  // The running total sits on the smallest (innermost) circle – territorial,
+  // which only grows during the first step. Until that circle is big enough
+  // to sit behind the text, render the number white on the dark backdrop.
+  const smallestDrawnDiameter =
+    step === 0 ? currentDrawnDiameter : diameterFor(steps[0].total);
+  const totalOnLayer = smallestDrawnDiameter >= (isMobile ? 64 : 116);
+
+  // Exit morph (scroll-lerped): captions fade first, then the bubble
+  // compresses into a blue droplet that sinks and finally falls off-stage
+  // toward the bathtub scene. With reduced motion the stage simply fades.
+  const exitFade = reducedMotion ? 1 : 1 - Math.min(exitProgress / 0.3, 1);
+  const shrinkT = reducedMotion
+    ? 0
+    : smoothstep(clamp01((exitProgress - 0.1) / 0.7));
+  const fallT = reducedMotion ? 0 : clamp01((exitProgress - 0.8) / 0.2);
+  const viewportH = typeof window === "undefined" ? 800 : window.innerHeight;
+  const bubbleScale = 1 + (DROPLET_DIAMETER / maxDiameter - 1) * shrinkT;
+  const bubbleY = viewportH * (0.22 * shrinkT + 0.9 * fallT * fallT);
+  const bubbleOpacity = 1 - fallT;
+  const stageOpacity = reducedMotion ? 1 - clamp01(exitProgress / 0.5) : 1;
 
   return (
     <section
@@ -154,7 +308,7 @@ export function NationEmissionsJourney({
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] flex items-center px-4 md:px-8 py-3 md:py-0 overflow-hidden"
+        className="h-[100svh] flex items-center px-4 md:px-8 pt-14 pb-6 md:py-0 overflow-hidden"
         style={stageStyle}
       >
         {/* Same subtle depth backdrop as the hero, tying the chapter to the intro */}
@@ -162,12 +316,21 @@ export function NationEmissionsJourney({
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center w-full max-w-5xl mx-auto">
+        <div
+          className="relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center w-full max-w-5xl mx-auto"
+          style={{ opacity: stageOpacity }}
+        >
           {/* Bubble = accumulating colored layers */}
           <div className="flex flex-col items-center gap-2 md:gap-4 order-1">
             <div
               className="relative"
-              style={{ width: maxDiameter, height: maxDiameter }}
+              style={{
+                width: maxDiameter,
+                height: maxDiameter,
+                transform: `translateY(${bubbleY}px) scale(${bubbleScale})`,
+                transformOrigin: "50% 50%",
+                opacity: bubbleOpacity,
+              }}
             >
               {/* Soft glow behind the bubble in the current step's color */}
               <AnimatePresence>
@@ -190,23 +353,30 @@ export function NationEmissionsJourney({
               </AnimatePresence>
 
               {revealedLayers.map((layer) => {
-                const d = diameterFor(layer.total);
-                const isGrowingLayer = layer.key === newestLayerKey;
+                const fullDiameter = diameterFor(layer.total);
+                // The newest layer grows with scroll (lerp) during its own
+                // step, starting from the previous layer's edge; scrolling
+                // back shrinks it the same way. Older layers stay full-size.
+                const isGrowingLayer =
+                  !reducedMotion &&
+                  current.layer &&
+                  layer.key === newestLayerKey &&
+                  layer.key === current.key;
+                const startDiameter =
+                  previousLayerTotal > 0 ? diameterFor(previousLayerTotal) : 0;
+                const d = isGrowingLayer
+                  ? startDiameter +
+                    (fullDiameter - startDiameter) * stepProgress
+                  : fullDiameter;
                 return (
                   <motion.div
                     key={layer.key}
                     className="absolute left-1/2 top-1/2 rounded-full"
                     style={{ backgroundColor: layer.color, opacity: 1 }}
-                    initial={
-                      isGrowingLayer && !reducedMotion
-                        ? { width: 0, height: 0, x: "-50%", y: "-50%" }
-                        : { width: d, height: d, x: "-50%", y: "-50%" }
-                    }
+                    initial={false}
                     animate={{ width: d, height: d, x: "-50%", y: "-50%" }}
                     transition={
-                      isGrowingLayer && !reducedMotion
-                        ? LAYER_GROW_TRANSITION
-                        : { duration: 0 }
+                      reducedMotion ? { duration: 0 } : LAYER_GROW_TRANSITION
                     }
                   />
                 );
@@ -214,29 +384,55 @@ export function NationEmissionsJourney({
 
               {/* Private e-commerce: thin dashed ring around the current total */}
               {showRing && ringStep && (
-                <motion.span
-                  className="absolute left-1/2 top-1/2 rounded-full border-2 border-dashed"
+                <div style={{ opacity: exitFade }}>
+                  <motion.span
+                    className="absolute left-1/2 top-1/2 rounded-full border-2 border-dashed"
+                    style={{
+                      width: diameterFor(ringTotal) + (isMobile ? 16 : 26),
+                      height: diameterFor(ringTotal) + (isMobile ? 16 : 26),
+                      x: "-50%",
+                      y: "-50%",
+                      borderColor: NATION_STORY_COLORS.eCommerceRing,
+                    }}
+                    initial={
+                      reducedMotion ? false : { opacity: 0, scale: 0.85 }
+                    }
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0 }
+                        : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
+                    }
+                  />
+                </div>
+              )}
+
+              {/* Exit morph: the stack crossfades to water-blue while it
+                  shrinks, so the droplet matches the tub's faucet drip */}
+              {shrinkT > 0 && (
+                <div
+                  aria-hidden
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                   style={{
-                    width: diameterFor(ringTotal) + (isMobile ? 16 : 26),
-                    height: diameterFor(ringTotal) + (isMobile ? 16 : 26),
-                    x: "-50%",
-                    y: "-50%",
-                    borderColor: NATION_STORY_COLORS.eCommerceRing,
+                    width: maxDiameter,
+                    height: maxDiameter,
+                    backgroundColor: "var(--blue-2)",
+                    opacity: shrinkT,
                   }}
-                  initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={
-                    reducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
-                  }
                 />
               )}
 
-              {/* Running total on top */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span
-                  className={`${NATION_STORY_TYPE.stat} text-black font-medium select-none leading-none text-center`}
+              {/* Running total on top – white on the dark backdrop until the
+                  innermost circle has grown large enough to sit behind it */}
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ opacity: exitFade }}
+              >
+                <motion.span
+                  initial={false}
+                  animate={{ color: totalOnLayer ? "#000000" : "#ffffff" }}
+                  transition={{ duration: 0.3 }}
+                  className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                 >
                   {formatMton(current.total, currentLanguage, 0)}
                   <span
@@ -244,7 +440,7 @@ export function NationEmissionsJourney({
                   >
                     {t("nation.story.unit.mton")}
                   </span>
-                </span>
+                </motion.span>
               </div>
 
               {/* The step's own contribution sits just off the current circle's
@@ -253,6 +449,7 @@ export function NationEmissionsJourney({
               {step > 0 && current.delta > 0 && (
                 <motion.span
                   className="absolute left-1/2 top-1/2 pointer-events-none"
+                  style={{ opacity: exitFade }}
                   initial={false}
                   animate={{ x: deltaChipOffset, y: -deltaChipOffset }}
                   transition={
@@ -272,7 +469,12 @@ export function NationEmissionsJourney({
                       className={`${NATION_STORY_TYPE.emphasis} tabular-nums whitespace-nowrap`}
                       style={{ color: current.color }}
                     >
-                      +{formatMton(current.delta, currentLanguage, 0)}{" "}
+                      +
+                      {formatMton(
+                        current.delta,
+                        currentLanguage,
+                        deltaDecimals(current.delta),
+                      )}{" "}
                       {t("nation.story.unit.mton")}
                     </motion.p>
                   </span>
@@ -282,13 +484,17 @@ export function NationEmissionsJourney({
 
             <p
               className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 md:mt-10`}
+              style={{ opacity: exitFade }}
             >
               {t("nation.story.journey.dataYear", { year: metrics.latestYear })}
             </p>
           </div>
 
           {/* Caption + legend of layers added so far */}
-          <div className="space-y-2.5 md:space-y-4 order-2 min-h-0">
+          <div
+            className="space-y-2.5 md:space-y-4 order-2 min-h-0"
+            style={{ opacity: exitFade }}
+          >
             <motion.div
               key={current.key}
               initial={{ opacity: 0, y: 12 }}
@@ -326,7 +532,7 @@ export function NationEmissionsJourney({
               <div className="space-y-1 border-t border-white/10 pt-2 md:pt-3">
                 {steps
                   .slice(0, step + 1)
-                  .filter((s) => s.layer)
+                  .filter((s) => s.layer || s.ring)
                   .map((s, i) => (
                     <motion.div
                       key={s.key}
@@ -337,7 +543,9 @@ export function NationEmissionsJourney({
                     >
                       <span
                         className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
-                        style={{ backgroundColor: s.color }}
+                        style={{
+                          backgroundColor: s.ring ? "#ffffff" : s.color,
+                        }}
                       />
                       <span className={`${NATION_STORY_TEXT.secondary} flex-1`}>
                         {t(s.labelKey)}
@@ -346,7 +554,11 @@ export function NationEmissionsJourney({
                         className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
                       >
                         {i === 0 ? "" : "+"}
-                        {formatMton(s.delta, currentLanguage, 0)}{" "}
+                        {formatMton(
+                          s.delta,
+                          currentLanguage,
+                          deltaDecimals(s.delta),
+                        )}{" "}
                         {t("nation.story.unit.mton")}
                       </span>
                     </motion.div>
