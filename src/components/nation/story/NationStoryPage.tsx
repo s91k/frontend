@@ -160,22 +160,18 @@ export function NationStoryPage({
     <div className="bg-black text-white pb-10 md:pb-24">
       <StoryProgressBar />
 
-      {/* Intro hero – exactly one viewport: eyebrow, headline, lede, silhouette */}
+      {/* Intro hero – one landing view: eyebrow, headline and lede up top,
+          then the silhouette with callouts, then the explanation paragraphs. */}
       <section
         data-story-section
-        className="relative min-h-[100svh] md:h-[100svh] flex flex-col items-center justify-center px-4 md:px-8 pt-6 md:pt-10 pb-28 md:pb-20 overflow-hidden"
+        className="relative min-h-[100svh] flex flex-col items-center justify-start px-4 md:px-8 pt-[clamp(4.5rem,17svh,9rem)] md:pt-44 pb-28 md:pb-20 overflow-hidden"
       >
         {/* Subtle depth behind the hero, using existing surface colors only */}
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative max-w-5xl mx-auto text-center space-y-4 md:space-y-6">
-          <p
-            className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
-          >
-            {t("nation.story.intro.eyebrow")}
-          </p>
+        <div className="relative max-w-5xl mx-auto text-center space-y-2.5 md:space-y-4">
           <h1 className="text-4xl md:text-6xl font-light tracking-tight text-white">
             {t("nation.story.intro.title")}
           </h1>
@@ -184,35 +180,10 @@ export function NationStoryPage({
           >
             {t("nation.story.intro.paragraph1")}
           </p>
-          <NationIntroPunch metrics={metrics} />
-        </div>
-      </section>
-
-      {/* Short transition: the explanation that follows the hero's punch.
-          Mobile keeps this tight – big min-heights read as empty black. */}
-      <section
-        data-story-section
-        className="relative min-h-[35vh] md:min-h-[70vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
-      >
-        <div className="max-w-2xl mx-auto text-center space-y-5 md:space-y-6">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5 }}
-            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
-          >
-            {t("nation.story.intro.paragraph2")}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className={`${NATION_STORY_TYPE.emphasis} text-white`}
-          >
-            {t("nation.story.intro.paragraph3")}
-          </motion.p>
+          {/* Extra breathing room between the copy and the map */}
+          <div className="pt-6 md:pt-10">
+            <NationIntroPunch metrics={metrics} />
+          </div>
         </div>
       </section>
 
@@ -225,21 +196,12 @@ export function NationStoryPage({
       {/* Mid-story conclusion before the stacked historic chart */}
       <FullScreenSection>
         <div className="max-w-2xl mx-auto text-center space-y-6">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.4 }}
-            className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
-          >
-            {t("nation.story.interlude.eyebrow")}
-          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.45, delay: 0.05 }}
-            className={`${NATION_STORY_TYPE.title} leading-tight`}
+            className={NATION_STORY_TYPE.title}
           >
             {t("nation.story.interlude.title")}
           </motion.h2>

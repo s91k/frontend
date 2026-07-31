@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   AnimatePresence,
@@ -30,17 +30,12 @@ type JourneyStep = {
   total: number;
   /** this step's own contribution in Mton */
   delta: number;
-  /** drawn as an added colored circle layer (vs a thin ring for tiny additions) */
-  layer: boolean;
-  /** small extra addition drawn as a dashed ring (private e-commerce) */
-  ring?: boolean;
 };
 
 /**
- * Private e-commerce estimate (~326 000 t CO₂e). Shown as its own tally row,
- * but excluded from the running total: the amount is too small to move the
- * rounded 159 Mton figure and is presented as an addition outside official
- * statistics.
+ * Private e-commerce estimate (~326 000 t CO₂e). Included in the running
+ * total like every other layer, though it is far too small to move the
+ * rounded Mton figures.
  */
 const E_COMMERCE_MTON = 0.326;
 
@@ -54,16 +49,16 @@ function deltaDecimals(delta: number): number {
 
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
 const DESKTOP_MAX_DIAMETER = 300;
-const MOBILE_MAX_DIAMETER = 148;
+const MOBILE_MAX_DIAMETER = 240;
 /** Scroll distance per journey step – higher = more time to watch each layer grow. */
-const JOURNEY_STEP_VH = 115;
+const JOURNEY_STEP_VH = 80;
 /**
  * Extra pinned scroll after the last step for the exit morph: the finished
  * bubble compresses into a water drop and falls toward the bathtub scene.
  * Entering this zone triggers an auto-scroll ride through the whole hand-off,
  * so the zone mainly sets the morph's pacing during that ride.
  */
-const JOURNEY_EXIT_VH = 90;
+const JOURNEY_EXIT_VH = 70;
 /** Size the bubble shrinks to before falling – matches the tub's faucet drip. */
 const DROPLET_DIAMETER = 14;
 
@@ -94,7 +89,6 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
       color: NATION_STORY_COLORS.territorial,
       total: territorial,
       delta: territorial,
-      layer: true,
     },
     {
       key: "step2",
@@ -103,7 +97,6 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
       color: NATION_STORY_COLORS.production,
       total: production,
       delta: production - territorial,
-      layer: true,
     },
     {
       key: "step3",
@@ -112,28 +105,57 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
       color: NATION_STORY_COLORS.consumption,
       total: production + consumption,
       delta: consumption,
-      layer: true,
     },
     {
       key: "step4",
       labelKey: "nation.story.journey.step4.label",
       textKey: "nation.story.journey.step4.text",
-      color: NATION_STORY_COLORS.eCommerceRing,
-      total: production + consumption,
+      color: NATION_STORY_COLORS.eCommerce,
+      total: production + consumption + E_COMMERCE_MTON,
       delta: E_COMMERCE_MTON,
-      layer: false,
-      ring: true,
     },
     {
       key: "step5",
       labelKey: "nation.story.journey.step5.label",
       textKey: "nation.story.journey.step5.text",
       color: NATION_STORY_COLORS.biogenic,
-      total: production + consumption + biogenic,
+      total: production + consumption + E_COMMERCE_MTON + biogenic,
       delta: biogenic,
-      layer: true,
     },
   ];
+}
+
+/**
+ * Rolls the running total between step values instead of snapping, roughly
+ * in step with the layer-growth spring. Renders the formatted value only.
+ */
+function AnimatedTotal({
+  value,
+  format,
+}: {
+  value: number;
+  format: (value: number) => string;
+}) {
+  const reducedMotion = useReducedMotion();
+  const [displayValue, setDisplayValue] = useState(value);
+  const previousRef = useRef(value);
+
+  useEffect(() => {
+    const from = previousRef.current;
+    previousRef.current = value;
+    if (reducedMotion || from === value) {
+      setDisplayValue(value);
+      return;
+    }
+    const controls = animate(from, value, {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: setDisplayValue,
+    });
+    return () => controls.stop();
+  }, [value, reducedMotion]);
+
+  return <>{format(displayValue)}</>;
 }
 
 type NationEmissionsJourneyProps = {
@@ -152,7 +174,7 @@ export function NationEmissionsJourney({
   const maxTotal = steps[steps.length - 1].total;
   const maxDiameter = isMobile ? MOBILE_MAX_DIAMETER : DESKTOP_MAX_DIAMETER;
 
-  const { ref, step, progress, exitProgress, sectionVh, stageStyle } =
+  const { ref, step, exitProgress, mode, sectionVh, stageStyle } =
     usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
       exitVh: JOURNEY_EXIT_VH,
     });
@@ -229,59 +251,44 @@ export function NationEmissionsJourney({
   useEffect(() => () => rideControlsRef.current?.stop(), []);
 
   const current = steps[step];
-  // Scroll position within the current step (0–1), smoothstepped so layers
-  // grow gently with the scroll instead of jumping per step.
-  const rawStepProgress = clamp01(progress * steps.length - step);
-  const stepProgress = smoothstep(rawStepProgress);
-  const newestLayerKey = steps
-    .slice(0, step + 1)
-    .filter((s) => s.layer)
-    .at(-1)?.key;
-  // Total of the layer beneath the one currently growing – its start diameter.
-  const previousLayerTotal =
-    steps
-      .slice(0, step)
-      .filter((s) => s.layer)
-      .at(-1)?.total ?? 0;
+  // The pinned stage is in the DOM before the reader reaches it, so gate the
+  // reveals on the section actually pinning – otherwise the first layer's
+  // grow animation would have played long before anyone sees it.
+  const sectionStarted = mode !== "before";
 
   // All layer-circles revealed so far, largest drawn first (behind) so each
   // colour shows as a ring around the previous – i.e. the types stacked up.
-  const revealedLayers = steps
-    .slice(0, step + 1)
-    .filter((s) => s.layer)
-    .sort((a, b) => b.total - a.total);
-
-  const showRing = steps.slice(0, step + 1).some((s) => s.ring);
-  const ringStep = steps.find((s) => s.ring);
-  const ringTotal = ringStep?.total ?? current.total;
+  // Each layer springs to full size the moment its step activates (and back
+  // on exit) – one trigger per ring, no partial builds while scrubbing.
+  const revealedLayers = sectionStarted
+    ? steps
+        .slice(0, step + 1)
+        .slice()
+        .sort((a, b) => b.total - a.total)
+    : [];
 
   const diameterFor = (total: number) =>
     Math.sqrt(total / maxTotal) * maxDiameter;
 
-  // Diameter of the circle as currently drawn: lerped while the current
-  // step's layer is growing, full-size otherwise.
-  const currentStartDiameter =
-    previousLayerTotal > 0 ? diameterFor(previousLayerTotal) : 0;
-  const currentDrawnDiameter =
-    current.layer && !reducedMotion
-      ? currentStartDiameter +
-        (diameterFor(current.total) - currentStartDiameter) * stepProgress
-      : diameterFor(current.total);
+  // Area-true diameters, except each layer must grow visibly past the one
+  // beneath it. Without this the e-commerce layer (+0.326 Mton on a ~110 Mton
+  // onion) would add a fraction of a pixel and be invisible.
+  const minRingGrowth = isMobile ? 10 : 14;
+  const layerDiameters = new Map<string, number>();
+  {
+    let previous = 0;
+    for (const s of steps) {
+      const diameter = Math.max(diameterFor(s.total), previous + minRingGrowth);
+      layerDiameters.set(s.key, diameter);
+      previous = diameter;
+    }
+  }
+  const currentDiameter = layerDiameters.get(current.key) ?? 0;
 
   // Distance from the bubble center to just outside the current circle's
-  // edge along the 45° upper-right diagonal (past the dashed ring when shown).
+  // edge along the 45° upper-right diagonal.
   const deltaChipOffset =
-    (currentDrawnDiameter + (current.ring ? (isMobile ? 16 : 26) : 0)) /
-      2 /
-      Math.SQRT2 +
-    (isMobile ? 8 : 12);
-
-  // The running total sits on the smallest (innermost) circle – territorial,
-  // which only grows during the first step. Until that circle is big enough
-  // to sit behind the text, render the number white on the dark backdrop.
-  const smallestDrawnDiameter =
-    step === 0 ? currentDrawnDiameter : diameterFor(steps[0].total);
-  const totalOnLayer = smallestDrawnDiameter >= (isMobile ? 64 : 116);
+    currentDiameter / 2 / Math.SQRT2 + (isMobile ? 8 : 12);
 
   // Exit morph (scroll-lerped): captions fade first, then the bubble
   // compresses into a blue droplet that sinks and finally falls off-stage
@@ -304,6 +311,7 @@ export function NationEmissionsJourney({
       data-story-step={step}
       data-story-steps={steps.length}
       data-story-step-vh={JOURNEY_STEP_VH}
+      data-story-exit-vh={JOURNEY_EXIT_VH}
       className="relative"
       style={{ height: `${sectionVh}vh` }}
     >
@@ -317,11 +325,11 @@ export function NationEmissionsJourney({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className="relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center w-full max-w-5xl mx-auto"
+          className="relative flex h-full flex-col justify-center gap-4 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-12 w-full max-w-5xl mx-auto"
           style={{ opacity: stageOpacity }}
         >
           {/* Bubble = accumulating colored layers */}
-          <div className="flex flex-col items-center gap-2 md:gap-4 order-1">
+          <div className="flex flex-col items-center gap-2 md:gap-4 py-3 md:py-0 order-1">
             <div
               className="relative"
               style={{
@@ -352,60 +360,44 @@ export function NationEmissionsJourney({
                 />
               </AnimatePresence>
 
-              {revealedLayers.map((layer) => {
-                const fullDiameter = diameterFor(layer.total);
-                // The newest layer grows with scroll (lerp) during its own
-                // step, starting from the previous layer's edge; scrolling
-                // back shrinks it the same way. Older layers stay full-size.
-                const isGrowingLayer =
-                  !reducedMotion &&
-                  current.layer &&
-                  layer.key === newestLayerKey &&
-                  layer.key === current.key;
-                const startDiameter =
-                  previousLayerTotal > 0 ? diameterFor(previousLayerTotal) : 0;
-                const d = isGrowingLayer
-                  ? startDiameter +
-                    (fullDiameter - startDiameter) * stepProgress
-                  : fullDiameter;
-                return (
-                  <motion.div
-                    key={layer.key}
-                    className="absolute left-1/2 top-1/2 rounded-full"
-                    style={{ backgroundColor: layer.color, opacity: 1 }}
-                    initial={false}
-                    animate={{ width: d, height: d, x: "-50%", y: "-50%" }}
-                    transition={
-                      reducedMotion ? { duration: 0 } : LAYER_GROW_TRANSITION
-                    }
-                  />
-                );
-              })}
-
-              {/* Private e-commerce: thin dashed ring around the current total */}
-              {showRing && ringStep && (
-                <div style={{ opacity: exitFade }}>
-                  <motion.span
-                    className="absolute left-1/2 top-1/2 rounded-full border-2 border-dashed"
-                    style={{
-                      width: diameterFor(ringTotal) + (isMobile ? 16 : 26),
-                      height: diameterFor(ringTotal) + (isMobile ? 16 : 26),
-                      x: "-50%",
-                      y: "-50%",
-                      borderColor: NATION_STORY_COLORS.eCommerceRing,
-                    }}
-                    initial={
-                      reducedMotion ? false : { opacity: 0, scale: 0.85 }
-                    }
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={
-                      reducedMotion
-                        ? { duration: 0 }
-                        : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
-                    }
-                  />
-                </div>
-              )}
+              <AnimatePresence>
+                {revealedLayers.map((layer) => {
+                  const fullDiameter = layerDiameters.get(layer.key) ?? 0;
+                  // Each ring grows out from the edge of the layer beneath
+                  // it, and shrinks back onto it when scrolled out again.
+                  const layerIndex = steps.findIndex(
+                    (s) => s.key === layer.key,
+                  );
+                  const startDiameter =
+                    layerIndex > 0
+                      ? (layerDiameters.get(steps[layerIndex - 1].key) ?? 0)
+                      : 0;
+                  const collapsed = {
+                    width: startDiameter,
+                    height: startDiameter,
+                    x: "-50%",
+                    y: "-50%",
+                  };
+                  return (
+                    <motion.div
+                      key={layer.key}
+                      className="absolute left-1/2 top-1/2 rounded-full"
+                      style={{ backgroundColor: layer.color, opacity: 1 }}
+                      initial={reducedMotion ? false : collapsed}
+                      animate={{
+                        width: fullDiameter,
+                        height: fullDiameter,
+                        x: "-50%",
+                        y: "-50%",
+                      }}
+                      exit={collapsed}
+                      transition={
+                        reducedMotion ? { duration: 0 } : LAYER_GROW_TRANSITION
+                      }
+                    />
+                  );
+                })}
+              </AnimatePresence>
 
               {/* Exit morph: the stack crossfades to water-blue while it
                   shrinks, so the droplet matches the tub's faucet drip */}
@@ -423,24 +415,56 @@ export function NationEmissionsJourney({
               )}
 
               {/* Running total on top – white on the dark backdrop until the
-                  innermost circle has grown large enough to sit behind it */}
+                  innermost circle has grown large enough to sit behind it.
+                  Before the section pins, a pulsing seed dot waits where the
+                  first layer will grow, instead of a stranded number. */}
               <div
                 className="absolute inset-0 flex items-center justify-center"
                 style={{ opacity: exitFade }}
               >
-                <motion.span
-                  initial={false}
-                  animate={{ color: totalOnLayer ? "#000000" : "#ffffff" }}
-                  transition={{ duration: 0.3 }}
-                  className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
-                >
-                  {formatMton(current.total, currentLanguage, 0)}
-                  <span
-                    className={`block ${NATION_STORY_TYPE.meta} font-medium mt-0.5 md:mt-1`}
+                {sectionStarted ? (
+                  <motion.span
+                    // Mounts the moment the first layer starts springing from
+                    // zero, so it starts white on the dark backdrop and turns
+                    // black once the circle has grown up behind it
+                    initial={{ color: "#ffffff" }}
+                    animate={{ color: "#000000" }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0 }
+                        : { duration: 0.3, delay: 0.4 }
+                    }
+                    className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
-                    {t("nation.story.unit.mton")}
-                  </span>
-                </motion.span>
+                    <AnimatedTotal
+                      value={current.total}
+                      format={(v) => formatMton(v, currentLanguage, 0)}
+                    />
+                    <span
+                      className={`block ${NATION_STORY_TYPE.meta} font-medium mt-0.5 md:mt-1`}
+                    >
+                      {t("nation.story.unit.mton")}
+                    </span>
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    aria-hidden
+                    className="block w-3.5 h-3.5 rounded-full"
+                    style={{
+                      backgroundColor: NATION_STORY_COLORS.territorial,
+                    }}
+                    animate={
+                      reducedMotion
+                        ? undefined
+                        : { scale: [1, 1.35, 1], opacity: [0.7, 1, 0.7] }
+                    }
+                    transition={{
+                      repeat: Infinity,
+                      duration: 1.8,
+                      ease: "easeInOut",
+                    }}
+                  />
+                )}
               </div>
 
               {/* The step's own contribution sits just off the current circle's
@@ -482,11 +506,29 @@ export function NationEmissionsJourney({
               )}
             </div>
 
+            {/* Data note under the bubble: compact on mobile, full sentence
+                on desktop. Appears with the first layer, not before. */}
             <p
               className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 md:mt-10`}
               style={{ opacity: exitFade }}
             >
-              {t("nation.story.journey.dataYear", { year: metrics.latestYear })}
+              <motion.span
+                className="block"
+                initial={false}
+                animate={{ opacity: sectionStarted ? 1 : 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <span className="md:hidden">
+                  {t("nation.story.journey.dataYearShort", {
+                    year: metrics.latestYear,
+                  })}
+                </span>
+                <span className="hidden md:inline">
+                  {t("nation.story.journey.dataYear", {
+                    year: metrics.latestYear,
+                  })}
+                </span>
+              </motion.span>
             </p>
           </div>
 
@@ -495,21 +537,28 @@ export function NationEmissionsJourney({
             className="space-y-2.5 md:space-y-4 order-2 min-h-0"
             style={{ opacity: exitFade }}
           >
+            {/* Hidden (but space-keeping) until the section pins, so the
+                label and copy arrive together with the growing circle */}
             <motion.div
               key={current.key}
               initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{
+                opacity: sectionStarted ? 1 : 0,
+                y: sectionStarted ? 0 : 12,
+              }}
               transition={{ duration: 0.4 }}
               className="space-y-2 md:space-y-3"
             >
               <p
-                className={`${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
+                className={`hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
               >
                 {t("nation.story.journey.stepCounter", {
                   current: step + 1,
                   total: steps.length,
                 })}
               </p>
+              {/* Dot + label lead the paragraph they describe – on mobile this
+                  sits right under the onion, on desktop in the caption column */}
               <p
                 className={`flex items-center gap-2.5 md:gap-3 ${NATION_STORY_TYPE.emphasis} text-white`}
               >
@@ -527,42 +576,41 @@ export function NationEmissionsJourney({
             </motion.div>
 
             {/* Running tally: builds up row by row, with a summed total line.
-                Hidden while there is only one layer (it would just repeat the header). */}
+                Desktop only – on mobile the bubble (chip + center total)
+                already carries these numbers. Hidden while there is only one
+                layer (it would just repeat the header). */}
             {revealedLayers.length >= 2 && (
-              <div className="space-y-1 border-t border-white/10 pt-2 md:pt-3">
-                {steps
-                  .slice(0, step + 1)
-                  .filter((s) => s.layer || s.ring)
-                  .map((s, i) => (
-                    <motion.div
-                      key={s.key}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.35, delay: 0.1 }}
-                      className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
+              <div className="hidden md:block space-y-1 border-t border-white/10 pt-2 md:pt-3">
+                {steps.slice(0, step + 1).map((s, i) => (
+                  <motion.div
+                    key={s.key}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, delay: 0.1 }}
+                    className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
+                  >
+                    <span
+                      className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+                      style={{
+                        backgroundColor: s.color,
+                      }}
+                    />
+                    <span className={`${NATION_STORY_TEXT.secondary} flex-1`}>
+                      {t(s.labelKey)}
+                    </span>
+                    <span
+                      className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
                     >
-                      <span
-                        className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
-                        style={{
-                          backgroundColor: s.ring ? "#ffffff" : s.color,
-                        }}
-                      />
-                      <span className={`${NATION_STORY_TEXT.secondary} flex-1`}>
-                        {t(s.labelKey)}
-                      </span>
-                      <span
-                        className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
-                      >
-                        {i === 0 ? "" : "+"}
-                        {formatMton(
-                          s.delta,
-                          currentLanguage,
-                          deltaDecimals(s.delta),
-                        )}{" "}
-                        {t("nation.story.unit.mton")}
-                      </span>
-                    </motion.div>
-                  ))}
+                      {i === 0 ? "" : "+"}
+                      {formatMton(
+                        s.delta,
+                        currentLanguage,
+                        deltaDecimals(s.delta),
+                      )}{" "}
+                      {t("nation.story.unit.mton")}
+                    </span>
+                  </motion.div>
+                ))}
                 <div
                   className={`flex items-center gap-2 md:gap-2.5 border-t border-white/10 pt-1.5 mt-1.5 ${NATION_STORY_TYPE.meta} text-white font-medium`}
                 >

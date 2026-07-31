@@ -1539,30 +1539,32 @@
       "intro": {
         "eyebrow": "Election 2026",
         "title": "Sweden's emissions",
-        "paragraph1": "We often hear that Sweden's emissions have fallen by a third while the economy has doubled. But is that really true?",
-        "paragraph2": "What we usually hear about are territorial emissions – fossil greenhouse gas emissions within Sweden's borders. It is the measure used to track Sweden's climate goals.",
-        "paragraph3": "But Sweden's emissions are actually larger than that. Let's look at it, step by step.",
+        "paragraph1": "We often hear that Sweden's emissions are small and that they have fallen by a third while the economy has doubled. But is that really true? Let's look at it, step by step.",
+        "usualLabel": "What we often hear about",
+        "fullLabel": "Sweden's actual emissions",
         "previewRatio": "larger than what we usually talk about"
       },
       "scrollHint": {
-        "text": "Scroll for more",
+        "scroll": "Scroll",
+        "swipe": "Swipe",
         "label": "Scroll down to the next part of the story"
       },
       "journey": {
-        "dataYear": "Figures refer to CO₂e and year {{year}}.",
+        "dataYear": "The figure refers to CO₂e and {{year}}.",
+        "dataYearShort": "CO₂e, year {{year}}",
         "stepCounter": "Step {{current}} of {{total}}",
         "totalLabel": "Total",
         "step1": {
           "label": "Territorial emissions",
-          "text": "First, we have emissions within Sweden's borders. This includes emissions from industry, domestic transport, agriculture, heating and waste, among other sources."
+          "text": "We start with the figure we hear about most often: territorial emissions – fossil emissions within Sweden's borders. This includes emissions from industry, transport, agriculture, heating and waste, among other sources. This measure is used to track our climate goals."
         },
         "step2": {
           "label": "Production-based emissions",
-          "text": "Production-based emissions are emissions from the Swedish economy. They are roughly equivalent to territorial emissions, but also include emissions from Swedish shipping in international waters and Swedish airlines in international airspace."
+          "text": "Production-based emissions are emissions from the Swedish economy. They are roughly equivalent to territorial emissions, but also include emissions from Swedish shipping companies and airlines abroad."
         },
         "step3": {
-          "label": "Consumption abroad",
-          "text": "But Swedes also cause emissions through our consumption abroad. This includes emissions from manufacturing and transport of imported goods for Swedish household consumption, public services and investments. Swedes' international flights are included here, but emissions from goods produced in Sweden and exported to other countries are excluded."
+          "label": "Consumption-based emissions abroad",
+          "text": "Swedes also cause emissions abroad through our consumption. This includes emissions from manufacturing and transport of imported goods for Swedish household consumption, public services and investments. Emissions from goods produced in Sweden and exported to other countries are excluded."
         },
         "step4": {
           "label": "Private e-commerce",
@@ -1570,27 +1572,25 @@
         },
         "step5": {
           "label": "Biogenic emissions",
-          "text": "Finally, there are biogenic carbon dioxide emissions released when wood and other biological material is burned – for example in district heating, the paper industry and cars using biofuels. Biogenic emissions are part of the natural cycle. However, it can take decades for new forest to absorb the same amount of carbon dioxide, which is why biogenic emissions also affect the climate here and now."
+          "text": "Finally, we have biogenic carbon dioxide emissions released when wood and other biological material is burned. In theory the carbon dioxide can be reabsorbed, for example when new trees are planted. However, it can take several decades for new forest to bind the same amount of carbon dioxide. That is why biogenic emissions also have a climate impact here and now."
         }
       },
       "bathtub": {
         "eyebrow": "The bathtub effect",
-        "text": "The atmosphere responds to the total amount of greenhouse gases – and they stay and accumulate over time. A bit like a bathtub with the tap running: until the tap is fully closed, the water level will keep rising. And the atmosphere has already passed the threshold for 1.5°C of warming. That is why it is crucially important how quickly we cut emissions toward zero.",
-        "question": "How has that gone since 1990?",
-        "waterCaptionPrefix": "Sweden has emitted a total of",
-        "waterCaptionSuffix": "since 1990",
+        "text": "The atmosphere responds to the amount of greenhouse gases – which stay and accumulate over time. Like a bathtub with the tap running: until the tap is turned off, the water level will keep rising. We have already passed 1.5°C of warming, and Sweden is approaching the point where we have emitted more than our commitment under the Paris Agreement. That is why how quickly we cut emissions is decisive.",
+        "question": "How has it gone since 1990?",
+        "waterCaptionPrefix": "Sweden has since 1990 emitted",
         "chunkCaptionSingleYear": "+{{value}} Mt CO₂e added in {{year}}",
         "chunkCaptionYearRange": "+{{value}} Mt CO₂e added {{fromYear}}–{{toYear}}"
       },
       "graph": {
-        "territorialFossil": "Territorial emissions",
+        "territorialFossil": "Territorial",
         "productionBased": "Production-based emissions",
-        "productionBeyondTerritorial": "Swedish shipping and aviation abroad",
-        "biogenic": "Biogenic emissions",
-        "consumptionAbroad": "Consumption-based emissions abroad"
+        "productionBeyondTerritorial": "Production-based",
+        "biogenic": "Biogenic",
+        "consumptionAbroad": "Consumption-based abroad"
       },
       "interlude": {
-        "eyebrow": "Insight",
         "title": "We only discuss part of Sweden's emissions",
         "body": "The usual figure we hear about gives an overly positive picture. When we also include other emissions that Sweden can influence, we get a more complete picture – one that tells a different story."
       },
@@ -1598,12 +1598,12 @@
         "layerCounter": "Layer {{current}} of {{total}}",
         "title": "Sweden's emissions since 1990",
         "layerCaption1": "First we have territorial emissions – fossil emissions within Sweden's borders.",
-        "layerCaption2": "Now we add emissions from Swedish shipping and aviation abroad – together with the territorial emissions, this makes up the production-based emissions.",
+        "layerCaption2": "Now we add emissions from Swedish shipping companies and airlines abroad – together with the territorial emissions, this gives us the production-based emissions.",
         "layerCaption3": "Then we add consumption-based emissions abroad, including private e-commerce imports.",
-        "layerCaption4": "And finally the biogenic emissions to show the full picture."
+        "layerCaption4": "And finally the biogenic emissions to show the full picture.",
+        "scrubHint": "Swipe across the chart to see values by year"
       },
       "conclusion": {
-        "eyebrow": "Conclusion",
         "title": "Sweden's emissions are larger than we think and have not fallen as much as we think",
         "usualLabel": "What we usually discuss",
         "fullLabel": "Sweden's actual emissions",

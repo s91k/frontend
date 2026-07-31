@@ -3,7 +3,7 @@ export const NATION_STORY_COLORS = {
   territorial: "var(--orange-3)",
   production: "var(--blue-2)",
   consumption: "var(--pink-3)",
-  eCommerceRing: "var(--pink-1)",
+  eCommerce: "#ffffff",
   biogenic: "var(--green-2)",
 } as const;
 
@@ -29,9 +29,9 @@ export const NATION_STORY_TEXT = {
  */
 export const NATION_STORY_TYPE = {
   /** Section titles (intro, interlude, conclusion, stacked chart) */
-  title: "text-3xl md:text-5xl font-light tracking-tight",
+  title: "text-3xl md:text-5xl font-light tracking-tight leading-tight",
   /** Narrative paragraphs and step body copy */
-  body: "text-base md:text-lg leading-relaxed",
+  body: "text-base md:text-lg leading-snug",
   /** Step/layer headers with color dots – same size as body, heavier weight */
   emphasis: "text-base md:text-lg font-medium",
   /** Eyebrows like “Conclusion” */
