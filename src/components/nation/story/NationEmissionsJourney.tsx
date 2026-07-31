@@ -257,10 +257,6 @@ export function NationEmissionsJourney({
   const deltaChipOffset =
     currentDiameter / 2 / Math.SQRT2 + (isMobile ? 8 : 12);
 
-  // The running total sits on the innermost circle – white on the dark
-  // backdrop until the first layer starts growing behind it.
-  const totalOnLayer = sectionStarted;
-
   // Exit morph (scroll-lerped): captions fade first, then the bubble
   // compresses into a blue droplet that sinks and finally falls off-stage
   // toward the bathtub scene. With reduced motion the stage simply fades.
@@ -395,9 +391,16 @@ export function NationEmissionsJourney({
               >
                 {sectionStarted ? (
                   <motion.span
-                    initial={false}
-                    animate={{ color: totalOnLayer ? "#000000" : "#ffffff" }}
-                    transition={{ duration: 0.3 }}
+                    // Mounts the moment the first layer starts springing from
+                    // zero, so it starts white on the dark backdrop and turns
+                    // black once the circle has grown up behind it
+                    initial={{ color: "#ffffff" }}
+                    animate={{ color: "#000000" }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0 }
+                        : { duration: 0.3, delay: 0.4 }
+                    }
                     className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
                     {formatMton(current.total, currentLanguage, 0)}
