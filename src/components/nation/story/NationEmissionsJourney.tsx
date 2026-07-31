@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   AnimatePresence,
@@ -123,6 +123,39 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
       delta: biogenic,
     },
   ];
+}
+
+/**
+ * Rolls the running total between step values instead of snapping, roughly
+ * in step with the layer-growth spring. Renders the formatted value only.
+ */
+function AnimatedTotal({
+  value,
+  format,
+}: {
+  value: number;
+  format: (value: number) => string;
+}) {
+  const reducedMotion = useReducedMotion();
+  const [displayValue, setDisplayValue] = useState(value);
+  const previousRef = useRef(value);
+
+  useEffect(() => {
+    const from = previousRef.current;
+    previousRef.current = value;
+    if (reducedMotion || from === value) {
+      setDisplayValue(value);
+      return;
+    }
+    const controls = animate(from, value, {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: setDisplayValue,
+    });
+    return () => controls.stop();
+  }, [value, reducedMotion]);
+
+  return <>{format(displayValue)}</>;
 }
 
 type NationEmissionsJourneyProps = {
@@ -403,7 +436,10 @@ export function NationEmissionsJourney({
                     }
                     className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
-                    {formatMton(current.total, currentLanguage, 0)}
+                    <AnimatedTotal
+                      value={current.total}
+                      format={(v) => formatMton(v, currentLanguage, 0)}
+                    />
                     <span
                       className={`block ${NATION_STORY_TYPE.meta} font-medium mt-0.5 md:mt-1`}
                     >
