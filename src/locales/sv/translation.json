@@ -1589,30 +1589,32 @@
       "intro": {
         "eyebrow": "Valet 2026",
         "title": "Sveriges utsläpp",
-        "paragraph1": "Vi får ofta höra att Sveriges utsläpp minskat med en tredjedel samtidigt som ekonomin har fördubblats. Men stämmer det verkligen?",
-        "paragraph2": "Det vi oftast hör om är territoriella utsläpp, det vill säga fossila växthusgasutsläpp inom Sveriges gränser. Det är det måttet som används för att följa upp Sveriges klimatmål.",
-        "paragraph3": "Men Sveriges utsläpp är egentligen större än så. Låt oss titta på det, steg för steg.",
+        "paragraph1": "Vi får ofta höra att Sveriges utsläpp är små och att de minskat med en tredjedel samtidigt som ekonomin har fördubblats. Men stämmer det verkligen? Låt oss titta på det, steg för steg.",
+        "usualLabel": "Det vi ofta hör om",
+        "fullLabel": "Sveriges egentliga utsläpp",
         "previewRatio": "större än det vi brukar prata om"
       },
       "scrollHint": {
-        "text": "Scrolla för mer",
+        "scroll": "Scrolla",
+        "swipe": "Svep",
         "label": "Scrolla nedåt till nästa del av berättelsen"
       },
       "journey": {
-        "dataYear": "Siffrorna avser CO₂e och år {{year}}.",
+        "dataYear": "Siffran avser CO₂e och {{year}}.",
+        "dataYearShort": "CO₂e, år {{year}}",
         "stepCounter": "Steg {{current}} av {{total}}",
         "totalLabel": "Totalt",
         "step1": {
           "label": "Territoriella utsläpp",
-          "text": "Först har vi alltså utsläpp innanför Sveriges gränser. Här ingår bland annat utsläpp från industrin, inrikestransporter, jordbruk, uppvärmning och avfall."
+          "text": "Vi börjar med siffran vi oftast hör om: de territoriella utsläppen, fossila utsläpp inom Sveriges gränser. Här ingår bland annat utsläpp från industrin, transporter, jordbruk, uppvärmning och avfall. Detta mått används för att följa upp våra klimatmål."
         },
         "step2": {
           "label": "Produktionsbaserade utsläpp",
-          "text": "Med produktionsbaserade utsläpp menas utsläpp från den svenska ekonomin. Det är ungefär likvärdigt med de territoriella utsläppen, men omfattar också utsläpp från svenska rederier på internationellt vatten och svenska flygbolag i internationellt luftrum."
+          "text": "Med produktionsbaserade utsläpp menas utsläpp från den svenska ekonomin. Det är ungefär likvärdigt med de territoriella utsläppen, men omfattar också utsläpp från svenska rederier och flygbolag utomlands."
         },
         "step3": {
-          "label": "Konsumtion utomlands",
-          "text": "Men svenskar orsakar också utsläpp genom vår konsumtion utomlands. Här inkluderas utsläpp från tillverkning och transport av importerade varor till svensk hushållskonsumtion, offentlig verksamhet och investeringar. Svenskarnas utrikesflyg ingår här, men utsläpp från varor som produceras i Sverige men exporteras till andra länder räknas bort."
+          "label": "Konsumtionsbaserade utsläpp utomlands",
+          "text": "Svenskar orsakar också utsläpp utomlands genom vår konsumtion. Här inkluderas utsläpp från tillverkning och transport av importerade varor till svensk hushållskonsumtion, offentlig verksamhet och investeringar. Utsläpp från varor som produceras i Sverige och exporteras till andra länder räknas bort."
         },
         "step4": {
           "label": "Privat e-handel",
@@ -1620,27 +1622,25 @@
         },
         "step5": {
           "label": "Biogena utsläpp",
-          "text": "Till sist har vi biogena koldioxidutsläpp som frigörs när trä och annat biologiskt material förbränns, exempelvis i fjärrvärmen, i pappersindustrin och från bilar med biodrivmedel. Biogena utsläpp ingår i det naturliga kretsloppet. Det kan dock ta decennier för ny skog att binda samma mängd koldioxid, därför har även biogena utsläpp klimatpåverkan här och nu."
+          "text": "Till sist har vi biogena koldioxidutsläpp som frigörs när trä och annat biologiskt material förbränns. I teorin kan koldioxiden tas upp igen, exempelvis när nya träd planteras. Det kan dock ta flera decennier för ny skog att binda samma mängd koldioxid. Därför har även biogena utsläpp klimatpåverkan här och nu."
         }
       },
       "bathtub": {
         "eyebrow": "Badkarseffekten",
-        "text": "Atmosfären reagerar på mängden växthusgaser totalt – och de stannar kvar och ansamlas över tid. Lite som ett badkar, där kranen står på. Innan kranen dras åt helt, kommer vattennivån att fortsätta stiga. Och atmosfären har redan passerat gränsen för 1,5 graders uppvärmning. Därför är det avgörande viktigt hur snabbt vi minskar utsläppen ner mot noll.",
-        "question": "Hur har det gått med det sedan 1990?",
-        "waterCaptionPrefix": "Sverige har totalt släppt ut",
-        "waterCaptionSuffix": "sedan 1990",
+        "text": "Atmosfären reagerar på mängden växthusgaser – som stannar kvar och ansamlas över tid. Som ett badkar, där kranen står på. Tills kranen dras åt, kommer vattennivån att fortsätta stiga. Vi har redan passerat 1,5 graders uppvärmning och Sverige närmar oss gränsen då vi släppt ut mer än vårt åtagande enligt Parisavtalet. Därför är det avgörande hur snabbt vi minskar utsläppen.",
+        "question": "Hur har det gått sedan 1990?",
+        "waterCaptionPrefix": "Sverige har sedan 1990 släppt ut",
         "chunkCaptionSingleYear": "+{{value}} Mton CO₂e tillkom {{year}}",
         "chunkCaptionYearRange": "+{{value}} Mton CO₂e tillkom {{fromYear}}–{{toYear}}"
       },
       "graph": {
-        "territorialFossil": "Territoriella utsläpp",
+        "territorialFossil": "Territoriella",
         "productionBased": "Produktionsbaserade utsläpp",
-        "productionBeyondTerritorial": "Svensk sjöfart och flyg utomlands",
-        "biogenic": "Biogena utsläpp",
+        "productionBeyondTerritorial": "Produktionsbaserade",
+        "biogenic": "Biogena",
         "consumptionAbroad": "Konsumtionsbaserade utomlands"
       },
       "interlude": {
-        "eyebrow": "Insikt",
         "title": "Vi diskuterar bara en del av Sveriges utsläpp",
         "body": "Den vanliga siffran vi hör om ger en överdrivet positiv bild. Om vi räknar in även andra utsläpp som Sverige kan påverka får vi en mer heltäckande bild – som berättar en annan historia."
       },
@@ -1648,12 +1648,12 @@
         "layerCounter": "Lager {{current}} av {{total}}",
         "title": "Sveriges utsläpp sedan 1990",
         "layerCaption1": "Först har vi de territoriella utsläppen – fossila utsläpp inom Sveriges gränser.",
-        "layerCaption2": "Nu lägger vi till utsläpp från svensk sjöfart och flyg utomlands – tillsammans med de territoriella blir det de produktionsbaserade utsläppen.",
+        "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utomlands, tillsammans med de territoriella får vi då de produktionsbaserade utsläppen.",
         "layerCaption3": "Sedan lägger vi till de konsumtionsbaserade utsläppen utomlands, inklusive privat e-handelsimport.",
-        "layerCaption4": "Och slutligen de biogena utsläppen för att ge hela bilden."
+        "layerCaption4": "Och slutligen de biogena utsläppen för att ge hela bilden.",
+        "scrubHint": "Svep över grafen för att se värden per år"
       },
       "conclusion": {
-        "eyebrow": "Slutsats",
         "title": "Sveriges utsläpp är större än vad vi tror och har inte minskat så mycket som vi tror",
         "usualLabel": "Det vi vanligtvis diskuterar",
         "fullLabel": "Sveriges egentliga utsläpp",

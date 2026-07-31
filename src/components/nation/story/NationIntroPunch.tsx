@@ -1,11 +1,6 @@
-import { useId, useRef } from "react";
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -74,11 +69,13 @@ function StatCallout({
       </p>
       <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>
         {value}{" "}
+        {/* Unit below the number on mobile (symmetric columns, same format
+            as the onion total), inline written-out on desktop */}
         <span
-          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} font-normal align-baseline`}
+          className={`block mt-1 md:mt-0 md:inline ${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} font-normal align-baseline`}
         >
-          <span className="md:hidden">{unitShort}</span>
-          <span className="hidden md:inline">{unitLong}</span>
+          <span className="md:hidden whitespace-nowrap">{unitShort}</span>
+          <span className="hidden md:inline whitespace-nowrap">{unitLong}</span>
         </span>
       </p>
     </motion.div>
@@ -97,7 +94,6 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const reducedMotion = useReducedMotion();
-  const rootRef = useRef<HTMLDivElement>(null);
   const clipId = `sweden-fill-clip-${useId().replace(/:/g, "")}`;
 
   const reportedValue = metrics.territorialLatestMton;
@@ -109,33 +105,15 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const unitShort = t("nation.story.unit.mtonCo2e");
   const unitLong = t("nation.story.unit.millionTco2e");
 
-  // Scroll-lerped drain: as the hero scrolls out, the orange fill sinks back
-  // down and empties – one scroll later the onion's first orange circle grows
-  // from zero, so the reported share visually pours from the map into it.
-  // Pushing the clipped fill group down reads as the level draining; it
-  // composes with the one-shot rise (attribute animation vs transform) and
-  // refills when scrolling back up.
-  const { scrollYProgress: drainProgress } = useScroll({
-    target: rootRef,
-    offset: ["end 85%", "end 25%"],
-  });
-  const drainDistance = OUTLINE_BOTTOM - fillTop + 6;
-  const drainY = useTransform(
-    drainProgress,
-    [0, 1],
-    reducedMotion ? [0, 0] : [0, drainDistance],
-  );
-
   return (
     <motion.div
-      ref={rootRef}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.35 }}
       transition={{ duration: 0.45 }}
       className="flex flex-col md:flex-row items-center justify-center gap-5 md:gap-10 lg:gap-14"
     >
-      <div className="relative h-[clamp(180px,32svh,300px)] md:h-[clamp(240px,40svh,420px)] aspect-[100/220]">
+      <div className="relative h-[clamp(220px,41svh,400px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
           className="h-full w-auto max-w-full mx-auto"
@@ -159,47 +137,45 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
 
           {/* Reported share rises like water inside the silhouette */}
           <g clipPath={svgLocalUrl(clipId)}>
-            <motion.g style={{ y: drainY }}>
-              <motion.rect
-                x={0}
-                width={100}
-                fill={NATION_STORY_COLORS.territorial}
-                initial={
-                  reducedMotion
-                    ? { y: fillTop, height: OUTLINE_BOTTOM - fillTop + 6 }
-                    : { y: OUTLINE_BOTTOM, height: 0 }
-                }
-                whileInView={{
-                  y: fillTop,
-                  height: OUTLINE_BOTTOM - fillTop + 6,
-                }}
-                viewport={{ once: true, amount: 0.35 }}
-                transition={
-                  reducedMotion
-                    ? { duration: 0 }
-                    : { ...FILL_SPRING, delay: 0.35 }
-                }
-              />
-              <motion.line
-                x1={0}
-                x2={100}
-                stroke="var(--orange-1)"
-                strokeWidth="1"
-                strokeOpacity="0.8"
-                initial={
-                  reducedMotion
-                    ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                    : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-                }
-                whileInView={{ y1: fillTop, y2: fillTop, opacity: 1 }}
-                viewport={{ once: true, amount: 0.35 }}
-                transition={
-                  reducedMotion
-                    ? { duration: 0 }
-                    : { ...FILL_SPRING, delay: 0.35 }
-                }
-              />
-            </motion.g>
+            <motion.rect
+              x={0}
+              width={100}
+              fill={NATION_STORY_COLORS.territorial}
+              initial={
+                reducedMotion
+                  ? { y: fillTop, height: OUTLINE_BOTTOM - fillTop + 6 }
+                  : { y: OUTLINE_BOTTOM, height: 0 }
+              }
+              whileInView={{
+                y: fillTop,
+                height: OUTLINE_BOTTOM - fillTop + 6,
+              }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { ...FILL_SPRING, delay: 0.35 }
+              }
+            />
+            <motion.line
+              x1={0}
+              x2={100}
+              stroke="var(--orange-1)"
+              strokeWidth="1"
+              strokeOpacity="0.8"
+              initial={
+                reducedMotion
+                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
+                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
+              }
+              whileInView={{ y1: fillTop, y2: fillTop, opacity: 1 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { ...FILL_SPRING, delay: 0.35 }
+              }
+            />
           </g>
         </svg>
       </div>
@@ -207,7 +183,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       {/* Full/pink callout beside the upper region, reported/orange beside the fill */}
       <div className="flex flex-row md:flex-col items-center md:items-start justify-center gap-8 md:gap-10">
         <StatCallout
-          label={t("nation.story.conclusion.fullLabel")}
+          label={t("nation.story.intro.fullLabel")}
           value={full}
           unitShort={unitShort}
           unitLong={unitLong}
@@ -216,7 +192,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           className="order-2 md:order-1"
         />
         <StatCallout
-          label={t("nation.story.conclusion.usualLabel")}
+          label={t("nation.story.intro.usualLabel")}
           value={reported}
           unitShort={unitShort}
           unitLong={unitLong}
