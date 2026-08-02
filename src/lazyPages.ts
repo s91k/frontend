@@ -21,6 +21,11 @@ export const SectorsOverviewPage = lazy(() =>
     default: m.SectorsOverviewPage,
   })),
 );
+export const SectorDetailPage = lazy(() =>
+  import("./pages/SectorDetailPage").then((m) => ({
+    default: m.SectorDetailPage,
+  })),
+);
 export const DownloadsPage = lazy(() => import("./pages/DownloadsPage"));
 export const ErrorPage = lazy(() =>
   import("./pages/ErrorPage").then((m) => ({ default: m.ErrorPage })),

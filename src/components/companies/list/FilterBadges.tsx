@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-interface FilterBadge {
+export interface FilterBadge {
   type: "filter" | "sort";
   label: string;
   onRemove?: () => void;
