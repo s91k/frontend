@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { RankedCompany } from "@/types/company";
-import { SECTOR_ORDER, type CompanySector } from "@/lib/constants/sectors";
 import SectorEmissionsChart from "@/components/companies/sectors/charts/SectorEmissionsChart";
 import { FilterBadge, FilterBadges } from "../list/FilterBadges";
 import { useTranslation } from "react-i18next";
@@ -15,14 +14,14 @@ interface SectorOverviewProps {
   companies: RankedCompany[];
   filterGroups: FilterGroup[];
   activeFilters: FilterBadge[];
-  selectedSector: CompanySector | null;
+  isSectorView: boolean;
 }
 
 const SectorOverview: React.FC<SectorOverviewProps> = ({
   companies,
   filterGroups,
   activeFilters,
-  selectedSector,
+  isSectorView,
 }) => {
   const { t } = useTranslation();
   const screenSize = useScreenSize();
@@ -41,7 +40,7 @@ const SectorOverview: React.FC<SectorOverviewProps> = ({
 
         {/* Wrapper for Filters and Badges */}
         <div className={cn("flex flex-wrap items-center gap-2 mb-2 md:mb-4")}>
-          {selectedSector && (
+          {isSectorView && (
             <LocalizedLink to={`/sectors${location.search}`}>
               <Button
                 variant="outline"
@@ -88,8 +87,7 @@ const SectorOverview: React.FC<SectorOverviewProps> = ({
         <div className="bg-black space-y-4">
           <SectorEmissionsChart
             companies={companies}
-            sectors={SECTOR_ORDER}
-            selectedSector={selectedSector}
+            isSectorView={isSectorView}
           />
         </div>
       )}

@@ -37,7 +37,7 @@ export function SectorsOverviewPage() {
         companies={filteredCompanies}
         filterGroups={filterGroups}
         activeFilters={activeFilters}
-        selectedSector={null}
+        isSectorView={false}
       />
     </>
   );

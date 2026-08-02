@@ -15,15 +15,13 @@ import { DetailPieSectorGrid } from "@/components/detail/DetailGrid";
 import SectorChartInsights from "./SectorChartInsights";
 import { useSectorChartInsights } from "@/hooks/companies/useSectorChartInsights";
 import { useChartMotion } from "@/hooks/useChartMotion";
-import { CompanySector } from "@/lib/constants/sectors";
 import { useLanguage } from "@/components/LanguageProvider";
 import { localizedPath } from "@/utils/routing";
 import EmissionsTotalDisplay from "./EmissionsTotalDisplay";
 
 interface EmissionsChartProps {
   companies: RankedCompany[];
-  sectors: CompanySector[];
-  selectedSector: CompanySector | null;
+  isSectorView: boolean;
 }
 
 interface PieChartClickData {
@@ -38,8 +36,7 @@ interface PieChartClickData {
 
 const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   companies,
-  sectors,
-  selectedSector,
+  isSectorView,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -51,27 +48,26 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
 
   const { pieChartData, totalEmissions } = useChartData(
     companies,
-    sectors,
-    selectedSector,
+    isSectorView,
     reportingYear,
   );
 
   const insights = useSectorChartInsights(
     companies,
     pieChartData,
-    selectedSector,
+    isSectorView,
     reportingYear,
   );
 
   const handlePieClick = (data: PieChartClickData) => {
-    if (!selectedSector && data?.sectorCode) {
+    if (!isSectorView && data?.sectorCode) {
       navigate(
         localizedPath(
           currentLanguage,
           `/sectors/${data.sectorCode}${location.search}`,
         ),
       );
-    } else if (selectedSector && data?.wikidataId) {
+    } else if (isSectorView && data?.wikidataId) {
       navigate(localizedPath(currentLanguage, `/companies/${data.wikidataId}`));
     }
   };
@@ -79,7 +75,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   const pieChartDataWithColor: PieChartItem[] = pieChartData.map(
     (entry, index) => ({
       ...entry,
-      color: selectedSector
+      color: isSectorView
         ? getCompanyColors(index).base
         : "sectorCode" in entry
           ? sectorColors[entry.sectorCode as keyof typeof sectorColors]?.base ||
@@ -88,11 +84,11 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
     }),
   );
 
-  const actionTooltipKey = selectedSector
+  const actionTooltipKey = isSectorView
     ? "pieLegendCompany"
     : "pieLegendSector";
 
-  const chartAnimationKey = `${selectedSector ?? "all-sectors"}-${reportingYear}`;
+  const chartAnimationKey = `${isSectorView ? "sector" : "all-sectors"}-${reportingYear}`;
 
   return (
     <>
@@ -100,7 +96,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
         <div className="flex flex-col">
           <EmissionsTotalDisplay
             totalEmissions={totalEmissions}
-            isSectorView={!!selectedSector}
+            isSectorView={isSectorView}
           />
         </div>
 

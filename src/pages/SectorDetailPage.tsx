@@ -22,7 +22,7 @@ export function SectorDetailPage() {
   const { currentLanguage } = useLanguage();
 
   const { filteredCompanies, filterGroups, activeFilters } = useCompanyFilters(
-    companies,
+    companies.filter((c) => c.industry?.industryGics.sectorCode == code),
     { includeSectorFilter: false },
   );
 
@@ -60,7 +60,7 @@ export function SectorDetailPage() {
         companies={filteredCompanies}
         filterGroups={filterGroups}
         activeFilters={activeFilters}
-        selectedSector={code}
+        isSectorView={true}
       />
     </>
   );
