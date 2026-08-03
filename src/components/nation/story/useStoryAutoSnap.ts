@@ -123,9 +123,7 @@ function startGlide(top: number) {
   state.gliding = true;
   state.glideTarget = top;
   state.lastGlideAt = Date.now();
-  const reduced = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
 }
 
@@ -238,8 +236,7 @@ export function useStoryAutoSnap() {
       Math.abs(startY - state.freeZoneStart) <= SEATED_PX;
 
     const startedDeepInZone = (startY: number) =>
-      state.freeZoneStart !== null &&
-      startY > state.freeZoneStart + SEATED_PX;
+      state.freeZoneStart !== null && startY > state.freeZoneStart + SEATED_PX;
 
     /** Re-seat on the nearest beat after native scrolling (scrollbar, keys). */
     const settle = () => {
@@ -302,10 +299,7 @@ export function useStoryAutoSnap() {
     };
 
     const onScroll = () => {
-      if (
-        state.gliding &&
-        Math.abs(window.scrollY - state.glideTarget) <= 2
-      ) {
+      if (state.gliding && Math.abs(window.scrollY - state.glideTarget) <= 2) {
         state.gliding = false;
       }
       // While a finger is down the page may pause without the gesture being
