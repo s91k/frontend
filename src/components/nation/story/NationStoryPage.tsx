@@ -8,6 +8,7 @@ import { NationEmissionsJourney } from "@/components/nation/story/NationEmission
 import { NationIntroPunch } from "@/components/nation/story/NationIntroPunch";
 import { NationStackedChart } from "@/components/nation/story/NationStackedChart";
 import { StoryScrollHint } from "@/components/nation/story/StoryScrollHint";
+import { useStoryAutoSnap } from "@/components/nation/story/useStoryAutoSnap";
 import {
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
@@ -142,7 +143,7 @@ function FullScreenSection({ children }: { children: React.ReactNode }) {
   return (
     <section
       data-story-section
-      className="relative min-h-[42vh] md:min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
+      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
     >
       <div className="w-full max-w-4xl mx-auto">{children}</div>
     </section>
@@ -155,6 +156,7 @@ export function NationStoryPage({
 }: NationStoryPageProps) {
   const { t } = useTranslation();
   const conclusionRef = useRef<HTMLElement>(null);
+  useStoryAutoSnap();
 
   return (
     <div className="bg-black text-white pb-10 md:pb-24">
@@ -224,7 +226,7 @@ export function NationStoryPage({
       <section
         ref={conclusionRef}
         data-story-section
-        className="relative min-h-[50vh] md:min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16 overflow-hidden"
+        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-24 pb-12 md:py-16 overflow-hidden"
       >
         {/* Same depth backdrop as the hero – the story ends where it began */}
         <div

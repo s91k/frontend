@@ -20,6 +20,7 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
+import { isStoryGliding } from "@/components/nation/story/useStoryAutoSnap";
 
 type JourneyStep = {
   key: string;
@@ -188,6 +189,18 @@ export function NationEmissionsJourney({
   const rideDoneRef = useRef(false);
   const rideControlsRef = useRef<AnimationPlaybackControls | null>(null);
 
+  const cancelRide = () => {
+    if (!rideControlsRef.current) return;
+    rideControlsRef.current.stop();
+    rideControlsRef.current = null;
+  };
+
+  useEffect(() => {
+    const onGlideStart = () => cancelRide();
+    window.addEventListener("story-glide-start", onGlideStart);
+    return () => window.removeEventListener("story-glide-start", onGlideStart);
+  }, []);
+
   useEffect(() => {
     const prevExit = prevExitRef.current;
     prevExitRef.current = exitProgress;
@@ -200,7 +213,7 @@ export function NationEmissionsJourney({
       rideControlsRef.current = null;
       return;
     }
-    if (reducedMotion || rideDoneRef.current) return;
+    if (reducedMotion || rideDoneRef.current || isStoryGliding()) return;
     // Only trigger on a downward crossing into the zone, not when arriving
     // from the bathtub side or after a programmatic jump deep into the zone.
     if (!(prevExit <= 0.02 && exitProgress > 0.02 && exitProgress < 0.5))

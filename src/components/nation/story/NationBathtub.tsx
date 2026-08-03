@@ -424,7 +424,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
         style={stageStyle}
       >
         <div
-          className="w-full max-w-3xl mx-auto space-y-6 md:space-y-8"
+          className="w-full max-w-3xl mx-auto space-y-6 md:space-y-5"
           style={{
             opacity: enterOpacity,
             transform: `translateY(${(1 - enterT) * 24}px) scale(${0.94 + 0.06 * enterT})`,
@@ -467,7 +467,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
             waterTop={waterTop}
             caption={tubCaption}
             compact={isMobile}
-            className="w-full max-w-sm md:max-w-2xl mx-auto h-auto max-h-[32svh] md:max-h-[38svh]"
+            className="w-full max-w-sm md:max-w-xl mx-auto h-auto max-h-[32svh] md:max-h-[30svh]"
           />
 
           {/* Milestone captions below the tub: the year and this decade's addition.
