@@ -123,8 +123,16 @@ function startGlide(top: number) {
   state.gliding = true;
   state.glideTarget = top;
   state.lastGlideAt = Date.now();
+  // Beat glides own the scroll position – cancel any scene exit ride that
+  // would otherwise fight the browser smooth scroll through the same zone.
+  window.dispatchEvent(new CustomEvent("story-glide-start"));
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+}
+
+/** Whether a beat glide is in flight (used by pinned scenes to avoid competing scroll rides). */
+export function isStoryGliding() {
+  return state.gliding;
 }
 
 /**
@@ -410,7 +418,9 @@ export function useStoryAutoSnap() {
           touchMode = "native";
         } else if (startedSeatedAtLast(touchStartScrollY)) {
           // Direction decides: down reads into the zone natively, up is a
-          // deliberate exit. Wait for the first non-zero delta.
+          // deliberate exit. Block iOS from claiming the gesture on zero-
+          // delta moves before direction is known.
+          event.preventDefault();
           if (delta === 0) return;
           touchMode = delta > 0 ? "native" : "hijack";
         } else {
