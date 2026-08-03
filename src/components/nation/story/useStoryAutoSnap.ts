@@ -148,7 +148,18 @@ export function advanceStoryBeat(direction: 1 | -1) {
     state.anchor = last;
     top = beats[last];
   } else {
-    const from = state.anchor ?? nearestBeatIndex(beats, y);
+    // Trust the anchor only while it still describes reality: it goes stale
+    // after native scrolling with no settle pass (reduced motion, or the
+    // window before a settle fires) and its index shifts when a resize or
+    // rotation changes the beat count. Mid-glide the anchor is the glide
+    // target, so distance from the viewport is expected.
+    const anchor = state.anchor;
+    const from =
+      anchor !== null &&
+      anchor < beats.length &&
+      (state.gliding || Math.abs(y - beats[anchor]) < viewport * 0.75)
+        ? anchor
+        : nearestBeatIndex(beats, y);
     if (
       direction === -1 &&
       from === last &&
@@ -430,6 +441,14 @@ export function useStoryAutoSnap() {
       scheduleSettle();
     };
 
+    // Rotation/resize changes the beat list (overflowing sections gain or
+    // lose beats), so the anchor index no longer matches. Re-anchor from
+    // scratch and re-seat on the nearest beat in the new geometry.
+    const onResize = () => {
+      state.anchor = null;
+      scheduleSettle();
+    };
+
     // Anchor to the current beat right away so the first gesture advances
     // from where the reader actually is.
     scheduleSettle();
@@ -440,6 +459,7 @@ export function useStoryAutoSnap() {
     window.addEventListener("touchmove", onTouchMove, { passive: false });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("wheel", onWheel);
@@ -447,6 +467,7 @@ export function useStoryAutoSnap() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchcancel", onTouchEnd);
+      window.removeEventListener("resize", onResize);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
     };
   }, []);
