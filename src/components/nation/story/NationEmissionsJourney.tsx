@@ -190,8 +190,8 @@ export function NationEmissionsJourney({
   const rideControlsRef = useRef<AnimationPlaybackControls | null>(null);
 
   const cancelRide = () => {
-    rideDoneRef.current = true;
-    rideControlsRef.current?.stop();
+    if (!rideControlsRef.current) return;
+    rideControlsRef.current.stop();
     rideControlsRef.current = null;
   };
 

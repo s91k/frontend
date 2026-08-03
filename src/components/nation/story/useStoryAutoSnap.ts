@@ -259,13 +259,25 @@ export function useStoryAutoSnap() {
 
     /** Re-seat on the nearest beat after native scrolling (scrollbar, keys). */
     const settle = () => {
-      const glided = state.gliding;
-      state.gliding = false;
       const y = window.scrollY;
       const beats = collectBeats(window.innerHeight);
       if (beats.length === 0) return;
       const last = beats.length - 1;
       state.freeZoneStart = beats[last];
+
+      // Mid-glide: don't clear gliding or rewrite the anchor until the
+      // smooth scroll has landed – touchend schedules settle ~120ms in,
+      // often while the browser is still animating.
+      if (state.gliding && Math.abs(y - state.glideTarget) > SEATED_PX) {
+        const sinceGlide = Date.now() - state.lastGlideAt;
+        if (settleTimer !== null) window.clearTimeout(settleTimer);
+        settleTimer = window.setTimeout(
+          settle,
+          Math.max(GLIDE_GRACE_MS - sinceGlide, SETTLE_MS),
+        );
+        return;
+      }
+      state.gliding = false;
       // From the conclusion onward scrolling is free – never snap there.
       if (y > beats[last] + SEATED_PX) {
         state.anchor = last;
@@ -301,7 +313,7 @@ export function useStoryAutoSnap() {
       // (or a browser quirk) left the page off-beat, that late pass quietly
       // re-seats it.
       const sinceGlide = Date.now() - state.lastGlideAt;
-      if (glided || sinceGlide < GLIDE_GRACE_MS) {
+      if (sinceGlide < GLIDE_GRACE_MS) {
         if (settleTimer !== null) window.clearTimeout(settleTimer);
         settleTimer = window.setTimeout(
           settle,
@@ -418,11 +430,14 @@ export function useStoryAutoSnap() {
           touchMode = "native";
         } else if (startedSeatedAtLast(touchStartScrollY)) {
           // Direction decides: down reads into the zone natively, up is a
-          // deliberate exit. Block iOS from claiming the gesture on zero-
-          // delta moves before direction is known.
-          event.preventDefault();
-          if (delta === 0) return;
+          // deliberate exit. Only zero-delta moves need preventDefault to
+          // stop iOS claiming the gesture before direction is known.
+          if (delta === 0) {
+            event.preventDefault();
+            return;
+          }
           touchMode = delta > 0 ? "native" : "hijack";
+          if (touchMode === "native") return;
         } else {
           touchMode = "hijack";
         }
