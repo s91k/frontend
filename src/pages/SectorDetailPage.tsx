@@ -13,6 +13,7 @@ import {
   SectorLoading,
 } from "@/components/companies/sectors/SectorPageStates";
 import { NotFoundPage } from "./NotFoundPage";
+import { SECTOR_ORDER, SectorCode } from "@/lib/constants/sectors";
 
 export function SectorDetailPage() {
   const { code } = useParams<{ code: string }>();
@@ -41,7 +42,7 @@ export function SectorDetailPage() {
     );
   }
 
-  if (code == undefined || !(code in sectorTitles)) {
+  if (code == undefined || !(SECTOR_ORDER.includes(code as SectorCode))) {
     return <NotFoundPage />;
   }
 

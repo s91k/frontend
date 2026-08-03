@@ -9,6 +9,7 @@ import { LocalizedLink } from "@/components/LocalizedLink";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { FilterGroup, FilterPopover } from "@/components/explore/FilterPopover";
+import { useLocation } from "react-router-dom";
 
 interface SectorOverviewProps {
   companies: RankedCompany[];
@@ -26,6 +27,7 @@ const SectorOverview: React.FC<SectorOverviewProps> = ({
   const { t } = useTranslation();
   const screenSize = useScreenSize();
   const [filterOpen, setFilterOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <>

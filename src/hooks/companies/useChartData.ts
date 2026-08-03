@@ -51,6 +51,7 @@ const createCompanyDataItem = (
   company: RankedCompany,
   selectedYear: string,
 ): {
+  key: string;
   name: string;
   value: number;
   sectorCode: string | undefined;
@@ -74,6 +75,7 @@ const createCompanyDataItem = (
   }
 
   return {
+    key: company.id,
     name: company.name,
     value: totalEmissions,
     sectorCode: company.industry?.industryGics?.sectorCode,
@@ -118,6 +120,7 @@ const buildSectorPieData = (
     const value = scope1 + scope2 + scope3;
 
     return {
+      key: sectorCode,
       name: sectorName,
       value,
       sectorCode,
@@ -148,7 +151,7 @@ export const useChartData = (
       isSectorView
         ? buildCompanyPieData(companies, selectedYear)
         : buildSectorPieData(companies, selectedYear, sectorNames),
-    [companies, selectedYear, isSectorView],
+    [companies, selectedYear, isSectorView, sectorNames],
   );
 
   const totalEmissions = useMemo(

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { sectorColors, getCompanyColors } from "@/lib/constants/companyColors";
 import { RankedCompany } from "@/types/company";
@@ -43,6 +43,7 @@ const SectorEmissionsChart: React.FC<EmissionsChartProps> = ({
   const { currentLanguage } = useLanguage();
   const { reduceMotion, fadeDuration, ease } = useChartMotion();
   const screenSize = useScreenSize();
+  const location = useLocation();
 
   const reportingYear = getSectorsReportingYear().toString();
 
