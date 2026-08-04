@@ -51,18 +51,18 @@ const EmissionsTotalDisplay: React.FC<EmissionsTotalDisplayProps> = ({
               ? t("companyDetailPage.sectorGraphs.sectorTotal")
               : t("companyDetailPage.sectorGraphs.total")}
             <div>
-            <motion.span
-              key={formattedTotal}
-              className="text-xl font-light text-orange-2 inline-block"
-              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: fadeDuration, ease }}
-            >
-              {formattedTotal}
-            </motion.span>
-            <span className="ml-1 text-xl font-light text-white">
-              {t("companyDetailPage.sectorGraphs.emissionsUnit")}
-            </span>
+              <motion.span
+                key={formattedTotal}
+                className="text-xl font-light text-orange-2 inline-block"
+                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: fadeDuration, ease }}
+              >
+                {formattedTotal}
+              </motion.span>
+              <span className="ml-1 text-xl font-light text-white">
+                {t("companyDetailPage.sectorGraphs.emissionsUnit")}
+              </span>
             </div>
           </div>
         </div>

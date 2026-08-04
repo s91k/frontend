@@ -29,6 +29,10 @@ export function SectorDetailPage() {
 
   const canonicalUrl = buildAbsoluteUrl(`/${currentLanguage}/sectors/${code}`);
 
+  if (code == undefined || !SECTOR_ORDER.includes(code as SectorCode)) {
+    return <NotFoundPage />;
+  }
+
   if (companiesLoading) {
     return <SectorLoading />;
   }
@@ -40,10 +44,6 @@ export function SectorDetailPage() {
         description={t("sectorsOverviewPage.errorDescription")}
       />
     );
-  }
-
-  if (code == undefined || !(SECTOR_ORDER.includes(code as SectorCode))) {
-    return <NotFoundPage />;
   }
 
   return (

@@ -37,6 +37,7 @@ import {
   ReportsPage,
   RequestsDashboard,
   SectorsOverviewPage,
+  SectorDetailPage,
   SupportPage,
   TrendAnalysisDashboard,
   UnauthorizedErrorPage,
@@ -45,7 +46,6 @@ import {
 import { AuthCallback } from "./pages/AuthCallback";
 import { LandingPage } from "./pages/LandingPage";
 import { ComparisonRouteLayout } from "./components/compare/ComparisonRouteLayout";
-import { SectorDetailPage } from "./pages/SectorDetailPage";
 
 function ComparisonRoutes({ basePath }: { basePath: string }) {
   return (
@@ -83,7 +83,10 @@ function CompanyRoutes({ basePath }: { basePath: string }) {
   return (
     <>
       <Route path={`${basePath}/sectors`} element={<SectorsOverviewPage />} />
-      <Route path={`${basePath}/sectors/:code`} element={<SectorDetailPage />} />
+      <Route
+        path={`${basePath}/sectors/:code`}
+        element={<SectorDetailPage />}
+      />
       <Route
         path={`${basePath}/companies`}
         element={<CompaniesOverviewPage />}

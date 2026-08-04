@@ -57,18 +57,10 @@ function buildTrendComparisonData(
 export function buildSectorSelectedInsights(
   context: SectorInsightsContext,
 ): ChartInsight[] {
-  const {
-    t,
-    companies,
-    pieChartData,
-    reportingYear,
-    currentLanguage,
-  } = context;
+  const { t, companies, pieChartData, reportingYear, currentLanguage } =
+    context;
 
-  const reportingCompanies = countReportingCompanies(
-    companies,
-    reportingYear,
-  );
+  const reportingCompanies = countReportingCompanies(companies, reportingYear);
 
   const {
     comparableCount,

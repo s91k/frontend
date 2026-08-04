@@ -91,8 +91,7 @@ const SectorPieLegend: React.FC<LegendProps> = ({
               ? "<0.1%"
               : formatPercent(entry.value / total, currentLanguage);
           const isFiltered = filteredSectors.has(entry.key);
-          const displayName =
-            (entry.name as string | undefined) ?? entry.key;
+          const displayName = (entry.name as string | undefined) ?? entry.key;
 
           return (
             <Tooltip key={`${animationKey}-legend-${index}`}>
