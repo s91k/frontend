@@ -43,16 +43,17 @@ const SectorOverview: React.FC<SectorOverviewProps> = ({
         {/* Wrapper for Filters and Badges */}
         <div className={cn("flex flex-wrap items-center gap-2 mb-2 md:mb-4")}>
           {isSectorView && (
-            <LocalizedLink to={`/sectors${location.search}`}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-black-2 border-black-1 text-white hover:bg-black-1"
-              >
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-black-2 border-black-1 text-white hover:bg-black-1"
+              asChild
+            >
+              <LocalizedLink to={`/sectors${location.search}`}>
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 {t("sectorsOverviewPage.overview")}
-              </Button>
-            </LocalizedLink>
+              </LocalizedLink>
+            </Button>
           )}
 
           {/* Filter Button */}
