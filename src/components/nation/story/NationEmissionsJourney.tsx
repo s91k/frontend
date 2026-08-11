@@ -347,7 +347,7 @@ export function NationEmissionsJourney({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className="relative flex h-full min-h-0 flex-1 flex-col justify-center story-short:justify-start gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
+          className="relative flex h-full min-h-0 flex-1 flex-col justify-center gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
           style={{ opacity: stageOpacity }}
         >
           {/* Bubble = accumulating colored layers */}
@@ -556,7 +556,7 @@ export function NationEmissionsJourney({
 
           {/* Caption + legend of layers added so far */}
           <div
-            className="space-y-2.5 md:space-y-4 order-2 min-h-0"
+            className="space-y-2.5 md:space-y-4 order-2 min-h-0 text-center md:text-left"
             style={{ opacity: exitFade }}
           >
             {/* Hidden (but space-keeping) until the section pins, so the
@@ -582,7 +582,7 @@ export function NationEmissionsJourney({
               {/* Dot + label lead the paragraph they describe – on mobile this
                   sits right under the onion, on desktop in the caption column */}
               <p
-                className={`flex items-center gap-2.5 md:gap-3 ${NATION_STORY_TYPE.emphasis} story-short:text-sm text-white`}
+                className={`flex items-center justify-center md:justify-start gap-2.5 md:gap-3 ${NATION_STORY_TYPE.emphasis} story-short:text-sm text-white`}
               >
                 <span
                   className="w-3 h-3 md:w-4 md:h-4 rounded-full shrink-0"
@@ -591,7 +591,7 @@ export function NationEmissionsJourney({
                 {t(current.labelKey)}
               </p>
               <p
-                className={`${NATION_STORY_TYPE.body} story-short:text-sm story-short:leading-snug ${NATION_STORY_TEXT.body}`}
+                className={`${NATION_STORY_TYPE.body} story-short:text-sm story-short:leading-snug ${NATION_STORY_TEXT.body} mx-auto md:mx-0 max-w-md md:max-w-none`}
               >
                 {t(current.textKey)}
               </p>
