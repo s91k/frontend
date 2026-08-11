@@ -115,6 +115,20 @@
   }
 }
 
+/* iPhone SE / story-short: reclaim a little vertical room for pinned stages */
+@media (max-width: 767px) and (max-height: 700px) {
+  :root {
+    --story-hero-pad-top: calc(
+      var(--story-top-reserve) + var(--story-chapter-band) + 0.25rem
+    );
+    --story-hero-pad-bottom: calc(var(--story-bottom-reserve) - 0.25rem);
+    --story-stage-pad-top: calc(
+      var(--story-top-reserve) + var(--story-chapter-band) + 0.125rem
+    );
+    --story-stage-pad-bottom: calc(var(--story-bottom-reserve) - 0.25rem);
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

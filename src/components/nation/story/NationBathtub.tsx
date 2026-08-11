@@ -425,7 +425,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
         style={stageStyle}
       >
         <div
-          className="mx-auto flex w-full max-w-3xl shrink-0 flex-col gap-2 max-md:gap-1.5 md:gap-2.5 lg:gap-3"
+          className="mx-auto flex w-full max-w-3xl shrink-0 flex-col gap-2 max-md:gap-1.5 story-short:gap-1 md:gap-2.5 lg:gap-3"
           style={{
             opacity: enterOpacity,
             transform: `translateY(${(1 - enterT) * 24}px) scale(${0.94 + 0.06 * enterT})`,
@@ -433,13 +433,13 @@ export function NationBathtub({ data }: NationBathtubProps) {
           }}
         >
           {/* Copy above the tub on all breakpoints */}
-          <div className="max-w-2xl mx-auto shrink-0 text-center space-y-1 max-md:space-y-0.5 md:space-y-2 lg:space-y-2.5">
+          <div className="max-w-2xl mx-auto shrink-0 text-center space-y-1 max-md:space-y-0.5 story-short:space-y-0.5 md:space-y-2 lg:space-y-2.5">
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.4 }}
-              className={`${NATION_STORY_TYPE.title} story-short:text-2xl text-white`}
+              className={`${NATION_STORY_TYPE.title} story-short:text-xl text-white`}
             >
               {t("nation.story.bathtub.eyebrow")}
             </motion.h2>
@@ -448,7 +448,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45 }}
-              className={`${NATION_STORY_TYPE.body} text-sm leading-snug max-md:text-sm md:text-base ${NATION_STORY_TEXT.body}`}
+              className={`${NATION_STORY_TYPE.body} text-sm leading-snug max-md:text-sm story-short:text-xs story-short:leading-snug md:text-base ${NATION_STORY_TEXT.body}`}
             >
               {t("nation.story.bathtub.text")}
             </motion.p>
@@ -457,7 +457,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45, delay: 0.1 }}
-              className={`${NATION_STORY_TYPE.emphasis} text-sm max-md:text-sm md:text-base text-white`}
+              className={`${NATION_STORY_TYPE.emphasis} text-sm max-md:text-sm story-short:text-xs md:text-base text-white`}
             >
               {t("nation.story.bathtub.question")}
             </motion.p>
@@ -469,7 +469,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               waterTop={waterTop}
               caption={tubCaption}
               compact={isMobile}
-              className="w-full max-w-[18rem] md:max-w-md mx-auto h-auto max-h-[22svh] md:max-h-[24svh] lg:max-h-[26svh]"
+              className="w-full max-w-[18rem] story-short:max-w-[15rem] md:max-w-md mx-auto h-auto max-h-[22svh] story-short:max-h-[18svh] md:max-h-[24svh] lg:max-h-[26svh]"
             />
           </div>
 

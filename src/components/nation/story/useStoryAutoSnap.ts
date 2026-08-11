@@ -30,6 +30,20 @@ const TOUCH_TRIGGER_PX = 24;
  */
 const FREE_ZONE_EXIT_WHEEL_PX = 150;
 const FREE_ZONE_EXIT_TOUCH_PX = 90;
+/**
+ * Finger noise while holding still on the conclusion (esp. Android panels)
+ * often reports 1–8px of movement. Claiming hijack on that fights the
+ * browser and flickers the page – wait for a real direction claim first.
+ */
+const FREE_ZONE_TOUCH_DEADZONE_PX = 10;
+/**
+ * After a no-commit hold/release near the conclusion top, tolerate this
+ * much scroll drift without a corrective glide (avoids post-hold yank).
+ */
+const SOFT_SEATED_PX = 24;
+/** Lost-touchend fallback – long enough that a reading hold + URL-bar
+ * resize cannot expire the mid-touch settle guard. */
+const TOUCH_STALE_MS = 2000;
 
 /**
  * Collect the scroll positions of every story beat, derived from the
@@ -317,7 +331,6 @@ export function useStoryAutoSnap() {
     /** Last touch input – lets a lost touchend (iOS system gestures, JS
      * alerts) expire a stuck touchDownCount instead of blocking settle forever. */
     let lastTouchAt = 0;
-    const TOUCH_STALE_MS = 600;
 
     // Wheel gesture tracking
     let wheelAccum = 0;
@@ -556,15 +569,17 @@ export function useStoryAutoSnap() {
       if (isInsideOverlay(event.target)) return;
       const delta = touchStartClientY - event.touches[0].clientY;
 
-      // Decide the gesture's fate once, on its very first movement, based
-      // on where it STARTED. iOS ignores preventDefault after an unprevented
-      // first touchmove, so hijacked gestures must be prevented immediately.
+      // Decide the gesture's fate once, on its first *meaningful* movement,
+      // based on where it STARTED. iOS ignores preventDefault after an
+      // unprevented first touchmove, so hijacked gestures must be prevented
+      // immediately once claimed – but hold micro-jitter must not claim.
       if (touchMode === null) {
         if (startedDeepInZone(touchStartScrollY)) {
           touchMode = "native";
         } else if (startedSeatedAtLast(touchStartScrollY)) {
-          if (delta === 0) {
-            // Stationary hold while reading – leave native scrolling alone.
+          if (Math.abs(delta) < FREE_ZONE_TOUCH_DEADZONE_PX) {
+            // Stationary hold / finger noise while reading – leave native
+            // scrolling alone until a real direction appears.
             return;
           }
           touchMode = delta > 0 ? "native" : "hijack";
@@ -595,9 +610,24 @@ export function useStoryAutoSnap() {
         0,
         touchDownCount - event.changedTouches.length,
       );
+      const wasTriggered = touchTriggered;
+      const startedAt = touchStartScrollY;
       if (event.touches.length === 0) {
         touchStartClientY = null;
         touchMode = null;
+        touchTriggered = false;
+      }
+      // No-commit hold/release at the conclusion: tolerate small scroll
+      // drift without a corrective glide (post-hold yank on Android).
+      if (
+        !wasTriggered &&
+        startedSeatedAtLast(startedAt) &&
+        state.freeZoneStart !== null &&
+        Math.abs(window.scrollY - state.freeZoneStart) <= SOFT_SEATED_PX
+      ) {
+        const beats = collectBeats(window.innerHeight);
+        if (beats.length) state.anchor = beats.length - 1;
+        return;
       }
       scheduleSettle();
     };
@@ -613,6 +643,16 @@ export function useStoryAutoSnap() {
       if (touchDownCount > 0) return;
       state.anchor = null;
       scheduleSettle();
+    };
+
+    // Tab backgrounded / system UI can drop touchend; clear the hold guard
+    // so settle isn't blocked forever without waiting for TOUCH_STALE_MS.
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== "hidden") return;
+      touchDownCount = 0;
+      touchStartClientY = null;
+      touchMode = null;
+      touchTriggered = false;
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -657,6 +697,7 @@ export function useStoryAutoSnap() {
     window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("touchcancel", onTouchEnd, { passive: true });
     window.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("wheel", onWheel);
@@ -666,6 +707,7 @@ export function useStoryAutoSnap() {
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
       if (glideFrame !== null) {
         window.cancelAnimationFrame(glideFrame);

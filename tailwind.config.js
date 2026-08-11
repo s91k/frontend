@@ -13,13 +13,15 @@ export default {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
-        /** Short phones (e.g. iPhone SE) – DevTools omits browser chrome */
+      },
+    },
+    extend: {
+      /** Short phones (e.g. iPhone SE) – must live under extend.screens for variants */
+      screens: {
         "story-short": {
           raw: "(max-width: 767px) and (max-height: 700px)",
         },
       },
-    },
-    extend: {
       fontFamily: {
         sans: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],
       },
