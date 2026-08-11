@@ -54,22 +54,22 @@ export function NationStoryPage({
       <section
         data-story-section
         data-story-chapter="intro"
-        className="relative min-h-[100svh] flex flex-col items-center justify-start px-4 md:px-8 pt-[var(--story-hero-pad-top)] md:pt-44 pb-[var(--story-hero-pad-bottom)] md:pb-20 overflow-x-hidden"
+        className="relative flex h-[100svh] min-h-0 flex-col items-center justify-center px-4 md:px-8 pt-[var(--story-hero-pad-top)] md:pt-44 pb-[var(--story-hero-pad-bottom)] md:pb-20 overflow-x-hidden"
       >
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative max-w-5xl mx-auto text-center space-y-2 story-short:space-y-1.5 md:space-y-4">
-          <h1 className="text-3xl story-short:text-[1.75rem] md:text-6xl font-light tracking-tight text-white">
+        <div className="relative w-full max-w-5xl mx-auto shrink-0 text-center space-y-1.5 max-md:space-y-1 md:space-y-4">
+          <h1 className="text-[1.75rem] leading-tight max-md:text-[1.875rem] md:text-6xl font-light tracking-tight text-white">
             {t("nation.story.intro.title")}
           </h1>
           <p
-            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
+            className={`${NATION_STORY_TYPE.body} max-md:text-[0.9375rem] max-md:leading-snug ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
           >
             {t("nation.story.intro.paragraph1")}
           </p>
-          <div className="pt-4 story-short:pt-2 md:pt-10">
+          <div className="pt-2 max-md:pt-1.5 md:pt-10">
             <NationIntroPunch metrics={metrics} />
           </div>
         </div>

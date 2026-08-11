@@ -137,11 +137,11 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45 }}
-      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-3 story-short:gap-2 md:flex-row md:items-center md:gap-10 lg:gap-14"
+      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-2 md:flex-row md:items-center md:gap-10 lg:gap-14"
     >
       <div
         ref={mapRef}
-        className="relative h-[clamp(160px,28svh,400px)] story-short:h-[clamp(120px,22svh,220px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
+        className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(120px,22svh,220px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
       >
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
