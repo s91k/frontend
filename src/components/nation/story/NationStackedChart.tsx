@@ -126,9 +126,9 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
     [],
   );
 
-  // Height caps at 32svh so short phones (~570-670px tall) still fit the
-  // title, caption, chart and legend inside the pinned stage.
-  const chartHeight = isMobile ? "min(240px, 32svh)" : 330;
+  // Height caps at 28svh (22svh on story-short) so phones with browser chrome
+  // still fit the title, caption, chart and legend inside the pinned stage.
+  const chartHeight = isMobile ? "min(200px, 24svh)" : 330;
   const activeLayer = LAYERS[visibleLayers - 1];
 
   // Full-bleed mobile plot: the edge ticks anchor inward so "1990" and the
@@ -199,7 +199,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] flex items-center px-4 md:px-8 pt-14 pb-6 md:py-0 overflow-hidden"
+        className="h-[100svh] min-h-0 flex flex-col px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:py-0 overflow-hidden"
         style={stageStyle}
       >
         {/* Same depth backdrop as the hero and journey chapters */}
@@ -207,7 +207,9 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className={`relative w-full max-w-4xl mx-auto ${className ?? ""}`}>
+        <div
+          className={`relative flex min-h-0 flex-1 flex-col justify-center story-short:justify-start w-full max-w-4xl mx-auto ${className ?? ""}`}
+        >
           {/* Mobile relies on the step dots for progress instead */}
           <p
             className={`hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow} mb-2 md:mb-3`}
@@ -217,7 +219,9 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
               total: LAYERS.length,
             })}
           </p>
-          <h2 className={`${NATION_STORY_TYPE.title} text-white mb-2 md:mb-4`}>
+          <h2
+            className={`${NATION_STORY_TYPE.title} story-short:text-2xl text-white mb-2 story-short:mb-1 md:mb-4`}
+          >
             {t("nation.story.stacked.title")}
           </h2>
 
@@ -226,7 +230,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
               step-header emphasis style reads too heavy), dot on line one */}
           {/* Sized for the longest caption (3 lines mobile) so the chart
               below doesn't shift vertically as the step captions swap */}
-          <div className="min-h-[3.75rem] md:min-h-[2.5rem] mb-2 md:mb-4">
+          <div className="min-h-[3.75rem] story-short:min-h-[3rem] md:min-h-[2.5rem] mb-2 story-short:mb-1 md:mb-4">
             <motion.p
               key={visibleLayers}
               initial={{ opacity: 0, y: 6 }}
