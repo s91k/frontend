@@ -58,6 +58,33 @@
   --blue-3-muted: color-mix(in srgb, var(--blue-3) 20%, transparent);
   --orange-3-muted: color-mix(in srgb, var(--orange-3) 20%, transparent);
   --pink-3-muted: color-mix(in srgb, var(--pink-3) 20%, transparent);
+
+  /*
+   * Valet 2026 story – safe-area-aware chrome.
+   * The scroll chevron uses env(safe-area-inset-bottom): it sits low on
+   * phones without a home indicator (SE, DevTools) and lifts on notched
+   * devices. Section padding is derived from the hint position so copy
+   * clears the chevron on any device – no fixed browser-chrome guess.
+   */
+  --story-site-header: 3rem;
+  /** Chevron + “Svep”/“Scroll” label height */
+  --story-scroll-hint: 2.75rem;
+  --story-safe-top: env(safe-area-inset-top, 0px);
+  --story-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root {
+  --story-scroll-hint-bottom: calc(0.75rem + var(--story-safe-bottom));
+  --story-bottom-reserve: calc(
+    var(--story-scroll-hint-bottom) + var(--story-scroll-hint) + 0.5rem
+  );
+  --story-top-reserve: calc(var(--story-site-header) + var(--story-safe-top));
+  --story-hero-pad-top: calc(
+    var(--story-top-reserve) + clamp(0.5rem, 3svh, 1.75rem)
+  );
+  --story-hero-pad-bottom: var(--story-bottom-reserve);
+  --story-stage-pad-top: calc(var(--story-top-reserve) + 0.25rem);
+  --story-stage-pad-bottom: var(--story-bottom-reserve);
 }
 
 @layer base {

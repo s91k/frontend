@@ -95,7 +95,7 @@ function StoryStepDots({ endRef }: { endRef: RefObject<HTMLElement | null> }) {
       initial={false}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.35 }}
-      className={`md:hidden fixed right-2 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 ${visible ? "" : "pointer-events-none"}`}
+      className={`md:hidden fixed right-3 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 ${visible ? "" : "pointer-events-none"}`}
     >
       {state.sections.map((section, index) => {
         const isActive = index === state.active;
@@ -143,7 +143,7 @@ function FullScreenSection({ children }: { children: React.ReactNode }) {
   return (
     <section
       data-story-section
-      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
+      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:py-16"
     >
       <div className="w-full max-w-4xl mx-auto">{children}</div>
     </section>
@@ -166,15 +166,15 @@ export function NationStoryPage({
           then the silhouette with callouts, then the explanation paragraphs. */}
       <section
         data-story-section
-        className="relative min-h-[100svh] flex flex-col items-center justify-start px-4 md:px-8 pt-[clamp(4.5rem,17svh,9rem)] md:pt-44 pb-28 md:pb-20 overflow-hidden"
+        className="relative min-h-[100svh] flex flex-col items-center justify-start px-4 md:px-8 pt-[var(--story-hero-pad-top)] md:pt-44 pb-[var(--story-hero-pad-bottom)] md:pb-20 overflow-x-hidden"
       >
         {/* Subtle depth behind the hero, using existing surface colors only */}
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative max-w-5xl mx-auto text-center space-y-2.5 md:space-y-4">
-          <h1 className="text-4xl md:text-6xl font-light tracking-tight text-white">
+        <div className="relative max-w-5xl mx-auto text-center space-y-2 story-short:space-y-1.5 md:space-y-4">
+          <h1 className="text-3xl story-short:text-[1.75rem] md:text-6xl font-light tracking-tight text-white">
             {t("nation.story.intro.title")}
           </h1>
           <p
@@ -183,7 +183,7 @@ export function NationStoryPage({
             {t("nation.story.intro.paragraph1")}
           </p>
           {/* Extra breathing room between the copy and the map */}
-          <div className="pt-6 md:pt-10">
+          <div className="pt-4 story-short:pt-2 md:pt-10">
             <NationIntroPunch metrics={metrics} />
           </div>
         </div>
@@ -226,7 +226,7 @@ export function NationStoryPage({
       <section
         ref={conclusionRef}
         data-story-section
-        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-24 pb-12 md:py-16 overflow-hidden"
+        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] md:pt-24 pb-[var(--story-stage-pad-bottom)] md:py-16 overflow-x-hidden"
       >
         {/* Same depth backdrop as the hero – the story ends where it began */}
         <div

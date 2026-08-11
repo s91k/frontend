@@ -59,7 +59,7 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
             }
           : { duration: 0.35 }
       }
-      className={`fixed inset-x-0 bottom-4 md:bottom-6 z-50 mx-auto flex w-fit flex-col items-center justify-center gap-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 ${visible ? "" : "pointer-events-none"}`}
+      className={`fixed inset-x-0 bottom-[var(--story-scroll-hint-bottom)] md:bottom-6 z-50 mx-auto flex w-fit flex-col items-center justify-center gap-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 ${visible ? "" : "pointer-events-none"}`}
     >
       <ChevronDown
         className="h-6 w-6 md:h-7 md:w-7"

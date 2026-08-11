@@ -329,7 +329,7 @@ export function NationEmissionsJourney({
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] flex items-center px-4 md:px-8 pt-14 pb-6 md:py-0 overflow-hidden"
+        className="h-[100svh] min-h-0 flex flex-col px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:py-0 overflow-hidden"
         style={stageStyle}
       >
         {/* Same subtle depth backdrop as the hero, tying the chapter to the intro */}
@@ -338,7 +338,7 @@ export function NationEmissionsJourney({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className="relative flex h-full flex-col justify-center gap-4 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-12 w-full max-w-5xl mx-auto"
+          className="relative flex h-full min-h-0 flex-1 flex-col justify-center story-short:justify-start gap-4 story-short:gap-2 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-12 w-full max-w-5xl mx-auto"
           style={{ opacity: stageOpacity }}
         >
           {/* Bubble = accumulating colored layers */}
