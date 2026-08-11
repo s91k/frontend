@@ -81,8 +81,8 @@ function StatCallout({
         </p>
       </div>
 
-      {/* Desktop: label leads, unit inline */}
-      <div className="hidden md:block text-left">
+      {/* Desktop: centered under the page title; mobile stays compact */}
+      <div className="hidden md:block text-center">
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
         >
@@ -137,7 +137,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45 }}
-      className="flex flex-col md:flex-row items-center justify-center gap-3 story-short:gap-2 md:gap-10 lg:gap-14"
+      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-3 story-short:gap-2 md:flex-row md:items-center md:gap-10 lg:gap-14"
     >
       <div
         ref={mapRef}
@@ -212,8 +212,8 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
         </svg>
       </div>
 
-      {/* Side-by-side on mobile; stacked beside map on desktop */}
-      <div className="grid grid-cols-2 gap-x-3 md:flex md:flex-col md:gap-10 w-full max-w-[20rem] md:max-w-none mx-auto md:mx-0">
+      {/* Desktop: map + callouts centered as one unit; mobile: two-column grid */}
+      <div className="grid grid-cols-2 gap-x-3 md:flex md:w-auto md:flex-col md:items-center md:gap-10 w-full max-w-[20rem] md:max-w-none mx-auto">
         <StatCallout
           label={t("nation.story.intro.fullLabel")}
           value={full}
