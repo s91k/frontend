@@ -126,15 +126,51 @@ const state = {
   freeZoneStart: null as number | null,
 };
 
+/** Softer beat landing than the browser's default smooth scroll curve. */
+const GLIDE_DURATION_MS = 680;
+let glideFrame: number | null = null;
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 function startGlide(top: number) {
+  if (glideFrame !== null) {
+    window.cancelAnimationFrame(glideFrame);
+    glideFrame = null;
+  }
+
   state.gliding = true;
   state.glideTarget = top;
   state.lastGlideAt = Date.now();
-  // Beat glides own the scroll position – cancel any scene exit ride that
-  // would otherwise fight the browser smooth scroll through the same zone.
   window.dispatchEvent(new CustomEvent("story-glide-start"));
+
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+  if (reduced) {
+    window.scrollTo({ top, behavior: "auto" });
+    state.gliding = false;
+    return;
+  }
+
+  const from = window.scrollY;
+  const distance = top - from;
+  if (Math.abs(distance) <= SEATED_PX) {
+    state.gliding = false;
+    return;
+  }
+
+  const start = performance.now();
+  const tick = (now: number) => {
+    const progress = Math.min((now - start) / GLIDE_DURATION_MS, 1);
+    window.scrollTo(0, from + distance * easeOutCubic(progress));
+    if (progress < 1) {
+      glideFrame = window.requestAnimationFrame(tick);
+      return;
+    }
+    glideFrame = null;
+    state.gliding = false;
+  };
+  glideFrame = window.requestAnimationFrame(tick);
 }
 
 /** Whether a beat glide is in flight (used by pinned scenes to avoid competing scroll rides). */
@@ -210,6 +246,37 @@ export function glideToStoryBeat(index: number) {
   startGlide(top);
 }
 
+/** Jump to the first beat of the next story chapter (skip pinned steps). */
+export function skipToNextStoryChapter() {
+  const viewport = window.innerHeight;
+  const beats = collectBeats(viewport);
+  if (beats.length === 0) return;
+
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-story-section]"),
+  );
+  if (sections.length === 0) return;
+
+  const probeY = viewport * 0.45;
+  let active = 0;
+  sections.forEach((section, index) => {
+    if (section.getBoundingClientRect().top <= probeY) active = index;
+  });
+  if (active >= sections.length - 1) return;
+
+  const nextTop =
+    window.scrollY + sections[active + 1].getBoundingClientRect().top;
+  let targetBeat = nearestBeatIndex(beats, nextTop);
+  for (let i = 0; i < beats.length; i++) {
+    if (beats[i] >= nextTop - SEATED_PX) {
+      targetBeat = i;
+      break;
+    }
+  }
+
+  glideToStoryBeat(targetBeat);
+}
+
 /** How a single gesture is handled – decided once, then sticky. */
 type GestureMode = "hijack" | "native";
 
@@ -262,6 +329,9 @@ export function useStoryAutoSnap() {
     const finePointerQuery = window.matchMedia(
       "(hover: hover) and (pointer: fine)",
     );
+    const coarseTouchQuery = window.matchMedia(
+      "(hover: none) and (pointer: coarse)",
+    );
     const wheelTriggerPx = () =>
       finePointerQuery.matches
         ? FINE_POINTER_WHEEL_TRIGGER_PX
@@ -274,6 +344,8 @@ export function useStoryAutoSnap() {
       finePointerQuery.matches
         ? FINE_POINTER_WHEEL_MOMENTUM_MS
         : COARSE_WHEEL_MOMENTUM_MS;
+    const touchTriggerPx = () =>
+      coarseTouchQuery.matches ? 20 : TOUCH_TRIGGER_PX;
 
     // Touch gesture tracking
     let touchStartClientY: number | null = null;
@@ -510,7 +582,7 @@ export function useStoryAutoSnap() {
       // Backing out of the end zone takes a deliberate drag.
       const trigger = startedSeatedAtLast(touchStartScrollY)
         ? FREE_ZONE_EXIT_TOUCH_PX
-        : TOUCH_TRIGGER_PX;
+        : touchTriggerPx();
 
       if (Math.abs(delta) >= trigger) {
         touchTriggered = true;
@@ -519,7 +591,10 @@ export function useStoryAutoSnap() {
     };
 
     const releaseTouches = (event: TouchEvent) => {
-      touchDownCount = Math.max(0, touchDownCount - event.changedTouches.length);
+      touchDownCount = Math.max(
+        0,
+        touchDownCount - event.changedTouches.length,
+      );
       if (event.touches.length === 0) {
         touchStartClientY = null;
         touchMode = null;
@@ -592,6 +667,10 @@ export function useStoryAutoSnap() {
       window.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("resize", onResize);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
+      if (glideFrame !== null) {
+        window.cancelAnimationFrame(glideFrame);
+        glideFrame = null;
+      }
     };
   }, []);
 }
