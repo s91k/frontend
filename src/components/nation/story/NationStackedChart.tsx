@@ -8,7 +8,7 @@ import {
   YAxis,
 } from "recharts";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   formatMton,
   NATION_BASELINE_YEAR,
@@ -81,6 +81,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
+  const reducedMotion = useReducedMotion();
   const latestYear = data.at(-1)?.year ?? NATION_BASELINE_YEAR;
   // Mobile skips 2020: it sits so close to the latest year that recharts
   // drops one of the colliding labels, leaving uneven spacing.
@@ -95,7 +96,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
     LAYERS.length,
     STACKED_STEP_VH,
   );
-  const visibleLayers = step + 1;
+  const visibleLayers = reducedMotion ? LAYERS.length : step + 1;
 
   // Mobile has no floating tooltip (it covers the chart); instead the legend
   // becomes a readout while the reader scrubs a finger across the chart,
@@ -192,6 +193,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
     <section
       ref={ref}
       data-story-section
+      data-story-chapter="stacked"
       data-story-step={step}
       data-story-steps={LAYERS.length}
       data-story-step-vh={STACKED_STEP_VH}

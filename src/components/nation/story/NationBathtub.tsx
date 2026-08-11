@@ -411,6 +411,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
     <section
       ref={ref}
       data-story-section
+      data-story-chapter="bathtub"
       data-story-step={displayedIndex}
       data-story-steps={milestones.length}
       data-story-snap="round"
@@ -420,19 +421,19 @@ export function NationBathtub({ data }: NationBathtubProps) {
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] min-h-0 flex flex-col px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:pt-16 md:pb-16 overflow-hidden"
+        className="h-[100svh] min-h-0 flex flex-col justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:pt-10 md:pb-10 lg:pt-8 lg:pb-8 overflow-hidden"
         style={stageStyle}
       >
         <div
-          className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col justify-center gap-4 story-short:justify-start story-short:gap-2 md:gap-5"
+          className="mx-auto flex w-full max-w-3xl shrink-0 flex-col gap-2 max-md:gap-1.5 md:gap-2.5 lg:gap-3"
           style={{
             opacity: enterOpacity,
             transform: `translateY(${(1 - enterT) * 24}px) scale(${0.94 + 0.06 * enterT})`,
-            transformOrigin: "50% 0%",
+            transformOrigin: "50% 50%",
           }}
         >
           {/* Copy above the tub on all breakpoints */}
-          <div className="max-w-2xl mx-auto shrink-0 text-center space-y-2 story-short:space-y-1 md:space-y-4">
+          <div className="max-w-2xl mx-auto shrink-0 text-center space-y-1 max-md:space-y-0.5 md:space-y-2 lg:space-y-2.5">
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -447,7 +448,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45 }}
-              className={`${NATION_STORY_TYPE.body} story-short:text-sm story-short:leading-snug ${NATION_STORY_TEXT.body}`}
+              className={`${NATION_STORY_TYPE.body} text-sm leading-snug max-md:text-sm md:text-base ${NATION_STORY_TEXT.body}`}
             >
               {t("nation.story.bathtub.text")}
             </motion.p>
@@ -456,25 +457,25 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45, delay: 0.1 }}
-              className={`${NATION_STORY_TYPE.emphasis} story-short:text-sm text-white`}
+              className={`${NATION_STORY_TYPE.emphasis} text-sm max-md:text-sm md:text-base text-white`}
             >
               {t("nation.story.bathtub.question")}
             </motion.p>
           </div>
 
-          <div className="flex min-h-0 flex-1 items-center justify-center story-short:flex-none">
+          <div className="flex max-md:flex-none md:flex-none md:py-0">
             <TubGraphic
               idPrefix={idPrefix}
               waterTop={waterTop}
               caption={tubCaption}
               compact={isMobile}
-              className="w-full max-w-sm md:max-w-xl mx-auto h-auto max-h-[26svh] story-short:max-h-[19svh] md:max-h-[30svh]"
+              className="w-full max-w-[18rem] md:max-w-md mx-auto h-auto max-h-[22svh] md:max-h-[24svh] lg:max-h-[26svh]"
             />
           </div>
 
           {/* Milestone captions below the tub: the year and this decade's addition.
               The accumulated total lives inside the tub water. */}
-          <div className="shrink-0 text-center space-y-0.5 story-short:space-y-0 min-h-[2.75rem] story-short:min-h-[2rem] md:min-h-[4.5rem]">
+          <div className="shrink-0 text-center space-y-0 max-md:space-y-0 min-h-0 md:min-h-0">
             <p className="sr-only">
               {`${tubCaption.prefix} ${tubCaption.value}`}
             </p>
@@ -482,12 +483,12 @@ export function NationBathtub({ data }: NationBathtubProps) {
               key={current.year}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`${NATION_STORY_TYPE.stat} story-short:text-xl`}
+              className={`${NATION_STORY_TYPE.stat} text-xl max-md:text-xl md:text-inherit`}
             >
               {current.year}
             </motion.p>
             <p
-              className={`${NATION_STORY_TYPE.meta} story-short:text-xs ${NATION_STORY_TEXT.secondary}`}
+              className={`${NATION_STORY_TYPE.meta} text-xs ${NATION_STORY_TEXT.secondary}`}
             >
               {chunkCaption}
             </p>
