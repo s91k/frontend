@@ -187,7 +187,7 @@ function StoryOnboardingHint({ endReached }: { endReached: boolean }) {
   };
 
   return (
-    <div className="fixed inset-x-4 top-[calc(var(--story-site-header)+1rem+env(safe-area-inset-top,0px))] z-50 mx-auto flex max-w-md items-start gap-3 rounded-lg border border-white/15 bg-black/90 px-4 py-3 backdrop-blur-sm md:left-auto md:right-6 md:mx-0">
+    <div className="fixed inset-x-4 top-[calc(var(--story-site-header)+var(--story-chapter-band)+0.75rem+env(safe-area-inset-top,0px))] z-50 mx-auto flex max-w-md items-start gap-3 rounded-lg border border-white/15 bg-black/90 px-4 py-3 backdrop-blur-sm md:top-[calc(var(--story-site-header)+1rem+env(safe-area-inset-top,0px))] md:left-auto md:right-6 md:mx-0">
       <p
         className={`flex-1 ${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
       >

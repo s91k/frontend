@@ -64,18 +64,14 @@ function StatCallout({
     >
       {/* Mobile: big number on top so both columns share a baseline */}
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
+        <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>{value}</p>
         <p
-          className={`text-[2rem] story-short:text-[1.75rem] font-light tabular-nums leading-none ${colorClass}`}
-        >
-          {value}
-        </p>
-        <p
-          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1`}
+          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5`}
         >
           {unitShort}
         </p>
         <p
-          className={`text-xs leading-snug ${NATION_STORY_TEXT.secondary} mt-2 max-w-[9.25rem]`}
+          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[9.25rem]`}
         >
           {label}
         </p>
@@ -137,11 +133,11 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45 }}
-      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-2 md:flex-row md:items-center md:gap-10 lg:gap-14"
+      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex-row md:items-center md:gap-10 lg:gap-14"
     >
       <div
         ref={mapRef}
-        className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(120px,22svh,220px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
+        className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
       >
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}

@@ -21,6 +21,7 @@ import {
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 import { isStoryGliding } from "@/components/nation/story/useStoryAutoSnap";
+import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 type JourneyStep = {
   key: string;
@@ -51,6 +52,8 @@ function deltaDecimals(delta: number): number {
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
 const DESKTOP_MAX_DIAMETER = 300;
 const MOBILE_MAX_DIAMETER = 240;
+/** iPhone SE / story-short – leave room for label + body under the onion. */
+const STORY_SHORT_MAX_DIAMETER = 180;
 /** Scroll distance per journey step – higher = more time to watch each layer grow. */
 const JOURNEY_STEP_VH = 80;
 /**
@@ -169,11 +172,16 @@ export function NationEmissionsJourney({
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
+  const isStoryShort = useStoryShortViewport();
   const reducedMotion = useReducedMotion();
 
   const steps = buildSteps(metrics);
   const maxTotal = steps[steps.length - 1].total;
-  const maxDiameter = isMobile ? MOBILE_MAX_DIAMETER : DESKTOP_MAX_DIAMETER;
+  const maxDiameter = !isMobile
+    ? DESKTOP_MAX_DIAMETER
+    : isStoryShort
+      ? STORY_SHORT_MAX_DIAMETER
+      : MOBILE_MAX_DIAMETER;
 
   const { ref, step, exitProgress, mode, sectionVh, stageStyle } =
     usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
@@ -339,11 +347,11 @@ export function NationEmissionsJourney({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className="relative flex h-full min-h-0 flex-1 flex-col justify-center story-short:justify-start gap-4 story-short:gap-2 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
+          className="relative flex h-full min-h-0 flex-1 flex-col justify-center gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
           style={{ opacity: stageOpacity }}
         >
           {/* Bubble = accumulating colored layers */}
-          <div className="flex flex-col items-center gap-2 md:gap-4 py-3 md:py-0 order-1">
+          <div className="flex flex-col items-center gap-2 story-short:gap-1 md:gap-4 py-3 story-short:py-1 md:py-0 order-1">
             <div
               className="relative"
               style={{
@@ -548,7 +556,7 @@ export function NationEmissionsJourney({
 
           {/* Caption + legend of layers added so far */}
           <div
-            className="space-y-2.5 md:space-y-4 order-2 min-h-0"
+            className="space-y-2.5 md:space-y-4 order-2 min-h-0 text-center md:text-left"
             style={{ opacity: exitFade }}
           >
             {/* Hidden (but space-keeping) until the section pins, so the
@@ -561,7 +569,7 @@ export function NationEmissionsJourney({
                 y: sectionStarted ? 0 : 12,
               }}
               transition={{ duration: 0.4 }}
-              className="space-y-2 md:space-y-3"
+              className="space-y-2 story-short:space-y-1 md:space-y-3"
             >
               <p
                 className={`hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
@@ -574,7 +582,7 @@ export function NationEmissionsJourney({
               {/* Dot + label lead the paragraph they describe – on mobile this
                   sits right under the onion, on desktop in the caption column */}
               <p
-                className={`flex items-center gap-2.5 md:gap-3 ${NATION_STORY_TYPE.emphasis} text-white`}
+                className={`flex items-center justify-center md:justify-start gap-2.5 md:gap-3 ${NATION_STORY_TYPE.emphasis} text-white`}
               >
                 <span
                   className="w-3 h-3 md:w-4 md:h-4 rounded-full shrink-0"
@@ -583,7 +591,7 @@ export function NationEmissionsJourney({
                 {t(current.labelKey)}
               </p>
               <p
-                className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
+                className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} mx-auto md:mx-0 max-w-md md:max-w-none`}
               >
                 {t(current.textKey)}
               </p>

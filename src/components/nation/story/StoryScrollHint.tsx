@@ -65,7 +65,7 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
           strokeWidth={2}
           aria-hidden
         />
-        <span className="text-[11px] md:text-xs font-medium tracking-wide">
+        <span className="text-xs md:text-sm font-medium tracking-wide">
           <span className="md:hidden">
             {t("nation.story.scrollHint.swipe")}
           </span>
