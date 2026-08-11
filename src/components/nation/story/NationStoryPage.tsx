@@ -226,7 +226,7 @@ export function NationStoryPage({
       <section
         ref={conclusionRef}
         data-story-section
-      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] md:pt-24 pb-[var(--story-stage-pad-bottom)] md:py-16 overflow-x-hidden"
+        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] md:pt-24 pb-[var(--story-stage-pad-bottom)] md:py-16 overflow-x-hidden"
       >
         {/* Same depth backdrop as the hero – the story ends where it began */}
         <div
