@@ -113,13 +113,11 @@ function ConclusionStat({
       >
         {t(labelKey)}
       </p>
-      <p
-        className={`text-4xl story-short:text-3xl md:text-6xl font-light tabular-nums leading-none ${colorClass}`}
-      >
+      <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>
         <CountUpMton value={value} />
       </p>
       <p
-        className={`${NATION_STORY_TYPE.body} story-short:text-sm ${NATION_STORY_TEXT.body} mt-1.5 story-short:mt-1 md:mt-2`}
+        className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} mt-1.5 story-short:mt-1 md:mt-2`}
       >
         {t("nation.story.unit.millionTco2e")}
       </p>
@@ -168,7 +166,7 @@ export function NationConclusion({ metrics }: NationConclusionProps) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.45, delay: 0.05 }}
-        className={`${NATION_STORY_TYPE.title} story-short:text-xl`}
+        className={NATION_STORY_TYPE.title}
       >
         {t("nation.story.conclusion.title")}
       </motion.h2>

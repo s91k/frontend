@@ -439,7 +439,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.4 }}
-              className={`${NATION_STORY_TYPE.title} story-short:text-xl text-white`}
+              className={`${NATION_STORY_TYPE.title} text-white`}
             >
               {t("nation.story.bathtub.eyebrow")}
             </motion.h2>
@@ -448,7 +448,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45 }}
-              className={`${NATION_STORY_TYPE.body} text-sm leading-snug max-md:text-sm story-short:text-xs story-short:leading-snug md:text-base ${NATION_STORY_TEXT.body}`}
+              className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
             >
               {t("nation.story.bathtub.text")}
             </motion.p>
@@ -457,7 +457,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.45, delay: 0.1 }}
-              className={`${NATION_STORY_TYPE.emphasis} text-sm max-md:text-sm story-short:text-xs md:text-base text-white`}
+              className={`${NATION_STORY_TYPE.emphasis} text-white`}
             >
               {t("nation.story.bathtub.question")}
             </motion.p>
@@ -483,12 +483,12 @@ export function NationBathtub({ data }: NationBathtubProps) {
               key={current.year}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`${NATION_STORY_TYPE.stat} text-xl max-md:text-xl md:text-inherit`}
+              className={NATION_STORY_TYPE.stat}
             >
               {current.year}
             </motion.p>
             <p
-              className={`${NATION_STORY_TYPE.meta} text-xs ${NATION_STORY_TEXT.secondary}`}
+              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
             >
               {chunkCaption}
             </p>

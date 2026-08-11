@@ -228,7 +228,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
             })}
           </p>
           <h2
-            className={`${NATION_STORY_TYPE.title} story-short:text-2xl text-white mb-2 story-short:mb-1 md:mb-4`}
+            className={`${NATION_STORY_TYPE.title} text-white mb-2 story-short:mb-1 md:mb-4`}
           >
             {t("nation.story.stacked.title")}
           </h2>
@@ -244,7 +244,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className={`flex items-start gap-2 md:gap-3 ${NATION_STORY_TYPE.meta} story-short:text-xs text-white`}
+              className={`flex items-start gap-2 md:gap-3 ${NATION_STORY_TYPE.meta} text-white`}
             >
               <span
                 className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0 mt-1 md:mt-1.5"
@@ -387,14 +387,14 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                 while the finger is on the chart */}
             {isMobile &&
               (scrubbing ? (
-                <p className={`${NATION_STORY_TYPE.meta} story-short:text-xs`}>
+                <p className={NATION_STORY_TYPE.meta}>
                   <span className="text-white tabular-nums font-medium">
                     {readoutYear}
                   </span>
                 </p>
               ) : (
                 <p
-                  className={`${NATION_STORY_TYPE.meta} story-short:text-xs ${NATION_STORY_TEXT.secondary}`}
+                  className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
                 >
                   {t("nation.story.stacked.scrubHint")}
                 </p>
@@ -406,7 +406,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: 0.1 }}
-                  className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta} story-short:text-xs`}
+                  className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
                 >
                   <span
                     className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"

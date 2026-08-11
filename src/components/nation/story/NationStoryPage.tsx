@@ -61,11 +61,11 @@ export function NationStoryPage({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div className="relative w-full max-w-5xl mx-auto shrink-0 text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
-          <h1 className="text-[1.75rem] leading-tight max-md:text-[1.875rem] story-short:text-[1.5rem] story-short:leading-snug md:text-6xl font-light tracking-tight text-white">
+          <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>
             {t("nation.story.intro.title")}
           </h1>
           <p
-            className={`${NATION_STORY_TYPE.body} max-md:text-[0.9375rem] max-md:leading-snug story-short:text-sm story-short:leading-snug ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
+            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
           >
             {t("nation.story.intro.paragraph1")}
           </p>
@@ -85,7 +85,7 @@ export function NationStoryPage({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.45 }}
             transition={{ duration: 0.45, delay: 0.05 }}
-            className={`${NATION_STORY_TYPE.title} story-short:text-2xl`}
+            className={NATION_STORY_TYPE.title}
           >
             {t("nation.story.interlude.title")}
           </motion.h2>

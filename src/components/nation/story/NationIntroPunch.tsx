@@ -64,18 +64,14 @@ function StatCallout({
     >
       {/* Mobile: big number on top so both columns share a baseline */}
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
-        <p
-          className={`text-[2rem] story-short:text-[1.5rem] font-light tabular-nums leading-none ${colorClass}`}
-        >
-          {value}
-        </p>
+        <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>{value}</p>
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5`}
         >
           {unitShort}
         </p>
         <p
-          className={`text-xs leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[9.25rem]`}
+          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[9.25rem]`}
         >
           {label}
         </p>
