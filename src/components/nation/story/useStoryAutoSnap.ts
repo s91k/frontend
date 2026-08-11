@@ -245,9 +245,10 @@ export function useStoryAutoSnap() {
     }
 
     let settleTimer: number | null = null;
-    let touchActive = false;
+    /** Active touch contacts – blocks settle while a finger is down. */
+    let touchDownCount = 0;
     /** Last touch input – lets a lost touchend (iOS system gestures, JS
-     * alerts) expire instead of blocking the settle pass forever. */
+     * alerts) expire a stuck touchDownCount instead of blocking settle forever. */
     let lastTouchAt = 0;
     const TOUCH_STALE_MS = 600;
 
@@ -376,9 +377,9 @@ export function useStoryAutoSnap() {
       // While a finger is down the page may pause without the gesture being
       // over – never let a settle fire (and snap) mid-touch. If no touch
       // input has arrived for a while, assume the touchend was lost.
-      if (touchActive) {
+      if (touchDownCount > 0) {
         if (performance.now() - lastTouchAt < TOUCH_STALE_MS) return;
-        touchActive = false;
+        touchDownCount = 0;
       }
       scheduleSettle();
     };
@@ -460,13 +461,17 @@ export function useStoryAutoSnap() {
     };
 
     const onTouchStart = (event: TouchEvent) => {
-      touchActive = true;
+      touchDownCount += event.changedTouches.length;
       lastTouchAt = performance.now();
       if (event.touches.length === 1) {
         touchStartClientY = event.touches[0].clientY;
         touchStartScrollY = window.scrollY;
         touchMode = null;
         touchTriggered = false;
+        // Deep in the conclusion free zone: native scroll only.
+        if (startedDeepInZone(touchStartScrollY)) {
+          touchMode = "native";
+        }
       } else {
         // Multi-touch (pinch zoom) stays native for the whole gesture.
         touchMode = "native";
@@ -486,11 +491,8 @@ export function useStoryAutoSnap() {
         if (startedDeepInZone(touchStartScrollY)) {
           touchMode = "native";
         } else if (startedSeatedAtLast(touchStartScrollY)) {
-          // Direction decides: down reads into the zone natively, up is a
-          // deliberate exit. Only zero-delta moves need preventDefault to
-          // stop iOS claiming the gesture before direction is known.
           if (delta === 0) {
-            event.preventDefault();
+            // Stationary hold while reading – leave native scrolling alone.
             return;
           }
           touchMode = delta > 0 ? "native" : "hijack";
@@ -516,17 +518,24 @@ export function useStoryAutoSnap() {
       }
     };
 
-    const onTouchEnd = () => {
-      touchActive = false;
-      touchStartClientY = null;
-      touchMode = null;
+    const releaseTouches = (event: TouchEvent) => {
+      touchDownCount = Math.max(0, touchDownCount - event.changedTouches.length);
+      if (event.touches.length === 0) {
+        touchStartClientY = null;
+        touchMode = null;
+      }
       scheduleSettle();
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      releaseTouches(event);
     };
 
     // Rotation/resize changes the beat list (overflowing sections gain or
     // lose beats), so the anchor index no longer matches. Re-anchor from
     // scratch and re-seat on the nearest beat in the new geometry.
     const onResize = () => {
+      if (touchDownCount > 0) return;
       state.anchor = null;
       scheduleSettle();
     };
