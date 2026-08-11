@@ -18,6 +18,9 @@ const WHEEL_GESTURE_GAP_MS = 250;
 const FINE_POINTER_WHEEL_TRIGGER_PX = 90;
 /** Wheel events further apart than this start a new gesture (trackpad). */
 const FINE_POINTER_WHEEL_GESTURE_GAP_MS = 400;
+/** Fixed window after a beat commit – swallows same-swipe momentum without extending when the reader retries early. */
+const FINE_POINTER_WHEEL_MOMENTUM_MS = 520;
+const COARSE_WHEEL_MOMENTUM_MS = 280;
 /** Touch drag distance (px) that commits a beat advance. */
 const TOUCH_TRIGGER_PX = 24;
 /**
@@ -252,8 +255,8 @@ export function useStoryAutoSnap() {
     let wheelAccum = 0;
     let lastWheelAt = 0;
     let wheelStartScrollY = 0;
-    /** One beat per wheel gesture – cleared when a new gesture starts. */
-    let wheelTriggered = false;
+    /** When a beat was last committed from wheel input (0 = none yet). */
+    let wheelBeatAt = 0;
 
     const finePointerQuery = window.matchMedia(
       "(hover: hover) and (pointer: fine)",
@@ -266,6 +269,10 @@ export function useStoryAutoSnap() {
       finePointerQuery.matches
         ? FINE_POINTER_WHEEL_GESTURE_GAP_MS
         : WHEEL_GESTURE_GAP_MS;
+    const wheelMomentumMs = () =>
+      finePointerQuery.matches
+        ? FINE_POINTER_WHEEL_MOMENTUM_MS
+        : COARSE_WHEEL_MOMENTUM_MS;
 
     // Touch gesture tracking
     let touchStartClientY: number | null = null;
@@ -382,12 +389,11 @@ export function useStoryAutoSnap() {
       if (isInsideOverlay(event.target)) return;
 
       const now = performance.now();
-      const freshGesture = now - lastWheelAt > wheelGestureGapMs();
-      lastWheelAt = now;
+      const freshGesture =
+        lastWheelAt === 0 || now - lastWheelAt > wheelGestureGapMs();
       if (freshGesture) {
         wheelAccum = 0;
         wheelStartScrollY = window.scrollY;
-        wheelTriggered = false;
       }
 
       // Gestures that started deep in the end zone stay native. If momentum
@@ -425,12 +431,15 @@ export function useStoryAutoSnap() {
         return;
       }
 
-      // Same physical swipe can emit momentum long after the glide lands –
-      // never advance twice within one gesture (mirrors touchTriggered).
-      if (wheelTriggered) {
+      // Same-swipe momentum tail: fixed window from the beat commit. Swallowed
+      // events must not touch lastWheelAt – otherwise a retry before the window
+      // expires keeps resetting the gesture gap and the reader gets stuck.
+      if (wheelBeatAt > 0 && now - wheelBeatAt < wheelMomentumMs()) {
         event.preventDefault();
         return;
       }
+
+      lastWheelAt = now;
 
       event.preventDefault();
 
@@ -441,7 +450,7 @@ export function useStoryAutoSnap() {
         const direction = wheelAccum > 0 ? 1 : -1;
         wheelAccum = 0;
         if (advanceStoryBeat(direction)) {
-          wheelTriggered = true;
+          wheelBeatAt = now;
         } else {
           // Stale anchor – re-seat instead of swallowing wheel with no movement.
           state.anchor = null;
