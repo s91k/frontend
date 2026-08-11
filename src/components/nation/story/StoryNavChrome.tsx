@@ -3,9 +3,7 @@ import { ChevronUp } from "lucide-react";
 import { motion, useScroll } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useStoryEndReached } from "@/components/nation/story/useStoryEndReached";
-import {
-  advanceStoryBeat,
-} from "@/components/nation/story/useStoryAutoSnap";
+import { advanceStoryBeat } from "@/components/nation/story/useStoryAutoSnap";
 import { useStorySectionState } from "@/components/nation/story/useStorySectionState";
 import {
   NATION_STORY_TEXT,
@@ -26,9 +24,7 @@ function StoryProgressBar({
   const { scrollYProgress } = useScroll();
   const { t } = useTranslation();
   const chapter = sectionState.sections[sectionState.active]?.chapter;
-  const chapterLabel = chapter
-    ? t(`nation.story.chapters.${chapter}`)
-    : null;
+  const chapterLabel = chapter ? t(`nation.story.chapters.${chapter}`) : null;
 
   return (
     <div className="hidden md:flex fixed top-12 left-0 right-0 z-40 h-8 items-center px-4 pointer-events-none">
@@ -192,7 +188,9 @@ function StoryOnboardingHint({ endReached }: { endReached: boolean }) {
 
   return (
     <div className="fixed inset-x-4 top-[calc(var(--story-site-header)+1rem+env(safe-area-inset-top,0px))] z-50 mx-auto flex max-w-md items-start gap-3 rounded-lg border border-white/15 bg-black/90 px-4 py-3 backdrop-blur-sm md:left-auto md:right-6 md:mx-0">
-      <p className={`flex-1 ${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}>
+      <p
+        className={`flex-1 ${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
+      >
         {hint === "desktop"
           ? t("nation.story.nav.onboardingDesktop")
           : t("nation.story.nav.onboardingMobile")}
@@ -293,7 +291,10 @@ export function StoryNavChrome({
   return (
     <>
       <StoryProgressBar endReached={endReached} sectionState={sectionState} />
-      <StoryMobileProgress endReached={endReached} sectionState={sectionState} />
+      <StoryMobileProgress
+        endReached={endReached}
+        sectionState={sectionState}
+      />
       <StoryStepDots endReached={endReached} sectionState={sectionState} />
       <StoryPreviousSectionNav
         endReached={endReached}
