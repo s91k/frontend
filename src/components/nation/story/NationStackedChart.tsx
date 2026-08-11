@@ -216,7 +216,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className={`relative flex min-h-0 flex-1 flex-col justify-center story-short:justify-start w-full max-w-4xl mx-auto ${className ?? ""}`}
+          className={`relative flex min-h-0 flex-1 flex-col justify-center w-full max-w-4xl mx-auto ${className ?? ""}`}
         >
           {/* Mobile relies on the step dots for progress instead */}
           <p
