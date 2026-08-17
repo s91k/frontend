@@ -99,8 +99,9 @@
       "description": "Börja din resa in i klimatdata. Sök efter företag, kommuner, regioner och länder. Utforska rankningar och upptäck vem som leder kampen mot klimatförändringarna."
     },
     "valet2026Banner": {
-      "prefix": "Inför valet 2026:",
-      "link": "en berättelse om Sveriges utsläpp"
+      "badge": "Nyhet!",
+      "title": "Sveriges egentliga utsläpp",
+      "subtitle": "En berättelse inför valet 2026"
     },
     "companiesSection": {
       "title": "Hur går det med företagens utsläpp?",
