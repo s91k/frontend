@@ -18,21 +18,26 @@ export function Valet2026HeroBanner() {
       aria-label={label}
       className={`group fixed inset-x-0 top-12 z-40 flex ${VALET_BANNER_HEIGHT_CLASS} items-center border-b border-black/10 bg-[#E2FF8D] transition-colors hover:bg-[#daf585]`}
     >
-      <div className="container mx-auto flex w-full items-center gap-2.5 px-4 md:gap-4">
+      <div className="container mx-auto flex w-full items-center gap-2.5 px-4 md:justify-center md:gap-3">
         <span className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-black md:text-xs">
           {t("landingPage.valet2026Banner.badge")}
         </span>
-        <div className="min-w-0 flex-1 text-left md:text-center">
-          <p className="truncate text-sm font-medium text-black md:text-base">
+        <div className="min-w-0 flex-1 md:flex md:flex-none md:items-center md:gap-2.5">
+          <p className="truncate text-sm font-medium text-black md:text-base md:truncate-none">
             {t("landingPage.valet2026Banner.title")}
           </p>
-          <p className="truncate text-xs text-black/70 md:hidden">
-            {t("landingPage.valet2026Banner.subtitle")}
+          <p className="truncate text-xs text-black/70 md:truncate-none md:text-sm">
+            <span className="md:hidden">
+              {t("landingPage.valet2026Banner.subtitle")}
+            </span>
+            <span className="hidden md:inline">
+              <span aria-hidden className="mr-2.5">
+                ·
+              </span>
+              {t("landingPage.valet2026Banner.subtitle")}
+            </span>
           </p>
         </div>
-        <p className="hidden min-w-0 flex-1 truncate text-center text-sm text-black/70 md:block">
-          {t("landingPage.valet2026Banner.subtitle")}
-        </p>
         <ArrowRight
           className="h-4 w-4 shrink-0 text-black transition-transform duration-300 group-hover:translate-x-0.5 md:h-5 md:w-5"
           aria-hidden
