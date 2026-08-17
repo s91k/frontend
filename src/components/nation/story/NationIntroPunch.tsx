@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { animate, motion, useInView, useReducedMotion } from "framer-motion";
+import { animate, motion, useReducedMotion } from "framer-motion";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -21,54 +21,25 @@ type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
+/** Pink map grows out from the orange core shortly after mount. */
+const PINK_MAP_REVEAL_DELAY_S = 0.35;
+
 const OUTER_GROW_TRANSITION = {
   type: "spring" as const,
   stiffness: 42,
   damping: 20,
   mass: 1,
-  delay: 0.2,
+  delay: PINK_MAP_REVEAL_DELAY_S,
 };
 
-const INNER_GROW_TRANSITION = {
-  type: "spring" as const,
-  stiffness: 55,
-  damping: 18,
-  delay: 0.05,
+/** Pink callout trails the map expansion slightly. */
+const PINK_CALLOUT_FADE = {
+  duration: 0.45,
+  delay: PINK_MAP_REVEAL_DELAY_S + 0.12,
 };
-
-const INNER_FADE_TRANSITION = { duration: 0.35, delay: 0.05 };
 
 /** Visual nudge – the silhouette reads right-heavy when nested at bbox centre. */
 const INNER_MAP_NUDGE_X = -7;
-
-/** Drive a numeric value with framer animate. */
-function useAnimatedValue(
-  from: number,
-  to: number,
-  active: boolean,
-  transition: object,
-  reducedMotion: boolean | null,
-) {
-  const [value, setValue] = useState(to);
-
-  useEffect(() => {
-    if (!active) {
-      setValue(from);
-      return;
-    }
-    if (reducedMotion) {
-      setValue(to);
-      return;
-    }
-    const controls = animate(from, to, {
-      ...transition,
-      onUpdate: (v) => setValue(v),
-    });
-    return () => controls.stop();
-  }, [active, from, to, reducedMotion, transition]);
-
-  return value;
-}
 
 type SwedenSilhouetteProps = {
   scale: number;
@@ -108,7 +79,6 @@ type StatCalloutProps = {
   unitShort: string;
   unitLong: string;
   colorClass: string;
-  delay: number;
   className?: string;
 };
 
@@ -118,17 +88,10 @@ function StatCallout({
   unitShort,
   unitLong,
   colorClass,
-  delay,
   className,
 }: StatCalloutProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 12 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.5, delay }}
-      className={`min-w-0 ${className ?? ""}`}
-    >
+    <div className={`min-w-0 ${className ?? ""}`}>
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
         <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>{value}</p>
         <p
@@ -160,6 +123,27 @@ function StatCallout({
           </span>
         </p>
       </div>
+    </div>
+  );
+}
+
+type DelayedStatCalloutProps = StatCalloutProps & {
+  reducedMotion: boolean | null;
+};
+
+function DelayedStatCallout({
+  reducedMotion,
+  className,
+  ...props
+}: DelayedStatCalloutProps) {
+  return (
+    <motion.div
+      className={className}
+      initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={reducedMotion ? { duration: 0 } : PINK_CALLOUT_FADE}
+    >
+      <StatCallout {...props} />
     </motion.div>
   );
 }
@@ -173,8 +157,6 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const reducedMotion = useReducedMotion();
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInView = useInView(mapRef, { once: true, amount: 0.15 });
 
   const reportedValue = metrics.territorialLatestMton;
   const fullValue = Math.max(metrics.combinedLatestMton, reportedValue);
@@ -185,42 +167,26 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const unitShort = t("nation.story.unit.mtonCo2e");
   const unitLong = t("nation.story.unit.millionTco2e");
 
-  const mapShown = Boolean(reducedMotion || mapInView);
+  const [outerScale, setOuterScale] = useState(() =>
+    reducedMotion ? 1 : innerScale,
+  );
 
-  const outerScale = useAnimatedValue(
-    innerScale,
-    1,
-    mapShown,
-    OUTER_GROW_TRANSITION,
-    reducedMotion,
-  );
-  const innerScaleAnimated = useAnimatedValue(
-    innerScale,
-    innerScale,
-    mapShown,
-    INNER_GROW_TRANSITION,
-    reducedMotion,
-  );
-  const innerOpacity = useAnimatedValue(
-    0,
-    1,
-    mapShown,
-    INNER_FADE_TRANSITION,
-    reducedMotion,
-  );
+  useEffect(() => {
+    if (reducedMotion) {
+      setOuterScale(1);
+      return;
+    }
+    setOuterScale(innerScale);
+    const controls = animate(innerScale, 1, {
+      ...OUTER_GROW_TRANSITION,
+      onUpdate: (value) => setOuterScale(value),
+    });
+    return () => controls.stop();
+  }, [innerScale, reducedMotion]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.45 }}
-      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex-row md:items-center md:gap-10 lg:gap-14"
-    >
-      <div
-        ref={mapRef}
-        className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
-      >
+    <div className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex-row md:items-center md:gap-10 lg:gap-14">
+      <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
           className="h-full w-auto max-w-full mx-auto block"
@@ -232,9 +198,8 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
             fill={NATION_STORY_COLORS.consumption}
           />
           <SwedenSilhouette
-            scale={innerScaleAnimated}
+            scale={innerScale}
             fill={NATION_STORY_COLORS.territorial}
-            opacity={innerOpacity}
             nudgeX={INNER_MAP_NUDGE_X}
           />
         </svg>
@@ -247,19 +212,18 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           unitShort={unitShort}
           unitLong={unitLong}
           colorClass="text-orange-3"
-          delay={0.15}
           className="order-1"
         />
-        <StatCallout
+        <DelayedStatCallout
+          reducedMotion={reducedMotion}
           label={t("nation.story.intro.fullLabel")}
           value={full}
           unitShort={unitShort}
           unitLong={unitLong}
           colorClass="text-pink-3"
-          delay={0.3}
           className="order-2"
         />
       </div>
-    </motion.div>
+    </div>
   );
 }
