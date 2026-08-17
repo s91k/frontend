@@ -617,8 +617,8 @@ export function NationEmissionsJourney({
                       <span
                         className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
                       >
-                        {i === 0 ? "" : `+${deltaLabel} `}
-                        {i === 0 ? "" : t("nation.story.unit.mton")}
+                        {i === 0 ? `${deltaLabel} ` : `+${deltaLabel} `}
+                        {t("nation.story.unit.mton")}
                       </span>
                     </motion.div>
                   );
