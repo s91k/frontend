@@ -19,11 +19,11 @@ export function Valet2026HeroBanner() {
       className={`group fixed inset-x-0 top-12 z-40 flex ${VALET_BANNER_HEIGHT_CLASS} items-center border-b border-black/10 bg-[#E2FF8D] transition-colors hover:bg-[#daf585]`}
     >
       <div className="container mx-auto flex w-full items-center gap-2.5 px-4 md:justify-center md:gap-3">
-        <span className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-black md:text-xs">
+        <span className="shrink-0 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black md:text-xs">
           {t("landingPage.valet2026Banner.badge")}
         </span>
         <div className="min-w-0 flex-1 md:flex md:flex-none md:items-center md:gap-2.5">
-          <p className="truncate text-sm font-medium text-black md:text-base md:truncate-none">
+          <p className="truncate text-sm font-medium text-black md:text-lg md:font-semibold md:truncate-none">
             {t("landingPage.valet2026Banner.title")}
           </p>
           <p className="truncate text-xs text-black/70 md:truncate-none md:text-sm">
