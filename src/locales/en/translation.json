@@ -100,8 +100,7 @@
     },
     "valet2026Banner": {
       "badge": "New!",
-      "title": "Sweden's actual emissions",
-      "subtitle": "A story ahead of the 2026 election"
+      "title": "Explore Sweden's actual emissions ahead of the 2026 election"
     },
     "companiesSection": {
       "title": "How's it going with company emissions?",
@@ -1607,9 +1606,9 @@
         "dismiss": "Got it"
       },
       "journey": {
-        "dataYear": "The figure refers to CO₂e and {{year}}.",
-        "dataYearShort": "CO₂e, year {{year}}",
-        "stepCounter": "Step {{current}} of {{total}}",
+        "dataYear": "The figure refers to million tonnes (Mt) CO₂e and {{year}}.",
+        "dataYearShort": "Mt CO₂e, {{year}}",
+        "stepCounter": "Layer {{current}} of {{total}}",
         "totalLabel": "Total",
         "step1": {
           "label": "Territorial emissions",
@@ -1625,7 +1624,7 @@
         },
         "step4": {
           "label": "Private e-commerce",
-          "text": "We have also quantified emissions from private e-commerce imports – for example when we order goods from Amazon and Shein. These emissions are not included in official statistics today. They amount to an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
+          "text": "We have also quantified emissions from private e-commerce imports. These emissions are not included in official statistics today. This amounts to approximately an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
         },
         "step5": {
           "label": "Biogenic emissions",
@@ -1653,7 +1652,7 @@
         "stat": "The full picture is {{ratio}}× larger: {{combined}} vs {{territorial}} territorial"
       },
       "stacked": {
-        "layerCounter": "Layer {{current}} of {{total}}",
+        "layerCounter": "Step {{current}} of {{total}}",
         "title": "Sweden's emissions since 1990",
         "layerCaption1": "First we have territorial emissions – fossil emissions within Sweden's borders.",
         "layerCaption2": "Now we add emissions from Swedish shipping companies and airlines abroad – together with the territorial emissions, this gives us the production-based emissions.",

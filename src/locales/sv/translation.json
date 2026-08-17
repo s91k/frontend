@@ -100,8 +100,7 @@
     },
     "valet2026Banner": {
       "badge": "Nyhet!",
-      "title": "Sveriges egentliga utsläpp",
-      "subtitle": "En berättelse inför valet 2026"
+      "title": "Utforska Sveriges egentliga utsläpp inför valet 2026"
     },
     "companiesSection": {
       "title": "Hur går det med företagens utsläpp?",
@@ -1657,9 +1656,9 @@
         "dismiss": "Okej"
       },
       "journey": {
-        "dataYear": "Siffran avser CO₂e och {{year}}.",
-        "dataYearShort": "CO₂e, år {{year}}",
-        "stepCounter": "Steg {{current}} av {{total}}",
+        "dataYear": "Siffran avser miljoner ton (Mton) CO₂e och {{year}}.",
+        "dataYearShort": "Mton CO₂e, {{year}}",
+        "stepCounter": "Lager {{current}} av {{total}}",
         "totalLabel": "Totalt",
         "step1": {
           "label": "Territoriella utsläpp",
@@ -1675,7 +1674,7 @@
         },
         "step4": {
           "label": "Privat e-handel",
-          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis när vi klickar hem prylar från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
+          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare ca 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
         },
         "step5": {
           "label": "Biogena utsläpp",
@@ -1703,7 +1702,7 @@
         "stat": "Den fulla bilden är {{ratio}}× större: {{combined}} mot {{territorial}} territoriellt"
       },
       "stacked": {
-        "layerCounter": "Lager {{current}} av {{total}}",
+        "layerCounter": "Steg {{current}} av {{total}}",
         "title": "Sveriges utsläpp sedan 1990",
         "layerCaption1": "Först har vi de territoriella utsläppen – fossila utsläpp inom Sveriges gränser.",
         "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utomlands, tillsammans med de territoriella får vi då de produktionsbaserade utsläppen.",

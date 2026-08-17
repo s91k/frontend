@@ -36,17 +36,16 @@ type JourneyStep = {
 
 /**
  * Private e-commerce estimate (~326 000 t CO₂e). Included in the running
- * total like every other layer, though it is far too small to move the
- * rounded Mton figures.
+ * total like every other layer, though it is far too small to show as Mton.
  */
 const E_COMMERCE_MTON = 0.326;
 
-/**
- * Small additions need decimals to not round to zero – three of them, so the
- * e-commerce delta (0.326 Mton) matches the 326 000 tonnes cited in the copy.
- */
-function deltaDecimals(delta: number): number {
-  return delta > 0 && delta < 1 ? 3 : 0;
+/** Sub‑Mton deltas are explained in copy instead of a +0,326 chip. */
+const MIN_DELTA_CHIP_MTON = 1;
+
+function formatDeltaMton(delta: number, language: string): string | null {
+  if (delta < MIN_DELTA_CHIP_MTON) return null;
+  return formatMton(delta, language, 0);
 }
 
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
@@ -492,7 +491,7 @@ export function NationEmissionsJourney({
               {/* The step's own contribution sits just off the current circle's
                   upper-right edge, riding outward with the same spring as the
                   growing layer so it follows the circle smoothly. */}
-              {step > 0 && current.delta > 0 && (
+              {step > 0 && formatDeltaMton(current.delta, currentLanguage) && (
                 <motion.span
                   className="absolute left-1/2 top-1/2 pointer-events-none"
                   style={{ opacity: exitFade }}
@@ -515,12 +514,7 @@ export function NationEmissionsJourney({
                       className={`${NATION_STORY_TYPE.emphasis} tabular-nums whitespace-nowrap`}
                       style={{ color: current.color }}
                     >
-                      +
-                      {formatMton(
-                        current.delta,
-                        currentLanguage,
-                        deltaDecimals(current.delta),
-                      )}{" "}
+                      +{formatDeltaMton(current.delta, currentLanguage)}{" "}
                       {t("nation.story.unit.mton")}
                     </motion.p>
                   </span>
@@ -603,36 +597,36 @@ export function NationEmissionsJourney({
                 layer (it would just repeat the header). */}
             {revealedLayers.length >= 2 && (
               <div className="hidden md:block space-y-1 border-t border-white/10 pt-2 md:pt-3">
-                {steps.slice(0, step + 1).map((s, i) => (
-                  <motion.div
-                    key={s.key}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.35, delay: 0.1 }}
-                    className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
-                  >
-                    <span
-                      className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
-                      style={{
-                        backgroundColor: s.color,
-                      }}
-                    />
-                    <span className={`${NATION_STORY_TEXT.secondary} flex-1`}>
-                      {t(s.labelKey)}
-                    </span>
-                    <span
-                      className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
+                {steps.slice(0, step + 1).map((s, i) => {
+                  const deltaLabel = formatDeltaMton(s.delta, currentLanguage);
+                  return (
+                    <motion.div
+                      key={s.key}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.35, delay: 0.1 }}
+                      className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
                     >
-                      {i === 0 ? "" : "+"}
-                      {formatMton(
-                        s.delta,
-                        currentLanguage,
-                        deltaDecimals(s.delta),
-                      )}{" "}
-                      {t("nation.story.unit.mton")}
-                    </span>
-                  </motion.div>
-                ))}
+                      <span
+                        className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: s.color,
+                        }}
+                      />
+                      <span className={`${NATION_STORY_TEXT.secondary} flex-1`}>
+                        {t(s.labelKey)}
+                      </span>
+                      <span
+                        className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
+                      >
+                        {i === 0 || !deltaLabel ? "" : `+${deltaLabel} `}
+                        {i === 0 || !deltaLabel
+                          ? ""
+                          : t("nation.story.unit.mton")}
+                      </span>
+                    </motion.div>
+                  );
+                })}
                 <div
                   className={`flex items-center gap-2 md:gap-2.5 border-t border-white/10 pt-1.5 mt-1.5 ${NATION_STORY_TYPE.meta} text-white font-medium`}
                 >

@@ -153,7 +153,9 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
 
           <motion.path
             d={SWEDEN_OUTLINE_PATH}
-            fill={NATION_STORY_COLORS.consumption}
+            fill={NATION_STORY_COLORS.territorial}
+            stroke={NATION_STORY_COLORS.consumption}
+            strokeWidth={2}
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -165,7 +167,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
             <motion.rect
               x={0}
               width={100}
-              fill={NATION_STORY_COLORS.territorial}
+              fill="var(--orange-1)"
               initial={
                 reducedMotion
                   ? { y: fillTop, height: fillHeight }
