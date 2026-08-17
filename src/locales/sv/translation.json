@@ -98,6 +98,10 @@
     "ctaSection": {
       "description": "Börja din resa in i klimatdata. Sök efter företag, kommuner, regioner och länder. Utforska rankningar och upptäck vem som leder kampen mot klimatförändringarna."
     },
+    "valet2026Banner": {
+      "prefix": "Inför valet 2026:",
+      "link": "en berättelse om Sveriges utsläpp"
+    },
     "companiesSection": {
       "title": "Hur går det med företagens utsläpp?",
       "description": "Utforska över 400 bolag och få detaljerad data om rapporterade utsläpp och om de ligger i linje med Parisavtalet.",
