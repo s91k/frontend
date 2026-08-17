@@ -38,6 +38,9 @@ const INNER_GROW_TRANSITION = {
 
 const INNER_FADE_TRANSITION = { duration: 0.35, delay: 0.05 };
 
+/** Visual nudge – the silhouette reads right-heavy when nested at bbox centre. */
+const INNER_MAP_NUDGE_X = -5;
+
 /** Drive a numeric value with framer animate. */
 function useAnimatedValue(
   from: number,
@@ -73,6 +76,8 @@ type SwedenSilhouetteProps = {
   stroke?: string;
   strokeWidth?: number;
   opacity?: number;
+  nudgeX?: number;
+  nudgeY?: number;
 };
 
 /** Scale the path around the silhouette centre via a single matrix on the path. */
@@ -82,6 +87,8 @@ function SwedenSilhouette({
   stroke,
   strokeWidth = 0,
   opacity = 1,
+  nudgeX = 0,
+  nudgeY = 0,
 }: SwedenSilhouetteProps) {
   return (
     <path
@@ -90,7 +97,7 @@ function SwedenSilhouette({
       stroke={stroke}
       strokeWidth={strokeWidth}
       opacity={opacity}
-      transform={swedenOutlineScaleMatrix(scale)}
+      transform={swedenOutlineScaleMatrix(scale, nudgeX, nudgeY)}
     />
   );
 }
@@ -228,6 +235,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
             scale={innerScaleAnimated}
             fill={NATION_STORY_COLORS.territorial}
             opacity={innerOpacity}
+            nudgeX={INNER_MAP_NUDGE_X}
           />
         </svg>
       </div>

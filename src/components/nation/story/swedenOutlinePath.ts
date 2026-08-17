@@ -27,9 +27,13 @@ export const SWEDEN_OUTLINE_CENTER = (() => {
 })();
 
 /** Uniform scale around {@link SWEDEN_OUTLINE_CENTER} as a single SVG matrix. */
-export function swedenOutlineScaleMatrix(scale: number): string {
+export function swedenOutlineScaleMatrix(
+  scale: number,
+  dx = 0,
+  dy = 0,
+): string {
   const { x, y } = SWEDEN_OUTLINE_CENTER;
-  const offsetX = x * (1 - scale);
-  const offsetY = y * (1 - scale);
+  const offsetX = x * (1 - scale) + dx;
+  const offsetY = y * (1 - scale) + dy;
   return `matrix(${scale} 0 0 ${scale} ${offsetX} ${offsetY})`;
 }
