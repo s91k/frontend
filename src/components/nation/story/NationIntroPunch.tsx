@@ -12,6 +12,7 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import {
+  SWEDEN_OUTLINE_CENTER,
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
 } from "@/components/nation/story/swedenOutlinePath";
@@ -20,16 +21,58 @@ type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
-/** Silhouette center for uniform scale transforms inside the viewBox. */
-const MAP_CENTER_X = 50;
-const MAP_CENTER_Y = 110;
-
 const OUTER_GROW_SPRING = {
   type: "spring" as const,
   stiffness: 42,
   damping: 20,
   mass: 1,
 };
+
+type ScaledSilhouetteProps = {
+  scale: number;
+  initialScale?: number;
+  opacity?: number;
+  initialOpacity?: number;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  transition?: object;
+};
+
+/** Scale the silhouette uniformly around its bounding-box centre. */
+function ScaledSilhouette({
+  scale,
+  initialScale = scale,
+  opacity = 1,
+  initialOpacity = opacity,
+  fill,
+  stroke,
+  strokeWidth,
+  transition,
+}: ScaledSilhouetteProps) {
+  const { x, y } = SWEDEN_OUTLINE_CENTER;
+
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <motion.g
+        initial={{ scale: initialScale, opacity: initialOpacity }}
+        animate={{ scale, opacity }}
+        transition={transition}
+        style={{ transformOrigin: "0px 0px" }}
+      >
+        <g transform={`translate(${-x} ${-y})`}>
+          <path
+            d={SWEDEN_OUTLINE_PATH}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={strokeWidth}
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      </motion.g>
+    </g>
+  );
+}
 
 type StatCalloutProps = {
   label: string;
@@ -136,56 +179,39 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       >
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
-          className="h-full w-auto max-w-full mx-auto"
+          className="h-full w-auto max-w-full mx-auto overflow-visible"
           role="img"
           aria-label={`${reported}–${full} ${unitLong}`}
         >
           {/* Full picture – pink grows out from the orange core */}
-          <motion.g
-            style={{
-              transformOrigin: `${MAP_CENTER_X}px ${MAP_CENTER_Y}px`,
-              transformBox: "fill-box",
-            }}
-            initial={{ scale: innerScale }}
-            animate={{ scale: outerScale }}
+          <ScaledSilhouette
+            scale={outerScale}
+            initialScale={innerScale}
+            fill={NATION_STORY_COLORS.consumption}
+            stroke={NATION_STORY_COLORS.consumption}
+            strokeWidth={2}
             transition={
               reducedMotion
                 ? { duration: 0 }
                 : { ...OUTER_GROW_SPRING, delay: 0.2 }
             }
-          >
-            <path
-              d={SWEDEN_OUTLINE_PATH}
-              fill={NATION_STORY_COLORS.consumption}
-              stroke={NATION_STORY_COLORS.consumption}
-              strokeWidth={2}
-            />
-          </motion.g>
+          />
 
-          {/* Territorial share – smaller orange map at the centre */}
-          <motion.g
-            style={{
-              transformOrigin: `${MAP_CENTER_X}px ${MAP_CENTER_Y}px`,
-              transformBox: "fill-box",
-            }}
-            initial={{ scale: 0.88 * innerScale, opacity: 0 }}
-            animate={{
-              scale: innerScale,
-              opacity: mapShown ? 1 : 0,
-            }}
+          {/* Territorial share – smaller orange map centred inside the pink */}
+          <ScaledSilhouette
+            scale={innerScale}
+            initialScale={0.88 * innerScale}
+            opacity={mapShown ? 1 : 0}
+            initialOpacity={0}
+            fill={NATION_STORY_COLORS.territorial}
+            stroke={NATION_STORY_COLORS.territorial}
+            strokeWidth={1.5}
             transition={
               reducedMotion
                 ? { duration: 0 }
                 : { type: "spring", stiffness: 55, damping: 18, delay: 0.05 }
             }
-          >
-            <path
-              d={SWEDEN_OUTLINE_PATH}
-              fill={NATION_STORY_COLORS.territorial}
-              stroke={NATION_STORY_COLORS.territorial}
-              strokeWidth={1.5}
-            />
-          </motion.g>
+          />
         </svg>
       </div>
 
