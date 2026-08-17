@@ -12,23 +12,22 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import {
-  SWEDEN_OUTLINE_CENTER,
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
+  swedenOutlineScaleMatrix,
 } from "@/components/nation/story/swedenOutlinePath";
 
 type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
-const OUTER_GROW_SPRING = {
+const OUTER_GROW_TRANSITION = {
   type: "spring" as const,
   stiffness: 42,
   damping: 20,
   mass: 1,
+  delay: 0.2,
 };
-
-const OUTER_GROW_TRANSITION = { ...OUTER_GROW_SPRING, delay: 0.2 };
 
 const INNER_GROW_TRANSITION = {
   type: "spring" as const,
@@ -39,7 +38,7 @@ const INNER_GROW_TRANSITION = {
 
 const INNER_FADE_TRANSITION = { duration: 0.35, delay: 0.05 };
 
-/** Drive a numeric value with framer animate; apply via SVG transform attribute. */
+/** Drive a numeric value with framer animate. */
 function useAnimatedValue(
   from: number,
   to: number,
@@ -47,7 +46,7 @@ function useAnimatedValue(
   transition: object,
   reducedMotion: boolean | null,
 ) {
-  const [value, setValue] = useState(from);
+  const [value, setValue] = useState(to);
 
   useEffect(() => {
     if (!active) {
@@ -71,48 +70,35 @@ function useAnimatedValue(
 type SwedenSilhouetteProps = {
   scale: number;
   fill: string;
-  stroke: string;
-  strokeWidth: number;
+  stroke?: string;
+  strokeWidth?: number;
   opacity?: number;
 };
 
-/**
- * Scale around the silhouette centre using nested SVG groups so both maps
- * share the exact same origin.
- */
+/** Scale the path around the silhouette centre via a single matrix on the path. */
 function SwedenSilhouette({
   scale,
   fill,
   stroke,
-  strokeWidth,
+  strokeWidth = 0,
   opacity = 1,
 }: SwedenSilhouetteProps) {
-  const { x, y } = SWEDEN_OUTLINE_CENTER;
-
   return (
-    <g opacity={opacity}>
-      <g transform={`translate(${x} ${y})`}>
-        <g transform={`scale(${scale})`}>
-          <g transform={`translate(${-x} ${-y})`}>
-            <path
-              d={SWEDEN_OUTLINE_PATH}
-              fill={fill}
-              stroke={stroke}
-              strokeWidth={strokeWidth}
-            />
-          </g>
-        </g>
-      </g>
-    </g>
+    <path
+      d={SWEDEN_OUTLINE_PATH}
+      fill={fill}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      opacity={opacity}
+      transform={swedenOutlineScaleMatrix(scale)}
+    />
   );
 }
 
 type StatCalloutProps = {
   label: string;
   value: string;
-  /** Compact unit for mobile (e.g. "Mton") */
   unitShort: string;
-  /** Written-out unit for desktop (e.g. "miljoner ton") */
   unitLong: string;
   colorClass: string;
   delay: number;
@@ -136,7 +122,6 @@ function StatCallout({
       transition={{ duration: 0.5, delay }}
       className={`min-w-0 ${className ?? ""}`}
     >
-      {/* Mobile: big number on top so both columns share a baseline */}
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
         <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>{value}</p>
         <p
@@ -151,7 +136,6 @@ function StatCallout({
         </p>
       </div>
 
-      {/* Desktop: label above value; orange callout stacks above pink */}
       <div className="hidden md:block text-center">
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
@@ -190,12 +174,11 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const reported = formatMton(reportedValue, currentLanguage, 0);
   const full = formatMton(fullValue, currentLanguage, 0);
   const fillRatio = reportedValue / fullValue;
-  /** Area-proportional inner map – territorial share inside the full silhouette. */
   const innerScale = Math.sqrt(fillRatio);
   const unitShort = t("nation.story.unit.mtonCo2e");
   const unitLong = t("nation.story.unit.millionTco2e");
 
-  const mapShown = reducedMotion || mapInView;
+  const mapShown = Boolean(reducedMotion || mapInView);
 
   const outerScale = useAnimatedValue(
     innerScale,
@@ -205,7 +188,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
     reducedMotion,
   );
   const innerScaleAnimated = useAnimatedValue(
-    innerScale * 0.88,
+    innerScale,
     innerScale,
     mapShown,
     INNER_GROW_TRANSITION,
@@ -233,24 +216,17 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
       >
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
-          className="h-full w-auto max-w-full mx-auto overflow-visible"
+          className="h-full w-auto max-w-full mx-auto block"
           role="img"
           aria-label={`${reported}–${full} ${unitLong}`}
         >
-          {/* Full picture – pink grows out from the orange core */}
           <SwedenSilhouette
             scale={outerScale}
             fill={NATION_STORY_COLORS.consumption}
-            stroke={NATION_STORY_COLORS.consumption}
-            strokeWidth={2}
           />
-
-          {/* Territorial share – smaller orange map centred inside the pink */}
           <SwedenSilhouette
             scale={innerScaleAnimated}
             fill={NATION_STORY_COLORS.territorial}
-            stroke={NATION_STORY_COLORS.territorial}
-            strokeWidth={1.5}
             opacity={innerOpacity}
           />
         </svg>
