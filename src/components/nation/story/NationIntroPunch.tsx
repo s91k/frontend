@@ -39,7 +39,7 @@ const INNER_GROW_TRANSITION = {
 const INNER_FADE_TRANSITION = { duration: 0.35, delay: 0.05 };
 
 /** Visual nudge – the silhouette reads right-heavy when nested at bbox centre. */
-const INNER_MAP_NUDGE_X = -5;
+const INNER_MAP_NUDGE_X = -7;
 
 /** Drive a numeric value with framer animate. */
 function useAnimatedValue(
