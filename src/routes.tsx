@@ -1,10 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { LanguageRedirect } from "@/components/LanguageRedirect";
 import ProtectedRoute from "./components/ProtectedRoute";
-import StagingProtectedRoute from "./components/StagingProtectedRoute";
-// StagingProtectedRoute: use when developing new pages that should only be visible on staging.
-// Wrap the route(s) in <Route element={<StagingProtectedRoute />}> and nest your path(s) inside.
-// When ready for prod, remove the wrapper. Keep this import so dead-code scripts don't remove the component.
 import { useLanguage } from "./components/LanguageProvider";
 import {
   AboutPage,
@@ -130,9 +126,7 @@ function TerritoryRoutes({ basePath }: { basePath: string }) {
     <>
       <Route path={`${basePath}/regions`} element={<RegionalOverviewPage />} />
       <Route path={`${basePath}/nation`} element={<NationDetailPage />} />
-      <Route element={<StagingProtectedRoute />}>
-        <Route path={`${basePath}/valet-2026`} element={<Valet2026Page />} />
-      </Route>
+      <Route path={`${basePath}/valet-2026`} element={<Valet2026Page />} />
       <Route
         path={`${basePath}/municipalities`}
         element={<MunicipalitiesOverviewPage />}

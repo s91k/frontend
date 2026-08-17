@@ -98,6 +98,10 @@
     "ctaSection": {
       "description": "Start your journey into climate data. Search for companies, municipalities, regions, and countries. Explore rankings and discover who's leading the fight against climate change."
     },
+    "valet2026Banner": {
+      "prefix": "Ahead of the 2026 election:",
+      "link": "a story about Sweden's emissions"
+    },
     "companiesSection": {
       "title": "How's it going with company emissions?",
       "description": "Explore over 400 companies and access detailed data on reported emissions and whether they are aligned with the Paris Agreement.",
