@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { NationBathtub } from "@/components/nation/story/NationBathtub";
 import { NationConclusion } from "@/components/nation/story/NationConclusion";
 import { NationEmissionsJourney } from "@/components/nation/story/NationEmissionsJourney";
-import { NationIntroPunch } from "@/components/nation/story/NationIntroPunch";
+import { NationIntroHero } from "@/components/nation/story/NationIntroPunch";
 import { NationStackedChart } from "@/components/nation/story/NationStackedChart";
 import { StoryNavChrome } from "@/components/nation/story/StoryNavChrome";
 import { StoryScrollHint } from "@/components/nation/story/StoryScrollHint";
@@ -60,19 +60,7 @@ export function NationStoryPage({
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative w-full max-w-5xl mx-auto shrink-0 text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
-          <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>
-            {t("nation.story.intro.title")}
-          </h1>
-          <p
-            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
-          >
-            {t("nation.story.intro.paragraph1")}
-          </p>
-          <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-10">
-            <NationIntroPunch metrics={metrics} />
-          </div>
-        </div>
+        <NationIntroHero metrics={metrics} />
       </section>
 
       <NationEmissionsJourney metrics={metrics} />
