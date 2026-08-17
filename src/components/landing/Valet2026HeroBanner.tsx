@@ -5,6 +5,10 @@ import { LocalizedLink } from "@/components/LocalizedLink";
 /** Fixed bar height – keep landing hero top padding in sync. */
 const VALET_BANNER_HEIGHT_CLASS = "h-[3.25rem] md:h-14";
 
+/** Header (3rem) + banner – use for scroll-margin on landing scroll targets. */
+export const VALET_BANNER_SCROLL_MARGIN_CLASS =
+  "scroll-mt-[6.25rem] md:scroll-mt-[6.5rem]";
+
 /**
  * Full-width news strip fixed directly below the site header on the landing page.
  */
@@ -20,11 +24,11 @@ export function Valet2026HeroBanner() {
     >
       <div className="container mx-auto flex w-full items-center gap-2.5 px-4 md:justify-center md:gap-3">
         <div className="min-w-0 flex-1 md:flex md:flex-none md:items-center md:gap-2.5">
-          <p className="truncate text-sm font-medium text-black md:text-base md:truncate-none">
+          <p className="max-md:truncate text-sm font-medium text-black md:text-base">
             {t("landingPage.valet2026Banner.badge")}{" "}
             {t("landingPage.valet2026Banner.title")}
           </p>
-          <p className="truncate text-xs text-black/70 md:truncate-none md:text-sm">
+          <p className="max-md:truncate text-xs text-black/70 md:text-sm">
             <span className="md:hidden">
               {t("landingPage.valet2026Banner.subtitle")}
             </span>

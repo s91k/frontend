@@ -7,6 +7,7 @@ import { SCROLL_FADE_THRESHOLD } from "@/hooks/landing/useLandingPageData";
 import useThrottle from "@/hooks/useThrottle";
 import { SCROLL_THROTTLE_DELAY } from "@/lib/constants/landingPage";
 import { LandingPageCTA } from "@/components/landing/LandingPageCTA";
+import { VALET_BANNER_SCROLL_MARGIN_CLASS } from "@/components/landing/Valet2026HeroBanner";
 import { CompaniesSection } from "@/components/landing/CompaniesSection";
 import { MunicipalitiesSection } from "@/components/landing/MunicipalitiesSection";
 import { CountriesSection } from "@/components/landing/CountriesSection";
@@ -138,7 +139,7 @@ export function LandingPage() {
       <div
         ref={municipalitiesSectionRef}
         id="municipalities-section"
-        className="w-full"
+        className={`w-full ${VALET_BANNER_SCROLL_MARGIN_CLASS}`}
       >
         <MunicipalitiesSection />
       </div>
