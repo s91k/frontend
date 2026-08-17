@@ -167,22 +167,20 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const unitShort = t("nation.story.unit.mtonCo2e");
   const unitLong = t("nation.story.unit.millionTco2e");
 
-  const [outerScale, setOuterScale] = useState(() =>
-    reducedMotion ? 1 : innerScale,
-  );
+  const [outerScale, setOuterScale] = useState(() => (reducedMotion ? 1 : 0));
 
   useEffect(() => {
     if (reducedMotion) {
       setOuterScale(1);
       return;
     }
-    setOuterScale(innerScale);
-    const controls = animate(innerScale, 1, {
+    setOuterScale(0);
+    const controls = animate(0, 1, {
       ...OUTER_GROW_TRANSITION,
       onUpdate: (value) => setOuterScale(value),
     });
     return () => controls.stop();
-  }, [innerScale, reducedMotion]);
+  }, [reducedMotion]);
 
   return (
     <div className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex-row md:items-center md:gap-10 lg:gap-14">
