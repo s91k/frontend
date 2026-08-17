@@ -6,6 +6,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { ScrollToTop } from "./ScrollToTop";
 import { SuggestEdit } from "./SuggestEdit";
+import { Valet2026HeroBanner } from "@/components/landing/Valet2026HeroBanner";
 
 interface LayoutProps {
   children: ReactNode;
@@ -40,6 +41,7 @@ export function Layout({ children }: LayoutProps) {
     <div className="min-h-screen w-full overflow-x-hidden bg-black-3 flex flex-col">
       <Seo meta={seoMeta} />
       <Header />
+      {isLandingPage && <Valet2026HeroBanner />}
       {/* The story page is full-bleed like the landing page – its scenes
           manage their own padding and start right below the fixed header */}
       <main
