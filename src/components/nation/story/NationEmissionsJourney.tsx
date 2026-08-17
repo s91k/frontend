@@ -40,12 +40,10 @@ type JourneyStep = {
  */
 const E_COMMERCE_MTON = 0.326;
 
-/** Sub‑Mton deltas are explained in copy instead of a +0,326 chip. */
-const MIN_DELTA_CHIP_MTON = 1;
-
-function formatDeltaMton(delta: number, language: string): string | null {
-  if (delta < MIN_DELTA_CHIP_MTON) return null;
-  return formatMton(delta, language, 0);
+/** Sub‑Mton deltas use one decimal (e.g. 0,3) instead of three (0,326). */
+function formatDeltaMton(delta: number, language: string): string {
+  const fractionDigits = delta < 1 ? 1 : 0;
+  return formatMton(delta, language, fractionDigits);
 }
 
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
@@ -491,7 +489,7 @@ export function NationEmissionsJourney({
               {/* The step's own contribution sits just off the current circle's
                   upper-right edge, riding outward with the same spring as the
                   growing layer so it follows the circle smoothly. */}
-              {step > 0 && formatDeltaMton(current.delta, currentLanguage) && (
+              {step > 0 && (
                 <motion.span
                   className="absolute left-1/2 top-1/2 pointer-events-none"
                   style={{ opacity: exitFade }}
@@ -619,10 +617,8 @@ export function NationEmissionsJourney({
                       <span
                         className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
                       >
-                        {i === 0 || !deltaLabel ? "" : `+${deltaLabel} `}
-                        {i === 0 || !deltaLabel
-                          ? ""
-                          : t("nation.story.unit.mton")}
+                        {i === 0 ? "" : `+${deltaLabel} `}
+                        {i === 0 ? "" : t("nation.story.unit.mton")}
                       </span>
                     </motion.div>
                   );
