@@ -25,9 +25,3 @@ export const SWEDEN_OUTLINE_CENTER = (() => {
   }
   return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
 })();
-
-/** Uniform scale around the silhouette centre – native SVG transform attribute. */
-export function swedenOutlineScaleTransform(scale: number): string {
-  const { x, y } = SWEDEN_OUTLINE_CENTER;
-  return `translate(${x} ${y}) scale(${scale}) translate(${-x} ${-y})`;
-}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import {
@@ -12,10 +12,11 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import {
+  SWEDEN_OUTLINE_CENTER,
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
-  swedenOutlineScaleTransform,
 } from "@/components/nation/story/swedenOutlinePath";
+import { svgLocalUrl } from "@/components/nation/story/svgLocalUrl";
 
 type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
@@ -69,6 +70,7 @@ function useAnimatedValue(
 }
 
 type SwedenSilhouetteProps = {
+  outlineId: string;
   scale: number;
   fill: string;
   stroke: string;
@@ -76,22 +78,34 @@ type SwedenSilhouetteProps = {
   opacity?: number;
 };
 
+/**
+ * Scale around the silhouette centre using nested SVG groups so both maps
+ * share the exact same origin (a single transform string can mis-render).
+ */
 function SwedenSilhouette({
+  outlineId,
   scale,
   fill,
   stroke,
   strokeWidth,
   opacity = 1,
 }: SwedenSilhouetteProps) {
+  const { x, y } = SWEDEN_OUTLINE_CENTER;
+
   return (
-    <g transform={swedenOutlineScaleTransform(scale)} opacity={opacity}>
-      <path
-        d={SWEDEN_OUTLINE_PATH}
-        fill={fill}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        vectorEffect="non-scaling-stroke"
-      />
+    <g opacity={opacity}>
+      <g transform={`translate(${x} ${y})`}>
+        <g transform={`scale(${scale})`}>
+          <g transform={`translate(${-x} ${-y})`}>
+            <use
+              href={svgLocalUrl(outlineId)}
+              fill={fill}
+              stroke={stroke}
+              strokeWidth={strokeWidth}
+            />
+          </g>
+        </g>
+      </g>
     </g>
   );
 }
@@ -173,6 +187,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const reducedMotion = useReducedMotion();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInView = useInView(mapRef, { once: true, amount: 0.15 });
+  const outlineId = `sweden-outline-${useId().replace(/:/g, "")}`;
 
   const reportedValue = metrics.territorialLatestMton;
   const fullValue = Math.max(metrics.combinedLatestMton, reportedValue);
@@ -226,8 +241,13 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           role="img"
           aria-label={`${reported}–${full} ${unitLong}`}
         >
+          <defs>
+            <path id={outlineId} d={SWEDEN_OUTLINE_PATH} />
+          </defs>
+
           {/* Full picture – pink grows out from the orange core */}
           <SwedenSilhouette
+            outlineId={outlineId}
             scale={outerScale}
             fill={NATION_STORY_COLORS.consumption}
             stroke={NATION_STORY_COLORS.consumption}
@@ -236,6 +256,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
 
           {/* Territorial share – smaller orange map centred inside the pink */}
           <SwedenSilhouette
+            outlineId={outlineId}
             scale={innerScaleAnimated}
             fill={NATION_STORY_COLORS.territorial}
             stroke={NATION_STORY_COLORS.territorial}
