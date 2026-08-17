@@ -86,84 +86,6 @@ function StoryMobileProgress({
   );
 }
 
-function StorySectionDots({
-  section,
-  index,
-  activeIndex,
-}: {
-  section: ReturnType<typeof useStorySectionState>["sections"][number];
-  index: number;
-  activeIndex: number;
-}) {
-  const isActive = index === activeIndex;
-  const isPast = index < activeIndex;
-
-  if (isActive && section.steps > 1) {
-    return (
-      <span className="flex flex-col items-center gap-1">
-        {Array.from({ length: section.steps }, (_, stepIndex) => (
-          <span
-            key={stepIndex}
-            className="w-1.5 rounded-full transition-colors duration-300"
-            style={{
-              height: 10,
-              backgroundColor:
-                stepIndex <= section.step
-                  ? "var(--blue-2)"
-                  : "rgba(255,255,255,0.2)",
-            }}
-          />
-        ))}
-      </span>
-    );
-  }
-
-  return (
-    <span
-      className="rounded-full transition-all duration-300"
-      style={{
-        width: isActive ? 10 : 6,
-        height: isActive ? 10 : 6,
-        backgroundColor: isActive
-          ? "var(--blue-2)"
-          : isPast
-            ? "rgba(153,207,255,0.45)"
-            : "rgba(255,255,255,0.2)",
-      }}
-    />
-  );
-}
-
-function StoryStepDots({
-  endReached,
-  sectionState,
-}: {
-  endReached: boolean;
-  sectionState: ReturnType<typeof useStorySectionState>;
-}) {
-  const visible = !endReached && sectionState.sections.length > 0;
-
-  return (
-    <motion.div
-      aria-hidden
-      initial={false}
-      animate={{ opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.35 }}
-      className={`fixed top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 md:flex ${visible ? "" : "pointer-events-none"}`}
-      style={{ right: "var(--story-rail-inset)" }}
-    >
-      {sectionState.sections.map((section, index) => (
-        <StorySectionDots
-          key={index}
-          section={section}
-          index={index}
-          activeIndex={sectionState.active}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
 function StoryOnboardingHint({ endReached }: { endReached: boolean }) {
   const { t } = useTranslation();
   const [hint, setHint] = useState<"desktop" | "mobile" | null>(null);
@@ -295,7 +217,6 @@ export function StoryNavChrome({
         endReached={endReached}
         sectionState={sectionState}
       />
-      <StoryStepDots endReached={endReached} sectionState={sectionState} />
       <StoryPreviousSectionNav
         endReached={endReached}
         sectionState={sectionState}

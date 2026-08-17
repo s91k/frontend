@@ -71,13 +71,11 @@
   --story-scroll-hint: 2.75rem;
   --story-safe-top: env(safe-area-inset-top, 0px);
   --story-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --story-safe-right: env(safe-area-inset-right, 0px);
 }
 
 :root {
   /** Space for the mobile step counter below the site header */
   --story-chapter-band: 1.5rem;
-  --story-rail-inset: calc(1.125rem + var(--story-safe-right));
   --story-scroll-hint-bottom: calc(0.75rem + var(--story-safe-bottom));
   --story-bottom-reserve: calc(
     var(--story-scroll-hint-bottom) + var(--story-scroll-hint) + 0.5rem
@@ -97,7 +95,6 @@
 @media (min-width: 768px) {
   :root {
     --story-chapter-band: 0px;
-    --story-rail-inset: calc(1.125rem + var(--story-safe-right));
     --story-stage-pad-top: calc(var(--story-top-reserve) + 0.25rem);
   }
 }
