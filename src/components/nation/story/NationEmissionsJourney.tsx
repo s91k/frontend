@@ -40,10 +40,16 @@ type JourneyStep = {
  */
 const E_COMMERCE_MTON = 0.326;
 
-/** Sub‑Mton deltas use one decimal (e.g. 0,3) instead of three (0,326). */
+/** Sub‑Mton deltas show one decimal in the onion chip and tally (e.g. 0,3). */
 function formatDeltaMton(delta: number, language: string): string {
-  const fractionDigits = delta < 1 ? 1 : 0;
-  return formatMton(delta, language, fractionDigits);
+  if (delta < 1) {
+    const rounded = Math.round(delta * 10) / 10;
+    return new Intl.NumberFormat(language === "sv" ? "sv-SE" : "en-GB", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(rounded);
+  }
+  return formatMton(delta, language, 0);
 }
 
 /** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
