@@ -1,4 +1,4 @@
-import { useId, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import {
@@ -11,7 +11,6 @@ import {
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
-import { svgLocalUrl } from "@/components/nation/story/svgLocalUrl";
 import {
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
@@ -21,15 +20,14 @@ type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
-/** Silhouette vertical extents inside the 0 0 100 220 viewBox. */
-const OUTLINE_TOP = 6;
-const OUTLINE_BOTTOM = 214;
-const OUTLINE_HEIGHT = OUTLINE_BOTTOM - OUTLINE_TOP;
+/** Silhouette center for uniform scale transforms inside the viewBox. */
+const MAP_CENTER_X = 50;
+const MAP_CENTER_Y = 110;
 
-const FILL_SPRING = {
+const OUTER_GROW_SPRING = {
   type: "spring" as const,
-  stiffness: 50,
-  damping: 18,
+  stiffness: 42,
+  damping: 20,
   mass: 1,
 };
 
@@ -77,7 +75,7 @@ function StatCallout({
         </p>
       </div>
 
-      {/* Desktop: centered under the page title; mobile stays compact */}
+      {/* Desktop: label above value; orange callout stacks above pink */}
       <div className="hidden md:block text-center">
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
@@ -100,18 +98,14 @@ function StatCallout({
 }
 
 /**
- * Hero visual: the Sweden silhouette in the full-emissions colour, with the
- * officially reported share shown as a liquid fill rising from the bottom —
- * foreshadowing the bathtub metaphor later in the story.
- *
- * The fill is height-proportional (standard infographic convention); the
- * exact figures live in the callouts beside the silhouette.
+ * Hero visual: a smaller orange Sweden (what we usually discuss) nested inside
+ * a larger pink silhouette (the full picture). The pink ring between them is
+ * the emissions gap the story unpacks.
  */
 export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const reducedMotion = useReducedMotion();
-  const clipId = `sweden-fill-clip-${useId().replace(/:/g, "")}`;
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInView = useInView(mapRef, { once: true, amount: 0.15 });
 
@@ -120,12 +114,13 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const reported = formatMton(reportedValue, currentLanguage, 0);
   const full = formatMton(fullValue, currentLanguage, 0);
   const fillRatio = reportedValue / fullValue;
-  const fillTop = OUTLINE_BOTTOM - fillRatio * OUTLINE_HEIGHT;
-  const fillHeight = OUTLINE_BOTTOM - fillTop + 6;
+  /** Area-proportional inner map – territorial share inside the full silhouette. */
+  const innerScale = Math.sqrt(fillRatio);
   const unitShort = t("nation.story.unit.mtonCo2e");
   const unitLong = t("nation.story.unit.millionTco2e");
 
-  const fillShown = reducedMotion || mapInView;
+  const mapShown = reducedMotion || mapInView;
+  const outerScale = mapShown ? 1 : innerScale;
 
   return (
     <motion.div
@@ -145,90 +140,73 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           role="img"
           aria-label={`${reported}–${full} ${unitLong}`}
         >
-          <defs>
-            <clipPath id={clipId}>
-              <path d={SWEDEN_OUTLINE_PATH} />
-            </clipPath>
-          </defs>
-
-          <motion.path
-            d={SWEDEN_OUTLINE_PATH}
-            fill={NATION_STORY_COLORS.territorial}
-            stroke={NATION_STORY_COLORS.consumption}
-            strokeWidth={2}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            style={{ transformOrigin: "50% 50%" }}
-          />
-
-          {/* Reported share rises like water inside the silhouette */}
-          <g clipPath={svgLocalUrl(clipId)}>
-            <motion.rect
-              x={0}
-              width={100}
-              fill="var(--orange-1)"
-              initial={
-                reducedMotion
-                  ? { y: fillTop, height: fillHeight }
-                  : { y: OUTLINE_BOTTOM, height: 0 }
-              }
-              animate={
-                fillShown
-                  ? { y: fillTop, height: fillHeight }
-                  : { y: OUTLINE_BOTTOM, height: 0 }
-              }
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
+          {/* Full picture – pink grows out from the orange core */}
+          <motion.g
+            style={{
+              transformOrigin: `${MAP_CENTER_X}px ${MAP_CENTER_Y}px`,
+              transformBox: "fill-box",
+            }}
+            initial={{ scale: innerScale }}
+            animate={{ scale: outerScale }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { ...OUTER_GROW_SPRING, delay: 0.2 }
+            }
+          >
+            <path
+              d={SWEDEN_OUTLINE_PATH}
+              fill={NATION_STORY_COLORS.consumption}
+              stroke={NATION_STORY_COLORS.consumption}
+              strokeWidth={2}
             />
-            <motion.line
-              x1={0}
-              x2={100}
-              stroke="var(--orange-1)"
-              strokeWidth="1"
-              strokeOpacity="0.8"
-              initial={
-                reducedMotion
-                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-              }
-              animate={
-                fillShown
-                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-              }
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
+          </motion.g>
+
+          {/* Territorial share – smaller orange map at the centre */}
+          <motion.g
+            style={{
+              transformOrigin: `${MAP_CENTER_X}px ${MAP_CENTER_Y}px`,
+              transformBox: "fill-box",
+            }}
+            initial={{ scale: 0.88 * innerScale, opacity: 0 }}
+            animate={{
+              scale: innerScale,
+              opacity: mapShown ? 1 : 0,
+            }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { type: "spring", stiffness: 55, damping: 18, delay: 0.05 }
+            }
+          >
+            <path
+              d={SWEDEN_OUTLINE_PATH}
+              fill={NATION_STORY_COLORS.territorial}
+              stroke={NATION_STORY_COLORS.territorial}
+              strokeWidth={1.5}
             />
-          </g>
+          </motion.g>
         </svg>
       </div>
 
-      {/* Desktop: map + callouts centered as one unit; mobile: two-column grid */}
       <div className="grid grid-cols-2 gap-x-3 md:flex md:w-auto md:flex-col md:items-center md:gap-10 w-full max-w-[20rem] md:max-w-none mx-auto">
-        <StatCallout
-          label={t("nation.story.intro.fullLabel")}
-          value={full}
-          unitShort={unitShort}
-          unitLong={unitLong}
-          colorClass="text-pink-3"
-          delay={0.15}
-          className="order-2 md:order-1"
-        />
         <StatCallout
           label={t("nation.story.intro.usualLabel")}
           value={reported}
           unitShort={unitShort}
           unitLong={unitLong}
           colorClass="text-orange-3"
+          delay={0.15}
+          className="order-1"
+        />
+        <StatCallout
+          label={t("nation.story.intro.fullLabel")}
+          value={full}
+          unitShort={unitShort}
+          unitLong={unitLong}
+          colorClass="text-pink-3"
           delay={0.3}
-          className="order-1 md:order-2"
+          className="order-2"
         />
       </div>
     </motion.div>
