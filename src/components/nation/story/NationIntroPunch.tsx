@@ -80,7 +80,10 @@ type AnimatedPinkSilhouetteProps = {
 };
 
 /** Pink map scale – SVG attribute updates without React re-renders per frame. */
-function AnimatedPinkSilhouette({ progress, fill }: AnimatedPinkSilhouetteProps) {
+function AnimatedPinkSilhouette({
+  progress,
+  fill,
+}: AnimatedPinkSilhouetteProps) {
   const ref = useRef<SVGPathElement>(null);
 
   const applyTransform = (scale: number) => {
@@ -248,9 +251,7 @@ function PinkStatCallout({
 }: PinkStatCalloutProps) {
   const { currentLanguage } = useLanguage();
   const reservedValue = formatMton(targetMton, currentLanguage, 0);
-  const [value, setValue] = useState(() =>
-    formatMton(0, currentLanguage, 0),
-  );
+  const [value, setValue] = useState(() => formatMton(0, currentLanguage, 0));
   const lastRoundedRef = useRef(-1);
 
   useMotionValueEvent(progress, "change", (p) => {
