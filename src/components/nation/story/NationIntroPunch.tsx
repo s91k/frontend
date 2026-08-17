@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -12,9 +12,9 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import {
-  SWEDEN_OUTLINE_CENTER,
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
+  swedenOutlineScaleTransform,
 } from "@/components/nation/story/swedenOutlinePath";
 
 type NationIntroPunchProps = {
@@ -28,48 +28,70 @@ const OUTER_GROW_SPRING = {
   mass: 1,
 };
 
-type ScaledSilhouetteProps = {
+const OUTER_GROW_TRANSITION = { ...OUTER_GROW_SPRING, delay: 0.2 };
+
+const INNER_GROW_TRANSITION = {
+  type: "spring" as const,
+  stiffness: 55,
+  damping: 18,
+  delay: 0.05,
+};
+
+const INNER_FADE_TRANSITION = { duration: 0.35, delay: 0.05 };
+
+/** Drive a numeric value with framer animate; apply via SVG transform attribute. */
+function useAnimatedValue(
+  from: number,
+  to: number,
+  active: boolean,
+  transition: object,
+  reducedMotion: boolean | null,
+) {
+  const [value, setValue] = useState(from);
+
+  useEffect(() => {
+    if (!active) {
+      setValue(from);
+      return;
+    }
+    if (reducedMotion) {
+      setValue(to);
+      return;
+    }
+    const controls = animate(from, to, {
+      ...transition,
+      onUpdate: (v) => setValue(v),
+    });
+    return () => controls.stop();
+  }, [active, from, to, reducedMotion, transition]);
+
+  return value;
+}
+
+type SwedenSilhouetteProps = {
   scale: number;
-  initialScale?: number;
-  opacity?: number;
-  initialOpacity?: number;
   fill: string;
   stroke: string;
   strokeWidth: number;
-  transition?: object;
+  opacity?: number;
 };
 
-/** Scale the silhouette uniformly around its bounding-box centre. */
-function ScaledSilhouette({
+function SwedenSilhouette({
   scale,
-  initialScale = scale,
-  opacity = 1,
-  initialOpacity = opacity,
   fill,
   stroke,
   strokeWidth,
-  transition,
-}: ScaledSilhouetteProps) {
-  const { x, y } = SWEDEN_OUTLINE_CENTER;
-
+  opacity = 1,
+}: SwedenSilhouetteProps) {
   return (
-    <g transform={`translate(${x} ${y})`}>
-      <motion.g
-        initial={{ scale: initialScale, opacity: initialOpacity }}
-        animate={{ scale, opacity }}
-        transition={transition}
-        style={{ transformOrigin: "0px 0px" }}
-      >
-        <g transform={`translate(${-x} ${-y})`}>
-          <path
-            d={SWEDEN_OUTLINE_PATH}
-            fill={fill}
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            vectorEffect="non-scaling-stroke"
-          />
-        </g>
-      </motion.g>
+    <g transform={swedenOutlineScaleTransform(scale)} opacity={opacity}>
+      <path
+        d={SWEDEN_OUTLINE_PATH}
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        vectorEffect="non-scaling-stroke"
+      />
     </g>
   );
 }
@@ -163,7 +185,28 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   const unitLong = t("nation.story.unit.millionTco2e");
 
   const mapShown = reducedMotion || mapInView;
-  const outerScale = mapShown ? 1 : innerScale;
+
+  const outerScale = useAnimatedValue(
+    innerScale,
+    1,
+    mapShown,
+    OUTER_GROW_TRANSITION,
+    reducedMotion,
+  );
+  const innerScaleAnimated = useAnimatedValue(
+    innerScale * 0.88,
+    innerScale,
+    mapShown,
+    INNER_GROW_TRANSITION,
+    reducedMotion,
+  );
+  const innerOpacity = useAnimatedValue(
+    0,
+    1,
+    mapShown,
+    INNER_FADE_TRANSITION,
+    reducedMotion,
+  );
 
   return (
     <motion.div
@@ -184,33 +227,20 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
           aria-label={`${reported}–${full} ${unitLong}`}
         >
           {/* Full picture – pink grows out from the orange core */}
-          <ScaledSilhouette
+          <SwedenSilhouette
             scale={outerScale}
-            initialScale={innerScale}
             fill={NATION_STORY_COLORS.consumption}
             stroke={NATION_STORY_COLORS.consumption}
             strokeWidth={2}
-            transition={
-              reducedMotion
-                ? { duration: 0 }
-                : { ...OUTER_GROW_SPRING, delay: 0.2 }
-            }
           />
 
           {/* Territorial share – smaller orange map centred inside the pink */}
-          <ScaledSilhouette
-            scale={innerScale}
-            initialScale={0.88 * innerScale}
-            opacity={mapShown ? 1 : 0}
-            initialOpacity={0}
+          <SwedenSilhouette
+            scale={innerScaleAnimated}
             fill={NATION_STORY_COLORS.territorial}
             stroke={NATION_STORY_COLORS.territorial}
             strokeWidth={1.5}
-            transition={
-              reducedMotion
-                ? { duration: 0 }
-                : { type: "spring", stiffness: 55, damping: 18, delay: 0.05 }
-            }
+            opacity={innerOpacity}
           />
         </svg>
       </div>
