@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, type RefObject } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import {
   animate,
@@ -185,7 +185,7 @@ function StableStatValue({
         className="col-start-1 row-start-1"
         {...(valueRef ? { "aria-live": "polite" as const } : {})}
       >
-        {value}
+        {valueRef ? null : value}
       </span>
     </span>
   );
@@ -301,6 +301,17 @@ const PinkStatCallout = memo(function PinkStatCallout({
     lastRoundedRef.current = Math.round(targetMton);
     writeValue(targetMton);
   }, [reducedMotion, targetMton, currentLanguage]);
+
+  useLayoutEffect(() => {
+    const clamped = Math.min(1, Math.max(progress.get(), 0));
+    const rounded = Math.round(clamped * targetMton);
+    if (rounded === lastRoundedRef.current) {
+      writeValue(rounded);
+      return;
+    }
+    lastRoundedRef.current = rounded;
+    writeValue(rounded);
+  });
 
   return (
     <div className={className}>

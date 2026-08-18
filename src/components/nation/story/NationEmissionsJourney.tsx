@@ -5,9 +5,7 @@ import {
   animate,
   motion,
   useReducedMotion,
-  type AnimationPlaybackControls,
 } from "framer-motion";
-import { BATHTUB_ENTER_VH } from "@/components/nation/story/NationBathtub";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -20,10 +18,7 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
-import {
-  isStoryGliding,
-  useStorySectionJumping,
-} from "@/components/nation/story/useStoryAutoSnap";
+import { useStorySectionJumping } from "@/components/nation/story/useStoryAutoSnap";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 type JourneyStep = {
@@ -197,89 +192,6 @@ export function NationEmissionsJourney({
     usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
       exitVh: JOURNEY_EXIT_VH,
     });
-
-  // Auto-scroll ride: scrolling into the exit zone takes over and carries the
-  // page through the droplet morph and the bathtub's enter fade in one
-  // continuous motion, so a slow swipe can't strand the reader in the gap
-  // between the falling drop and the tub. Scrolling up (or a new touch)
-  // cancels the ride; it re-arms once the reader is back above the zone.
-  const prevExitRef = useRef(0);
-  const rideDoneRef = useRef(false);
-  const rideControlsRef = useRef<AnimationPlaybackControls | null>(null);
-
-  const cancelRide = () => {
-    if (!rideControlsRef.current) return;
-    rideControlsRef.current.stop();
-    rideControlsRef.current = null;
-  };
-
-  useEffect(() => {
-    const onGlideStart = () => cancelRide();
-    window.addEventListener("story-glide-start", onGlideStart);
-    return () => window.removeEventListener("story-glide-start", onGlideStart);
-  }, []);
-
-  useEffect(() => {
-    const prevExit = prevExitRef.current;
-    prevExitRef.current = exitProgress;
-
-    if (exitProgress === 0) {
-      // Back above the zone: re-arm and make sure no stale ride keeps
-      // driving the scroll (e.g. after a scrollbar drag fought it upward).
-      rideDoneRef.current = false;
-      rideControlsRef.current?.stop();
-      rideControlsRef.current = null;
-      return;
-    }
-    if (reducedMotion || rideDoneRef.current || isStoryGliding()) return;
-    // Only trigger on a downward crossing into the zone, not when arriving
-    // from the bathtub side or after a programmatic jump deep into the zone.
-    if (!(prevExit <= 0.02 && exitProgress > 0.02 && exitProgress < 0.5))
-      return;
-
-    const tubSection = ref.current?.nextElementSibling;
-    if (!(tubSection instanceof HTMLElement)) return;
-    rideDoneRef.current = true;
-    // Single flight: never let two rides drive the scroll at once.
-    rideControlsRef.current?.stop();
-
-    // Land where the tub has fully entered: tub top + its enter zone.
-    const target =
-      window.scrollY +
-      tubSection.getBoundingClientRect().top +
-      (BATHTUB_ENTER_VH / 100) * window.innerHeight;
-
-    const controls = animate(window.scrollY, target, {
-      duration: 2,
-      ease: [0.45, 0, 0.25, 1],
-      onUpdate: (value) => window.scrollTo(0, value),
-    });
-    rideControlsRef.current = controls;
-
-    const cancelIfUpward = (event: WheelEvent) => {
-      if (event.deltaY < 0) controls.stop();
-    };
-    // Any new pointer contact (touch, click, scrollbar grab) hands control back.
-    const cancelOnPointer = () => controls.stop();
-    const cancelIfUpwardKey = (event: KeyboardEvent) => {
-      if (["ArrowUp", "PageUp", "Home"].includes(event.key)) controls.stop();
-    };
-    window.addEventListener("wheel", cancelIfUpward, { passive: true });
-    window.addEventListener("touchstart", cancelOnPointer, { passive: true });
-    window.addEventListener("pointerdown", cancelOnPointer, { passive: true });
-    window.addEventListener("keydown", cancelIfUpwardKey);
-    const cleanup = () => {
-      window.removeEventListener("wheel", cancelIfUpward);
-      window.removeEventListener("touchstart", cancelOnPointer);
-      window.removeEventListener("pointerdown", cancelOnPointer);
-      window.removeEventListener("keydown", cancelIfUpwardKey);
-      if (rideControlsRef.current === controls) rideControlsRef.current = null;
-    };
-    controls.then(cleanup, cleanup);
-  }, [exitProgress, reducedMotion, ref]);
-
-  // Stop a running ride if the story unmounts mid-flight.
-  useEffect(() => () => rideControlsRef.current?.stop(), []);
 
   const current = steps[step];
   // The pinned stage is in the DOM before the reader reaches it, so gate the
@@ -657,8 +569,8 @@ export function NationEmissionsJourney({
                       <span
                         className={`${NATION_STORY_TEXT.secondary} tabular-nums shrink-0`}
                       >
-                        {i === 0 ? `${deltaLabel} ` : `+${deltaLabel} `}
-                        {t("nation.story.unit.mton")}
+                        {i === 0 ? "" : "+"}
+                        {deltaLabel} {t("nation.story.unit.mton")}
                       </span>
                     </motion.div>
                   );
