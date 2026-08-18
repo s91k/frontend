@@ -1,4 +1,10 @@
-import { memo, useEffect, useLayoutEffect, useRef, type RefObject } from "react";
+import {
+  memo,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  type RefObject,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   animate,
