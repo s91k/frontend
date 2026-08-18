@@ -58,14 +58,14 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
               }
             : { duration: 0.35 }
         }
-        className="flex min-h-[3rem] min-w-[min(100%,12rem)] flex-col items-center justify-center gap-0 rounded-full px-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 story-compact:min-h-0 story-compact:min-w-0 story-compact:px-2 story-compact:py-0.5 lg:min-h-[3rem] lg:min-w-[min(100%,12rem)] lg:px-6"
+        className="flex min-h-[3rem] min-w-[min(100%,12rem)] flex-col items-center justify-center gap-0 rounded-full px-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 story-compact:px-4 story-compact:py-1"
       >
         <ChevronDown
-          className="h-6 w-6 story-compact:h-5 story-compact:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7"
+          className="h-6 w-6 story-compact:h-5 story-compact:w-5 lg:h-7 lg:w-7"
           strokeWidth={2}
           aria-hidden
         />
-        <span className="text-xs md:text-sm font-medium tracking-wide story-compact:hidden lg:inline">
+        <span className="text-xs md:text-sm font-medium tracking-wide">
           <span className="md:hidden">
             {t("nation.story.scrollHint.swipe")}
           </span>
