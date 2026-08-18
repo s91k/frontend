@@ -343,7 +343,10 @@ export function StoryPreviousSectionButton({
       onClick={() => advanceStoryBeat(-1)}
       className={`flex items-center gap-1.5 ${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} transition-colors hover:text-white story-compact:gap-1 ${className}`}
     >
-      <ChevronUp className="h-3.5 w-3.5 story-compact:h-3 story-compact:w-3 lg:h-4 lg:w-4" aria-hidden />
+      <ChevronUp
+        className="h-3.5 w-3.5 story-compact:h-3 story-compact:w-3 lg:h-4 lg:w-4"
+        aria-hidden
+      />
       {t("nation.story.nav.previousSection")}
     </button>
   );
