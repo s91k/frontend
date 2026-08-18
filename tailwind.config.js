@@ -21,6 +21,10 @@ export default {
         "story-short": {
           raw: "(max-width: 767px) and (max-height: 700px)",
         },
+        /** Typical laptop / short desktop – limited vertical space at md+ width */
+        "story-compact": {
+          raw: "(min-width: 768px) and (max-height: 820px)",
+        },
       },
       fontFamily: {
         sans: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],

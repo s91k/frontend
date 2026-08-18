@@ -41,7 +41,7 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-[var(--story-scroll-hint-bottom)] z-50 flex justify-center px-6 py-2 md:bottom-6 md:px-4 ${visible ? "" : "pointer-events-none"}`}
+      className={`fixed inset-x-0 bottom-[var(--story-scroll-hint-bottom)] z-50 flex justify-center px-6 py-2 story-compact:px-3 story-compact:py-1 md:bottom-[var(--story-scroll-hint-bottom)] lg:bottom-6 lg:px-4 ${visible ? "" : "pointer-events-none"}`}
     >
       <motion.button
         type="button"
@@ -58,14 +58,14 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
               }
             : { duration: 0.35 }
         }
-        className="flex min-h-[3rem] min-w-[min(100%,12rem)] flex-col items-center justify-center gap-0 rounded-full px-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2"
+        className="flex min-h-[3rem] min-w-[min(100%,12rem)] flex-col items-center justify-center gap-0 rounded-full px-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors hover:text-blue-2 story-compact:min-h-0 story-compact:min-w-0 story-compact:px-2 story-compact:py-0.5 lg:min-h-[3rem] lg:min-w-[min(100%,12rem)] lg:px-6"
       >
         <ChevronDown
-          className="h-6 w-6 md:h-7 md:w-7"
+          className="h-6 w-6 story-compact:h-5 story-compact:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7"
           strokeWidth={2}
           aria-hidden
         />
-        <span className="text-xs md:text-sm font-medium tracking-wide">
+        <span className="text-xs md:text-sm font-medium tracking-wide story-compact:hidden lg:inline">
           <span className="md:hidden">
             {t("nation.story.scrollHint.swipe")}
           </span>

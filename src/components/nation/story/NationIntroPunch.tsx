@@ -130,7 +130,7 @@ const IntroSwedenMaps = memo(function IntroSwedenMaps({
   unitLong,
 }: IntroSwedenMapsProps) {
   return (
-    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(200px,34svh,320px)] story-compact:h-[clamp(190px,32svh,300px)] lg:h-[clamp(240px,40svh,400px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
       <div className="absolute inset-[7%] md:inset-[8%]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
@@ -452,7 +452,7 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
 
 function IntroPunchVisual({ content }: { content: IntroPunchContent }) {
   return (
-    <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex md:w-fit md:max-w-full md:items-center md:justify-center md:gap-10 lg:gap-14">
+    <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex md:w-fit md:max-w-full md:items-center md:justify-center md:gap-6 story-compact:gap-6 lg:gap-10 xl:gap-14">
       <IntroSwedenMaps
         pinkProgress={content.pinkProgress}
         innerScale={content.innerScale}
@@ -474,14 +474,14 @@ export function NationIntroHero({ metrics }: NationIntroPunchProps) {
 
   return (
     <div className="relative w-full max-w-5xl mx-auto shrink-0 md:max-w-6xl">
-      <div className="text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
+      <div className="text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-3 story-compact:space-y-2 lg:space-y-4">
         <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>{title}</h1>
         <p
           className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
         >
           {paragraph}
         </p>
-        <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-6 lg:pt-10">
+        <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-4 story-compact:pt-3 lg:pt-6 xl:pt-10">
           <IntroPunchVisual content={content} />
         </div>
       </div>

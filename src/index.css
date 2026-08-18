@@ -99,6 +99,23 @@
   }
 }
 
+/* Short laptop / compact desktop – reclaim vertical room for pinned stages */
+@media (min-width: 768px) and (max-height: 820px) {
+  :root {
+    --story-scroll-hint: 2.25rem;
+    --story-scroll-hint-bottom: calc(0.5rem + var(--story-safe-bottom));
+    --story-bottom-reserve: calc(
+      var(--story-scroll-hint-bottom) + var(--story-scroll-hint) + 0.375rem
+    );
+    --story-stage-pad-top: calc(var(--story-top-reserve) + 0.125rem);
+    --story-stage-pad-bottom: calc(var(--story-bottom-reserve) - 0.125rem);
+    --story-hero-pad-top: calc(
+      var(--story-top-reserve) + clamp(0.375rem, 2svh, 1rem)
+    );
+    --story-hero-pad-bottom: calc(var(--story-bottom-reserve) - 0.125rem);
+  }
+}
+
 @media (max-height: 32rem) and (orientation: landscape) {
   :root {
     --story-hero-pad-top: calc(
