@@ -7,7 +7,10 @@ import { SCROLL_FADE_THRESHOLD } from "@/hooks/landing/useLandingPageData";
 import useThrottle from "@/hooks/useThrottle";
 import { SCROLL_THROTTLE_DELAY } from "@/lib/constants/landingPage";
 import { LandingPageCTA } from "@/components/landing/LandingPageCTA";
-import { VALET_BANNER_SCROLL_MARGIN_CLASS } from "@/components/landing/Valet2026HeroBanner";
+import {
+  VALET_BANNER_LANDING_HERO_PAD_CLASS,
+  VALET_BANNER_SCROLL_MARGIN_CLASS,
+} from "@/components/landing/Valet2026HeroBanner";
 import { CompaniesSection } from "@/components/landing/CompaniesSection";
 import { MunicipalitiesSection } from "@/components/landing/MunicipalitiesSection";
 import { CountriesSection } from "@/components/landing/CountriesSection";
@@ -76,7 +79,9 @@ export function LandingPage() {
         structuredData={structuredData}
       />
       <div className="flex flex-col items-center h-screen">
-        <div className="flex-1 flex flex-col items-center text-center px-4 pt-[calc(8rem_+_3.25rem)] story-short:pt-[calc(7rem_+_3.25rem)] md:pt-[calc(12rem_+_3.5rem)] md:pb-2">
+        <div
+          className={`flex-1 flex flex-col items-center text-center px-4 ${VALET_BANNER_LANDING_HERO_PAD_CLASS} md:pb-2`}
+        >
           <div className="max-w-lg md:max-w-4xl mx-auto space-y-2 story-short:space-y-1">
             <h1 className="text-4xl story-short:text-[1.75rem] story-short:leading-tight md:text-7xl font-light tracking-tight">
               {t("landingPage.title")}

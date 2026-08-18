@@ -1641,9 +1641,10 @@
       "chapters": {
         "intro": "Intro",
         "journey": "Löken",
-        "bathtub": "Badkaret",
         "interlude": "Perspektiv",
         "stacked": "Historik",
+        "bathtubBridge": "Ackumulation",
+        "bathtub": "Badkaret",
         "conclusion": "Slutsats"
       },
       "nav": {
@@ -1651,6 +1652,7 @@
         "keyboardHint": "↑↓ eller PgUp/PgDn för att byta scen",
         "freeScrollCue": "Scrolla fritt här nere",
         "previousSection": "Föregående del",
+        "chaptersLabel": "Delar av berättelsen",
         "onboardingDesktop": "Scrolla för att gå vidare i berättelsen, ett steg i taget.",
         "onboardingMobile": "Svep för att gå vidare i berättelsen, ett steg i taget.",
         "dismiss": "Okej"
@@ -1662,7 +1664,7 @@
         "totalLabel": "Totalt",
         "step1": {
           "label": "Territoriella utsläpp",
-          "text": "Vi börjar med siffran vi oftast hör om: de territoriella utsläppen, fossila utsläpp inom Sveriges gränser. Här ingår bland annat utsläpp från industrin, transporter, jordbruk, uppvärmning och avfall. Detta mått används för att följa upp våra klimatmål."
+          "text": "Vi börjar med siffran vi oftast hör om: de territoriella utsläppen – det mått som används för att följa upp våra klimatmål. Det är fossila utsläpp inom Sveriges gränser. Här ingår bland annat utsläpp från industrin, transporter, jordbruk, uppvärmning och avfall."
         },
         "step2": {
           "label": "Produktionsbaserade utsläpp",
@@ -1670,11 +1672,11 @@
         },
         "step3": {
           "label": "Konsumtionsbaserade utsläpp utomlands",
-          "text": "Svenskar orsakar också utsläpp utomlands genom vår konsumtion. Här inkluderas utsläpp från tillverkning och transport av importerade varor till svensk hushållskonsumtion, offentlig verksamhet och investeringar. Utsläpp från varor som produceras i Sverige och exporteras till andra länder räknas bort."
+          "text": "Svenskar orsakar också utsläpp utomlands genom vår konsumtion. Här inkluderas utsläpp från tillverkning och transport av importerade varor för svensk hushållskonsumtion, offentlig verksamhet och investeringar. Utsläpp från varor som produceras i Sverige och exporteras till andra länder räknas bort."
         },
         "step4": {
           "label": "Privat e-handel",
-          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare cirka 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
+          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis när vi klickar hem prylar från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare cirka 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
         },
         "step5": {
           "label": "Biogena utsläpp",
@@ -1683,35 +1685,40 @@
       },
       "bathtub": {
         "eyebrow": "Badkarseffekten",
-        "text": "Atmosfären reagerar på mängden växthusgaser – som stannar kvar och ansamlas över tid. Som ett badkar, där kranen står på. Tills kranen dras åt, kommer vattennivån att fortsätta stiga. Vi har redan passerat 1,5 graders uppvärmning och Sverige närmar oss gränsen då vi släppt ut mer än vårt åtagande enligt Parisavtalet. Därför är det avgörande hur snabbt vi minskar utsläppen.",
-        "question": "Hur har det gått sedan 1990?",
-        "waterCaptionPrefix": "Sverige har sedan 1990 släppt ut",
-        "chunkCaptionSingleYear": "+{{value}} Mton CO₂e tillkom {{year}}",
-        "chunkCaptionYearRange": "+{{value}} Mton CO₂e tillkom {{fromYear}}–{{toYear}}"
+        "text": "Atmosfären reagerar på mängden växthusgaser som stannar kvar och ansamlas över tid. Som ett badkar, där kranen står på. Tills kranen dras åt, kommer vattennivån att fortsätta stiga. Vi har redan passerat 1,5 graders uppvärmning globalt och Sverige närmar sig gränsen då vi släppt ut mer än vårt åtagande enligt Parisavtalet. Därför är det avgörande hur snabbt vi minskar utsläppen.",
+        "scrollCta": "Scrolla för att se hur de svenska totala utsläppen har ackumulerats över tid sedan 1990.",
+        "swipeCta": "Svep för att se hur de svenska totala utsläppen har ackumulerats över tid sedan 1990.",
+        "baselineCaption": "{{year}} var utsläppen {{value}} Mton",
+        "rangeCaption": "{{fromYear}}–{{toYear}} tillkom {{value}} Mton CO₂e"
       },
       "graph": {
         "territorialFossil": "Territoriella",
         "productionBased": "Produktionsbaserade utsläpp",
-        "productionBeyondTerritorial": "Produktionsbaserade",
+        "productionBeyondTerritorial": "Rederier och flygbolag",
         "biogenic": "Biogena",
         "consumptionAbroad": "Konsumtionsbaserade utomlands"
       },
       "interlude": {
-        "title": "Vi diskuterar bara en del av Sveriges utsläpp",
-        "body": "Den vanliga siffran vi hör om ger en överdrivet positiv bild. Om vi räknar in även andra utsläpp som Sverige kan påverka får vi en mer heltäckande bild – som berättar en annan historia.",
+        "title": "Den vanliga bilden av Sveriges utsläpp är ofullständig",
+        "body": "Genom att inkludera alla utsläpp som Sverige kan påverka får vi en mer heltäckande bild.",
+        "body2": "Men hur har det gått med utsläppen över tid?",
         "stat": "Den fulla bilden är {{ratio}}× större: {{combined}} mot {{territorial}} territoriellt"
       },
       "stacked": {
         "layerCounter": "Steg {{current}} av {{total}}",
         "title": "Sveriges utsläpp sedan 1990",
-        "layerCaption1": "Först har vi de territoriella utsläppen – fossila utsläpp inom Sveriges gränser.",
-        "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utomlands, tillsammans med de territoriella får vi då de produktionsbaserade utsläppen.",
+        "layerCaption1": "Först har vi de territoriella utsläppen – alltså fossila utsläpp inom Sveriges gränser",
+        "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utomlands, tillsammans med de territoriella får vi då de produktionsbaserade utsläppen",
         "layerCaption3": "Sedan lägger vi till de konsumtionsbaserade utsläppen utomlands, inklusive privat e-handelsimport.",
         "layerCaption4": "Och slutligen de biogena utsläppen för att ge hela bilden.",
         "scrubHint": "Svep över grafen för att se värden per år"
       },
+      "bathtubBridge": {
+        "title": "Vissa utsläpp har minskat, andra har ökat. Sammantaget går utsläppsminskningarna för långsamt ner mot noll.",
+        "body": "Men årlig statistik döljer också en viktig detalj: utsläppen ackumuleras över tid i atmosfären."
+      },
       "conclusion": {
-        "title": "Sveriges utsläpp är större än vad vi tror och har inte minskat så mycket som vi tror",
+        "title": "Sveriges utsläpp är större än vad vi tror, de minskar för långsamt och våra ackumulerade utsläpp är stora",
         "usualLabel": "Det vi vanligtvis diskuterar",
         "fullLabel": "Sveriges egentliga utsläpp",
         "since1990": "sedan 1990",

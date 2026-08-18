@@ -64,7 +64,6 @@ export function NationStoryPage({
       </section>
 
       <NationEmissionsJourney metrics={metrics} />
-      <NationBathtub data={metrics.bathtubData} />
 
       <FullScreenSection chapter="interlude">
         <div className="max-w-2xl mx-auto text-center space-y-5 story-short:space-y-3 md:space-y-4 lg:space-y-5">
@@ -77,6 +76,32 @@ export function NationStoryPage({
           >
             {t("nation.story.interlude.title")}
           </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} space-y-4 md:space-y-5`}
+          >
+            <p>{t("nation.story.interlude.body")}</p>
+            <p>{t("nation.story.interlude.body2")}</p>
+          </motion.div>
+        </div>
+      </FullScreenSection>
+
+      <NationStackedChart data={metrics.stackData} />
+
+      <FullScreenSection chapter="bathtubBridge">
+        <div className="max-w-2xl mx-auto text-center space-y-5 story-short:space-y-3 md:space-y-4 lg:space-y-5">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ duration: 0.45, delay: 0.05 }}
+            className={NATION_STORY_TYPE.title}
+          >
+            {t("nation.story.bathtubBridge.title")}
+          </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -84,12 +109,12 @@ export function NationStoryPage({
             transition={{ duration: 0.5, delay: 0.12 }}
             className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
           >
-            {t("nation.story.interlude.body")}
+            {t("nation.story.bathtubBridge.body")}
           </motion.p>
         </div>
       </FullScreenSection>
 
-      <NationStackedChart data={metrics.stackData} />
+      <NationBathtub data={metrics.bathtubData} />
 
       <section
         ref={conclusionRef}

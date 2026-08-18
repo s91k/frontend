@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /** Within this distance of a beat the page counts as seated. */
 const SEATED_PX = 8;
@@ -140,6 +140,14 @@ const state = {
   freeZoneStart: null as number | null,
 };
 
+export type StorySectionJumpDetail = {
+  top: number;
+  beatIndex: number;
+};
+
+export const STORY_SECTION_JUMP_START = "story-section-jump-start";
+export const STORY_SECTION_JUMP_END = "story-section-jump-end";
+
 /** Softer beat landing than the browser's default smooth scroll curve. */
 const GLIDE_DURATION_MS = 680;
 let glideFrame: number | null = null;
@@ -185,6 +193,53 @@ function startGlide(top: number) {
     state.gliding = false;
   };
   glideFrame = window.requestAnimationFrame(tick);
+}
+
+function commitSectionJump(top: number, beatIndex: number) {
+  const viewport = window.innerHeight;
+  const beats = collectBeats(viewport);
+  window.scrollTo({ top, behavior: "auto" });
+  state.anchor = beatIndex;
+  state.freeZoneStart = beats[beats.length - 1] ?? null;
+  state.glideTarget = top;
+  state.lastGlideAt = Date.now();
+}
+
+/** Scroll instantly to a section jump target (called while the fade overlay is opaque). */
+export function commitStorySectionJump(top: number, beatIndex: number) {
+  commitSectionJump(top, beatIndex);
+}
+
+/** Mark a section jump complete after the fade-out finishes. */
+export function finishStorySectionJump() {
+  state.gliding = false;
+  window.dispatchEvent(new CustomEvent(STORY_SECTION_JUMP_END));
+}
+
+function startSectionJump(top: number, beatIndex: number) {
+  if (glideFrame !== null) {
+    window.cancelAnimationFrame(glideFrame);
+    glideFrame = null;
+  }
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) {
+    commitSectionJump(top, beatIndex);
+    return;
+  }
+
+  if (Math.abs(top - window.scrollY) <= SEATED_PX) return;
+
+  state.gliding = true;
+  state.glideTarget = top;
+  state.anchor = beatIndex;
+  state.lastGlideAt = Date.now();
+  window.dispatchEvent(new CustomEvent("story-glide-start"));
+  window.dispatchEvent(
+    new CustomEvent<StorySectionJumpDetail>(STORY_SECTION_JUMP_START, {
+      detail: { top, beatIndex },
+    }),
+  );
 }
 
 /** Whether a beat glide is in flight (used by pinned scenes to avoid competing scroll rides). */
@@ -262,15 +317,12 @@ export function glideToStoryBeat(index: number) {
 
 /** Jump to the first beat of the next story chapter (skip pinned steps). */
 export function skipToNextStoryChapter() {
-  const viewport = window.innerHeight;
-  const beats = collectBeats(viewport);
-  if (beats.length === 0) return;
-
   const sections = Array.from(
     document.querySelectorAll<HTMLElement>("[data-story-section]"),
   );
   if (sections.length === 0) return;
 
+  const viewport = window.innerHeight;
   const probeY = viewport * 0.45;
   let active = 0;
   sections.forEach((section, index) => {
@@ -278,17 +330,40 @@ export function skipToNextStoryChapter() {
   });
   if (active >= sections.length - 1) return;
 
-  const nextTop =
-    window.scrollY + sections[active + 1].getBoundingClientRect().top;
-  let targetBeat = nearestBeatIndex(beats, nextTop);
+  glideToStorySection(active + 1);
+}
+
+function beatIndexForSection(
+  sectionIndex: number,
+  beats: number[],
+  sections: HTMLElement[],
+): number {
+  const sectionTop =
+    window.scrollY + sections[sectionIndex].getBoundingClientRect().top;
   for (let i = 0; i < beats.length; i++) {
-    if (beats[i] >= nextTop - SEATED_PX) {
-      targetBeat = i;
-      break;
+    if (beats[i] >= sectionTop - SEATED_PX) {
+      return i;
     }
   }
+  return nearestBeatIndex(beats, sectionTop);
+}
 
-  glideToStoryBeat(targetBeat);
+/** Jump to the first beat of a story chapter by section index. */
+export function glideToStorySection(sectionIndex: number) {
+  const viewport = window.innerHeight;
+  const beats = collectBeats(viewport);
+  if (beats.length === 0) return;
+
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-story-section]"),
+  );
+  if (sectionIndex < 0 || sectionIndex >= sections.length) return;
+
+  const beatIndex = beatIndexForSection(sectionIndex, beats, sections);
+  const top = beats[beatIndex];
+  if (Math.abs(top - window.scrollY) <= SEATED_PX) return;
+
+  startSectionJump(top, beatIndex);
 }
 
 /** How a single gesture is handled – decided once, then sticky. */
@@ -715,4 +790,22 @@ export function useStoryAutoSnap() {
       }
     };
   }, []);
+}
+
+/** True while a chapter-jump fade is in flight – pinned scenes snap visuals instead of springing. */
+export function useStorySectionJumping(): boolean {
+  const [jumping, setJumping] = useState(false);
+
+  useEffect(() => {
+    const onStart = () => setJumping(true);
+    const onEnd = () => setJumping(false);
+    window.addEventListener(STORY_SECTION_JUMP_START, onStart);
+    window.addEventListener(STORY_SECTION_JUMP_END, onEnd);
+    return () => {
+      window.removeEventListener(STORY_SECTION_JUMP_START, onStart);
+      window.removeEventListener(STORY_SECTION_JUMP_END, onEnd);
+    };
+  }, []);
+
+  return jumping;
 }

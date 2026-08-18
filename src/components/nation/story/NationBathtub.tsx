@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   formatMton,
+  NATION_BASELINE_YEAR,
   type NationBathtubDataPoint,
 } from "@/utils/data/nationStoryMetrics";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -15,21 +16,88 @@ import { svgLocalUrl } from "@/components/nation/story/svgLocalUrl";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 
 /**
- * Sample years so the caption advances in decade milestones
- * (1990, 2000, 2010, 2020 + the latest year) – four scrolls to the end.
+ * Scroll-driven bathtub steps: 1990 baseline, four decade ranges, then a
+ * caption-free screenshot beat at the full cumulative total.
  */
-function sampleBathtubYears(
+const BATHTUB_DECADE_RANGES = [
+  { from: 1991, to: 2000 },
+  { from: 2001, to: 2010 },
+  { from: 2011, to: 2020 },
+] as const;
+
+type BathtubCaption =
+  | { kind: "baseline"; year: number; valueMton: number }
+  | { kind: "range"; fromYear: number; toYear: number; valueMton: number };
+
+type BathtubDisplayStep = {
+  cumulativeMton: number;
+  caption: BathtubCaption | null;
+};
+
+function sumAnnualMton(
   data: NationBathtubDataPoint[],
-): NationBathtubDataPoint[] {
+  fromYear: number,
+  toYear: number,
+): number {
+  return data
+    .filter((point) => point.year >= fromYear && point.year <= toYear)
+    .reduce((sum, point) => sum + point.annualMton, 0);
+}
+
+function buildBathtubDisplaySteps(
+  data: NationBathtubDataPoint[],
+): BathtubDisplayStep[] {
   if (data.length === 0) return [];
-  const sampled: NationBathtubDataPoint[] = [];
-  for (const point of data) {
-    const isMilestone = (point.year - data[0].year) % 10 === 0;
-    const isLast = point === data.at(-1);
-    if ((isMilestone || isLast) && !sampled.includes(point))
-      sampled.push(point);
+
+  const byYear = new Map(data.map((point) => [point.year, point]));
+  const latestYear = data.at(-1)!.year;
+  const baseline = byYear.get(NATION_BASELINE_YEAR);
+  if (!baseline) return [];
+
+  const steps: BathtubDisplayStep[] = [
+    {
+      cumulativeMton: baseline.cumulativeMton,
+      caption: {
+        kind: "baseline",
+        year: NATION_BASELINE_YEAR,
+        valueMton: baseline.annualMton,
+      },
+    },
+  ];
+
+  for (const { from, to } of BATHTUB_DECADE_RANGES) {
+    const endPoint = byYear.get(to);
+    if (!endPoint) continue;
+    steps.push({
+      cumulativeMton: endPoint.cumulativeMton,
+      caption: {
+        kind: "range",
+        fromYear: from,
+        toYear: to,
+        valueMton: sumAnnualMton(data, from, to),
+      },
+    });
   }
-  return sampled;
+
+  const latestPoint = byYear.get(latestYear);
+  if (latestPoint && latestYear > 2020) {
+    steps.push({
+      cumulativeMton: latestPoint.cumulativeMton,
+      caption: {
+        kind: "range",
+        fromYear: 2021,
+        toYear: latestYear,
+        valueMton: sumAnnualMton(data, 2021, latestYear),
+      },
+    });
+  }
+
+  steps.push({
+    cumulativeMton: data.at(-1)!.cumulativeMton,
+    caption: null,
+  });
+
+  return steps;
 }
 
 type NationBathtubProps = {
@@ -117,9 +185,7 @@ const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
 
 type TubCaption = {
-  /** small line above the figure, e.g. "Sverige har sedan 1990 släppt" */
-  prefix: string;
-  /** the accumulated figure incl. unit, e.g. "4 712 Mton CO₂e" */
+  /** Accumulated total incl. unit, e.g. "1 850 Mton CO₂e" */
   value: string;
 };
 
@@ -249,23 +315,14 @@ function TubGraphic({
         />
       </g>
 
-      {/* Accumulated total inside the basin – the screenshot-friendly figure */}
+      {/* Accumulated total inside the basin – the main focal point */}
       <g style={{ fontFamily: "inherit" }}>
         <text
           x={260}
-          y={compact ? 134 : 138}
-          textAnchor="middle"
-          fill="rgba(255,255,255,0.9)"
-          fontSize={compact ? 21 : 15}
-        >
-          {caption.prefix}
-        </text>
-        <text
-          x={260}
-          y={compact ? 176 : 176}
+          y={compact ? 168 : 162}
           textAnchor="middle"
           fill="#ffffff"
-          fontSize={compact ? 42 : 32}
+          fontSize={compact ? 46 : 38}
           fontWeight={500}
           style={{ fontVariantNumeric: "tabular-nums" }}
         >
@@ -349,27 +406,27 @@ export function NationBathtub({ data }: NationBathtubProps) {
   const reducedMotion = useReducedMotion();
   // useId can include ":" which is awkward in url(#…) fragments
   const idPrefix = `tub-${useId().replace(/:/g, "")}`;
-  const milestones = useMemo(() => sampleBathtubYears(data), [data]);
-  // 1990 is the resting start view (its water already in the tub), so only
-  // the decade jumps get scroll segments – four scrolls to full, not five.
-  const segmentCount = Math.max(milestones.length - 1, 1);
+  const steps = useMemo(() => buildBathtubDisplaySteps(data), [data]);
+  const stepCount = Math.max(steps.length, 1);
   const maxCumulative = data.at(-1)?.cumulativeMton ?? 1;
 
-  const { ref, progress, enterProgress, sectionVh, stageStyle } =
-    usePinnedSteps(segmentCount, BATHTUB_STEP_VH, {
+  const { ref, step, enterProgress, sectionVh, stageStyle } = usePinnedSteps(
+    stepCount,
+    BATHTUB_STEP_VH,
+    {
       enterVh: BATHTUB_ENTER_VH,
-    });
-
-  // Water and captions move in lock-step: scroll only picks the active
-  // milestone (flipping at segment midpoints) and the water springs to that
-  // exact level – a swipe either bumps a whole decade or changes nothing,
-  // never a partial fill with a stale caption.
-  const displayedIndex = Math.min(
-    Math.round(progress * segmentCount),
-    milestones.length - 1,
+    },
   );
-  const current = milestones[displayedIndex];
+
+  const displayedIndex = reducedMotion
+    ? stepCount - 1
+    : Math.min(step, stepCount - 1);
+  const current = steps[displayedIndex];
   if (!current) return null;
+
+  const isFinalStep = current.caption === null;
+  const captionForLayout =
+    current.caption ?? steps[displayedIndex - 1]?.caption ?? null;
 
   // Enter morph (scroll-lerped): the tub and copy ease in from below while
   // the faucet drip carries over the droplet from the onion scene. `progress`
@@ -382,28 +439,23 @@ export function NationBathtub({ data }: NationBathtubProps) {
   const fillRatio = Math.min(current.cumulativeMton / maxCumulative, 1);
   const waterTop = TUB_INNER_BOTTOM - fillRatio * TUB_WATER_HEIGHT;
 
-  const previous = displayedIndex === 0 ? null : milestones[displayedIndex - 1];
-  const previousCumulative = previous?.cumulativeMton ?? 0;
-  const chunkMton = current.cumulativeMton - previousCumulative;
-  // Milestone chunks cover the years after the previous sample through current.
-  const chunkFromYear = previous ? previous.year + 1 : current.year;
-  const chunkToYear = current.year;
+  const periodCaption = (() => {
+    if (!captionForLayout) return null;
+    const value = formatMton(captionForLayout.valueMton, currentLanguage, 0);
+    if (captionForLayout.kind === "baseline") {
+      return t("nation.story.bathtub.baselineCaption", {
+        year: captionForLayout.year,
+        value,
+      });
+    }
+    return t("nation.story.bathtub.rangeCaption", {
+      fromYear: captionForLayout.fromYear,
+      toYear: captionForLayout.toYear,
+      value,
+    });
+  })();
 
-  const chunkCaption =
-    chunkFromYear === chunkToYear
-      ? t("nation.story.bathtub.chunkCaptionSingleYear", {
-          value: formatMton(chunkMton, currentLanguage, 0),
-          year: chunkToYear,
-        })
-      : t("nation.story.bathtub.chunkCaptionYearRange", {
-          value: formatMton(chunkMton, currentLanguage, 0),
-          fromYear: chunkFromYear,
-          toYear: chunkToYear,
-        });
-
-  // Accumulated-total caption drawn inside the tub water.
   const tubCaption: TubCaption = {
-    prefix: t("nation.story.bathtub.waterCaptionPrefix"),
     value: `${formatMton(current.cumulativeMton, currentLanguage, 0)} ${t("nation.story.unit.mtonCo2e")}`,
   };
 
@@ -413,7 +465,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
       data-story-section
       data-story-chapter="bathtub"
       data-story-step={displayedIndex}
-      data-story-steps={milestones.length}
+      data-story-steps={stepCount}
       data-story-snap="round"
       data-story-step-vh={BATHTUB_STEP_VH}
       data-story-enter-vh={BATHTUB_ENTER_VH}
@@ -450,16 +502,12 @@ export function NationBathtub({ data }: NationBathtubProps) {
               transition={{ duration: 0.45 }}
               className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
             >
-              {t("nation.story.bathtub.text")}
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.45, delay: 0.1 }}
-              className={`${NATION_STORY_TYPE.emphasis} text-white`}
-            >
-              {t("nation.story.bathtub.question")}
+              {t("nation.story.bathtub.text")}{" "}
+              {t(
+                isMobile
+                  ? "nation.story.bathtub.swipeCta"
+                  : "nation.story.bathtub.scrollCta",
+              )}
             </motion.p>
           </div>
 
@@ -473,26 +521,22 @@ export function NationBathtub({ data }: NationBathtubProps) {
             />
           </div>
 
-          {/* Milestone captions below the tub: the year and this decade's addition.
-              The accumulated total lives inside the tub water. */}
-          <div className="shrink-0 text-center space-y-0 max-md:space-y-0 min-h-0 md:min-h-0">
-            <p className="sr-only">
-              {`${tubCaption.prefix} ${tubCaption.value}`}
-            </p>
-            <motion.p
-              key={current.year}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={NATION_STORY_TYPE.stat}
+          {periodCaption && (
+            <div
+              className={`shrink-0 text-center ${isFinalStep ? "invisible" : ""}`}
+              aria-hidden={isFinalStep}
             >
-              {current.year}
-            </motion.p>
-            <p
-              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
-            >
-              {chunkCaption}
-            </p>
-          </div>
+              <p className="sr-only">{tubCaption.value}</p>
+              <motion.p
+                key={periodCaption}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
+              >
+                {periodCaption}
+              </motion.p>
+            </div>
+          )}
         </div>
       </div>
     </section>

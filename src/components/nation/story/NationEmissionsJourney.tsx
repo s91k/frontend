@@ -20,7 +20,7 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
-import { isStoryGliding } from "@/components/nation/story/useStoryAutoSnap";
+import { isStoryGliding, useStorySectionJumping } from "@/components/nation/story/useStoryAutoSnap";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 type JourneyStep = {
@@ -139,9 +139,11 @@ function buildSteps(metrics: NationStoryMetrics): JourneyStep[] {
 function AnimatedTotal({
   value,
   format,
+  instant = false,
 }: {
   value: number;
   format: (value: number) => string;
+  instant?: boolean;
 }) {
   const reducedMotion = useReducedMotion();
   const [displayValue, setDisplayValue] = useState(value);
@@ -150,7 +152,7 @@ function AnimatedTotal({
   useEffect(() => {
     const from = previousRef.current;
     previousRef.current = value;
-    if (reducedMotion || from === value) {
+    if (reducedMotion || instant || from === value) {
       setDisplayValue(value);
       return;
     }
@@ -160,7 +162,7 @@ function AnimatedTotal({
       onUpdate: setDisplayValue,
     });
     return () => controls.stop();
-  }, [value, reducedMotion]);
+  }, [value, reducedMotion, instant]);
 
   return <>{format(displayValue)}</>;
 }
@@ -177,6 +179,8 @@ export function NationEmissionsJourney({
   const { isMobile } = useScreenSize();
   const isStoryShort = useStoryShortViewport();
   const reducedMotion = useReducedMotion();
+  const sectionJumping = useStorySectionJumping();
+  const instantMotion = reducedMotion || sectionJumping;
 
   const steps = buildSteps(metrics);
   const maxTotal = steps[steps.length - 1].total;
@@ -327,6 +331,14 @@ export function NationEmissionsJourney({
   const bubbleY = viewportH * (0.22 * shrinkT + 0.9 * fallT * fallT);
   const bubbleOpacity = 1 - fallT;
   const stageOpacity = reducedMotion ? 1 - clamp01(exitProgress / 0.5) : 1;
+  const layerTransition = instantMotion
+    ? { duration: 0 }
+    : reducedMotion
+      ? { duration: 0 }
+      : LAYER_GROW_TRANSITION;
+  const captionTransition = instantMotion
+    ? { duration: 0 }
+    : { duration: 0.4 };
 
   return (
     <section
@@ -381,7 +393,9 @@ export function NationEmissionsJourney({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.18 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: reducedMotion ? 0 : 0.8 }}
+                  transition={
+                    instantMotion ? { duration: 0 } : { duration: reducedMotion ? 0 : 0.8 }
+                  }
                 />
               </AnimatePresence>
 
@@ -408,17 +422,27 @@ export function NationEmissionsJourney({
                       key={layer.key}
                       className="absolute left-1/2 top-1/2 rounded-full"
                       style={{ backgroundColor: layer.color, opacity: 1 }}
-                      initial={reducedMotion ? false : collapsed}
+                      initial={
+                        instantMotion || reducedMotion ? false : collapsed
+                      }
                       animate={{
                         width: fullDiameter,
                         height: fullDiameter,
                         x: "-50%",
                         y: "-50%",
                       }}
-                      exit={collapsed}
-                      transition={
-                        reducedMotion ? { duration: 0 } : LAYER_GROW_TRANSITION
+                      exit={
+                        instantMotion
+                          ? {
+                              width: 0,
+                              height: 0,
+                              opacity: 0,
+                              x: "-50%",
+                              y: "-50%",
+                            }
+                          : collapsed
                       }
+                      transition={layerTransition}
                     />
                   );
                 })}
@@ -449,21 +473,22 @@ export function NationEmissionsJourney({
               >
                 {sectionStarted ? (
                   <motion.span
-                    // Mounts the moment the first layer starts springing from
-                    // zero, so it starts white on the dark backdrop and turns
-                    // black once the circle has grown up behind it
-                    initial={{ color: "#ffffff" }}
+                    key={current.key}
+                    initial={instantMotion ? false : { color: "#ffffff" }}
                     animate={{ color: "#000000" }}
                     transition={
-                      reducedMotion
+                      instantMotion
                         ? { duration: 0 }
-                        : { duration: 0.3, delay: 0.4 }
+                        : reducedMotion
+                          ? { duration: 0 }
+                          : { duration: 0.3, delay: 0.4 }
                     }
                     className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
                     <AnimatedTotal
                       value={current.total}
                       format={(v) => formatMton(v, currentLanguage, 0)}
+                      instant={instantMotion}
                     />
                     <span
                       className={`block ${NATION_STORY_TYPE.meta} font-medium mt-0.5 md:mt-1`}
@@ -501,20 +526,22 @@ export function NationEmissionsJourney({
                   style={{ opacity: exitFade }}
                   initial={false}
                   animate={{ x: deltaChipOffset, y: -deltaChipOffset }}
-                  transition={
-                    reducedMotion ? { duration: 0 } : LAYER_GROW_TRANSITION
-                  }
+                  transition={layerTransition}
                 >
                   <span className="block -translate-y-full">
                     <motion.p
                       key={`delta-${current.key}`}
                       initial={
-                        reducedMotion
+                        instantMotion || reducedMotion
                           ? false
                           : { opacity: 0, y: 8, scale: 0.92 }
                       }
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.45, delay: 0.2 }}
+                      transition={
+                        instantMotion
+                          ? { duration: 0 }
+                          : { duration: 0.45, delay: 0.2 }
+                      }
                       className={`${NATION_STORY_TYPE.emphasis} tabular-nums whitespace-nowrap`}
                       style={{ color: current.color }}
                     >
@@ -536,7 +563,7 @@ export function NationEmissionsJourney({
                 className="block"
                 initial={false}
                 animate={{ opacity: sectionStarted ? 1 : 0 }}
-                transition={{ duration: 0.4 }}
+                transition={captionTransition}
               >
                 <span className="md:hidden">
                   {t("nation.story.journey.dataYearShort", {
@@ -566,7 +593,7 @@ export function NationEmissionsJourney({
                 opacity: sectionStarted ? 1 : 0,
                 y: sectionStarted ? 0 : 12,
               }}
-              transition={{ duration: 0.4 }}
+              transition={captionTransition}
               className="space-y-2 story-short:space-y-1 md:space-y-3"
             >
               <p
@@ -606,9 +633,11 @@ export function NationEmissionsJourney({
                   return (
                     <motion.div
                       key={s.key}
-                      initial={{ opacity: 0, x: -10 }}
+                      initial={instantMotion ? false : { opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.35, delay: 0.1 }}
+                      transition={
+                        instantMotion ? { duration: 0 } : { duration: 0.35, delay: 0.1 }
+                      }
                       className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
                     >
                       <span

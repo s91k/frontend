@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, type RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import {
   animate,
-  motion,
   useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
@@ -37,6 +36,7 @@ const PINK_REVEAL_TRANSITION = {
   damping: 20,
   mass: 1,
   delay: PINK_MAP_REVEAL_DELAY_S,
+  bounce: 0,
 };
 
 /** Visual nudge – the silhouette reads right-heavy when nested at bbox centre. */
@@ -86,7 +86,9 @@ function AnimatedPinkSilhouette({
 }: AnimatedPinkSilhouetteProps) {
   const ref = useRef<SVGPathElement>(null);
 
-  const applyTransform = (scale: number) => {
+  const applyTransform = (p: number) => {
+    // Clamp so spring easing cannot overshoot and clip against the SVG viewport.
+    const scale = Math.min(1, Math.max(p, 0.001));
     ref.current?.setAttribute("transform", swedenOutlineScaleMatrix(scale));
   };
 
@@ -96,7 +98,14 @@ function AnimatedPinkSilhouette({
     applyTransform(progress.get());
   }, [progress]);
 
-  return <path ref={ref} d={SWEDEN_OUTLINE_PATH} fill={fill} />;
+  return (
+    <path
+      ref={ref}
+      d={SWEDEN_OUTLINE_PATH}
+      fill={fill}
+      shapeRendering="geometricPrecision"
+    />
+  );
 }
 
 type IntroSwedenMapsProps = {
@@ -107,7 +116,7 @@ type IntroSwedenMapsProps = {
   unitLong: string;
 };
 
-function IntroSwedenMaps({
+const IntroSwedenMaps = memo(function IntroSwedenMaps({
   pinkProgress,
   innerScale,
   reported,
@@ -115,26 +124,29 @@ function IntroSwedenMaps({
   unitLong,
 }: IntroSwedenMapsProps) {
   return (
-    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0">
-      <svg
-        viewBox={SWEDEN_OUTLINE_VIEWBOX}
-        className="h-full w-auto max-w-full mx-auto md:mx-0 block"
-        role="img"
-        aria-label={`${reported}–${full} ${unitLong}`}
-      >
-        <AnimatedPinkSilhouette
-          progress={pinkProgress}
-          fill={NATION_STORY_COLORS.consumption}
-        />
-        <SwedenSilhouette
-          scale={innerScale}
-          fill={NATION_STORY_COLORS.territorial}
-          nudgeX={INNER_MAP_NUDGE_X}
-        />
-      </svg>
+    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+      <div className="absolute inset-[7%] md:inset-[8%]">
+        <svg
+          viewBox={SWEDEN_OUTLINE_VIEWBOX}
+          overflow="visible"
+          className="h-full w-full block"
+          role="img"
+          aria-label={`${reported}–${full} ${unitLong}`}
+        >
+          <AnimatedPinkSilhouette
+            progress={pinkProgress}
+            fill={NATION_STORY_COLORS.consumption}
+          />
+          <SwedenSilhouette
+            scale={innerScale}
+            fill={NATION_STORY_COLORS.territorial}
+            nudgeX={INNER_MAP_NUDGE_X}
+          />
+        </svg>
+      </div>
     </div>
   );
-}
+});
 
 type StatCalloutProps = {
   label: string;
@@ -145,16 +157,20 @@ type StatCalloutProps = {
   unitLong: string;
   colorClass: string;
   className?: string;
+  mobileValueRef?: RefObject<HTMLSpanElement>;
+  desktopValueRef?: RefObject<HTMLSpanElement>;
 };
 
 function StableStatValue({
   value,
   reservedValue,
   className,
+  valueRef,
 }: {
   value: string;
   reservedValue: string;
   className: string;
+  valueRef?: RefObject<HTMLSpanElement>;
 }) {
   return (
     <span className={`inline-grid ${className}`}>
@@ -164,7 +180,13 @@ function StableStatValue({
       >
         {reservedValue}
       </span>
-      <span className="col-start-1 row-start-1">{value}</span>
+      <span
+        ref={valueRef}
+        className="col-start-1 row-start-1"
+        {...(valueRef ? { "aria-live": "polite" as const } : {})}
+      >
+        {value}
+      </span>
     </span>
   );
 }
@@ -177,50 +199,52 @@ function StatCallout({
   unitLong,
   colorClass,
   className,
+  mobileValueRef,
+  desktopValueRef,
 }: StatCalloutProps) {
   const widthAnchor = reservedValue ?? value;
 
   return (
-    <div className={`min-w-0 ${className ?? ""}`}>
+    <div className={className ?? ""}>
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
         <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>
           <StableStatValue
             value={value}
             reservedValue={widthAnchor}
             className="justify-items-center"
+            valueRef={mobileValueRef}
           />
         </p>
         <p
-          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5`}
+          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5 px-0.5 leading-normal`}
         >
           {unitShort}
         </p>
         <p
-          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[9.25rem]`}
+          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[11rem]`}
         >
           {label}
         </p>
       </div>
 
-      <div className="hidden md:block text-left">
+      <div className="hidden md:block text-left min-w-[12.5rem]">
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
         >
           {label}
         </p>
-        <p
-          className={`${NATION_STORY_TYPE.display} leading-none ${colorClass} flex items-baseline gap-x-1.5`}
-        >
+        <p className={`${NATION_STORY_TYPE.display} leading-none ${colorClass}`}>
           <StableStatValue
             value={value}
             reservedValue={widthAnchor}
             className="justify-items-start"
+            valueRef={desktopValueRef}
           />
-          <span
-            className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} font-normal whitespace-nowrap`}
-          >
-            {unitLong}
-          </span>
+        </p>
+        <p
+          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1.5 leading-normal whitespace-nowrap`}
+        >
+          {unitLong}
         </p>
       </div>
     </div>
@@ -239,7 +263,7 @@ type PinkStatCalloutProps = {
   reducedMotion: boolean | null;
 };
 
-function PinkStatCallout({
+const PinkStatCallout = memo(function PinkStatCallout({
   label,
   unitShort,
   unitLong,
@@ -251,44 +275,46 @@ function PinkStatCallout({
 }: PinkStatCalloutProps) {
   const { currentLanguage } = useLanguage();
   const reservedValue = formatMton(targetMton, currentLanguage, 0);
-  const [value, setValue] = useState(() => formatMton(0, currentLanguage, 0));
+  const initialValue = formatMton(0, currentLanguage, 0);
+  const mobileValueRef = useRef<HTMLSpanElement>(null);
+  const desktopValueRef = useRef<HTMLSpanElement>(null);
   const lastRoundedRef = useRef(-1);
 
+  const writeValue = (rounded: number) => {
+    const text = formatMton(rounded, currentLanguage, 0);
+    if (mobileValueRef.current) mobileValueRef.current.textContent = text;
+    if (desktopValueRef.current) desktopValueRef.current.textContent = text;
+  };
+
   useMotionValueEvent(progress, "change", (p) => {
-    const rounded = Math.round(p * targetMton);
+    const clamped = Math.min(1, Math.max(p, 0));
+    const rounded = Math.round(clamped * targetMton);
     if (rounded === lastRoundedRef.current) return;
     lastRoundedRef.current = rounded;
-    setValue(formatMton(rounded, currentLanguage, 0));
+    writeValue(rounded);
   });
 
   useEffect(() => {
     if (!reducedMotion) return;
     lastRoundedRef.current = Math.round(targetMton);
-    setValue(formatMton(targetMton, currentLanguage, 0));
+    writeValue(targetMton);
   }, [reducedMotion, targetMton, currentLanguage]);
 
   return (
-    <motion.div
-      className={className}
-      initial={reducedMotion ? false : { opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={
-        reducedMotion
-          ? { duration: 0 }
-          : { delay: PINK_MAP_REVEAL_DELAY_S, duration: 0.25 }
-      }
-    >
+    <div className={className}>
       <StatCallout
         label={label}
-        value={value}
+        value={initialValue}
         reservedValue={reservedValue}
         unitShort={unitShort}
         unitLong={unitLong}
         colorClass={colorClass}
+        mobileValueRef={mobileValueRef}
+        desktopValueRef={desktopValueRef}
       />
-    </motion.div>
+    </div>
   );
-}
+});
 
 type IntroPunchContent = {
   pinkProgress: MotionValue<number>;
@@ -303,7 +329,7 @@ type IntroPunchContent = {
   fullLabel: string;
 };
 
-function IntroStatCallouts({
+const IntroStatCallouts = memo(function IntroStatCallouts({
   className,
   ...content
 }: IntroPunchContent & { className?: string }) {
@@ -311,7 +337,6 @@ function IntroStatCallouts({
     pinkProgress,
     reducedMotion,
     reported,
-    full,
     fullValue,
     unitShort,
     unitLong,
@@ -321,7 +346,7 @@ function IntroStatCallouts({
 
   return (
     <div
-      className={`grid w-full max-w-[20rem] grid-cols-2 gap-x-3 md:flex md:w-auto md:max-w-none md:flex-col md:items-start md:gap-5 lg:gap-6 ${className ?? ""}`}
+      className={`grid w-full max-w-[22rem] grid-cols-2 gap-x-4 md:flex md:w-auto md:max-w-none md:flex-col md:items-start md:gap-5 lg:gap-6 md:shrink-0 ${className ?? ""}`}
     >
       <StatCallout
         label={usualLabel}
@@ -344,7 +369,7 @@ function IntroStatCallouts({
       />
     </div>
   );
-}
+});
 
 function useIntroPunchContent(metrics: NationStoryMetrics): IntroPunchContent {
   const { t } = useTranslation();
@@ -406,6 +431,21 @@ export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
   );
 }
 
+function IntroPunchVisual({ content }: { content: IntroPunchContent }) {
+  return (
+    <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex md:w-fit md:max-w-full md:items-center md:justify-center md:gap-10 lg:gap-14">
+      <IntroSwedenMaps
+        pinkProgress={content.pinkProgress}
+        innerScale={content.innerScale}
+        reported={content.reported}
+        full={content.full}
+        unitLong={content.unitLong}
+      />
+      <IntroStatCallouts {...content} />
+    </div>
+  );
+}
+
 /** Intro hero: stacked on mobile; centered title/body with map + stats side by side on desktop. */
 export function NationIntroHero({ metrics }: NationIntroPunchProps) {
   const { t } = useTranslation();
@@ -415,43 +455,15 @@ export function NationIntroHero({ metrics }: NationIntroPunchProps) {
 
   return (
     <div className="relative w-full max-w-5xl mx-auto shrink-0 md:max-w-6xl">
-      <div className="text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:hidden">
+      <div className="text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
         <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>{title}</h1>
         <p
           className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
         >
           {paragraph}
         </p>
-        <div className="pt-2 max-md:pt-1.5 story-short:pt-1">
-          <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1">
-            <IntroSwedenMaps
-              pinkProgress={content.pinkProgress}
-              innerScale={content.innerScale}
-              reported={content.reported}
-              full={content.full}
-              unitLong={content.unitLong}
-            />
-            <IntroStatCallouts {...content} />
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden md:block text-center space-y-4">
-        <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>{title}</h1>
-        <p
-          className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
-        >
-          {paragraph}
-        </p>
-        <div className="mx-auto flex w-fit max-w-full items-center gap-5 pt-6 lg:gap-10 lg:pt-10">
-          <IntroSwedenMaps
-            pinkProgress={content.pinkProgress}
-            innerScale={content.innerScale}
-            reported={content.reported}
-            full={content.full}
-            unitLong={content.unitLong}
-          />
-          <IntroStatCallouts {...content} />
+        <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-6 lg:pt-10">
+          <IntroPunchVisual content={content} />
         </div>
       </div>
     </div>

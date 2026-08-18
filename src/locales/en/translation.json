@@ -1591,9 +1591,10 @@
       "chapters": {
         "intro": "Intro",
         "journey": "The onion",
-        "bathtub": "The bathtub",
         "interlude": "Perspective",
         "stacked": "History",
+        "bathtubBridge": "Accumulation",
+        "bathtub": "The bathtub",
         "conclusion": "Conclusion"
       },
       "nav": {
@@ -1601,6 +1602,7 @@
         "keyboardHint": "↑↓ or PgUp/PgDn to change scene",
         "freeScrollCue": "Scroll freely down here",
         "previousSection": "Previous part",
+        "chaptersLabel": "Story sections",
         "onboardingDesktop": "Scroll to move through the story, one step at a time.",
         "onboardingMobile": "Swipe to move through the story, one step at a time.",
         "dismiss": "Got it"
@@ -1612,7 +1614,7 @@
         "totalLabel": "Total",
         "step1": {
           "label": "Territorial emissions",
-          "text": "We start with the figure we hear about most often: territorial emissions – fossil emissions within Sweden's borders. This includes emissions from industry, transport, agriculture, heating and waste, among other sources. This measure is used to track our climate goals."
+          "text": "We start with the figure we hear about most often: territorial emissions – the measure used to track our climate goals. These are fossil emissions within Sweden's borders. They include emissions from industry, transport, agriculture, heating and waste, among other sources."
         },
         "step2": {
           "label": "Production-based emissions",
@@ -1624,7 +1626,7 @@
         },
         "step4": {
           "label": "Private e-commerce",
-          "text": "We have also quantified emissions from private e-commerce imports. These emissions are not included in official statistics today. This amounts to approximately an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
+          "text": "We have also quantified emissions from private e-commerce imports, for example when we order goods from Amazon and Shein. These emissions are not included in official statistics today. This amounts to approximately an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
         },
         "step5": {
           "label": "Biogenic emissions",
@@ -1633,35 +1635,40 @@
       },
       "bathtub": {
         "eyebrow": "The bathtub effect",
-        "text": "The atmosphere responds to the amount of greenhouse gases – which stay and accumulate over time. Like a bathtub with the tap running: until the tap is turned off, the water level will keep rising. We have already passed 1.5°C of warming, and Sweden is approaching the point where we have emitted more than our commitment under the Paris Agreement. That is why how quickly we cut emissions is decisive.",
-        "question": "How has it gone since 1990?",
-        "waterCaptionPrefix": "Sweden has since 1990 emitted",
-        "chunkCaptionSingleYear": "+{{value}} Mt CO₂e added in {{year}}",
-        "chunkCaptionYearRange": "+{{value}} Mt CO₂e added {{fromYear}}–{{toYear}}"
+        "text": "The atmosphere responds to the amount of greenhouse gases that stay and accumulate over time. Like a bathtub with the tap running. Until the tap is turned off, the water level will keep rising. We have already passed 1.5°C of global warming, and Sweden is approaching the point where we have emitted more than our commitment under the Paris Agreement. That is why how quickly we cut emissions is decisive.",
+        "scrollCta": "Scroll to see how Sweden's total emissions have accumulated over time since 1990.",
+        "swipeCta": "Swipe to see how Sweden's total emissions have accumulated over time since 1990.",
+        "baselineCaption": "In {{year}}, emissions were {{value}} Mt",
+        "rangeCaption": "{{fromYear}}–{{toYear}} added {{value}} Mt CO₂e"
       },
       "graph": {
         "territorialFossil": "Territorial",
         "productionBased": "Production-based emissions",
-        "productionBeyondTerritorial": "Production-based",
+        "productionBeyondTerritorial": "Shipping and airlines",
         "biogenic": "Biogenic",
         "consumptionAbroad": "Consumption-based abroad"
       },
       "interlude": {
-        "title": "We only discuss part of Sweden's emissions",
-        "body": "The usual figure we hear about gives an overly positive picture. When we also include other emissions that Sweden can influence, we get a more complete picture – one that tells a different story.",
+        "title": "The usual picture of Sweden's emissions is incomplete",
+        "body": "By including all emissions that Sweden can influence, we get a more comprehensive picture.",
+        "body2": "But how have emissions developed over time?",
         "stat": "The full picture is {{ratio}}× larger: {{combined}} vs {{territorial}} territorial"
       },
       "stacked": {
         "layerCounter": "Step {{current}} of {{total}}",
         "title": "Sweden's emissions since 1990",
-        "layerCaption1": "First we have territorial emissions – fossil emissions within Sweden's borders.",
-        "layerCaption2": "Now we add emissions from Swedish shipping companies and airlines abroad – together with the territorial emissions, this gives us the production-based emissions.",
+        "layerCaption1": "First we have territorial emissions – in other words, fossil emissions within Sweden's borders",
+        "layerCaption2": "Now we add emissions from Swedish shipping companies and airlines abroad – together with territorial emissions, this gives us production-based emissions",
         "layerCaption3": "Then we add consumption-based emissions abroad, including private e-commerce imports.",
         "layerCaption4": "And finally the biogenic emissions to show the full picture.",
         "scrubHint": "Swipe across the chart to see values by year"
       },
+      "bathtubBridge": {
+        "title": "Some emissions have fallen, others have risen. Overall, emission reductions are slowing too gradually towards zero.",
+        "body": "But annual statistics also hide an important detail: emissions accumulate in the atmosphere over time."
+      },
       "conclusion": {
-        "title": "Sweden's emissions are larger than we think and have not fallen as much as we think",
+        "title": "Sweden's emissions are larger than we think, they are falling too slowly, and our accumulated emissions are large",
         "usualLabel": "What we usually discuss",
         "fullLabel": "Sweden's actual emissions",
         "since1990": "since 1990",
