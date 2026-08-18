@@ -25,6 +25,7 @@ import {
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
+import { useStoryCompactViewport } from "@/components/nation/story/useStoryCompactViewport";
 import { cn } from "@/lib/utils";
 
 const ONBOARDING_DESKTOP_KEY = "valet2026-story-onboarding-desktop";
@@ -114,8 +115,11 @@ function useStoryChapters(sectionState: StorySectionState): StoryChapter[] {
   }));
 }
 
-function chapterNavLabel(chapter: StoryChapter): string {
-  if (chapter.isActive && chapter.steps > 1) {
+function chapterNavLabel(
+  chapter: StoryChapter,
+  showStepCounter: boolean,
+): string {
+  if (showStepCounter && chapter.isActive && chapter.steps > 1) {
     return `${chapter.label} · ${chapter.step + 1}/${chapter.steps}`;
   }
   return chapter.label;
@@ -123,8 +127,10 @@ function chapterNavLabel(chapter: StoryChapter): string {
 
 function StoryDesktopChapterNav({
   sectionState,
+  showStepCounter,
 }: {
   sectionState: StorySectionState;
+  showStepCounter: boolean;
 }) {
   const { t } = useTranslation();
   const chapters = useStoryChapters(sectionState);
@@ -134,13 +140,13 @@ function StoryDesktopChapterNav({
   return (
     <nav
       aria-label={t("nation.story.nav.chaptersLabel")}
-      className="relative mt-2 mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-1 gap-y-1 text-center pointer-events-auto"
+      className="relative mt-1.5 story-compact:mt-1 mx-auto flex max-w-4xl lg:max-w-5xl flex-wrap items-center justify-center gap-x-0.5 story-compact:gap-x-0 gap-y-0.5 text-center pointer-events-auto px-2"
     >
       {chapters.map((chapter, index) => (
         <span key={chapter.chapter} className="inline-flex items-center">
           {index > 0 && (
             <span
-              className={`mx-1.5 ${NATION_STORY_TYPE.meta} text-white/25`}
+              className={`mx-1 story-compact:mx-0.5 ${NATION_STORY_TYPE.meta} text-white/25`}
               aria-hidden
             >
               ·
@@ -152,13 +158,13 @@ function StoryDesktopChapterNav({
             aria-current={chapter.isActive ? "location" : undefined}
             className={cn(
               NATION_STORY_TYPE.meta,
-              "rounded-sm transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40",
+              "rounded-sm px-0.5 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40",
               chapter.isActive
                 ? "text-white"
                 : `${NATION_STORY_TEXT.secondary} hover:text-white/85`,
             )}
           >
-            {chapterNavLabel(chapter)}
+            {chapterNavLabel(chapter, showStepCounter)}
           </button>
         </span>
       ))}
@@ -168,19 +174,24 @@ function StoryDesktopChapterNav({
 
 function StoryProgressBar({
   sectionState,
+  showStepCounter,
 }: {
   sectionState: StorySectionState;
+  showStepCounter: boolean;
 }) {
   const { scrollYProgress } = useScroll();
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-12 z-40 hidden min-h-8 items-start justify-center px-4 md:flex">
+    <div className="pointer-events-none fixed inset-x-0 top-12 z-40 hidden min-h-7 story-compact:min-h-6 lg:min-h-8 items-start justify-center px-3 story-compact:px-2 md:flex">
       <motion.div
         aria-hidden
         className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-orange-3 to-pink-3"
         style={{ scaleX: scrollYProgress }}
       />
-      <StoryDesktopChapterNav sectionState={sectionState} />
+      <StoryDesktopChapterNav
+        sectionState={sectionState}
+        showStepCounter={showStepCounter}
+      />
     </div>
   );
 }
@@ -196,7 +207,7 @@ function StoryMobileChapterMenu({
 
   if (!activeChapter) return null;
 
-  const triggerLabel = chapterNavLabel(activeChapter);
+  const triggerLabel = chapterNavLabel(activeChapter, true);
 
   return (
     <DropdownMenu>
@@ -236,7 +247,7 @@ function StoryMobileChapterMenu({
               chapter.isActive ? "text-white" : "text-grey",
             )}
           >
-            {chapterNavLabel(chapter)}
+            {chapterNavLabel(chapter, true)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -330,9 +341,12 @@ export function StoryPreviousSectionButton({
     <button
       type="button"
       onClick={() => advanceStoryBeat(-1)}
-      className={`flex items-center gap-1.5 ${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} transition-colors hover:text-white ${className}`}
+      className={`flex items-center gap-1.5 ${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} transition-colors hover:text-white story-compact:gap-1 ${className}`}
     >
-      <ChevronUp className="h-4 w-4" aria-hidden />
+      <ChevronUp
+        className="h-3.5 w-3.5 story-compact:h-3 story-compact:w-3 lg:h-4 lg:w-4"
+        aria-hidden
+      />
       {t("nation.story.nav.previousSection")}
     </button>
   );
@@ -367,11 +381,16 @@ export function StoryNavChrome({
 }) {
   const endReached = useStoryEndReached(endRef);
   const sectionState = useStorySectionState();
+  const isStoryCompact = useStoryCompactViewport();
+  const showStepCounter = !isStoryCompact;
 
   return (
     <>
       <StoryJumpOverlay />
-      <StoryProgressBar sectionState={sectionState} />
+      <StoryProgressBar
+        sectionState={sectionState}
+        showStepCounter={showStepCounter}
+      />
       <StoryMobileChapterMenu sectionState={sectionState} />
       <StoryPreviousSectionNav
         endReached={endReached}

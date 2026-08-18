@@ -20,6 +20,7 @@ import {
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 import { useStorySectionJumping } from "@/components/nation/story/useStoryAutoSnap";
+import { useStoryCompactViewport } from "@/components/nation/story/useStoryCompactViewport";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 type JourneyStep = {
@@ -51,8 +52,9 @@ function formatDeltaMton(delta: number, language: string): string {
   return formatMton(delta, language, 0);
 }
 
-/** Desktop onion diameter; mobile scales down so text + bubble fit one screen. */
+/** Full desktop onion diameter; laptop uses a smaller cap. */
 const DESKTOP_MAX_DIAMETER = 300;
+const LAPTOP_MAX_DIAMETER = 240;
 const MOBILE_MAX_DIAMETER = 240;
 /** iPhone SE / story-short – leave room for label + body under the onion. */
 const STORY_SHORT_MAX_DIAMETER = 180;
@@ -168,8 +170,9 @@ export function NationEmissionsJourney({
 }: NationEmissionsJourneyProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
-  const { isMobile } = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
   const isStoryShort = useStoryShortViewport();
+  const isStoryCompact = useStoryCompactViewport();
   const reducedMotion = useReducedMotion();
   const sectionJumping = useStorySectionJumping();
   const instantMotion = reducedMotion || sectionJumping;
@@ -177,11 +180,13 @@ export function NationEmissionsJourney({
 
   const steps = buildSteps(metrics);
   const maxTotal = steps[steps.length - 1].total;
-  const maxDiameter = !isMobile
-    ? DESKTOP_MAX_DIAMETER
-    : isStoryShort
+  const maxDiameter = isMobile
+    ? isStoryShort
       ? STORY_SHORT_MAX_DIAMETER
-      : MOBILE_MAX_DIAMETER;
+      : MOBILE_MAX_DIAMETER
+    : isStoryCompact || isTablet
+      ? LAPTOP_MAX_DIAMETER
+      : DESKTOP_MAX_DIAMETER;
 
   const { ref, step, exitProgress, mode, sectionVh, stageStyle } =
     usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
@@ -276,7 +281,7 @@ export function NationEmissionsJourney({
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
         <div
-          className="relative flex h-full min-h-0 flex-1 flex-col justify-center gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
+          className="relative flex h-full min-h-0 flex-1 flex-col justify-center gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-6 story-compact:gap-5 lg:gap-8 xl:gap-10 w-full max-w-5xl mx-auto"
           style={{ opacity: exitFade }}
         >
           {/* Bubble = accumulating colored layers */}
@@ -441,7 +446,7 @@ export function NationEmissionsJourney({
             {/* Data note under the bubble: compact on mobile, full sentence
                 on desktop. Appears with the first layer, not before. */}
             <p
-              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 md:mt-10`}
+              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 md:mt-6 story-compact:mt-4 lg:mt-10`}
             >
               <motion.span
                 className="block"

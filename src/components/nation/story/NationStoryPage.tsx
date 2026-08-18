@@ -32,7 +32,7 @@ function FullScreenSection({
     <section
       data-story-section
       data-story-chapter={chapter}
-      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:py-10 lg:py-8"
+      className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:py-8 story-compact:py-6 lg:py-10 xl:py-8"
     >
       <div className="w-full max-w-4xl mx-auto">{children}</div>
     </section>
@@ -54,7 +54,7 @@ export function NationStoryPage({
       <section
         data-story-section
         data-story-chapter="intro"
-        className="relative flex h-[100svh] min-h-0 flex-col items-center justify-center px-4 md:px-8 pt-[var(--story-hero-pad-top)] md:pt-44 pb-[var(--story-hero-pad-bottom)] md:pb-20 overflow-x-hidden"
+        className="relative flex h-[100svh] min-h-0 flex-col items-center justify-center px-4 md:px-8 pt-[var(--story-hero-pad-top)] md:pt-28 story-compact:pt-24 lg:pt-36 xl:pt-44 pb-[var(--story-hero-pad-bottom)] md:pb-16 story-compact:pb-14 lg:pb-20 overflow-x-hidden"
       >
         <div
           aria-hidden
@@ -120,7 +120,7 @@ export function NationStoryPage({
         ref={conclusionRef}
         data-story-section
         data-story-chapter="conclusion"
-        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] md:pt-20 lg:pt-16 pb-[var(--story-stage-pad-bottom)] md:pb-10 lg:pb-8 overflow-x-hidden"
+        className="relative min-h-[100svh] flex items-center justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] md:pt-14 story-compact:pt-12 lg:pt-20 xl:pt-16 pb-[var(--story-stage-pad-bottom)] md:pb-8 story-compact:pb-7 lg:pb-10 xl:pb-8 overflow-x-hidden"
       >
         <div
           aria-hidden

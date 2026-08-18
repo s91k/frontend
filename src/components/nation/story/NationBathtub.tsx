@@ -467,7 +467,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
       style={{ height: `${sectionVh}vh` }}
     >
       <div
-        className="h-[100svh] min-h-0 flex flex-col justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:pt-10 md:pb-10 lg:pt-8 lg:pb-8 overflow-hidden"
+        className="h-[100svh] min-h-0 flex flex-col justify-center px-4 md:px-8 pt-[var(--story-stage-pad-top)] pb-[var(--story-stage-pad-bottom)] md:pt-8 story-compact:pt-6 md:pb-8 story-compact:pb-6 lg:pt-10 lg:pb-10 xl:pt-8 xl:pb-8 overflow-hidden"
         style={stageStyle}
       >
         <div
@@ -511,7 +511,7 @@ export function NationBathtub({ data }: NationBathtubProps) {
               waterTop={waterTop}
               caption={tubCaption}
               compact={isMobile}
-              className="w-full max-w-[18rem] story-short:max-w-[15rem] md:max-w-md mx-auto h-auto max-h-[22svh] story-short:max-h-[18svh] md:max-h-[24svh] lg:max-h-[26svh]"
+              className="w-full max-w-[18rem] story-short:max-w-[15rem] md:max-w-sm story-compact:max-w-[17rem] lg:max-w-md mx-auto h-auto max-h-[22svh] story-short:max-h-[18svh] md:max-h-[20svh] story-compact:max-h-[19svh] lg:max-h-[24svh] xl:max-h-[26svh]"
             />
           </div>
 

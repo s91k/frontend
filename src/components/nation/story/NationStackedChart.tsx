@@ -24,6 +24,7 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
+import { useStoryCompactViewport } from "@/components/nation/story/useStoryCompactViewport";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 /**
@@ -85,8 +86,9 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
 }) => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
-  const { isMobile } = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
   const isStoryShort = useStoryShortViewport();
+  const isStoryCompact = useStoryCompactViewport();
   const reducedMotion = useReducedMotion();
   const latestYear = data.at(-1)?.year ?? NATION_BASELINE_YEAR;
   // Mobile skips 2020: it sits so close to the latest year that recharts
@@ -140,11 +142,13 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
 
   // Height caps so phones with browser chrome still fit the title, caption,
   // chart and legend inside the pinned stage (tighter on iPhone SE).
-  const chartHeight = !isMobile
-    ? 330
-    : isStoryShort
+  const chartHeight = isMobile
+    ? isStoryShort
       ? "min(160px, 20svh)"
-      : "min(200px, 24svh)";
+      : "min(200px, 24svh)"
+    : isStoryCompact || isTablet
+      ? 260
+      : 330;
   const activeLayer = LAYERS[Math.min(visibleLayers, LAYER_COUNT) - 1];
 
   // Full-bleed mobile plot: the edge ticks anchor inward so "1990" and the
