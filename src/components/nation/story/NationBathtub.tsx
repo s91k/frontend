@@ -174,12 +174,8 @@ const WATER_SPRING = {
  * skipping two decades at once – the water snaps per milestone regardless.
  */
 const BATHTUB_STEP_VH = 55;
-/**
- * Extra pinned scroll before the steps: the tub eases in while the faucet
- * drip (the droplet handed over from the onion scene) is already falling.
- * The onion scene's auto-scroll ride ends exactly at the end of this zone.
- */
-export const BATHTUB_ENTER_VH = 55;
+/** Extra pinned scroll before the steps – the tub eases in from below. */
+export const BATHTUB_ENTER_VH = 40;
 
 const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
@@ -428,11 +424,9 @@ export function NationBathtub({ data }: NationBathtubProps) {
   const captionForLayout =
     current.caption ?? steps[displayedIndex - 1]?.caption ?? null;
 
-  // Enter morph (scroll-lerped): the tub and copy ease in from below while
-  // the faucet drip carries over the droplet from the onion scene. `progress`
+  // Enter morph (scroll-lerped): the tub and copy ease in from below. `progress`
   // covers the steps span only, so the water rests at the 1990 level until
-  // this is done. Opacity completes early in the zone to keep the black gap
-  // after the falling droplet short.
+  // this is done.
   const enterT = reducedMotion ? 1 : smoothstep(clamp01(enterProgress));
   const enterOpacity = reducedMotion ? 1 : clamp01(enterT / 0.65);
 

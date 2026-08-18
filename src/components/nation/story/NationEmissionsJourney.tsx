@@ -58,15 +58,8 @@ const MOBILE_MAX_DIAMETER = 240;
 const STORY_SHORT_MAX_DIAMETER = 180;
 /** Scroll distance per journey step – higher = more time to watch each layer grow. */
 const JOURNEY_STEP_VH = 80;
-/**
- * Extra pinned scroll after the last step for the exit morph: the finished
- * bubble compresses into a water drop and falls toward the bathtub scene.
- * Entering this zone triggers an auto-scroll ride through the whole hand-off,
- * so the zone mainly sets the morph's pacing during that ride.
- */
-const JOURNEY_EXIT_VH = 70;
-/** Size the bubble shrinks to before falling – matches the tub's faucet drip. */
-const DROPLET_DIAMETER = 14;
+/** Extra pinned scroll after the last step – the scene fades out before the interlude. */
+const JOURNEY_EXIT_VH = 40;
 
 const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
@@ -252,19 +245,8 @@ export function NationEmissionsJourney({
   const deltaChipOffset =
     currentDiameter / 2 / Math.SQRT2 + (isMobile ? 8 : 12);
 
-  // Exit morph (scroll-lerped): captions fade first, then the bubble
-  // compresses into a blue droplet that sinks and finally falls off-stage
-  // toward the bathtub scene. With reduced motion the stage simply fades.
-  const exitFade = reducedMotion ? 1 : 1 - Math.min(exitProgress / 0.3, 1);
-  const shrinkT = reducedMotion
-    ? 0
-    : smoothstep(clamp01((exitProgress - 0.1) / 0.7));
-  const fallT = reducedMotion ? 0 : clamp01((exitProgress - 0.8) / 0.2);
-  const viewportH = typeof window === "undefined" ? 800 : window.innerHeight;
-  const bubbleScale = 1 + (DROPLET_DIAMETER / maxDiameter - 1) * shrinkT;
-  const bubbleY = viewportH * (0.22 * shrinkT + 0.9 * fallT * fallT);
-  const bubbleOpacity = 1 - fallT;
-  const stageOpacity = reducedMotion ? 1 - clamp01(exitProgress / 0.5) : 1;
+  // Exit fade – the onion eases out before the interlude (no bathtub hand-off).
+  const exitFade = 1 - smoothstep(clamp01(exitProgress));
   const layerTransition = instantMotion
     ? { duration: 0 }
     : reducedMotion
@@ -295,7 +277,7 @@ export function NationEmissionsJourney({
         />
         <div
           className="relative flex h-full min-h-0 flex-1 flex-col justify-center gap-4 story-short:gap-1.5 md:grid md:h-auto md:grid-cols-2 md:items-center md:gap-8 lg:gap-10 w-full max-w-5xl mx-auto"
-          style={{ opacity: stageOpacity }}
+          style={{ opacity: exitFade }}
         >
           {/* Bubble = accumulating colored layers */}
           <div className="flex flex-col items-center gap-2 story-short:gap-1 md:gap-4 py-3 story-short:py-1 md:py-0 order-1">
@@ -304,9 +286,6 @@ export function NationEmissionsJourney({
               style={{
                 width: maxDiameter,
                 height: maxDiameter,
-                transform: `translateY(${bubbleY}px) scale(${bubbleScale})`,
-                transformOrigin: "50% 50%",
-                opacity: bubbleOpacity,
               }}
             >
               {/* Soft glow behind the bubble in the current step's color */}
@@ -382,29 +361,11 @@ export function NationEmissionsJourney({
                 })}
               </AnimatePresence>
 
-              {/* Exit morph: the stack crossfades to water-blue while it
-                  shrinks, so the droplet matches the tub's faucet drip */}
-              {shrinkT > 0 && (
-                <div
-                  aria-hidden
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{
-                    width: maxDiameter,
-                    height: maxDiameter,
-                    backgroundColor: "var(--blue-2)",
-                    opacity: shrinkT,
-                  }}
-                />
-              )}
-
               {/* Running total on top – white on the dark backdrop until the
                   innermost circle has grown large enough to sit behind it.
                   Before the section pins, a pulsing seed dot waits where the
                   first layer will grow, instead of a stranded number. */}
-              <div
-                className="absolute inset-0 flex items-center justify-center"
-                style={{ opacity: exitFade }}
-              >
+              <div className="absolute inset-0 flex items-center justify-center">
                 {sectionStarted ? (
                   <motion.span
                     style={{ color: totalTextColor }}
@@ -448,7 +409,6 @@ export function NationEmissionsJourney({
               {step > 0 && (
                 <motion.span
                   className="absolute left-1/2 top-1/2 pointer-events-none"
-                  style={{ opacity: exitFade }}
                   initial={false}
                   animate={{ x: deltaChipOffset, y: -deltaChipOffset }}
                   transition={layerTransition}
@@ -482,7 +442,6 @@ export function NationEmissionsJourney({
                 on desktop. Appears with the first layer, not before. */}
             <p
               className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 md:mt-10`}
-              style={{ opacity: exitFade }}
             >
               <motion.span
                 className="block"
@@ -505,10 +464,7 @@ export function NationEmissionsJourney({
           </div>
 
           {/* Caption + legend of layers added so far */}
-          <div
-            className="space-y-2.5 md:space-y-4 order-2 min-h-0 text-center md:text-left"
-            style={{ opacity: exitFade }}
-          >
+          <div className="space-y-2.5 md:space-y-4 order-2 min-h-0 text-center md:text-left">
             {/* Hidden (but space-keeping) until the section pins, so the
                 label and copy arrive together with the growing circle */}
             <motion.div
