@@ -70,6 +70,10 @@ const LAYERS = [
 /** Shorter than the 90vh default so the reveal is quicker to scroll through. */
 const STACKED_STEP_VH = 70;
 
+const LAYER_COUNT = LAYERS.length;
+/** One extra scroll step after all layers: legend values + total, no caption. */
+const STEP_COUNT = LAYER_COUNT + 1;
+
 interface NationStackedChartProps {
   data: NationStackDataPoint[];
   className?: string;
@@ -93,12 +97,16 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
     return ticks;
   }, [latestYear, isMobile]);
 
-  // Scroll-driven: each step reveals one more area layer.
+  // Scroll-driven: each step reveals one more area layer, then a summary step.
   const { ref, step, sectionVh, stageStyle } = usePinnedSteps(
-    LAYERS.length,
+    STEP_COUNT,
     STACKED_STEP_VH,
   );
-  const visibleLayers = reducedMotion ? LAYERS.length : step + 1;
+  const isSummaryStep = reducedMotion || step >= LAYER_COUNT;
+  const visibleLayers = reducedMotion
+    ? LAYER_COUNT
+    : Math.min(step + 1, LAYER_COUNT);
+  const showCaption = !reducedMotion && step < LAYER_COUNT;
 
   // Mobile has no floating tooltip (it covers the chart); instead the legend
   // becomes a readout while the reader scrubs a finger across the chart,
@@ -108,6 +116,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
   const scrubClearRef = useRef<number | null>(null);
   const latestPoint = data.at(-1);
   const scrubbing = isMobile && scrubYear !== null;
+  const showLegendValues = scrubbing || isSummaryStep;
   const readoutYear = scrubYear ?? latestYear;
   const readoutPoint =
     data.find((point) => point.year === readoutYear) ?? latestPoint;
@@ -136,7 +145,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
     : isStoryShort
       ? "min(160px, 20svh)"
       : "min(200px, 24svh)";
-  const activeLayer = LAYERS[visibleLayers - 1];
+  const activeLayer = LAYERS[Math.min(visibleLayers, LAYER_COUNT) - 1];
 
   // Full-bleed mobile plot: the edge ticks anchor inward so "1990" and the
   // latest year don't clip at the svg boundary.
@@ -201,7 +210,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
       data-story-section
       data-story-chapter="stacked"
       data-story-step={step}
-      data-story-steps={LAYERS.length}
+      data-story-steps={STEP_COUNT}
       data-story-step-vh={STACKED_STEP_VH}
       className="relative"
       style={{ height: `${sectionVh}vh` }}
@@ -223,8 +232,8 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
             className={`hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow} mb-2 md:mb-3`}
           >
             {t("nation.story.stacked.layerCounter", {
-              current: visibleLayers,
-              total: LAYERS.length,
+              current: Math.min(step + 1, STEP_COUNT),
+              total: STEP_COUNT,
             })}
           </p>
           <h2
@@ -238,20 +247,28 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
               step-header emphasis style reads too heavy), dot on line one */}
           {/* Sized for the longest caption (3 lines mobile) so the chart
               below doesn't shift vertically as the step captions swap */}
-          <div className="min-h-[3.75rem] story-short:min-h-[2.5rem] md:min-h-[2.5rem] mb-2 story-short:mb-0.5 md:mb-4">
-            <motion.p
-              key={visibleLayers}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className={`flex items-start gap-2 md:gap-3 ${NATION_STORY_TYPE.meta} text-white`}
-            >
-              <span
-                className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0 mt-1 md:mt-1.5"
-                style={{ backgroundColor: LAYERS[visibleLayers - 1].color }}
-              />
-              {t(LAYERS[visibleLayers - 1].captionKey)}
-            </motion.p>
+          <div
+            className={`mb-2 story-short:mb-0.5 md:mb-4 ${
+              showCaption
+                ? "min-h-[3.75rem] story-short:min-h-[2.5rem] md:min-h-[2.5rem]"
+                : ""
+            }`}
+          >
+            {showCaption && (
+              <motion.p
+                key={step}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className={`flex items-start gap-2 md:gap-3 ${NATION_STORY_TYPE.meta} text-white`}
+              >
+                <span
+                  className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0 mt-1 md:mt-1.5"
+                  style={{ backgroundColor: LAYERS[step].color }}
+                />
+                {t(LAYERS[step].captionKey)}
+              </motion.p>
+            )}
           </div>
 
           {/* Mobile has no rotated axis label, so state the unit here */}
@@ -378,66 +395,99 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
             </ResponsiveContainer>
           </div>
 
-          {/* Legend in the story's own styling. At rest it is names only; on
-              mobile, scrubbing the chart turns it into a readout showing the
-              scrubbed year's stacking arithmetic with a summed total. Desktop
-              keeps the hover tooltip for values. */}
-          <div className="mt-3 story-short:mt-1.5 md:mt-5 border-t border-white/10 pt-2.5 story-short:pt-1.5 md:pt-3 space-y-1.5 story-short:space-y-1 md:space-y-2">
-            {/* Same slot: an invitation to scrub at rest, the scrubbed year
-                while the finger is on the chart */}
-            {isMobile &&
-              (scrubbing ? (
-                <p className={NATION_STORY_TYPE.meta}>
-                  <span className="text-white tabular-nums font-medium">
-                    {readoutYear}
-                  </span>
-                </p>
-              ) : (
-                <p
-                  className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
+          {/* Legend: compact names-only view, crossfading to a readout on summary/scrub. */}
+          <div className="mt-3 story-short:mt-1.5 md:mt-5 border-t border-white/10 pt-2.5 story-short:pt-1.5 md:pt-3">
+            <AnimatePresence mode="wait" initial={false}>
+              {showLegendValues ? (
+                <motion.div
+                  key="legend-readout"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: reducedMotion ? 0 : 0.35,
+                    ease: "easeOut",
+                  }}
+                  className="space-y-1.5 story-short:space-y-1 md:space-y-2"
                 >
-                  {t("nation.story.stacked.scrubHint")}
-                </p>
-              ))}
-            <div className="flex flex-col gap-y-1.5 story-short:gap-y-1 md:flex-row md:flex-wrap md:items-center md:gap-x-8">
-              {LAYERS.slice(0, visibleLayers).map((layer, index) => (
-                <motion.span
-                  key={layer.dataKey}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: 0.1 }}
-                  className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
-                >
-                  <span
-                    className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
-                    style={{ backgroundColor: layer.color }}
-                  />
-                  <span className={NATION_STORY_TEXT.secondary}>
-                    {t(layer.translationKey)}
-                  </span>
-                  {scrubbing && (
-                    <span className="ml-auto text-white tabular-nums">
-                      {index === 0 ? "" : "+"}
-                      {formatMton(
-                        readoutPoint?.[layer.dataKey] ?? 0,
-                        currentLanguage,
-                        0,
-                      )}
+                  <p className={NATION_STORY_TYPE.meta}>
+                    <span className="text-white tabular-nums font-medium">
+                      {readoutYear}
                     </span>
+                  </p>
+                  <div className="flex flex-col gap-y-1.5 story-short:gap-y-1">
+                    {LAYERS.slice(0, visibleLayers).map((layer, index) => (
+                      <span
+                        key={layer.dataKey}
+                        className={`flex items-center gap-2 md:gap-2.5 w-full ${NATION_STORY_TYPE.meta}`}
+                      >
+                        <span
+                          className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+                          style={{ backgroundColor: layer.color }}
+                        />
+                        <span className={NATION_STORY_TEXT.secondary}>
+                          {t(layer.translationKey)}
+                        </span>
+                        <span className="ml-auto text-white tabular-nums">
+                          {index === 0 ? "" : "+"}
+                          {formatMton(
+                            readoutPoint?.[layer.dataKey] ?? 0,
+                            currentLanguage,
+                            0,
+                          )}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                  {visibleLayers > 1 && (
+                    <p
+                      className={`flex items-center justify-between border-t border-white/10 pt-1.5 ${NATION_STORY_TYPE.meta} text-white font-medium`}
+                    >
+                      <span>{t("nation.story.journey.totalLabel")}</span>
+                      <span className="tabular-nums">
+                        {formatMton(readoutTotal, currentLanguage, 0)}
+                      </span>
+                    </p>
                   )}
-                </motion.span>
-              ))}
-            </div>
-            {scrubbing && visibleLayers > 1 && (
-              <p
-                className={`flex items-center justify-between border-t border-white/10 pt-1.5 ${NATION_STORY_TYPE.meta} text-white font-medium`}
-              >
-                <span>{t("nation.story.journey.totalLabel")}</span>
-                <span className="tabular-nums">
-                  {formatMton(readoutTotal, currentLanguage, 0)}
-                </span>
-              </p>
-            )}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="legend-compact"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: reducedMotion ? 0 : 0.25,
+                    ease: "easeOut",
+                  }}
+                  className="space-y-1.5 story-short:space-y-1 md:space-y-2"
+                >
+                  {isMobile && (
+                    <p
+                      className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`}
+                    >
+                      {t("nation.story.stacked.scrubHint")}
+                    </p>
+                  )}
+                  <div className="flex flex-col gap-y-1.5 story-short:gap-y-1 md:flex-row md:flex-wrap md:items-center md:gap-x-8">
+                    {LAYERS.slice(0, visibleLayers).map((layer) => (
+                      <span
+                        key={layer.dataKey}
+                        className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
+                      >
+                        <span
+                          className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+                          style={{ backgroundColor: layer.color }}
+                        />
+                        <span className={NATION_STORY_TEXT.secondary}>
+                          {t(layer.translationKey)}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

@@ -1,6 +1,18 @@
-import { useId, useRef } from "react";
+import {
+  memo,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  type RefObject,
+} from "react";
 import { useTranslation } from "react-i18next";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import {
+  animate,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  type MotionValue,
+} from "framer-motion";
 import {
   formatMton,
   type NationStoryMetrics,
@@ -11,74 +23,217 @@ import {
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
-import { svgLocalUrl } from "@/components/nation/story/svgLocalUrl";
 import {
   SWEDEN_OUTLINE_PATH,
   SWEDEN_OUTLINE_VIEWBOX,
+  swedenOutlineScaleMatrix,
 } from "@/components/nation/story/swedenOutlinePath";
 
 type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
-/** Silhouette vertical extents inside the 0 0 100 220 viewBox. */
-const OUTLINE_TOP = 6;
-const OUTLINE_BOTTOM = 214;
-const OUTLINE_HEIGHT = OUTLINE_BOTTOM - OUTLINE_TOP;
+/** Pink map grows out from the orange core shortly after mount. */
+const PINK_MAP_REVEAL_DELAY_S = 0.35;
 
-const FILL_SPRING = {
+const PINK_REVEAL_TRANSITION = {
   type: "spring" as const,
-  stiffness: 50,
-  damping: 18,
+  stiffness: 42,
+  damping: 20,
   mass: 1,
+  delay: PINK_MAP_REVEAL_DELAY_S,
+  bounce: 0,
 };
+
+/** Visual nudge – the silhouette reads right-heavy when nested at bbox centre. */
+const INNER_MAP_NUDGE_X = -7;
+
+type SwedenSilhouetteProps = {
+  scale: number;
+  fill: string;
+  stroke?: string;
+  strokeWidth?: number;
+  opacity?: number;
+  nudgeX?: number;
+  nudgeY?: number;
+};
+
+/** Scale the path around the silhouette centre via a single matrix on the path. */
+function SwedenSilhouette({
+  scale,
+  fill,
+  stroke,
+  strokeWidth = 0,
+  opacity = 1,
+  nudgeX = 0,
+  nudgeY = 0,
+}: SwedenSilhouetteProps) {
+  return (
+    <path
+      d={SWEDEN_OUTLINE_PATH}
+      fill={fill}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      opacity={opacity}
+      transform={swedenOutlineScaleMatrix(scale, nudgeX, nudgeY)}
+    />
+  );
+}
+
+type AnimatedPinkSilhouetteProps = {
+  progress: MotionValue<number>;
+  fill: string;
+};
+
+/** Pink map scale – SVG attribute updates without React re-renders per frame. */
+function AnimatedPinkSilhouette({
+  progress,
+  fill,
+}: AnimatedPinkSilhouetteProps) {
+  const ref = useRef<SVGPathElement>(null);
+
+  const applyTransform = (p: number) => {
+    // Clamp so spring easing cannot overshoot and clip against the SVG viewport.
+    const scale = Math.min(1, Math.max(p, 0.001));
+    ref.current?.setAttribute("transform", swedenOutlineScaleMatrix(scale));
+  };
+
+  useMotionValueEvent(progress, "change", applyTransform);
+
+  useEffect(() => {
+    applyTransform(progress.get());
+  }, [progress]);
+
+  return (
+    <path
+      ref={ref}
+      d={SWEDEN_OUTLINE_PATH}
+      fill={fill}
+      shapeRendering="geometricPrecision"
+    />
+  );
+}
+
+type IntroSwedenMapsProps = {
+  pinkProgress: MotionValue<number>;
+  innerScale: number;
+  reported: string;
+  full: string;
+  unitLong: string;
+};
+
+const IntroSwedenMaps = memo(function IntroSwedenMaps({
+  pinkProgress,
+  innerScale,
+  reported,
+  full,
+  unitLong,
+}: IntroSwedenMapsProps) {
+  return (
+    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+      <div className="absolute inset-[7%] md:inset-[8%]">
+        <svg
+          viewBox={SWEDEN_OUTLINE_VIEWBOX}
+          overflow="visible"
+          className="h-full w-full block"
+          role="img"
+          aria-label={`${reported}–${full} ${unitLong}`}
+        >
+          <AnimatedPinkSilhouette
+            progress={pinkProgress}
+            fill={NATION_STORY_COLORS.consumption}
+          />
+          <SwedenSilhouette
+            scale={innerScale}
+            fill={NATION_STORY_COLORS.territorial}
+            nudgeX={INNER_MAP_NUDGE_X}
+          />
+        </svg>
+      </div>
+    </div>
+  );
+});
 
 type StatCalloutProps = {
   label: string;
   value: string;
-  /** Compact unit for mobile (e.g. "Mton") */
+  /** Invisible width anchor so counting digits do not shift sibling layout */
+  reservedValue?: string;
   unitShort: string;
-  /** Written-out unit for desktop (e.g. "miljoner ton") */
   unitLong: string;
   colorClass: string;
-  delay: number;
   className?: string;
+  mobileValueRef?: RefObject<HTMLSpanElement>;
+  desktopValueRef?: RefObject<HTMLSpanElement>;
 };
+
+function StableStatValue({
+  value,
+  reservedValue,
+  className,
+  valueRef,
+}: {
+  value: string;
+  reservedValue: string;
+  className: string;
+  valueRef?: RefObject<HTMLSpanElement>;
+}) {
+  return (
+    <span className={`inline-grid ${className}`}>
+      <span
+        className="col-start-1 row-start-1 invisible pointer-events-none select-none"
+        aria-hidden="true"
+      >
+        {reservedValue}
+      </span>
+      <span
+        ref={valueRef}
+        className="col-start-1 row-start-1"
+        {...(valueRef ? { "aria-live": "polite" as const } : {})}
+      >
+        {valueRef ? null : value}
+      </span>
+    </span>
+  );
+}
 
 function StatCallout({
   label,
   value,
+  reservedValue,
   unitShort,
   unitLong,
   colorClass,
-  delay,
   className,
+  mobileValueRef,
+  desktopValueRef,
 }: StatCalloutProps) {
+  const widthAnchor = reservedValue ?? value;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 12 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.5, delay }}
-      className={`min-w-0 ${className ?? ""}`}
-    >
-      {/* Mobile: big number on top so both columns share a baseline */}
+    <div className={className ?? ""}>
       <div className="md:hidden flex flex-col items-center text-center px-0.5">
-        <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>{value}</p>
+        <p className={`${NATION_STORY_TYPE.display} ${colorClass}`}>
+          <StableStatValue
+            value={value}
+            reservedValue={widthAnchor}
+            className="justify-items-center"
+            valueRef={mobileValueRef}
+          />
+        </p>
         <p
-          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5`}
+          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1 story-short:mt-0.5 px-0.5 leading-normal`}
         >
           {unitShort}
         </p>
         <p
-          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[9.25rem]`}
+          className={`${NATION_STORY_TYPE.meta} leading-snug ${NATION_STORY_TEXT.secondary} mt-2 story-short:mt-1 max-w-[11rem]`}
         >
           {label}
         </p>
       </div>
 
-      {/* Desktop: centered under the page title; mobile stays compact */}
-      <div className="hidden md:block text-center">
+      <div className="hidden md:block text-left min-w-[12.5rem]">
         <p
           className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
         >
@@ -87,148 +242,249 @@ function StatCallout({
         <p
           className={`${NATION_STORY_TYPE.display} leading-none ${colorClass}`}
         >
-          {value}{" "}
-          <span
-            className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} font-normal align-baseline whitespace-nowrap`}
-          >
-            {unitLong}
-          </span>
+          <StableStatValue
+            value={value}
+            reservedValue={widthAnchor}
+            className="justify-items-start"
+            valueRef={desktopValueRef}
+          />
+        </p>
+        <p
+          className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mt-1.5 leading-normal whitespace-nowrap`}
+        >
+          {unitLong}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-/**
- * Hero visual: the Sweden silhouette in the full-emissions colour, with the
- * officially reported share shown as a liquid fill rising from the bottom —
- * foreshadowing the bathtub metaphor later in the story.
- *
- * The fill is height-proportional (standard infographic convention); the
- * exact figures live in the callouts beside the silhouette.
- */
-export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
+type PinkStatCalloutProps = {
+  label: string;
+  unitShort: string;
+  unitLong: string;
+  colorClass: string;
+  className?: string;
+  /** 0–1, shared with the pink map scale animation */
+  progress: MotionValue<number>;
+  targetMton: number;
+  reducedMotion: boolean | null;
+};
+
+const PinkStatCallout = memo(function PinkStatCallout({
+  label,
+  unitShort,
+  unitLong,
+  colorClass,
+  className,
+  progress,
+  targetMton,
+  reducedMotion,
+}: PinkStatCalloutProps) {
+  const { currentLanguage } = useLanguage();
+  const reservedValue = formatMton(targetMton, currentLanguage, 0);
+  const initialValue = formatMton(0, currentLanguage, 0);
+  const mobileValueRef = useRef<HTMLSpanElement>(null);
+  const desktopValueRef = useRef<HTMLSpanElement>(null);
+  const lastRoundedRef = useRef(-1);
+
+  const writeValue = (rounded: number) => {
+    const text = formatMton(rounded, currentLanguage, 0);
+    if (mobileValueRef.current) mobileValueRef.current.textContent = text;
+    if (desktopValueRef.current) desktopValueRef.current.textContent = text;
+  };
+
+  useMotionValueEvent(progress, "change", (p) => {
+    const clamped = Math.min(1, Math.max(p, 0));
+    const rounded = Math.round(clamped * targetMton);
+    if (rounded === lastRoundedRef.current) return;
+    lastRoundedRef.current = rounded;
+    writeValue(rounded);
+  });
+
+  useEffect(() => {
+    if (!reducedMotion) return;
+    lastRoundedRef.current = Math.round(targetMton);
+    writeValue(targetMton);
+  }, [reducedMotion, targetMton, currentLanguage]);
+
+  useLayoutEffect(() => {
+    const clamped = Math.min(1, Math.max(progress.get(), 0));
+    const rounded = Math.round(clamped * targetMton);
+    if (rounded === lastRoundedRef.current) {
+      writeValue(rounded);
+      return;
+    }
+    lastRoundedRef.current = rounded;
+    writeValue(rounded);
+  });
+
+  return (
+    <div className={className}>
+      <StatCallout
+        label={label}
+        value={initialValue}
+        reservedValue={reservedValue}
+        unitShort={unitShort}
+        unitLong={unitLong}
+        colorClass={colorClass}
+        mobileValueRef={mobileValueRef}
+        desktopValueRef={desktopValueRef}
+      />
+    </div>
+  );
+});
+
+type IntroPunchContent = {
+  pinkProgress: MotionValue<number>;
+  reducedMotion: boolean | null;
+  innerScale: number;
+  reported: string;
+  full: string;
+  fullValue: number;
+  unitShort: string;
+  unitLong: string;
+  usualLabel: string;
+  fullLabel: string;
+};
+
+const IntroStatCallouts = memo(function IntroStatCallouts({
+  className,
+  ...content
+}: IntroPunchContent & { className?: string }) {
+  const {
+    pinkProgress,
+    reducedMotion,
+    reported,
+    fullValue,
+    unitShort,
+    unitLong,
+    usualLabel,
+    fullLabel,
+  } = content;
+
+  return (
+    <div
+      className={`grid w-full max-w-[22rem] grid-cols-2 gap-x-4 md:flex md:w-auto md:max-w-none md:flex-col md:items-start md:gap-5 lg:gap-6 md:shrink-0 ${className ?? ""}`}
+    >
+      <StatCallout
+        label={usualLabel}
+        value={reported}
+        reservedValue={reported}
+        unitShort={unitShort}
+        unitLong={unitLong}
+        colorClass="text-orange-3"
+        className="order-1"
+      />
+      <PinkStatCallout
+        reducedMotion={reducedMotion}
+        progress={pinkProgress}
+        targetMton={fullValue}
+        label={fullLabel}
+        unitShort={unitShort}
+        unitLong={unitLong}
+        colorClass="text-pink-3"
+        className="order-2"
+      />
+    </div>
+  );
+});
+
+function useIntroPunchContent(metrics: NationStoryMetrics): IntroPunchContent {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const reducedMotion = useReducedMotion();
-  const clipId = `sweden-fill-clip-${useId().replace(/:/g, "")}`;
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInView = useInView(mapRef, { once: true, amount: 0.15 });
 
   const reportedValue = metrics.territorialLatestMton;
   const fullValue = Math.max(metrics.combinedLatestMton, reportedValue);
   const reported = formatMton(reportedValue, currentLanguage, 0);
   const full = formatMton(fullValue, currentLanguage, 0);
   const fillRatio = reportedValue / fullValue;
-  const fillTop = OUTLINE_BOTTOM - fillRatio * OUTLINE_HEIGHT;
-  const fillHeight = OUTLINE_BOTTOM - fillTop + 6;
-  const unitShort = t("nation.story.unit.mtonCo2e");
-  const unitLong = t("nation.story.unit.millionTco2e");
+  const innerScale = Math.sqrt(fillRatio);
+  const pinkProgress = useMotionValue(reducedMotion ? 1 : 0);
 
-  const fillShown = reducedMotion || mapInView;
+  useEffect(() => {
+    if (reducedMotion === null) return;
+    if (reducedMotion) {
+      pinkProgress.set(1);
+      return;
+    }
+    pinkProgress.set(0);
+    const controls = animate(pinkProgress, 1, PINK_REVEAL_TRANSITION);
+    return () => controls.stop();
+  }, [reducedMotion, pinkProgress]);
+
+  return {
+    pinkProgress,
+    reducedMotion,
+    innerScale,
+    reported,
+    full,
+    fullValue,
+    unitShort: t("nation.story.unit.mtonCo2e"),
+    unitLong: t("nation.story.unit.millionTco2e"),
+    usualLabel: t("nation.story.intro.usualLabel"),
+    fullLabel: t("nation.story.intro.fullLabel"),
+  };
+}
+
+/**
+ * Hero visual: a smaller orange Sweden (what we usually discuss) nested inside
+ * a larger pink silhouette (the full picture). The pink ring between them is
+ * the emissions gap the story unpacks.
+ */
+export function NationIntroPunch({ metrics }: NationIntroPunchProps) {
+  const content = useIntroPunchContent(metrics);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.45 }}
-      className="mx-auto flex w-fit max-w-full flex-col items-center justify-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex-row md:items-center md:gap-10 lg:gap-14"
-    >
-      <div
-        ref={mapRef}
-        className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(260px,44svh,460px)] aspect-[100/220]"
-      >
-        <svg
-          viewBox={SWEDEN_OUTLINE_VIEWBOX}
-          className="h-full w-auto max-w-full mx-auto"
-          role="img"
-          aria-label={`${reported}–${full} ${unitLong}`}
+    <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1">
+      <IntroSwedenMaps
+        pinkProgress={content.pinkProgress}
+        innerScale={content.innerScale}
+        reported={content.reported}
+        full={content.full}
+        unitLong={content.unitLong}
+      />
+      <IntroStatCallouts {...content} />
+    </div>
+  );
+}
+
+function IntroPunchVisual({ content }: { content: IntroPunchContent }) {
+  return (
+    <div className="mx-auto grid max-w-full grid-cols-1 justify-items-center gap-2 max-md:gap-1.5 story-short:gap-1 md:flex md:w-fit md:max-w-full md:items-center md:justify-center md:gap-10 lg:gap-14">
+      <IntroSwedenMaps
+        pinkProgress={content.pinkProgress}
+        innerScale={content.innerScale}
+        reported={content.reported}
+        full={content.full}
+        unitLong={content.unitLong}
+      />
+      <IntroStatCallouts {...content} />
+    </div>
+  );
+}
+
+/** Intro hero: stacked on mobile; centered title/body with map + stats side by side on desktop. */
+export function NationIntroHero({ metrics }: NationIntroPunchProps) {
+  const { t } = useTranslation();
+  const content = useIntroPunchContent(metrics);
+  const title = t("nation.story.intro.title");
+  const paragraph = t("nation.story.intro.paragraph1");
+
+  return (
+    <div className="relative w-full max-w-5xl mx-auto shrink-0 md:max-w-6xl">
+      <div className="text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
+        <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>{title}</h1>
+        <p
+          className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
         >
-          <defs>
-            <clipPath id={clipId}>
-              <path d={SWEDEN_OUTLINE_PATH} />
-            </clipPath>
-          </defs>
-
-          <motion.path
-            d={SWEDEN_OUTLINE_PATH}
-            fill={NATION_STORY_COLORS.consumption}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            style={{ transformOrigin: "50% 50%" }}
-          />
-
-          {/* Reported share rises like water inside the silhouette */}
-          <g clipPath={svgLocalUrl(clipId)}>
-            <motion.rect
-              x={0}
-              width={100}
-              fill={NATION_STORY_COLORS.territorial}
-              initial={
-                reducedMotion
-                  ? { y: fillTop, height: fillHeight }
-                  : { y: OUTLINE_BOTTOM, height: 0 }
-              }
-              animate={
-                fillShown
-                  ? { y: fillTop, height: fillHeight }
-                  : { y: OUTLINE_BOTTOM, height: 0 }
-              }
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
-            />
-            <motion.line
-              x1={0}
-              x2={100}
-              stroke="var(--orange-1)"
-              strokeWidth="1"
-              strokeOpacity="0.8"
-              initial={
-                reducedMotion
-                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-              }
-              animate={
-                fillShown
-                  ? { y1: fillTop, y2: fillTop, opacity: 1 }
-                  : { y1: OUTLINE_BOTTOM, y2: OUTLINE_BOTTOM, opacity: 0 }
-              }
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { ...FILL_SPRING, delay: 0.35 }
-              }
-            />
-          </g>
-        </svg>
+          {paragraph}
+        </p>
+        <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-6 lg:pt-10">
+          <IntroPunchVisual content={content} />
+        </div>
       </div>
-
-      {/* Desktop: map + callouts centered as one unit; mobile: two-column grid */}
-      <div className="grid grid-cols-2 gap-x-3 md:flex md:w-auto md:flex-col md:items-center md:gap-10 w-full max-w-[20rem] md:max-w-none mx-auto">
-        <StatCallout
-          label={t("nation.story.intro.fullLabel")}
-          value={full}
-          unitShort={unitShort}
-          unitLong={unitLong}
-          colorClass="text-pink-3"
-          delay={0.15}
-          className="order-2 md:order-1"
-        />
-        <StatCallout
-          label={t("nation.story.intro.usualLabel")}
-          value={reported}
-          unitShort={unitShort}
-          unitLong={unitLong}
-          colorClass="text-orange-3"
-          delay={0.3}
-          className="order-1 md:order-2"
-        />
-      </div>
-    </motion.div>
+    </div>
   );
 }

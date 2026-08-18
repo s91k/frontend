@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { NationBathtub } from "@/components/nation/story/NationBathtub";
 import { NationConclusion } from "@/components/nation/story/NationConclusion";
 import { NationEmissionsJourney } from "@/components/nation/story/NationEmissionsJourney";
-import { NationIntroPunch } from "@/components/nation/story/NationIntroPunch";
+import { NationIntroHero } from "@/components/nation/story/NationIntroPunch";
 import { NationStackedChart } from "@/components/nation/story/NationStackedChart";
 import { StoryNavChrome } from "@/components/nation/story/StoryNavChrome";
 import { StoryScrollHint } from "@/components/nation/story/StoryScrollHint";
@@ -60,23 +60,10 @@ export function NationStoryPage({
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_38%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative w-full max-w-5xl mx-auto shrink-0 text-center space-y-1.5 max-md:space-y-1 story-short:space-y-0.5 md:space-y-4">
-          <h1 className={`${NATION_STORY_TYPE.heroTitle} text-white`}>
-            {t("nation.story.intro.title")}
-          </h1>
-          <p
-            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} max-w-2xl mx-auto`}
-          >
-            {t("nation.story.intro.paragraph1")}
-          </p>
-          <div className="pt-2 max-md:pt-1.5 story-short:pt-1 md:pt-10">
-            <NationIntroPunch metrics={metrics} />
-          </div>
-        </div>
+        <NationIntroHero metrics={metrics} />
       </section>
 
       <NationEmissionsJourney metrics={metrics} />
-      <NationBathtub data={metrics.bathtubData} />
 
       <FullScreenSection chapter="interlude">
         <div className="max-w-2xl mx-auto text-center space-y-5 story-short:space-y-3 md:space-y-4 lg:space-y-5">
@@ -89,6 +76,32 @@ export function NationStoryPage({
           >
             {t("nation.story.interlude.title")}
           </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body} space-y-4 md:space-y-5`}
+          >
+            <p>{t("nation.story.interlude.body")}</p>
+            <p>{t("nation.story.interlude.body2")}</p>
+          </motion.div>
+        </div>
+      </FullScreenSection>
+
+      <NationStackedChart data={metrics.stackData} />
+
+      <FullScreenSection chapter="bathtubBridge">
+        <div className="max-w-2xl mx-auto text-center space-y-5 story-short:space-y-3 md:space-y-4 lg:space-y-5">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ duration: 0.45, delay: 0.05 }}
+            className={NATION_STORY_TYPE.title}
+          >
+            {t("nation.story.bathtubBridge.title")}
+          </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -96,12 +109,12 @@ export function NationStoryPage({
             transition={{ duration: 0.5, delay: 0.12 }}
             className={`${NATION_STORY_TYPE.body} ${NATION_STORY_TEXT.body}`}
           >
-            {t("nation.story.interlude.body")}
+            {t("nation.story.bathtubBridge.body")}
           </motion.p>
         </div>
       </FullScreenSection>
 
-      <NationStackedChart data={metrics.stackData} />
+      <NationBathtub data={metrics.bathtubData} />
 
       <section
         ref={conclusionRef}
