@@ -216,7 +216,10 @@ function StoryMobileChapterMenu({
           }}
         >
           <span className="truncate">{triggerLabel}</span>
-          <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden />
+          <ChevronDown
+            className="h-3.5 w-3.5 shrink-0 opacity-70"
+            aria-hidden
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -225,17 +228,17 @@ function StoryMobileChapterMenu({
         className="z-50 min-w-[12rem] border-white/15 bg-black/95 p-1 text-white backdrop-blur-sm md:hidden"
       >
         {chapters.map((chapter) => (
-            <DropdownMenuItem
-              key={chapter.chapter}
-              onSelect={() => glideToStorySection(chapter.index)}
-              className={cn(
-                "cursor-pointer rounded-sm px-3 py-2 text-sm focus:bg-white/10 focus:text-white",
-                chapter.isActive ? "text-white" : "text-grey",
-              )}
-            >
-              {chapterNavLabel(chapter)}
-            </DropdownMenuItem>
-          ))}
+          <DropdownMenuItem
+            key={chapter.chapter}
+            onSelect={() => glideToStorySection(chapter.index)}
+            className={cn(
+              "cursor-pointer rounded-sm px-3 py-2 text-sm focus:bg-white/10 focus:text-white",
+              chapter.isActive ? "text-white" : "text-grey",
+            )}
+          >
+            {chapterNavLabel(chapter)}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

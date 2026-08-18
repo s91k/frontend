@@ -20,7 +20,10 @@ import {
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
-import { isStoryGliding, useStorySectionJumping } from "@/components/nation/story/useStoryAutoSnap";
+import {
+  isStoryGliding,
+  useStorySectionJumping,
+} from "@/components/nation/story/useStoryAutoSnap";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
 
 type JourneyStep = {
@@ -336,9 +339,7 @@ export function NationEmissionsJourney({
     : reducedMotion
       ? { duration: 0 }
       : LAYER_GROW_TRANSITION;
-  const captionTransition = instantMotion
-    ? { duration: 0 }
-    : { duration: 0.4 };
+  const captionTransition = instantMotion ? { duration: 0 } : { duration: 0.4 };
 
   return (
     <section
@@ -394,7 +395,9 @@ export function NationEmissionsJourney({
                   animate={{ opacity: 0.18 }}
                   exit={{ opacity: 0 }}
                   transition={
-                    instantMotion ? { duration: 0 } : { duration: reducedMotion ? 0 : 0.8 }
+                    instantMotion
+                      ? { duration: 0 }
+                      : { duration: reducedMotion ? 0 : 0.8 }
                   }
                 />
               </AnimatePresence>
@@ -636,7 +639,9 @@ export function NationEmissionsJourney({
                       initial={instantMotion ? false : { opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={
-                        instantMotion ? { duration: 0 } : { duration: 0.35, delay: 0.1 }
+                        instantMotion
+                          ? { duration: 0 }
+                          : { duration: 0.35, delay: 0.1 }
                       }
                       className={`flex items-center gap-2 md:gap-2.5 ${NATION_STORY_TYPE.meta}`}
                     >

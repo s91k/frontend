@@ -233,7 +233,9 @@ function StatCallout({
         >
           {label}
         </p>
-        <p className={`${NATION_STORY_TYPE.display} leading-none ${colorClass}`}>
+        <p
+          className={`${NATION_STORY_TYPE.display} leading-none ${colorClass}`}
+        >
           <StableStatValue
             value={value}
             reservedValue={widthAnchor}
