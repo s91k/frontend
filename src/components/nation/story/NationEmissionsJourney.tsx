@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   AnimatePresence,
   animate,
   motion,
+  useMotionValue,
   useReducedMotion,
 } from "framer-motion";
 import {
@@ -179,6 +180,7 @@ export function NationEmissionsJourney({
   const reducedMotion = useReducedMotion();
   const sectionJumping = useStorySectionJumping();
   const instantMotion = reducedMotion || sectionJumping;
+  const totalTextColor = useMotionValue("#ffffff");
 
   const steps = buildSteps(metrics);
   const maxTotal = steps[steps.length - 1].total;
@@ -194,6 +196,23 @@ export function NationEmissionsJourney({
     });
 
   const current = steps[step];
+
+  // Re-run the white→black flash on each layer without remounting AnimatedTotal
+  // (a keyed wrapper would reset its previous-value ref and snap the count-up).
+  useLayoutEffect(() => {
+    if (!sectionStarted) return;
+    if (instantMotion) {
+      totalTextColor.set("#000000");
+      return;
+    }
+    totalTextColor.set("#ffffff");
+    const controls = animate(totalTextColor, "#000000", {
+      duration: 0.3,
+      delay: 0.4,
+    });
+    return () => controls.stop();
+  }, [step, sectionStarted, instantMotion, totalTextColor]);
+
   // The pinned stage is in the DOM before the reader reaches it, so gate the
   // reveals on the section actually pinning – otherwise the first layer's
   // grow animation would have played long before anyone sees it.
@@ -388,15 +407,16 @@ export function NationEmissionsJourney({
               >
                 {sectionStarted ? (
                   <motion.span
-                    key={current.key}
-                    initial={instantMotion ? false : { color: "#ffffff" }}
+                    initial={
+                      step === 0 && !instantMotion && !reducedMotion
+                        ? { color: "#ffffff" }
+                        : false
+                    }
                     animate={{ color: "#000000" }}
                     transition={
-                      instantMotion
-                        ? { duration: 0 }
-                        : reducedMotion
-                          ? { duration: 0 }
-                          : { duration: 0.3, delay: 0.4 }
+                      step === 0 && !instantMotion && !reducedMotion
+                        ? { duration: 0.3, delay: 0.4 }
+                        : { duration: 0 }
                     }
                     className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
