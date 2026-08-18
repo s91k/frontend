@@ -197,6 +197,11 @@ export function NationEmissionsJourney({
 
   const current = steps[step];
 
+  // The pinned stage is in the DOM before the reader reaches it, so gate the
+  // reveals on the section actually pinning – otherwise the first layer's
+  // grow animation would have played long before anyone sees it.
+  const sectionStarted = mode !== "before";
+
   // Re-run the white→black flash on each layer without remounting AnimatedTotal
   // (a keyed wrapper would reset its previous-value ref and snap the count-up).
   useLayoutEffect(() => {
@@ -212,11 +217,6 @@ export function NationEmissionsJourney({
     });
     return () => controls.stop();
   }, [step, sectionStarted, instantMotion, totalTextColor]);
-
-  // The pinned stage is in the DOM before the reader reaches it, so gate the
-  // reveals on the section actually pinning – otherwise the first layer's
-  // grow animation would have played long before anyone sees it.
-  const sectionStarted = mode !== "before";
 
   // All layer-circles revealed so far, largest drawn first (behind) so each
   // colour shows as a ring around the previous – i.e. the types stacked up.
@@ -407,17 +407,7 @@ export function NationEmissionsJourney({
               >
                 {sectionStarted ? (
                   <motion.span
-                    initial={
-                      step === 0 && !instantMotion && !reducedMotion
-                        ? { color: "#ffffff" }
-                        : false
-                    }
-                    animate={{ color: "#000000" }}
-                    transition={
-                      step === 0 && !instantMotion && !reducedMotion
-                        ? { duration: 0.3, delay: 0.4 }
-                        : { duration: 0 }
-                    }
+                    style={{ color: totalTextColor }}
                     className={`${NATION_STORY_TYPE.stat} font-medium select-none leading-none text-center`}
                   >
                     <AnimatedTotal
