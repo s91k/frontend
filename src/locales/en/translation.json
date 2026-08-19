@@ -1678,7 +1678,7 @@
         "ctaMunicipalities": "How does your municipality compare?",
         "shareCta": "Feel free to share on your social channels",
         "recap": {
-          "onionHeadline": "Sweden's total emissions 2025",
+          "onionHeadline": "Sweden's total emissions {{year}}",
           "chartHeadline": "Sweden's annual emissions since 1990",
           "bathtubHeadline": "Sweden's accumulated emissions since 1990"
         }

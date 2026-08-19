@@ -1728,7 +1728,7 @@
         "ctaMunicipalities": "Hur ser det ut där du bor?",
         "shareCta": "Dela gärna vidare i dina sociala kanaler",
         "recap": {
-          "onionHeadline": "Sveriges totala utsläpp 2025",
+          "onionHeadline": "Sveriges totala utsläpp {{year}}",
           "chartHeadline": "Sveriges årliga utsläpp sedan 1990",
           "bathtubHeadline": "Sveriges ackumulerade utsläpp sedan 1990"
         }

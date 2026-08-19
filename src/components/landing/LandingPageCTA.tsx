@@ -10,7 +10,7 @@ import type { HeroSearchResult } from "@/types/landing";
 import { Text } from "../ui/text";
 import { POPULAR_HERO_ITEMS } from "@/lib/constants/landingPage";
 import { useHeroGlobalSearch } from "../../hooks/landing/useHeroGlobalSearch";
-import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
+import { nationPublicPath } from "@/utils/ui/featureFlags";
 
 export function LandingPageCTA() {
   const { t } = useTranslation();
@@ -65,9 +65,7 @@ export function LandingPageCTA() {
       }
 
       if (result.type === "nation") {
-        if (nationDetailPageEnabled()) {
-          navigate(localizedPath(currentLanguage, `/nation`));
-        }
+        navigate(localizedPath(currentLanguage, nationPublicPath()));
         return;
       }
 

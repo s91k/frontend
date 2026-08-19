@@ -342,7 +342,9 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
   const items: RecapItem[] = [
     {
       key: "onion",
-      headline: t("nation.story.conclusion.recap.onionHeadline"),
+      headline: t("nation.story.conclusion.recap.onionHeadline", {
+        year: metrics.latestYear,
+      }),
       delay: 0.1,
       mobileVisualClassName: "overflow-visible",
       desktopVisualClassName: "md:translate-x-5 lg:translate-x-6",
