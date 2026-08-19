@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useBlogPosts } from "./useBlogPosts";
 import type { HeroSearchResult } from "@/types/landing";
-import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
 
 export type CombinedData = {
   name: string;
@@ -35,31 +34,29 @@ export const useCombinedData = (
         : [];
 
     const mappedData: CombinedData[] = [
-      ...searchResults
-        .filter((item) => item.type !== "nation" || nationDetailPageEnabled())
-        .map((item) => {
-          if (item.type === "nation" && item.country) {
-            return {
-              name:
-                item.country[currentLanguage] ||
-                item.country.sv ||
-                item.country.en,
-              id: "nation",
-              category: "nations" as CombinedData["category"],
-            };
-          }
-          // Map other types as needed
-          let category: CombinedData["category"];
-          if (item.type === "company") category = "companies";
-          else if (item.type === "municipality") category = "municipalities";
-          else if (item.type === "region") category = "regions";
-          else category = "nations";
+      ...searchResults.map((item) => {
+        if (item.type === "nation" && item.country) {
           return {
-            name: item.name,
-            id: item.id || item.name,
-            category,
+            name:
+              item.country[currentLanguage] ||
+              item.country.sv ||
+              item.country.en,
+            id: "nation",
+            category: "nations" as CombinedData["category"],
           };
-        }),
+        }
+        // Map other types as needed
+        let category: CombinedData["category"];
+        if (item.type === "company") category = "companies";
+        else if (item.type === "municipality") category = "municipalities";
+        else if (item.type === "region") category = "regions";
+        else category = "nations";
+        return {
+          name: item.name,
+          id: item.id || item.name,
+          category,
+        };
+      }),
       ...filteredBlogPosts.map((blogPost) => ({
         name: blogPost.title,
         id: blogPost.id,
