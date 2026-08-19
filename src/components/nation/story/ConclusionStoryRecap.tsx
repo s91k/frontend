@@ -71,7 +71,11 @@ function recapExpandedFrameClass(variant: RecapVisualVariant) {
         "h-auto max-h-[min(44vh,14.5rem)] sm:h-[min(75vh,32rem)] sm:max-h-none",
       );
     case "chart":
-      return cn(base, "overflow-hidden px-2 py-1.5", RECAP_EXPANDED_VISUAL_HEIGHT);
+      return cn(
+        base,
+        "overflow-hidden px-2 py-1.5",
+        RECAP_EXPANDED_VISUAL_HEIGHT,
+      );
   }
 }
 
@@ -158,11 +162,7 @@ function OnionRecapSnapshot({
   const { isMobile } = useScreenSize();
   const containerRef = useRef<HTMLDivElement>(null);
   const [diameter, setDiameter] = useState(RECAP_ONION_DIAMETER);
-  const glowInset = enlarged
-    ? isMobile
-      ? 1.38
-      : 1.12
-    : ONION_GLOW_INSET;
+  const glowInset = enlarged ? (isMobile ? 1.38 : 1.12) : ONION_GLOW_INSET;
 
   useEffect(() => {
     const slot = containerRef.current;
@@ -584,10 +584,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
                   headline: expandedItem.headline,
                 })}
               </DialogDescription>
-              <RecapVisualFrame
-                variant={expandedItem.variant}
-                enlarged
-              >
+              <RecapVisualFrame variant={expandedItem.variant} enlarged>
                 {expandedItem.renderVisual(true)}
               </RecapVisualFrame>
             </>
