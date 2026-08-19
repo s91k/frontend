@@ -18,16 +18,11 @@ export const NAV_LINKS: NavLink[] = [
         path: `/explore/municipalities`,
       },
       {
-        label: "header.valet2026",
-        path: `/valet-2026`,
-        mobileOnly: true,
-      },
-      {
         label: "header.territories",
         items: [
           {
             label: "header.nation",
-            path: `/nation`,
+            path: `/valet-2026`,
           },
           {
             label: "header.regions",
@@ -53,11 +48,6 @@ export const NAV_LINKS: NavLink[] = [
         ],
       },
     ],
-  },
-  {
-    label: "header.valet2026",
-    path: `/valet-2026`,
-    desktopOnly: true,
   },
   {
     path: `/articles`,

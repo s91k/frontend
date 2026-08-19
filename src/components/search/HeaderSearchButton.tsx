@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CombinedData } from "@/hooks/useCombinedData";
 import { cn } from "@/lib/utils";
+import { nationPublicPath } from "@/utils/ui/featureFlags";
 import { SearchDialog } from "./SearchDialog";
 
 type HeaderSearchButtonProps = {
@@ -51,7 +52,7 @@ export const HeaderSearchButton = ({
         navigate(`/regions/${response.id}`);
         break;
       case "nations":
-        navigate(`/nation`);
+        navigate(nationPublicPath());
         break;
       case "blogPosts":
         navigate(`/insights/${response.id}`);

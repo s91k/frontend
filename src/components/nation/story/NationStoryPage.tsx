@@ -126,7 +126,7 @@ export function NationStoryPage({
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,var(--black-2)_0%,var(--black-3)_78%)]"
         />
-        <div className="relative w-full max-w-4xl mx-auto md:pt-6 lg:pt-4">
+        <div className="relative w-full max-w-4xl md:max-w-7xl mx-auto md:pt-6 lg:pt-4">
           <NationConclusion metrics={metrics} />
         </div>
       </section>

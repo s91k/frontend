@@ -1,6 +1,7 @@
 import { Trans, useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { LinkButton } from "@/components/layout/LinkButton";
+import { nationPublicPath } from "@/utils/ui/featureFlags";
 
 export const NationDataOverviewContent = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ export const NationDataOverviewContent = () => {
           <LinkButton
             title={t("methodsPage.nation.nationDataOverview.link.title")}
             text={t("methodsPage.nation.nationDataOverview.link.text")}
-            link={`${i18next.resolvedLanguage}/nation`}
+            link={`/${i18next.resolvedLanguage}${nationPublicPath()}`}
           />
         </div>
       </div>
