@@ -132,7 +132,10 @@ function OnionRecapSnapshot({
     const layerDiameters = new Map<string, number>();
     let previous = 0;
     for (const step of steps) {
-      const diameter = Math.max(diameterFor(step.total), previous + minRingGrowth);
+      const diameter = Math.max(
+        diameterFor(step.total),
+        previous + minRingGrowth,
+      );
       layerDiameters.set(step.key, diameter);
       previous = diameter;
     }
@@ -205,7 +208,8 @@ function ChartRecapSnapshot({ metrics }: { metrics: NationStoryMetrics }) {
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
   const latestYear =
-    metrics.stackData[metrics.stackData.length - 1]?.year ?? NATION_BASELINE_YEAR;
+    metrics.stackData[metrics.stackData.length - 1]?.year ??
+    NATION_BASELINE_YEAR;
   const unitLabel = t("nation.story.unit.mtonCo2e");
   const mirroredYAxisTick = useMemo(
     () => createMirroredYAxisTick(currentLanguage),

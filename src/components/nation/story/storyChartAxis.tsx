@@ -28,11 +28,7 @@ type MirroredYAxisTickProps = {
 
 /** Bold white labels inside the plot on mobile – matches the stacked chart. */
 export function createMirroredYAxisTick(currentLanguage: SupportedLanguage) {
-  return function MirroredYAxisTick({
-    x,
-    y,
-    payload,
-  }: MirroredYAxisTickProps) {
+  return function MirroredYAxisTick({ x, y, payload }: MirroredYAxisTickProps) {
     if (payload.value === 0) return <g />;
     return (
       <text

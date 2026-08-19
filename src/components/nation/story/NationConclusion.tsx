@@ -3,9 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import type { NationStoryMetrics } from "@/utils/data/nationStoryMetrics";
 import { useLanguage } from "@/components/LanguageProvider";
-import {
-  NATION_STORY_TYPE,
-} from "@/components/nation/story/nationStoryColors";
+import { NATION_STORY_TYPE } from "@/components/nation/story/nationStoryColors";
 import { StoryPreviousSectionButton } from "@/components/nation/story/StoryNavChrome";
 import { ConclusionStoryRecap } from "@/components/nation/story/ConclusionStoryRecap";
 

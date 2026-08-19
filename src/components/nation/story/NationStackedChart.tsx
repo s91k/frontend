@@ -435,8 +435,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                               {eCommerceLabel}
                             </span>
                             <span className="ml-auto text-white tabular-nums">
-                              +{eCommerceDelta}{" "}
-                              {t("nation.story.unit.mton")}
+                              +{eCommerceDelta} {t("nation.story.unit.mton")}
                             </span>
                           </span>
                         );

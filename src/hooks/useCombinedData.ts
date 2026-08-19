@@ -38,28 +38,28 @@ export const useCombinedData = (
       ...searchResults
         .filter((item) => item.type !== "nation" || nationDetailPageEnabled())
         .map((item) => {
-        if (item.type === "nation" && item.country) {
+          if (item.type === "nation" && item.country) {
+            return {
+              name:
+                item.country[currentLanguage] ||
+                item.country.sv ||
+                item.country.en,
+              id: "nation",
+              category: "nations" as CombinedData["category"],
+            };
+          }
+          // Map other types as needed
+          let category: CombinedData["category"];
+          if (item.type === "company") category = "companies";
+          else if (item.type === "municipality") category = "municipalities";
+          else if (item.type === "region") category = "regions";
+          else category = "nations";
           return {
-            name:
-              item.country[currentLanguage] ||
-              item.country.sv ||
-              item.country.en,
-            id: "nation",
-            category: "nations" as CombinedData["category"],
+            name: item.name,
+            id: item.id || item.name,
+            category,
           };
-        }
-        // Map other types as needed
-        let category: CombinedData["category"];
-        if (item.type === "company") category = "companies";
-        else if (item.type === "municipality") category = "municipalities";
-        else if (item.type === "region") category = "regions";
-        else category = "nations";
-        return {
-          name: item.name,
-          id: item.id || item.name,
-          category,
-        };
-      }),
+        }),
       ...filteredBlogPosts.map((blogPost) => ({
         name: blogPost.title,
         id: blogPost.id,
