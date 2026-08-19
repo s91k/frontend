@@ -1730,7 +1730,9 @@
         "recap": {
           "onionHeadline": "Sveriges totala utsläpp {{year}}",
           "chartHeadline": "Sveriges årliga utsläpp sedan 1990",
-          "bathtubHeadline": "Sveriges ackumulerade utsläpp sedan 1990"
+          "bathtubHeadline": "Sveriges ackumulerade utsläpp sedan 1990",
+          "expandLabel": "Förstora: {{headline}}",
+          "closeLabel": "Stäng"
         }
       }
     }

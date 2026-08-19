@@ -196,6 +196,7 @@ type TubGraphicProps = {
   /** Skip motion – used for the conclusion recap snapshot. */
   static?: boolean;
   className?: string;
+  viewBox?: string;
 };
 
 function TubGraphic({
@@ -205,6 +206,7 @@ function TubGraphic({
   compact = false,
   static: isStatic = false,
   className,
+  viewBox = "0 0 520 262",
 }: TubGraphicProps) {
   const reducedMotion = useReducedMotion();
   const clipId = `${idPrefix}-clip`;
@@ -219,7 +221,12 @@ function TubGraphic({
   const freezeMotion = isStatic || reducedMotion;
 
   return (
-    <svg viewBox="0 0 520 262" className={className} aria-hidden>
+    <svg
+      viewBox={viewBox}
+      preserveAspectRatio="xMidYMid meet"
+      className={className}
+      aria-hidden
+    >
       <defs>
         <clipPath id={clipId}>
           <path d={TUB_WATER_CLIP_PATH} />
@@ -565,13 +572,18 @@ export function NationBathtub({ data }: NationBathtubProps) {
   );
 }
 
+/** Tighter crop for recap cards – keeps faucet + claw feet after TUB_ZOOM. */
+const TUB_RECAP_VIEWBOX = "16 8 488 254";
+
 /** Full tub snapshot for the conclusion recap (final scroll step). */
 export function BathtubRecapGraphic({
   cumulativeMton,
   className,
+  cropped = false,
 }: {
   cumulativeMton: number;
   className?: string;
+  cropped?: boolean;
 }) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
@@ -587,6 +599,7 @@ export function BathtubRecapGraphic({
       caption={tubCaption}
       compact
       static
+      viewBox={cropped ? TUB_RECAP_VIEWBOX : undefined}
       className={className}
     />
   );
