@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useBlogPosts } from "./useBlogPosts";
 import type { HeroSearchResult } from "@/types/landing";
+import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
 
 export type CombinedData = {
   name: string;
@@ -34,7 +35,9 @@ export const useCombinedData = (
         : [];
 
     const mappedData: CombinedData[] = [
-      ...searchResults.map((item) => {
+      ...searchResults
+        .filter((item) => item.type !== "nation" || nationDetailPageEnabled())
+        .map((item) => {
         if (item.type === "nation" && item.country) {
           return {
             name:

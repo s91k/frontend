@@ -1656,7 +1656,7 @@
       },
       "stacked": {
         "layerCounter": "Step {{current}} of {{total}}",
-        "title": "Sweden's emissions since 1990",
+        "title": "Sweden's annual emissions since 1990",
         "layerCaption1": "First we have territorial emissions – in other words, fossil emissions within Sweden's borders",
         "layerCaption2": "Now we add emissions from Swedish shipping companies and airlines abroad – together with territorial emissions, this gives us production-based emissions",
         "layerCaption3": "Then we add consumption-based emissions abroad, including private e-commerce imports.",
@@ -1675,7 +1675,13 @@
         "methodologyLink": "Read more about how we calculate Sweden’s emissions",
         "ctaLead": "Want to dig deeper into the numbers?",
         "ctaNation": "Explore Sweden's data",
-        "ctaMunicipalities": "How does your municipality compare?"
+        "ctaMunicipalities": "How does your municipality compare?",
+        "shareCta": "Feel free to share on your social channels",
+        "recap": {
+          "onionHeadline": "Sweden's total emissions 2025",
+          "chartHeadline": "Sweden's annual emissions since 1990",
+          "bathtubHeadline": "Sweden's accumulated emissions since 1990"
+        }
       }
     }
   },

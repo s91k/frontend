@@ -26,19 +26,26 @@ import {
 import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 import { useStoryCompactViewport } from "@/components/nation/story/useStoryCompactViewport";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
+import {
+  createMirroredYAxisTick,
+  getStoryChartMargin,
+  STORY_Y_AXIS_WIDTH,
+  StoryChartYAxisUnit,
+} from "@/components/nation/story/storyChartAxis";
+import type { SupportedLanguage } from "@/lib/languageDetection";
 
-/**
- * Mobile runs the plot edge-to-edge so it lines up with the heading and copy
- * (the Y labels mirror inside the plot instead of reserving a gutter).
- * Desktop keeps room for the outside axis + rotated unit label.
- */
-function getStoryChartMargin(isMobile: boolean) {
-  return {
-    top: 8,
-    right: isMobile ? 0 : 12,
-    left: isMobile ? 0 : 20,
-    bottom: 0,
-  };
+/** E-commerce estimate shown in the onion legend only – not a chart layer. */
+const E_COMMERCE_MTON = 0.326;
+
+function formatDeltaMton(delta: number, language: SupportedLanguage): string {
+  if (delta < 1) {
+    const rounded = Math.round(delta * 10) / 10;
+    return new Intl.NumberFormat(language === "sv" ? "sv-SE" : "en-GB", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(rounded);
+  }
+  return formatMton(delta, language, 0);
 }
 
 const LAYERS = [
@@ -74,6 +81,29 @@ const STACKED_STEP_VH = 70;
 const LAYER_COUNT = LAYERS.length;
 /** One extra scroll step after all layers: legend values + total, no caption. */
 const STEP_COUNT = LAYER_COUNT + 1;
+
+type LegendEntry =
+  | { kind: "layer"; layer: (typeof LAYERS)[number] }
+  | { kind: "eCommerce" };
+
+function buildLegendEntries(
+  visibleLayers: number,
+  includeECommerce: boolean,
+): LegendEntry[] {
+  const entries: LegendEntry[] = LAYERS.slice(0, visibleLayers).map(
+    (layer) => ({ kind: "layer", layer }),
+  );
+  if (!includeECommerce) return entries;
+
+  const consumptionIdx = entries.findIndex(
+    (entry) =>
+      entry.kind === "layer" && entry.layer.dataKey === "consumptionAbroad",
+  );
+  if (consumptionIdx >= 0) {
+    entries.splice(consumptionIdx + 1, 0, { kind: "eCommerce" });
+  }
+  return entries;
+}
 
 interface NationStackedChartProps {
   data: NationStackDataPoint[];
@@ -173,7 +203,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
         x={x}
         y={y + 10}
         textAnchor={anchor}
-        fontSize={10}
+        fontSize={isMobile ? 10 : 12}
         fill="var(--grey)"
       >
         {payload.value}
@@ -184,29 +214,17 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
   // Mirrored Y labels paint above the fills (the axis is declared after the
   // areas), so plain sharp white text is enough. The 0 tick is skipped – the
   // baseline explains itself.
-  const mirroredYAxisTick = ({
-    x,
-    y,
-    payload,
-  }: {
-    x: number;
-    y: number;
-    payload: { value: number };
-  }) => {
-    if (payload.value === 0) return <g />;
-    return (
-      <text
-        x={x + 2}
-        y={y + 4}
-        textAnchor="start"
-        fontSize={11}
-        fontWeight={600}
-        fill="#ffffff"
-      >
-        {formatMton(payload.value, currentLanguage, 0)}
-      </text>
-    );
-  };
+  const mirroredYAxisTick = useMemo(
+    () => createMirroredYAxisTick(currentLanguage),
+    [currentLanguage],
+  );
+  const unitLabel = t("nation.story.unit.mtonCo2e");
+  const legendEntries = useMemo(
+    () => buildLegendEntries(visibleLayers, isSummaryStep),
+    [visibleLayers, isSummaryStep],
+  );
+  const eCommerceLabel = t("nation.story.journey.step4.label");
+  const eCommerceDelta = formatDeltaMton(E_COMMERCE_MTON, currentLanguage);
 
   return (
     <section
@@ -275,18 +293,11 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
             )}
           </div>
 
-          {/* Mobile has no rotated axis label, so state the unit here */}
-          {isMobile && (
-            <p
-              className={`${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary} mb-1`}
-            >
-              {t("nation.story.unit.mtonCo2e")}
-            </p>
-          )}
           <div
             className="relative touch-pan-x"
             style={{ width: "100%", height: chartHeight }}
           >
+            <StoryChartYAxisUnit unit={unitLabel} />
             {/* Soft glow behind the chart in the active layer's color – the
                 same cue the onion scene uses when a new layer grows */}
             <AnimatePresence>
@@ -314,7 +325,7 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                     "year",
                     [NATION_BASELINE_YEAR, latestYear],
                     xAxisTicks,
-                    isMobile ? edgeAwareTick : undefined,
+                    edgeAwareTick,
                   )}
                   // Render every hand-picked tick: recharts' collision culling
                   // assumes centered labels and drops the edge-anchored 1990
@@ -370,7 +381,8 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                   // Mirrored on mobile: labels sit inside the plot, so the
                   // chart spans the full text column width without a gutter
                   mirror={isMobile}
-                  width={isMobile ? 36 : 56}
+                  width={isMobile ? 36 : STORY_Y_AXIS_WIDTH}
+                  tickMargin={isMobile ? undefined : 4}
                   tick={
                     isMobile
                       ? mirroredYAxisTick
@@ -380,20 +392,6 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                     formatMton(value, currentLanguage, 0)
                   }
                   domain={[0, "auto"]}
-                  {...(!isMobile
-                    ? {
-                        label: {
-                          value: t("nation.story.unit.mton"),
-                          angle: -90,
-                          position: "insideLeft" as const,
-                          style: {
-                            fill: "var(--grey)",
-                            fontSize: 12,
-                            textAnchor: "middle",
-                          },
-                        },
-                      }
-                    : {})}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -420,28 +418,53 @@ export const NationStackedChart: FC<NationStackedChartProps> = ({
                     </span>
                   </p>
                   <div className="flex flex-col gap-y-1.5 story-short:gap-y-1">
-                    {LAYERS.slice(0, visibleLayers).map((layer, index) => (
-                      <span
-                        key={layer.dataKey}
-                        className={`flex items-center gap-2 md:gap-2.5 w-full ${NATION_STORY_TYPE.meta}`}
-                      >
+                    {legendEntries.map((entry) => {
+                      if (entry.kind === "eCommerce") {
+                        return (
+                          <span
+                            key="e-commerce"
+                            className={`flex items-center gap-2 md:gap-2.5 w-full ${NATION_STORY_TYPE.meta}`}
+                          >
+                            <span
+                              className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0 border border-white/20"
+                              style={{
+                                backgroundColor: NATION_STORY_COLORS.eCommerce,
+                              }}
+                            />
+                            <span className={NATION_STORY_TEXT.secondary}>
+                              {eCommerceLabel}
+                            </span>
+                            <span className="ml-auto text-white tabular-nums">
+                              +{eCommerceDelta}{" "}
+                              {t("nation.story.unit.mton")}
+                            </span>
+                          </span>
+                        );
+                      }
+                      const layerIndex = LAYERS.indexOf(entry.layer);
+                      return (
                         <span
-                          className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
-                          style={{ backgroundColor: layer.color }}
-                        />
-                        <span className={NATION_STORY_TEXT.secondary}>
-                          {t(layer.translationKey)}
+                          key={entry.layer.dataKey}
+                          className={`flex items-center gap-2 md:gap-2.5 w-full ${NATION_STORY_TYPE.meta}`}
+                        >
+                          <span
+                            className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+                            style={{ backgroundColor: entry.layer.color }}
+                          />
+                          <span className={NATION_STORY_TEXT.secondary}>
+                            {t(entry.layer.translationKey)}
+                          </span>
+                          <span className="ml-auto text-white tabular-nums">
+                            {layerIndex === 0 ? "" : "+"}
+                            {formatMton(
+                              readoutPoint?.[entry.layer.dataKey] ?? 0,
+                              currentLanguage,
+                              0,
+                            )}
+                          </span>
                         </span>
-                        <span className="ml-auto text-white tabular-nums">
-                          {index === 0 ? "" : "+"}
-                          {formatMton(
-                            readoutPoint?.[layer.dataKey] ?? 0,
-                            currentLanguage,
-                            0,
-                          )}
-                        </span>
-                      </span>
-                    ))}
+                      );
+                    })}
                   </div>
                   {visibleLayers > 1 && (
                     <p

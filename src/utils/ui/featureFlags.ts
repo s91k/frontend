@@ -2,6 +2,9 @@ export const dataGuideFeatureFlagEnabled = () => {
   return true;
 };
 
+/** Nation detail page (`/nation`) – flip to true when ready to publish. */
+export const nationDetailPageEnabled = () => false;
+
 export const stagingFeatureFlagEnabled = () => {
   // Check if we're running on localhost or stage
   if (

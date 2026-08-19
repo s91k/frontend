@@ -1706,7 +1706,7 @@
       },
       "stacked": {
         "layerCounter": "Steg {{current}} av {{total}}",
-        "title": "Sveriges utsläpp sedan 1990",
+        "title": "Sveriges årliga utsläpp sedan 1990",
         "layerCaption1": "Först har vi de territoriella utsläppen – alltså fossila utsläpp inom Sveriges gränser",
         "layerCaption2": "Nu lägger vi till utsläpp från svenska rederier och flygbolag utomlands, tillsammans med de territoriella får vi då de produktionsbaserade utsläppen",
         "layerCaption3": "Sedan lägger vi till de konsumtionsbaserade utsläppen utomlands, inklusive privat e-handelsimport.",
@@ -1725,7 +1725,13 @@
         "methodologyLink": "Läs mer om hur vi räknar på Sveriges utsläpp",
         "ctaLead": "Vill du gräva vidare i siffrorna?",
         "ctaNation": "Utforska Sveriges data",
-        "ctaMunicipalities": "Hur ser det ut där du bor?"
+        "ctaMunicipalities": "Hur ser det ut där du bor?",
+        "shareCta": "Dela gärna vidare i dina sociala kanaler",
+        "recap": {
+          "onionHeadline": "Sveriges totala utsläpp 2025",
+          "chartHeadline": "Sveriges årliga utsläpp sedan 1990",
+          "bathtubHeadline": "Sveriges ackumulerade utsläpp sedan 1990"
+        }
       }
     }
   },

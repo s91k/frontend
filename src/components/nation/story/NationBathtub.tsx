@@ -193,6 +193,8 @@ type TubGraphicProps = {
   caption: TubCaption;
   /** Larger relative type on small screens where the whole SVG shrinks. */
   compact?: boolean;
+  /** Skip motion – used for the conclusion recap snapshot. */
+  static?: boolean;
   className?: string;
 };
 
@@ -201,6 +203,7 @@ function TubGraphic({
   waterTop,
   caption,
   compact = false,
+  static: isStatic = false,
   className,
 }: TubGraphicProps) {
   const reducedMotion = useReducedMotion();
@@ -208,10 +211,12 @@ function TubGraphic({
   const gradientId = `${idPrefix}-gradient`;
   const enamelId = `${idPrefix}-enamel`;
   const waterHeight = Math.max(TUB_INNER_BOTTOM - waterTop, 0);
-  const waterTransition = reducedMotion ? { duration: 0 } : WATER_SPRING;
+  const waterTransition =
+    isStatic || reducedMotion ? { duration: 0 } : WATER_SPRING;
   // Water surface ellipse matches the basin width at the current level
   const surfaceRx = Math.max(basinHalfWidthAt(waterTop) - 3, 0);
   const surfaceRy = Math.max(surfaceRx * 0.055, 4);
+  const freezeMotion = isStatic || reducedMotion;
 
   return (
     <svg viewBox="0 0 520 262" className={className} aria-hidden>
@@ -258,7 +263,7 @@ function TubGraphic({
         {/* Spout mouth */}
         <path d="M396 30 h8 v4 h-8 z" fill={TUB_STROKE} />
         {/* Drip in brand blue – falls from the spout on a loop */}
-        {reducedMotion ? (
+        {freezeMotion ? (
           <circle cx="400" cy="46" r="3.2" fill="var(--blue-2)" />
         ) : (
           <motion.circle
@@ -289,26 +294,49 @@ function TubGraphic({
 
         {/* Single continuous water body (behind the rim so the lip overlaps it) */}
         <g clipPath={svgLocalUrl(clipId)}>
-          <motion.rect
-            x={TUB_WATER_LEFT}
-            width={TUB_WATER_WIDTH}
-            initial={false}
-            animate={{ y: waterTop, height: waterHeight }}
-            transition={waterTransition}
-            fill={svgLocalUrl(gradientId)}
-          />
+          {freezeMotion ? (
+            <rect
+              x={TUB_WATER_LEFT}
+              width={TUB_WATER_WIDTH}
+              y={waterTop}
+              height={waterHeight}
+              fill={svgLocalUrl(gradientId)}
+            />
+          ) : (
+            <motion.rect
+              x={TUB_WATER_LEFT}
+              width={TUB_WATER_WIDTH}
+              initial={false}
+              animate={{ y: waterTop, height: waterHeight }}
+              transition={waterTransition}
+              fill={svgLocalUrl(gradientId)}
+            />
+          )}
         </g>
         {/* Surface sits above the fill and outside the clip so it stays visible when full */}
-        <motion.ellipse
-          cx={260}
-          fill="var(--blue-2)"
-          fillOpacity={0.32}
-          stroke="var(--blue-2)"
-          strokeWidth="2"
-          initial={false}
-          animate={{ cy: waterTop, rx: surfaceRx, ry: surfaceRy }}
-          transition={waterTransition}
-        />
+        {freezeMotion ? (
+          <ellipse
+            cx={260}
+            cy={waterTop}
+            rx={surfaceRx}
+            ry={surfaceRy}
+            fill="var(--blue-2)"
+            fillOpacity={0.32}
+            stroke="var(--blue-2)"
+            strokeWidth="2"
+          />
+        ) : (
+          <motion.ellipse
+            cx={260}
+            fill="var(--blue-2)"
+            fillOpacity={0.32}
+            stroke="var(--blue-2)"
+            strokeWidth="2"
+            initial={false}
+            animate={{ cy: waterTop, rx: surfaceRx, ry: surfaceRy }}
+            transition={waterTransition}
+          />
+        )}
       </g>
 
       {/* Accumulated total inside the basin – the main focal point */}
@@ -534,5 +562,32 @@ export function NationBathtub({ data }: NationBathtubProps) {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Full tub snapshot for the conclusion recap (final scroll step). */
+export function BathtubRecapGraphic({
+  cumulativeMton,
+  className,
+}: {
+  cumulativeMton: number;
+  className?: string;
+}) {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
+  const idPrefix = `tub-recap-${useId().replace(/:/g, "")}`;
+  const tubCaption: TubCaption = {
+    value: `${formatMton(cumulativeMton, currentLanguage, 0)} ${t("nation.story.unit.mtonCo2e")}`,
+  };
+
+  return (
+    <TubGraphic
+      idPrefix={idPrefix}
+      waterTop={TUB_WATER_TOP}
+      caption={tubCaption}
+      compact
+      static
+      className={className}
+    />
   );
 }
