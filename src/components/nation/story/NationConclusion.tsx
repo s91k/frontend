@@ -32,7 +32,7 @@ export function NationConclusion({ metrics }: NationConclusionProps) {
         </motion.h2>
       </div>
 
-      <div className="w-full py-6 story-short:py-5 md:pt-12 md:pb-2 lg:pt-24">
+      <div className="w-full pt-8 pb-4 story-short:pt-7 story-short:pb-4 md:pt-12 md:pb-2 lg:pt-24">
         <ConclusionStoryRecap metrics={metrics} />
       </div>
 

@@ -21,6 +21,13 @@ import {
   NATION_BASELINE_YEAR,
   type NationStoryMetrics,
 } from "@/utils/data/nationStoryMetrics";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 const E_COMMERCE_MTON = 0.326;
 
@@ -41,38 +48,121 @@ const CHART_LAYERS = [
 ];
 
 const RECAP_ONION_DIAMETER = 168;
+/** Glow halo + blur spread – size rings inside this inset so nothing clips. */
+const ONION_GLOW_INSET = 1.2;
 const RECAP_VISUAL_HEIGHT =
   "h-[13rem] story-short:h-[12rem] md:h-[11.5rem] story-compact:md:h-[10.5rem] lg:h-[13rem]";
-const ONION_RECAP_MOBILE_SIZE_FACTOR = 1.12;
-const ONION_RECAP_DESKTOP_SIZE_FACTOR = 1;
+const RECAP_EXPANDED_VISUAL_HEIGHT =
+  "h-[min(70vh,28rem)] sm:h-[min(75vh,32rem)]";
 
-const RECAP_HEADLINE_CLASS = `${NATION_STORY_TYPE.emphasis} text-white w-full`;
+function recapExpandedFrameClass(variant: RecapVisualVariant) {
+  const base = "flex w-full items-center justify-center";
+  switch (variant) {
+    case "onion":
+      return cn(
+        base,
+        "overflow-visible px-3 py-2 sm:px-2 sm:py-1.5",
+        "h-[min(calc(100vw-4rem),15rem)] sm:h-[min(75vh,32rem)]",
+      );
+    case "bathtub":
+      return cn(
+        base,
+        "overflow-visible px-3 py-0",
+        "h-auto max-h-[min(44vh,14.5rem)] sm:h-[min(75vh,32rem)] sm:max-h-none",
+      );
+    case "chart":
+      return cn(base, "overflow-hidden px-2 py-1.5", RECAP_EXPANDED_VISUAL_HEIGHT);
+  }
+}
+
+function recapExpandedInnerClass(variant: RecapVisualVariant) {
+  switch (variant) {
+    case "onion":
+      return "aspect-square h-full w-full max-h-full max-w-full sm:w-auto";
+    case "chart":
+      return "h-full w-full min-w-0";
+    case "bathtub":
+      return "h-full w-full min-w-0";
+  }
+}
+const RECAP_CHART_MARGIN = { top: 22, right: 8, left: 8, bottom: 6 };
+
+const RECAP_HEADLINE_CLASS = `${NATION_STORY_TYPE.emphasis} text-white w-full leading-snug`;
 const RECAP_HEADLINE_ROW_MOBILE =
-  "flex items-start justify-center px-1 text-center";
+  "flex min-h-[3.25rem] items-start justify-center px-1 pt-0.5 text-center";
 const RECAP_HEADLINE_ROW_DESKTOP =
-  "flex min-h-[3.75rem] lg:min-h-[4.25rem] items-start justify-center px-1 text-center";
+  "flex h-[3rem] lg:h-[3.25rem] items-start justify-center px-1 text-center";
+const RECAP_CARD_CLASS =
+  "group flex h-full w-full flex-col gap-1.5 overflow-visible rounded-xl border border-white/15 bg-black/40 p-3 text-left transition-colors hover:border-white/25 hover:bg-black/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 active:bg-black/60";
+
+type RecapVisualVariant = "onion" | "chart" | "bathtub";
 
 type RecapItem = {
   key: string;
   headline: string;
   delay: number;
-  visual: React.ReactNode;
-  mobileVisualClassName?: string;
-  /** Desktop-only horizontal nudge on the visual slot. */
-  desktopVisualClassName?: string;
+  variant: RecapVisualVariant;
+  renderVisual: (enlarged: boolean) => React.ReactNode;
 };
+
+function RecapVisualFrame({
+  variant,
+  enlarged,
+  children,
+}: {
+  variant: RecapVisualVariant;
+  enlarged: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        enlarged
+          ? recapExpandedFrameClass(variant)
+          : cn(
+              "flex w-full items-center justify-center pt-0 pb-1",
+              variant === "bathtub" ? "px-3" : "px-2",
+              variant === "chart" ? "overflow-hidden" : "overflow-visible",
+              RECAP_VISUAL_HEIGHT,
+            ),
+      )}
+    >
+      <div
+        className={cn(
+          "flex min-h-0 items-center justify-center",
+          enlarged
+            ? recapExpandedInnerClass(variant)
+            : cn(
+                variant === "onion" &&
+                  "aspect-square h-full max-h-full w-auto max-w-full",
+                variant === "chart" && "h-full w-full min-w-0",
+                variant === "bathtub" && "h-full w-full min-w-0",
+              ),
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function OnionRecapSnapshot({
   metrics,
-  sizeFactor = 1,
+  enlarged = false,
 }: {
   metrics: NationStoryMetrics;
-  sizeFactor?: number;
+  enlarged?: boolean;
 }) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+  const { isMobile } = useScreenSize();
   const containerRef = useRef<HTMLDivElement>(null);
   const [diameter, setDiameter] = useState(RECAP_ONION_DIAMETER);
+  const glowInset = enlarged
+    ? isMobile
+      ? 1.38
+      : 1.12
+    : ONION_GLOW_INSET;
 
   useEffect(() => {
     const slot = containerRef.current;
@@ -80,15 +170,14 @@ function OnionRecapSnapshot({
 
     const update = () => {
       const base = Math.min(slot.clientWidth, slot.clientHeight);
-      const next = base * sizeFactor;
-      if (next > 0) setDiameter(next);
+      if (base > 0) setDiameter(base / glowInset);
     };
 
     update();
     const observer = new ResizeObserver(update);
     observer.observe(slot);
     return () => observer.disconnect();
-  }, [sizeFactor]);
+  }, [glowInset]);
 
   const { layers, total } = useMemo(() => {
     const territorial = metrics.territorialLatestMton;
@@ -153,10 +242,18 @@ function OnionRecapSnapshot({
     };
   }, [metrics, diameter]);
 
+  const innerDiameter =
+    layers.find((layer) => layer.key === "step1")?.diameter ?? diameter * 0.54;
+  const textScale = enlarged ? 0.34 : 0.4;
+  const statFontRem = (innerDiameter * textScale) / 16;
+  const statFontSize = enlarged
+    ? Math.min(3, Math.max(1.5, statFontRem))
+    : Math.min(1.5, Math.max(1.05, statFontRem));
+
   return (
     <div
       ref={containerRef}
-      className="relative flex h-full w-full items-start justify-center"
+      className="relative flex h-full w-full items-center justify-center overflow-visible"
     >
       <div
         className="relative shrink-0"
@@ -187,13 +284,14 @@ function OnionRecapSnapshot({
         ))}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className={`${NATION_STORY_TYPE.stat} font-medium tabular-nums leading-none text-center text-black origin-center`}
-            style={{
-              fontSize: `${Math.max(0.72, Math.min(1.05, diameter / 168))}rem`,
-            }}
+            className="font-medium tabular-nums leading-none text-center text-black select-none"
+            style={{ fontSize: `${statFontSize}rem` }}
           >
             {formatMton(total, currentLanguage, 0)}
-            <span className="block mt-0.5 text-[0.45em] font-medium">
+            <span
+              className="block mt-0.5 font-medium"
+              style={{ fontSize: `${statFontSize * 0.46}rem` }}
+            >
               {t("nation.story.unit.mton")}
             </span>
           </span>
@@ -203,10 +301,17 @@ function OnionRecapSnapshot({
   );
 }
 
-function ChartRecapSnapshot({ metrics }: { metrics: NationStoryMetrics }) {
+function ChartRecapSnapshot({
+  metrics,
+  compact = false,
+}: {
+  metrics: NationStoryMetrics;
+  compact?: boolean;
+}) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
+  const useMirroredAxis = isMobile || compact;
   const latestYear =
     metrics.stackData[metrics.stackData.length - 1]?.year ??
     NATION_BASELINE_YEAR;
@@ -256,12 +361,12 @@ function ChartRecapSnapshot({ metrics }: { metrics: NationStoryMetrics }) {
   };
 
   return (
-    <div className="relative h-full w-full min-h-0">
+    <div className="relative h-full w-full min-h-0 pointer-events-none select-none">
       <StoryChartYAxisUnit unit={unitLabel} />
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={metrics.stackData}
-          margin={getStoryChartMargin(isMobile)}
+          margin={compact ? RECAP_CHART_MARGIN : getStoryChartMargin(isMobile)}
         >
           <XAxis
             dataKey="year"
@@ -289,17 +394,18 @@ function ChartRecapSnapshot({ metrics }: { metrics: NationStoryMetrics }) {
               }
               connectNulls={false}
               isAnimationActive={false}
+              activeDot={false}
             />
           ))}
           <YAxis
             stroke="var(--grey)"
             tickLine={false}
             axisLine={false}
-            mirror={isMobile}
-            width={isMobile ? 36 : STORY_Y_AXIS_WIDTH}
-            tickMargin={isMobile ? undefined : 4}
+            mirror={useMirroredAxis}
+            width={useMirroredAxis ? 36 : STORY_Y_AXIS_WIDTH}
+            tickMargin={useMirroredAxis ? undefined : 4}
             tick={
-              isMobile
+              useMirroredAxis
                 ? mirroredYAxisTick
                 : { fill: "var(--grey)", fontSize: 10 }
             }
@@ -314,14 +420,70 @@ function ChartRecapSnapshot({ metrics }: { metrics: NationStoryMetrics }) {
   );
 }
 
-function BathtubRecapSnapshot({ cumulativeMton }: { cumulativeMton: number }) {
+function BathtubRecapSnapshot({
+  cumulativeMton,
+  enlarged = false,
+}: {
+  cumulativeMton: number;
+  enlarged?: boolean;
+}) {
   return (
-    <div className="flex h-full w-full items-start justify-center">
-      <BathtubRecapGraphic
-        cumulativeMton={cumulativeMton}
-        className="h-full w-auto max-w-full min-w-0"
-      />
-    </div>
+    <BathtubRecapGraphic
+      cumulativeMton={cumulativeMton}
+      className={cn(
+        "mx-auto h-auto w-full",
+        enlarged
+          ? "max-h-full max-w-full sm:max-h-full sm:max-w-full"
+          : "max-h-[86%] max-w-[88%]",
+      )}
+    />
+  );
+}
+
+function RecapPanel({
+  item,
+  layout,
+  onExpand,
+}: {
+  item: RecapItem;
+  layout: "mobile" | "desktop";
+  onExpand: () => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.45 }}
+      transition={{ duration: 0.45, delay: item.delay }}
+      className={cn(
+        layout === "mobile" && "min-w-0",
+        layout === "desktop" && "min-w-0 h-full",
+      )}
+    >
+      <button
+        type="button"
+        onClick={onExpand}
+        aria-label={t("nation.story.conclusion.recap.expandLabel", {
+          headline: item.headline,
+        })}
+        className={RECAP_CARD_CLASS}
+      >
+        <div
+          className={
+            layout === "mobile"
+              ? RECAP_HEADLINE_ROW_MOBILE
+              : RECAP_HEADLINE_ROW_DESKTOP
+          }
+        >
+          <p className={RECAP_HEADLINE_CLASS}>{item.headline}</p>
+        </div>
+        <RecapVisualFrame variant={item.variant} enlarged={false}>
+          {item.renderVisual(false)}
+        </RecapVisualFrame>
+      </button>
+    </motion.div>
   );
 }
 
@@ -332,88 +494,106 @@ type ConclusionStoryRecapProps = {
 /** Recap row: final-state onion, chart and bathtub — column on mobile, aligned grid on md+. */
 export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
   const { t } = useTranslation();
-  const { isMobile } = useScreenSize();
+  const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const cumulativeMton =
     metrics.bathtubData[metrics.bathtubData.length - 1]?.cumulativeMton ?? 0;
-  const onionSizeFactor = isMobile
-    ? ONION_RECAP_MOBILE_SIZE_FACTOR
-    : ONION_RECAP_DESKTOP_SIZE_FACTOR;
 
   const items: RecapItem[] = [
     {
       key: "onion",
+      variant: "onion",
       headline: t("nation.story.conclusion.recap.onionHeadline", {
         year: metrics.latestYear,
       }),
       delay: 0.1,
-      mobileVisualClassName: "overflow-visible",
-      desktopVisualClassName: "md:translate-x-5 lg:translate-x-6",
-      visual: (
-        <OnionRecapSnapshot metrics={metrics} sizeFactor={onionSizeFactor} />
+      renderVisual: (enlarged) => (
+        <OnionRecapSnapshot metrics={metrics} enlarged={enlarged} />
       ),
     },
     {
       key: "chart",
+      variant: "chart",
       headline: t("nation.story.conclusion.recap.chartHeadline"),
       delay: 0.18,
-      visual: <ChartRecapSnapshot metrics={metrics} />,
+      renderVisual: (enlarged) => (
+        <ChartRecapSnapshot metrics={metrics} compact={!enlarged} />
+      ),
     },
     {
       key: "bathtub",
+      variant: "bathtub",
       headline: t("nation.story.conclusion.recap.bathtubHeadline"),
       delay: 0.26,
-      desktopVisualClassName: "md:translate-x-3 lg:translate-x-4",
-      visual: <BathtubRecapSnapshot cumulativeMton={cumulativeMton} />,
+      renderVisual: (enlarged) => (
+        <BathtubRecapSnapshot
+          cumulativeMton={cumulativeMton}
+          enlarged={enlarged}
+        />
+      ),
     },
   ];
 
+  const expandedItem = items.find((item) => item.key === expandedKey) ?? null;
+
   return (
     <>
-      {/* Mobile: stacked sections */}
-      <div className="flex flex-col md:hidden w-full max-w-7xl mx-auto px-2">
+      <div className="flex flex-col gap-5 story-short:gap-4 md:hidden w-full max-w-7xl mx-auto px-2">
         {items.map((item) => (
-          <motion.div
+          <RecapPanel
             key={item.key}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ duration: 0.45, delay: item.delay }}
-            className="flex flex-col gap-2 story-short:gap-1.5 text-center border-b border-white/10 pt-10 pb-16 first:pt-4 story-short:first:pt-3 last:border-b-0 last:pb-10"
-          >
-            <div className={RECAP_HEADLINE_ROW_MOBILE}>
-              <p className={RECAP_HEADLINE_CLASS}>{item.headline}</p>
-            </div>
-            <div
-              className={`flex w-full ${RECAP_VISUAL_HEIGHT} items-center justify-center pb-1 ${item.mobileVisualClassName ?? ""}`}
-            >
-              {item.visual}
-            </div>
-          </motion.div>
+            item={item}
+            layout="mobile"
+            onExpand={() => setExpandedKey(item.key)}
+          />
         ))}
       </div>
 
-      {/* Desktop: equal columns, headline + visual stacked per item */}
-      <div className="hidden md:grid md:grid-cols-3 md:gap-x-6 lg:gap-x-10 w-full max-w-7xl mx-auto px-4">
+      <div className="hidden md:grid md:grid-cols-3 md:items-start md:gap-x-6 lg:gap-x-10 w-full max-w-7xl mx-auto px-4">
         {items.map((item) => (
-          <motion.div
+          <RecapPanel
             key={item.key}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ duration: 0.45, delay: item.delay }}
-            className="flex min-w-0 flex-col gap-2"
-          >
-            <div className={RECAP_HEADLINE_ROW_DESKTOP}>
-              <p className={RECAP_HEADLINE_CLASS}>{item.headline}</p>
-            </div>
-            <div
-              className={`${RECAP_VISUAL_HEIGHT} w-full min-w-0 ${item.desktopVisualClassName ?? ""}`}
-            >
-              {item.visual}
-            </div>
-          </motion.div>
+            item={item}
+            layout="desktop"
+            onExpand={() => setExpandedKey(item.key)}
+          />
         ))}
       </div>
+
+      <Dialog
+        open={expandedItem !== null}
+        onOpenChange={(open) => {
+          if (!open) setExpandedKey(null);
+        }}
+      >
+        <DialogContent
+          className={cn(
+            "max-w-[min(100vw-1.5rem,44rem)] border-white/15 bg-black p-4 text-white shadow-2xl sm:max-w-2xl sm:gap-4 sm:p-6 md:max-w-4xl [&>button]:text-white [&>button]:opacity-80 [&>button]:hover:opacity-100",
+            expandedItem?.variant === "bathtub" ? "gap-2" : "gap-3",
+          )}
+          aria-describedby={undefined}
+        >
+          {expandedItem ? (
+            <>
+              <DialogTitle
+                className={`${NATION_STORY_TYPE.emphasis} text-center text-white`}
+              >
+                {expandedItem.headline}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                {t("nation.story.conclusion.recap.expandLabel", {
+                  headline: expandedItem.headline,
+                })}
+              </DialogDescription>
+              <RecapVisualFrame
+                variant={expandedItem.variant}
+                enlarged
+              >
+                {expandedItem.renderVisual(true)}
+              </RecapVisualFrame>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

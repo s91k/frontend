@@ -1680,7 +1680,9 @@
         "recap": {
           "onionHeadline": "Sweden's total emissions {{year}}",
           "chartHeadline": "Sweden's annual emissions since 1990",
-          "bathtubHeadline": "Sweden's accumulated emissions since 1990"
+          "bathtubHeadline": "Sweden's accumulated emissions since 1990",
+          "expandLabel": "Enlarge: {{headline}}",
+          "closeLabel": "Close"
         }
       }
     }
