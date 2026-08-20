@@ -64,21 +64,21 @@ export const CountriesSection = () => {
 
         <div className="w-full flex justify-start md:justify-end">
           <LocalizedLink to="/nation" className="w-fit md:pt-2">
-              <Button
-                variant="outline"
-                size="lg"
-                className="group relative w-auto h-12 rounded-md overflow-hidden font-medium border-white group-hover:border-blue-3 hover:opacity-100 active:opacity-100"
-              >
-                <span
-                  className="absolute inset-0 origin-left scale-x-0 bg-white transition-transform duration-500 ease-out group-hover:scale-x-100"
-                  aria-hidden="true"
-                />
-                <span className="relative z-10 inline-flex items-center text-white transition-colors duration-500 group-hover:text-black">
-                  {t("landingPage.countriesSection.exploreButton")}
-                  <ArrowRight className="w-5 h-5 ml-2" aria-hidden="true" />
-                </span>
-              </Button>
-            </LocalizedLink>
+            <Button
+              variant="outline"
+              size="lg"
+              className="group relative w-auto h-12 rounded-md overflow-hidden font-medium border-white group-hover:border-blue-3 hover:opacity-100 active:opacity-100"
+            >
+              <span
+                className="absolute inset-0 origin-left scale-x-0 bg-white transition-transform duration-500 ease-out group-hover:scale-x-100"
+                aria-hidden="true"
+              />
+              <span className="relative z-10 inline-flex items-center text-white transition-colors duration-500 group-hover:text-black">
+                {t("landingPage.countriesSection.exploreButton")}
+                <ArrowRight className="w-5 h-5 ml-2" aria-hidden="true" />
+              </span>
+            </Button>
+          </LocalizedLink>
         </div>
       </div>
     </div>
