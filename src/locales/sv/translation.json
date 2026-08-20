@@ -1627,7 +1627,7 @@
       "intro": {
         "eyebrow": "Valet 2026",
         "title": "Sveriges utsläpp",
-        "paragraph1": "Vi får ofta höra att Sveriges utsläpp är små och att de minskat med en tredjedel samtidigt som ekonomin har fördubblats. Men stämmer det verkligen? Låt oss titta på det, steg för steg.",
+        "paragraph1": "Vi får ofta höra att Sveriges utsläpp är små och har minskat med en tredjedel, samtidigt som ekonomin har fördubblats. Men stämmer det verkligen? Låt oss titta på det.",
         "usualLabel": "Det vi ofta hör om",
         "fullLabel": "Sveriges egentliga utsläpp",
         "previewRatio": "större än det vi brukar prata om"
@@ -1664,7 +1664,7 @@
         "totalLabel": "Totalt",
         "step1": {
           "label": "Territoriella utsläpp",
-          "text": "Vi börjar med siffran vi oftast hör om: de territoriella utsläppen – det mått som används för att följa upp våra klimatmål. Det är fossila utsläpp inom Sveriges gränser. Här ingår bland annat utsläpp från industrin, transporter, jordbruk, uppvärmning och avfall."
+          "text": "Vi börjar med de territoriella utsläppen – det vanligaste måttet som används för att följa upp klimatmålen. Det är fossila utsläpp inom Sveriges gränser. Här ingår bland annat utsläpp från industrin, transporter, jordbruk, uppvärmning och avfall."
         },
         "step2": {
           "label": "Produktionsbaserade utsläpp",
@@ -1676,19 +1676,19 @@
         },
         "step4": {
           "label": "Privat e-handel",
-          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis när vi klickar hem prylar från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken. Det handlar om ytterligare cirka 326 000 ton, motsvarande utsläppen i Gävle 2024 (328 000 ton)."
+          "text": "Vi har också satt siffror på utsläppen från privat e-handelsimport, exempelvis från prylar vi klickar hem från Amazon och Shein. Dessa utsläpp ingår idag inte i den offentliga statistiken och adderar ytterligare 326 000 ton, motsvarande utsläppen i Gävle kommun 2024 (328 000 ton)."
         },
         "step5": {
           "label": "Biogena utsläpp",
-          "text": "Till sist har vi biogena koldioxidutsläpp som frigörs när trä och annat biologiskt material förbränns. I teorin kan koldioxiden tas upp igen, exempelvis när nya träd planteras. Det kan dock ta flera decennier för ny skog att binda samma mängd koldioxid. Därför har även biogena utsläpp klimatpåverkan här och nu."
+          "text": "Till sist, biogena koldioxidutsläpp frigörs när trä och annat biologiskt material förbränns. Även om en stor del av detta ändå skulle förmultna och avge koldioxid, så sker utsläppen vid förbränning här och nu – och får en direkt klimatpåverkan. Koldioxiden kan tas upp igen, exempelvis när nya träd planteras. Det kan dock ta flera decennier för ny skog att binda samma mängd koldioxid."
         }
       },
       "bathtub": {
         "eyebrow": "Badkarseffekten",
-        "text": "Atmosfären reagerar på mängden växthusgaser som stannar kvar och ansamlas över tid. Som ett badkar, där kranen står på. Tills kranen dras åt, kommer vattennivån att fortsätta stiga. Vi har redan passerat 1,5 graders uppvärmning globalt och Sverige närmar sig gränsen då vi släppt ut mer än vårt åtagande enligt Parisavtalet. Därför är det avgörande hur snabbt vi minskar utsläppen.",
-        "scrollCta": "Scrolla för att se hur de svenska totala utsläppen har ackumulerats över tid sedan 1990.",
-        "swipeCta": "Svep för att se hur de svenska totala utsläppen har ackumulerats över tid sedan 1990.",
-        "baselineCaption": "{{year}} var utsläppen {{value}} Mton",
+        "text": "Våra utsläpp av växthusgaser stannar kvar i atmosfären och ansamlas över tid. Som ett badkar, där vattnet fylls på och nivån stiger tills kranen dras åt. Sverige närmar sig gränsen då vi släppt ut mer än vi kan, för att klara Parisavtalet.",
+        "scrollCta": "Hur många ton har det blivit sedan 1990?",
+        "swipeCta": "Hur många ton har det blivit sedan 1990?",
+        "baselineCaption": "{{year}} var utsläppen {{value}} Mton CO₂e",
         "rangeCaption": "{{fromYear}}–{{toYear}} tillkom {{value}} Mton CO₂e"
       },
       "graph": {
