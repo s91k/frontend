@@ -83,7 +83,7 @@ function RecapLegendRow({
 }: {
   color?: string;
   label: string;
-  value: string;
+  value?: string;
   borderedDot?: boolean;
   total?: boolean;
 }) {
@@ -111,7 +111,9 @@ function RecapLegendRow({
       <span className={total ? "flex-1" : NATION_STORY_TEXT.secondary}>
         {label}
       </span>
-      <span className="ml-auto tabular-nums text-white">{value}</span>
+      {value ? (
+        <span className="ml-auto tabular-nums text-white">{value}</span>
+      ) : null}
     </div>
   );
 }
@@ -192,55 +194,54 @@ function OnionRecapLegend({
   );
 }
 
-function ChartRecapLegend({
-  metrics,
-  compact = false,
-}: {
-  metrics: NationStoryMetrics;
-  compact?: boolean;
-}) {
+function ChartRecapLegend({ compact = false }: { compact?: boolean }) {
   const { t } = useTranslation();
-  const { currentLanguage } = useLanguage();
-  const latestPoint =
-    metrics.stackData[metrics.stackData.length - 1] ?? undefined;
   const eCommerceLabel = t("nation.story.journey.step4.label");
-  const eCommerceDelta = formatRecapDeltaMton(E_COMMERCE_MTON, currentLanguage);
 
-  const readoutTotal = CHART_LAYERS.reduce(
-    (sum, layer) => sum + (latestPoint?.[layer.dataKey] ?? 0),
-    0,
+  const layersBeforeBiogenic = CHART_LAYERS.filter(
+    (layer) => layer.dataKey !== "biogenic",
   );
+  const biogenicLayer = CHART_LAYERS.find(
+    (layer) => layer.dataKey === "biogenic",
+  );
+
+  const legendRows = [
+    ...layersBeforeBiogenic.map((layer) => ({
+      key: layer.dataKey,
+      color: layer.color,
+      label: t(layer.translationKey),
+      borderedDot: false,
+    })),
+    {
+      key: "e-commerce",
+      color: NATION_STORY_COLORS.eCommerce,
+      label: eCommerceLabel,
+      borderedDot: true,
+    },
+    ...(biogenicLayer
+      ? [
+          {
+            key: biogenicLayer.dataKey,
+            color: biogenicLayer.color,
+            label: t(biogenicLayer.translationKey),
+            borderedDot: false,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
-      <p className="text-white tabular-nums font-medium">
-        {metrics.latestYear}
-      </p>
       <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
-        {CHART_LAYERS.map((layer, index) => (
+        {legendRows.map((row) => (
           <RecapLegendRow
-            key={layer.dataKey}
-            color={layer.color}
-            label={t(layer.translationKey)}
-            value={`${index === 0 ? "" : "+"}${formatMton(
-              latestPoint?.[layer.dataKey] ?? 0,
-              currentLanguage,
-              0,
-            )}`}
+            key={row.key}
+            color={row.color}
+            borderedDot={row.borderedDot}
+            label={row.label}
           />
         ))}
-        <RecapLegendRow
-          color={NATION_STORY_COLORS.eCommerce}
-          borderedDot
-          label={eCommerceLabel}
-          value={`+${eCommerceDelta}`}
-        />
       </div>
-      <RecapLegendRow
-        total
-        label={t("nation.story.journey.totalLabel")}
-        value={formatMton(readoutTotal, currentLanguage, 0)}
-      />
     </div>
   );
 }
@@ -724,7 +725,7 @@ function RecapPanel({
           <OnionRecapLegend metrics={metrics} compact />
         )}
         {showMobileLegend && item.key === "chart" && (
-          <ChartRecapLegend metrics={metrics} compact />
+          <ChartRecapLegend compact />
         )}
       </button>
     </motion.div>
@@ -874,7 +875,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
                   <OnionRecapLegend metrics={metrics} compact />
                 )}
                 {expandedItem.key === "chart" && (
-                  <ChartRecapLegend metrics={metrics} compact />
+                  <ChartRecapLegend compact />
                 )}
               </div>
             </>

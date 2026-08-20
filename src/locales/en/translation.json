@@ -1577,7 +1577,7 @@
       "intro": {
         "eyebrow": "Election 2026",
         "title": "Sweden's emissions",
-        "paragraph1": "We often hear that Sweden's emissions are small and that they have fallen by a third while the economy has doubled. But is that really true? Let's look at it, step by step.",
+        "paragraph1": "We often hear that Sweden's emissions are small and have fallen by a third, while the economy has doubled. But is that really true? Let's take a look.",
         "usualLabel": "What we often hear about",
         "fullLabel": "Sweden's actual emissions",
         "previewRatio": "larger than what we usually talk about"
@@ -1614,7 +1614,7 @@
         "totalLabel": "Total",
         "step1": {
           "label": "Territorial emissions",
-          "text": "We start with the figure we hear about most often: territorial emissions – the measure used to track our climate goals. These are fossil emissions within Sweden's borders. They include emissions from industry, transport, agriculture, heating and waste, among other sources."
+          "text": "We start with territorial emissions – the most common measure used to track climate goals. These are fossil emissions within Sweden's borders. They include emissions from industry, transport, agriculture, heating and waste, among other sources."
         },
         "step2": {
           "label": "Production-based emissions",
@@ -1626,19 +1626,19 @@
         },
         "step4": {
           "label": "Private e-commerce",
-          "text": "We have also quantified emissions from private e-commerce imports, for example when we order goods from Amazon and Shein. These emissions are not included in official statistics today. This amounts to approximately an additional 326,000 tonnes, comparable to Gävle's emissions in 2024 (328,000 tonnes)."
+          "text": "We have also quantified emissions from private e-commerce imports, for example from goods we order from Amazon and Shein. These emissions are not included in official statistics today and add a further 326,000 tonnes, comparable to Gävle Municipality's emissions in 2024 (328,000 tonnes)."
         },
         "step5": {
           "label": "Biogenic emissions",
-          "text": "Finally, we have biogenic carbon dioxide emissions released when wood and other biological material is burned. In theory the carbon dioxide can be reabsorbed, for example when new trees are planted. However, it can take several decades for new forest to bind the same amount of carbon dioxide. That is why biogenic emissions also have a climate impact here and now."
+          "text": "Finally, biogenic carbon dioxide emissions are released when wood and other biological material is burned. Even though much of this would decompose and release carbon dioxide anyway, combustion releases it here and now – with a direct climate impact. The carbon dioxide can be reabsorbed, for example when new trees are planted. However, it can take several decades for new forest to bind the same amount of carbon dioxide."
         }
       },
       "bathtub": {
         "eyebrow": "The bathtub effect",
-        "text": "The atmosphere responds to the amount of greenhouse gases that stay and accumulate over time. Like a bathtub with the tap running. Until the tap is turned off, the water level will keep rising. We have already passed 1.5°C of global warming, and Sweden is approaching the point where we have emitted more than our commitment under the Paris Agreement. That is why how quickly we cut emissions is decisive.",
-        "scrollCta": "Scroll to see how Sweden's total emissions have accumulated over time since 1990.",
-        "swipeCta": "Swipe to see how Sweden's total emissions have accumulated over time since 1990.",
-        "baselineCaption": "In {{year}}, emissions were {{value}} Mt",
+        "text": "Our greenhouse gas emissions stay in the atmosphere and accumulate over time. Like a bathtub being filled – the water level rises until the tap is turned off. Sweden is approaching the limit of what we can emit and still meet the Paris Agreement.",
+        "scrollCta": "How many tonnes has that added up to since 1990?",
+        "swipeCta": "How many tonnes has that added up to since 1990?",
+        "baselineCaption": "In {{year}}, emissions were {{value}} Mt CO₂e",
         "rangeCaption": "{{fromYear}}–{{toYear}} added {{value}} Mt CO₂e"
       },
       "graph": {
