@@ -22,7 +22,7 @@ export const NAV_LINKS: NavLink[] = [
         items: [
           {
             label: "header.nation",
-            path: `/valet-2026`,
+            path: `/nation`,
           },
           {
             label: "header.regions",

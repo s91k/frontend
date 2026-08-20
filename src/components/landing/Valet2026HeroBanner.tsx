@@ -23,7 +23,7 @@ export function Valet2026HeroBanner() {
 
   return (
     <LocalizedLink
-      to="/valet-2026"
+      to="/nation"
       aria-label={label}
       className="group fixed inset-x-0 top-12 z-40 flex min-h-[4.75rem] items-center border-b border-black/10 bg-[#E2FF8D] py-2.5 transition-colors hover:bg-[#daf585] md:h-14 md:min-h-0 md:py-0"
     >
