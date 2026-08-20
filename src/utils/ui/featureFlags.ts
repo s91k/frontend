@@ -2,12 +2,8 @@ export const dataGuideFeatureFlagEnabled = () => {
   return true;
 };
 
-/** Nation detail page (`/nation`) – flip to true when ready to publish. */
-export const nationDetailPageEnabled = () => false;
-
-/** Public Sweden destination while `/nation` may be gated. */
-export const nationPublicPath = () =>
-  nationDetailPageEnabled() ? "/nation" : "/valet-2026";
+/** Public path for Sweden's emissions story. */
+export const nationPublicPath = () => "/nation";
 
 export const stagingFeatureFlagEnabled = () => {
   // Check if we're running on localhost or stage

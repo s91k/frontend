@@ -8,7 +8,6 @@ import { Text } from "../ui/text";
 import { Button } from "../ui/button";
 import { LocalizedLink } from "@/components/LocalizedLink";
 import { ArrowRight } from "lucide-react";
-import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
 import { cn } from "@/lib/utils";
 import {
   LANDING_SECTOR_CHART_MIN_HEIGHT_CLASS,
@@ -63,9 +62,8 @@ export const CountriesSection = () => {
           )}
         </div>
 
-        {nationDetailPageEnabled() && (
-          <div className="w-full flex justify-start md:justify-end">
-            <LocalizedLink to="/nation" className="w-fit md:pt-2">
+        <div className="w-full flex justify-start md:justify-end">
+          <LocalizedLink to="/nation" className="w-fit md:pt-2">
               <Button
                 variant="outline"
                 size="lg"
@@ -81,8 +79,7 @@ export const CountriesSection = () => {
                 </span>
               </Button>
             </LocalizedLink>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

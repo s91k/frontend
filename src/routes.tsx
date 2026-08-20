@@ -21,7 +21,6 @@ import {
   MethodsPage,
   MunicipalitiesOverviewPage,
   MunicipalityDetailPage,
-  NationDetailPage,
   Valet2026Page,
   NewsLetterArchivePage,
   NotFoundPage,
@@ -125,8 +124,11 @@ function TerritoryRoutes({ basePath }: { basePath: string }) {
   return (
     <>
       <Route path={`${basePath}/regions`} element={<RegionalOverviewPage />} />
-      <Route path={`${basePath}/nation`} element={<NationDetailPage />} />
-      <Route path={`${basePath}/valet-2026`} element={<Valet2026Page />} />
+      <Route path={`${basePath}/nation`} element={<Valet2026Page />} />
+      <Route
+        path={`${basePath}/valet-2026`}
+        element={<Navigate to={`${basePath}/nation`} replace />}
+      />
       <Route
         path={`${basePath}/municipalities`}
         element={<MunicipalitiesOverviewPage />}

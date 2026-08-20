@@ -2,8 +2,6 @@ import { TerritoryEmissions } from "@/components/territories/TerritoryEmissions"
 import { PageLoading } from "@/components/pageStates/Loading";
 import { PageError } from "@/components/pageStates/Error";
 import { PageNoData } from "@/components/pageStates/NoData";
-import { NotFoundPage } from "@/pages/NotFoundPage";
-import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
 import { DetailHeader } from "@/components/detail/DetailHeader";
 import { DetailWrapper } from "@/components/detail/DetailWrapper";
 import { SectorEmissionsChart } from "@/components/charts/sectorChart/SectorEmissions";
@@ -57,10 +55,6 @@ function NationDetailContent({
 }
 
 export function NationDetailPage() {
-  if (!nationDetailPageEnabled()) {
-    return <NotFoundPage />;
-  }
-
   return <NationDetailPageContent />;
 }
 

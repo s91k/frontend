@@ -157,8 +157,8 @@ const SIMPLE_SEO_ROUTES: Record<
     descriptionKey: "regionalOverviewPage.description",
   },
   "/nation": {
-    titleKey: "nationDetailPage.title",
-    descriptionKey: "nationDetailPage.description",
+    titleKey: "valet2026Page.title",
+    descriptionKey: "valet2026Page.description",
   },
   "/data-download": {
     titleKey: "dataDownloadPage.title",
