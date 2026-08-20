@@ -4,6 +4,15 @@ import { Text } from "../ui/text";
 import { Button } from "../ui/button";
 import { LocalizedLink } from "@/components/LocalizedLink";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  LANDING_SECTION_BODY_CLASS,
+  LANDING_SECTION_ROW_CLASS,
+  LANDING_SECTION_TITLE_CLASS,
+  LANDING_TEXT_BLOCK_MAX_CLASS,
+  LANDING_TEXT_COLUMN_CLASS,
+  LANDING_VISUAL_COLUMN_CLASS,
+} from "@/lib/constants/landingPage";
 
 export const MissionSection = () => {
   const { t } = useTranslation();
@@ -11,18 +20,28 @@ export const MissionSection = () => {
   return (
     <div className="bg-black w-full flex flex-col items-center pt-44 md:pt-52">
       <div className="w-full container max-w-7xl mx-auto px-4">
-        <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:gap-12">
-          <div className="w-full lg:w-2/5 flex flex-col gap-24 lg:pt-4">
-            <div className="flex w-full max-w-[760px] flex-col gap-4 text-left">
-              <Text className="text-3xl sm:text-4xl font-light">
+        <div className={LANDING_SECTION_ROW_CLASS}>
+          <div
+            className={cn(
+              "flex flex-col gap-24 lg:pt-4",
+              LANDING_TEXT_COLUMN_CLASS,
+            )}
+          >
+            <div
+              className={cn(
+                "flex flex-col gap-4 text-left",
+                LANDING_TEXT_BLOCK_MAX_CLASS,
+              )}
+            >
+              <Text className={LANDING_SECTION_TITLE_CLASS}>
                 {t("landingPage.missionSection.title")}
               </Text>
-              <Text className="text-grey font-regular text-[18px]">
+              <Text className={LANDING_SECTION_BODY_CLASS}>
                 {t("landingPage.aboutUsContent")}
               </Text>
             </div>
 
-            <div className="hidden w-full lg:flex lg:justify-end">
+            <div className="hidden w-full landing-laptop:flex lg:flex lg:justify-end">
               <LocalizedLink to="/about" className="w-fit md:pt-2">
                 <Button
                   variant="outline"
@@ -42,10 +61,10 @@ export const MissionSection = () => {
             </div>
           </div>
 
-          <div className="w-full lg:w-3/5">
+          <div className={LANDING_VISUAL_COLUMN_CLASS}>
             <KlimatkollenVideo />
 
-            <div className="mt-8 flex w-full justify-start lg:hidden">
+            <div className="mt-8 flex w-full justify-start landing-laptop:hidden lg:hidden">
               <LocalizedLink to="/about" className="w-fit">
                 <Button
                   variant="outline"

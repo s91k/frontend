@@ -25,6 +25,10 @@ export default {
         "story-compact": {
           raw: "(min-width: 768px) and (max-height: 820px)",
         },
+        /** Landing sections – typical laptop widths without changing large desktop */
+        "landing-laptop": {
+          raw: "(min-width: 768px) and (max-width: 1279px)",
+        },
       },
       fontFamily: {
         sans: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],

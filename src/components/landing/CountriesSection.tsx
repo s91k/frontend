@@ -9,6 +9,13 @@ import { Button } from "../ui/button";
 import { LocalizedLink } from "@/components/LocalizedLink";
 import { ArrowRight } from "lucide-react";
 import { nationDetailPageEnabled } from "@/utils/ui/featureFlags";
+import { cn } from "@/lib/utils";
+import {
+  LANDING_SECTOR_CHART_MIN_HEIGHT_CLASS,
+  LANDING_SECTION_BODY_CLASS,
+  LANDING_SECTION_TITLE_CLASS,
+  LANDING_TEXT_BLOCK_MAX_CLASS,
+} from "@/lib/constants/landingPage";
 
 export const CountriesSection = () => {
   const { t } = useTranslation();
@@ -23,17 +30,23 @@ export const CountriesSection = () => {
   return (
     <div className="bg-black w-full flex flex-col items-center pt-44 md:pt-52">
       <div className="w-full container max-w-7xl mx-auto px-4 items-center flex flex-col gap-8">
-        <div className="flex w-full max-w-[760px] self-start flex-col gap-4 text-left md:self-center md:text-center">
-          <Text className="text-3xl sm:text-4xl font-light">
+        <div
+          className={cn(
+            "flex flex-col gap-4 text-left md:self-center md:text-center",
+            LANDING_TEXT_BLOCK_MAX_CLASS,
+            "self-start",
+          )}
+        >
+          <Text className={LANDING_SECTION_TITLE_CLASS}>
             {t("landingPage.countriesSection.title")}
           </Text>
-          <Text className="text-grey font-regular text-[18px]">
+          <Text className={LANDING_SECTION_BODY_CLASS}>
             {t("landingPage.countriesSection.description")}
           </Text>
         </div>
-        <div className="w-full">
+        <div className={LANDING_SECTOR_CHART_MIN_HEIGHT_CLASS}>
           {sectorEmissionsLoading ? (
-            <div className="h-[min(520px,70vh)] w-full animate-pulse bg-black-2 rounded-level-2" />
+            <div className="h-[min(520px,70vh)] landing-laptop:h-[min(600px,78vh)] w-full animate-pulse bg-black-2 rounded-level-2" />
           ) : (
             <SectorEmissionsChart
               sectorEmissions={sectorEmissions}

@@ -1608,7 +1608,7 @@
         "dismiss": "Got it"
       },
       "journey": {
-        "dataYear": "The figure refers to million tonnes (Mt) CO₂e and {{year}}.",
+        "dataYear": "The figure refers to million tonnes (Mt) CO₂e for year {{year}}.",
         "dataYearShort": "Mt CO₂e, {{year}}",
         "stepCounter": "Layer {{current}} of {{total}}",
         "totalLabel": "Total",
@@ -1682,6 +1682,8 @@
           "chartHeadline": "Sweden's annual emissions since 1990",
           "bathtubHeadline": "Sweden's accumulated emissions since 1990",
           "expandLabel": "Enlarge: {{headline}}",
+          "expandHintClick": "Click to enlarge",
+          "expandHintTap": "Tap to enlarge",
           "closeLabel": "Close"
         }
       }

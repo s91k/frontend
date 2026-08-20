@@ -19,3 +19,31 @@ export const POPULAR_HERO_ITEMS: HeroSearchResult[] = [
   { type: "company", name: "H&M", id: "Q188326" },
   { type: "region", name: "Skåne län" },
 ];
+
+/** Landing section typography/layout – laptop-only bumps (768–1279px); mobile + xl+ unchanged. */
+export const LANDING_SECTION_TITLE_CLASS =
+  "text-3xl sm:text-4xl font-light landing-laptop:text-4xl landing-laptop:sm:text-[2.75rem] landing-laptop:leading-tight";
+
+export const LANDING_SECTION_BODY_CLASS =
+  "text-grey font-regular text-[18px] landing-laptop:text-xl landing-laptop:leading-relaxed";
+
+export const LANDING_SECTION_ROW_CLASS =
+  "flex w-full flex-col items-start gap-8 landing-laptop:flex-row landing-laptop:gap-10 lg:flex-row lg:gap-12";
+
+export const LANDING_TEXT_COLUMN_CLASS =
+  "w-full landing-laptop:w-2/5 lg:w-2/5";
+
+export const LANDING_VISUAL_COLUMN_CLASS =
+  "w-full landing-laptop:w-3/5 lg:w-3/5";
+
+export const LANDING_MAP_HEIGHT_CLASS =
+  "relative w-full h-[55vh] md:h-[65vh] landing-laptop:md:h-[72vh] lg:h-[75vh] landing-laptop:lg:h-[80vh]";
+
+export const LANDING_CHART_PANEL_HEIGHT_CLASS =
+  "w-full h-[520px] landing-laptop:h-[600px]";
+
+export const LANDING_TEXT_BLOCK_MAX_CLASS =
+  "w-full max-w-[760px] landing-laptop:max-w-[880px]";
+
+export const LANDING_SECTOR_CHART_MIN_HEIGHT_CLASS =
+  "w-full landing-laptop:min-h-[min(600px,78vh)]";
