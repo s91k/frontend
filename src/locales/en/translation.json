@@ -99,8 +99,8 @@
       "description": "Start your journey into climate data. Search for companies, municipalities, regions, and countries. Explore rankings and discover who's leading the fight against climate change."
     },
     "valet2026Banner": {
-      "badge": "New!",
-      "title": "Explore Sweden's actual emissions ahead of the 2026 election"
+      "badge": "News!",
+      "title": "Explore Sweden's actual emissions 2025"
     },
     "companiesSection": {
       "title": "How's it going with company emissions?",
@@ -2135,7 +2135,7 @@
     "description": "National overview of emissions and climate transition in Sweden compared to the Paris Agreement targets."
   },
   "valet2026Page": {
-    "title": "Election 2026 – Sweden's emissions",
+    "title": "Sweden's emissions",
     "description": "A story about Sweden's emissions ahead of the 2026 election – from territorial figures to the full picture."
   },
   "globalSearch": {
