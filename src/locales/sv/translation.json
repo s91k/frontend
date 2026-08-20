@@ -1658,7 +1658,7 @@
         "dismiss": "Okej"
       },
       "journey": {
-        "dataYear": "Siffran avser miljoner ton (Mton) CO₂e och {{year}}.",
+        "dataYear": "Siffran avser miljoner ton (Mton) CO₂e och år {{year}}.",
         "dataYearShort": "Mton CO₂e, {{year}}",
         "stepCounter": "Lager {{current}} av {{total}}",
         "totalLabel": "Totalt",
@@ -1732,6 +1732,8 @@
           "chartHeadline": "Sveriges årliga utsläpp sedan 1990",
           "bathtubHeadline": "Sveriges ackumulerade utsläpp sedan 1990",
           "expandLabel": "Förstora: {{headline}}",
+          "expandHintClick": "Klicka för att förstora",
+          "expandHintTap": "Tryck för att förstora",
           "closeLabel": "Stäng"
         }
       }

@@ -19,7 +19,6 @@ import {
 } from "@/utils/data/nationStoryMetrics";
 import { useLanguage } from "@/components/LanguageProvider";
 import {
-  NATION_STORY_COLORS,
   NATION_STORY_TEXT,
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
@@ -33,7 +32,13 @@ type NationIntroPunchProps = {
   metrics: NationStoryMetrics;
 };
 
-/** Pink map grows out from the orange core shortly after mount. */
+/** Intro-only palette: blue for the usual figure (47), orange for full emissions (159). */
+const INTRO_INNER_MAP_FILL = "var(--blue-3)";
+const INTRO_OUTER_MAP_FILL = "var(--orange-3)";
+const INTRO_USUAL_VALUE_CLASS = "text-blue-3";
+const INTRO_FULL_VALUE_CLASS = "text-orange-3";
+
+/** Outer map grows out from the blue core shortly after mount. */
 const PINK_MAP_REVEAL_DELAY_S = 0.35;
 
 const PINK_REVEAL_TRANSITION = {
@@ -130,8 +135,8 @@ const IntroSwedenMaps = memo(function IntroSwedenMaps({
   unitLong,
 }: IntroSwedenMapsProps) {
   return (
-    <div className="relative h-[clamp(130px,24svh,280px)] story-short:h-[clamp(110px,20svh,200px)] md:h-[clamp(200px,34svh,320px)] story-compact:h-[clamp(190px,32svh,300px)] lg:h-[clamp(240px,40svh,400px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
-      <div className="absolute inset-[7%] md:inset-[8%]">
+    <div className="relative h-[clamp(155px,28svh,300px)] story-short:h-[clamp(130px,24svh,230px)] landing-laptop:h-[clamp(280px,42svh,420px)] story-compact:landing-laptop:h-[clamp(240px,36svh,360px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+      <div className="absolute inset-[5%] landing-laptop:inset-[5%] xl:inset-[8%]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
           overflow="visible"
@@ -141,11 +146,11 @@ const IntroSwedenMaps = memo(function IntroSwedenMaps({
         >
           <AnimatedPinkSilhouette
             progress={pinkProgress}
-            fill={NATION_STORY_COLORS.consumption}
+            fill={INTRO_OUTER_MAP_FILL}
           />
           <SwedenSilhouette
             scale={innerScale}
-            fill={NATION_STORY_COLORS.territorial}
+            fill={INTRO_INNER_MAP_FILL}
             nudgeX={INNER_MAP_NUDGE_X}
           />
         </svg>
@@ -373,7 +378,7 @@ const IntroStatCallouts = memo(function IntroStatCallouts({
         reservedValue={reported}
         unitShort={unitShort}
         unitLong={unitLong}
-        colorClass="text-orange-3"
+        colorClass={INTRO_USUAL_VALUE_CLASS}
         className="order-1"
       />
       <PinkStatCallout
@@ -383,7 +388,7 @@ const IntroStatCallouts = memo(function IntroStatCallouts({
         label={fullLabel}
         unitShort={unitShort}
         unitLong={unitLong}
-        colorClass="text-pink-3"
+        colorClass={INTRO_FULL_VALUE_CLASS}
         className="order-2"
       />
     </div>
@@ -429,8 +434,8 @@ function useIntroPunchContent(metrics: NationStoryMetrics): IntroPunchContent {
 }
 
 /**
- * Hero visual: a smaller orange Sweden (what we usually discuss) nested inside
- * a larger pink silhouette (the full picture). The pink ring between them is
+ * Hero visual: a smaller blue Sweden (what we usually discuss) nested inside
+ * a larger orange silhouette (the full picture). The ring between them is
  * the emissions gap the story unpacks.
  */
 export function NationIntroPunch({ metrics }: NationIntroPunchProps) {

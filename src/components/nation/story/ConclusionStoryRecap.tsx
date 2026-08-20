@@ -6,6 +6,7 @@ import { BathtubRecapGraphic } from "@/components/nation/story/NationBathtub";
 import {
   NATION_STORY_CHART,
   NATION_STORY_COLORS,
+  NATION_STORY_TEXT,
   NATION_STORY_TYPE,
 } from "@/components/nation/story/nationStoryColors";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -21,6 +22,7 @@ import {
   NATION_BASELINE_YEAR,
   type NationStoryMetrics,
 } from "@/utils/data/nationStoryMetrics";
+import type { SupportedLanguage } from "@/lib/languageDetection";
 import {
   Dialog,
   DialogContent,
@@ -35,17 +37,213 @@ const CHART_LAYERS = [
   {
     dataKey: "territorialFossil" as const,
     color: NATION_STORY_COLORS.territorial,
+    translationKey: "nation.story.graph.territorialFossil",
   },
   {
     dataKey: "productionBeyondTerritorial" as const,
     color: NATION_STORY_COLORS.production,
+    translationKey: "nation.story.graph.productionBeyondTerritorial",
   },
   {
     dataKey: "consumptionAbroad" as const,
     color: NATION_STORY_COLORS.consumption,
+    translationKey: "nation.story.graph.consumptionAbroad",
   },
-  { dataKey: "biogenic" as const, color: NATION_STORY_COLORS.biogenic },
+  {
+    dataKey: "biogenic" as const,
+    color: NATION_STORY_COLORS.biogenic,
+    translationKey: "nation.story.graph.biogenic",
+  },
 ];
+
+function formatRecapDeltaMton(
+  delta: number,
+  language: SupportedLanguage,
+): string {
+  if (delta < 1) {
+    const rounded = Math.round(delta * 10) / 10;
+    return new Intl.NumberFormat(language === "sv" ? "sv-SE" : "en-GB", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(rounded);
+  }
+  return formatMton(delta, language, 0);
+}
+
+const RECAP_LEGEND_CLASS = `w-full border-t border-white/10 pt-3 mt-1 space-y-1.5 ${NATION_STORY_TYPE.meta}`;
+const RECAP_DIALOG_LEGEND_CLASS = `w-full shrink-0 border-t border-white/10 pt-2 space-y-1 ${NATION_STORY_TYPE.meta}`;
+const RECAP_LEGEND_ROW_CLASS = `flex items-center gap-2.5 w-full ${NATION_STORY_TYPE.meta}`;
+
+function RecapLegendRow({
+  color,
+  label,
+  value,
+  borderedDot = false,
+  total = false,
+}: {
+  color?: string;
+  label: string;
+  value: string;
+  borderedDot?: boolean;
+  total?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        RECAP_LEGEND_ROW_CLASS,
+        total && "border-t border-white/10 pt-1.5 text-white font-medium",
+      )}
+    >
+      {color ? (
+        <span
+          className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 rounded-full shrink-0"
+          style={{
+            backgroundColor: color,
+            ...(borderedDot
+              ? { border: "1px solid rgba(255,255,255,0.2)" }
+              : {}),
+          }}
+          aria-hidden
+        />
+      ) : (
+        <span className="w-2.5 md:w-3.5 shrink-0" aria-hidden />
+      )}
+      <span className={total ? "flex-1" : NATION_STORY_TEXT.secondary}>
+        {label}
+      </span>
+      <span className="ml-auto tabular-nums text-white">{value}</span>
+    </div>
+  );
+}
+
+function OnionRecapLegend({
+  metrics,
+  compact = false,
+}: {
+  metrics: NationStoryMetrics;
+  compact?: boolean;
+}) {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
+
+  const { rows, total } = useMemo(() => {
+    const territorial = metrics.territorialLatestMton;
+    const production = metrics.productionLatestMton;
+    const consumption = metrics.consumptionLatestMton;
+    const biogenic = metrics.biogenicLatestMton;
+
+    const steps = [
+      {
+        labelKey: "nation.story.journey.step1.label",
+        color: NATION_STORY_COLORS.territorial,
+        delta: territorial,
+      },
+      {
+        labelKey: "nation.story.journey.step2.label",
+        color: NATION_STORY_COLORS.production,
+        delta: production - territorial,
+      },
+      {
+        labelKey: "nation.story.journey.step3.label",
+        color: NATION_STORY_COLORS.consumption,
+        delta: consumption,
+      },
+      {
+        labelKey: "nation.story.journey.step4.label",
+        color: NATION_STORY_COLORS.eCommerce,
+        delta: E_COMMERCE_MTON,
+        borderedDot: true,
+      },
+      {
+        labelKey: "nation.story.journey.step5.label",
+        color: NATION_STORY_COLORS.biogenic,
+        delta: biogenic,
+      },
+    ];
+
+    return {
+      rows: steps,
+      total: production + consumption + E_COMMERCE_MTON + biogenic,
+    };
+  }, [metrics]);
+
+  return (
+    <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
+      <p className="text-white tabular-nums font-medium">
+        {metrics.latestYear}
+      </p>
+      <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
+        {rows.map((row, index) => (
+          <RecapLegendRow
+            key={row.labelKey}
+            color={row.color}
+            borderedDot={row.borderedDot}
+            label={t(row.labelKey)}
+            value={`${index === 0 ? "" : "+"}${formatRecapDeltaMton(row.delta, currentLanguage)}`}
+          />
+        ))}
+      </div>
+      <RecapLegendRow
+        total
+        label={t("nation.story.journey.totalLabel")}
+        value={formatMton(total, currentLanguage, 0)}
+      />
+    </div>
+  );
+}
+
+function ChartRecapLegend({
+  metrics,
+  compact = false,
+}: {
+  metrics: NationStoryMetrics;
+  compact?: boolean;
+}) {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
+  const latestPoint =
+    metrics.stackData[metrics.stackData.length - 1] ?? undefined;
+  const eCommerceLabel = t("nation.story.journey.step4.label");
+  const eCommerceDelta = formatRecapDeltaMton(E_COMMERCE_MTON, currentLanguage);
+
+  const readoutTotal = CHART_LAYERS.reduce(
+    (sum, layer) => sum + (latestPoint?.[layer.dataKey] ?? 0),
+    0,
+  );
+
+  return (
+    <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
+      <p className="text-white tabular-nums font-medium">
+        {metrics.latestYear}
+      </p>
+      <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
+        {CHART_LAYERS.map((layer, index) => (
+          <RecapLegendRow
+            key={layer.dataKey}
+            color={layer.color}
+            label={t(layer.translationKey)}
+            value={`${index === 0 ? "" : "+"}${formatMton(
+              latestPoint?.[layer.dataKey] ?? 0,
+              currentLanguage,
+              0,
+            )}`}
+          />
+        ))}
+        <RecapLegendRow
+          color={NATION_STORY_COLORS.eCommerce}
+          borderedDot
+          label={eCommerceLabel}
+          value={`+${eCommerceDelta}`}
+        />
+      </div>
+      <RecapLegendRow
+        total
+        label={t("nation.story.journey.totalLabel")}
+        value={formatMton(readoutTotal, currentLanguage, 0)}
+      />
+    </div>
+  );
+}
 
 const RECAP_ONION_DIAMETER = 168;
 /** Glow halo + blur spread – size rings inside this inset so nothing clips. */
@@ -53,27 +251,49 @@ const ONION_GLOW_INSET = 1.2;
 const RECAP_VISUAL_HEIGHT =
   "h-[13rem] story-short:h-[12rem] md:h-[11.5rem] story-compact:md:h-[10.5rem] lg:h-[13rem]";
 const RECAP_EXPANDED_VISUAL_HEIGHT =
-  "h-[min(70vh,28rem)] sm:h-[min(75vh,32rem)]";
+  "h-[min(48vh,18rem)] sm:h-[min(52vh,20rem)]";
 
-function recapExpandedFrameClass(variant: RecapVisualVariant) {
+function recapExpandedFrameClass(
+  variant: RecapVisualVariant,
+  fitDialog = false,
+) {
   const base = "flex w-full items-center justify-center";
+  if (fitDialog) {
+    switch (variant) {
+      case "onion":
+        return cn(
+          base,
+          "h-[min(28svh,11rem)] sm:h-[min(32svh,13rem)] shrink-0 overflow-hidden px-2 py-0",
+        );
+      case "bathtub":
+        return cn(
+          base,
+          "h-[min(26svh,10rem)] sm:h-[min(30svh,12rem)] shrink-0 overflow-hidden px-2 py-0",
+        );
+      case "chart":
+        return cn(
+          base,
+          "h-[min(30svh,12rem)] sm:h-[min(34svh,14rem)] shrink-0 overflow-hidden px-1 py-0",
+        );
+    }
+  }
   switch (variant) {
     case "onion":
       return cn(
         base,
-        "overflow-visible px-3 py-2 sm:px-2 sm:py-1.5",
-        "h-[min(calc(100vw-4rem),15rem)] sm:h-[min(75vh,32rem)]",
+        "overflow-visible px-3 py-2 sm:px-2 sm:py-1",
+        "h-[min(calc(100vw-4rem),11rem)] sm:h-[min(48vh,18rem)]",
       );
     case "bathtub":
       return cn(
         base,
         "overflow-visible px-3 py-0",
-        "h-auto max-h-[min(44vh,14.5rem)] sm:h-[min(75vh,32rem)] sm:max-h-none",
+        "h-auto max-h-[min(36vh,12rem)] sm:h-[min(48vh,18rem)] sm:max-h-none",
       );
     case "chart":
       return cn(
         base,
-        "overflow-hidden px-2 py-1.5",
+        "overflow-hidden px-2 py-1",
         RECAP_EXPANDED_VISUAL_HEIGHT,
       );
   }
@@ -89,7 +309,8 @@ function recapExpandedInnerClass(variant: RecapVisualVariant) {
       return "h-full w-full min-w-0";
   }
 }
-const RECAP_CHART_MARGIN = { top: 22, right: 8, left: 8, bottom: 6 };
+const RECAP_CHART_MARGIN = { top: 26, right: 8, left: 6, bottom: 18 };
+const RECAP_DIALOG_CHART_MARGIN = { top: 30, right: 4, left: 6, bottom: 14 };
 
 const RECAP_HEADLINE_CLASS = `${NATION_STORY_TYPE.emphasis} text-white w-full leading-snug`;
 const RECAP_HEADLINE_ROW_MOBILE =
@@ -112,17 +333,19 @@ type RecapItem = {
 function RecapVisualFrame({
   variant,
   enlarged,
+  fitDialog = false,
   children,
 }: {
   variant: RecapVisualVariant;
   enlarged: boolean;
+  fitDialog?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div
       className={cn(
         enlarged
-          ? recapExpandedFrameClass(variant)
+          ? recapExpandedFrameClass(variant, fitDialog)
           : cn(
               "flex w-full items-center justify-center pt-0 pb-1",
               variant === "bathtub" ? "px-3" : "px-2",
@@ -304,14 +527,16 @@ function OnionRecapSnapshot({
 function ChartRecapSnapshot({
   metrics,
   compact = false,
+  fitDialog = false,
 }: {
   metrics: NationStoryMetrics;
   compact?: boolean;
+  fitDialog?: boolean;
 }) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   const { isMobile } = useScreenSize();
-  const useMirroredAxis = isMobile || compact;
+  const useMirroredAxis = isMobile || compact || fitDialog;
   const latestYear =
     metrics.stackData[metrics.stackData.length - 1]?.year ??
     NATION_BASELINE_YEAR;
@@ -321,6 +546,9 @@ function ChartRecapSnapshot({
     [currentLanguage],
   );
   const xAxisTicks = useMemo(() => {
+    if (compact && !fitDialog) {
+      return [NATION_BASELINE_YEAR, latestYear];
+    }
     const ticks = isMobile
       ? [NATION_BASELINE_YEAR, 2000, 2010]
       : [NATION_BASELINE_YEAR, 2000, 2010];
@@ -330,7 +558,7 @@ function ChartRecapSnapshot({
       ticks.push(2020);
     }
     return ticks;
-  }, [isMobile, latestYear]);
+  }, [compact, fitDialog, isMobile, latestYear]);
 
   const edgeAwareTick = ({
     x,
@@ -362,11 +590,17 @@ function ChartRecapSnapshot({
 
   return (
     <div className="relative h-full w-full min-h-0 pointer-events-none select-none">
-      <StoryChartYAxisUnit unit={unitLabel} />
+      {(compact || fitDialog) && <StoryChartYAxisUnit unit={unitLabel} />}
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={metrics.stackData}
-          margin={compact ? RECAP_CHART_MARGIN : getStoryChartMargin(isMobile)}
+          margin={
+            fitDialog
+              ? RECAP_DIALOG_CHART_MARGIN
+              : compact
+                ? RECAP_CHART_MARGIN
+                : getStoryChartMargin(isMobile)
+          }
         >
           <XAxis
             dataKey="year"
@@ -443,13 +677,17 @@ function BathtubRecapSnapshot({
 function RecapPanel({
   item,
   layout,
+  metrics,
   onExpand,
 }: {
   item: RecapItem;
   layout: "mobile" | "desktop";
+  metrics: NationStoryMetrics;
   onExpand: () => void;
 }) {
   const { t } = useTranslation();
+  const showMobileLegend =
+    layout === "mobile" && (item.key === "onion" || item.key === "chart");
 
   return (
     <motion.div
@@ -482,6 +720,12 @@ function RecapPanel({
         <RecapVisualFrame variant={item.variant} enlarged={false}>
           {item.renderVisual(false)}
         </RecapVisualFrame>
+        {showMobileLegend && item.key === "onion" && (
+          <OnionRecapLegend metrics={metrics} compact />
+        )}
+        {showMobileLegend && item.key === "chart" && (
+          <ChartRecapLegend metrics={metrics} compact />
+        )}
       </button>
     </motion.div>
   );
@@ -494,6 +738,7 @@ type ConclusionStoryRecapProps = {
 /** Recap row: final-state onion, chart and bathtub — column on mobile, aligned grid on md+. */
 export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
   const { t } = useTranslation();
+  const { isMobile } = useScreenSize();
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const cumulativeMton =
     metrics.bathtubData[metrics.bathtubData.length - 1]?.cumulativeMton ?? 0;
@@ -516,7 +761,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
       headline: t("nation.story.conclusion.recap.chartHeadline"),
       delay: 0.18,
       renderVisual: (enlarged) => (
-        <ChartRecapSnapshot metrics={metrics} compact={!enlarged} />
+        <ChartRecapSnapshot metrics={metrics} compact fitDialog={enlarged} />
       ),
     },
     {
@@ -534,26 +779,56 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
   ];
 
   const expandedItem = items.find((item) => item.key === expandedKey) ?? null;
+  const expandedFitsDialog =
+    expandedItem?.variant === "onion" ||
+    expandedItem?.variant === "chart" ||
+    expandedItem?.variant === "bathtub";
+  const isDialogOpen = expandedItem !== null;
 
   return (
     <>
-      <div className="flex flex-col gap-5 story-short:gap-4 md:hidden w-full max-w-7xl mx-auto px-2">
+      <p
+        className={cn(
+          `mb-4 story-short:mb-3 md:mb-5 text-center ${NATION_STORY_TYPE.meta} ${NATION_STORY_TEXT.secondary}`,
+          isDialogOpen && "opacity-60 transition-opacity duration-200",
+        )}
+      >
+        {t(
+          isMobile
+            ? "nation.story.conclusion.recap.expandHintTap"
+            : "nation.story.conclusion.recap.expandHintClick",
+        )}
+      </p>
+
+      <div
+        className={cn(
+          "flex flex-col gap-5 story-short:gap-4 md:hidden w-full max-w-7xl mx-auto px-2 transition-opacity duration-200",
+          isDialogOpen && "pointer-events-none opacity-55",
+        )}
+      >
         {items.map((item) => (
           <RecapPanel
             key={item.key}
             item={item}
             layout="mobile"
+            metrics={metrics}
             onExpand={() => setExpandedKey(item.key)}
           />
         ))}
       </div>
 
-      <div className="hidden md:grid md:grid-cols-3 md:items-start md:gap-x-6 lg:gap-x-10 w-full max-w-7xl mx-auto px-4">
+      <div
+        className={cn(
+          "hidden md:grid md:grid-cols-3 md:items-start md:gap-x-6 lg:gap-x-10 w-full max-w-7xl mx-auto px-4 transition-opacity duration-200",
+          isDialogOpen && "pointer-events-none opacity-55",
+        )}
+      >
         {items.map((item) => (
           <RecapPanel
             key={item.key}
             item={item}
             layout="desktop"
+            metrics={metrics}
             onExpand={() => setExpandedKey(item.key)}
           />
         ))}
@@ -566,16 +841,19 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
         }}
       >
         <DialogContent
+          overlayClassName="z-[80] bg-black/50 backdrop-blur-sm"
           className={cn(
-            "max-w-[min(100vw-1.5rem,44rem)] border-white/15 bg-black p-4 text-white shadow-2xl sm:max-w-2xl sm:gap-4 sm:p-6 md:max-w-4xl [&>button]:text-white [&>button]:opacity-80 [&>button]:hover:opacity-100",
-            expandedItem?.variant === "bathtub" ? "gap-2" : "gap-3",
+            "z-[80] max-w-[min(100vw-1.5rem,32rem)] border-white/15 bg-black p-4 text-white shadow-2xl sm:max-w-md sm:gap-3 sm:p-5 md:max-w-lg [&>button]:text-white [&>button]:opacity-80 [&>button]:hover:opacity-100",
+            expandedFitsDialog &&
+              "!flex max-h-[min(90svh,calc(100dvh-1.5rem))] flex-col overflow-hidden",
+            !expandedFitsDialog && "gap-3",
           )}
           aria-describedby={undefined}
         >
           {expandedItem ? (
             <>
               <DialogTitle
-                className={`${NATION_STORY_TYPE.emphasis} text-center text-white`}
+                className={`${NATION_STORY_TYPE.emphasis} shrink-0 text-center text-white leading-snug`}
               >
                 {expandedItem.headline}
               </DialogTitle>
@@ -584,9 +862,21 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
                   headline: expandedItem.headline,
                 })}
               </DialogDescription>
-              <RecapVisualFrame variant={expandedItem.variant} enlarged>
-                {expandedItem.renderVisual(true)}
-              </RecapVisualFrame>
+              <div className="flex min-h-0 flex-col gap-2 overflow-hidden">
+                <RecapVisualFrame
+                  variant={expandedItem.variant}
+                  enlarged
+                  fitDialog
+                >
+                  {expandedItem.renderVisual(true)}
+                </RecapVisualFrame>
+                {expandedItem.key === "onion" && (
+                  <OnionRecapLegend metrics={metrics} compact />
+                )}
+                {expandedItem.key === "chart" && (
+                  <ChartRecapLegend metrics={metrics} compact />
+                )}
+              </div>
             </>
           ) : null}
         </DialogContent>

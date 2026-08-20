@@ -13,6 +13,14 @@ import {
 } from "@/components/ui/select";
 import { useMunicipalitiesSection } from "./useMunicipalitiesSection";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { cn } from "@/lib/utils";
+import {
+  LANDING_SECTION_BODY_CLASS,
+  LANDING_SECTION_ROW_CLASS,
+  LANDING_SECTION_TITLE_CLASS,
+  LANDING_TEXT_COLUMN_CLASS,
+  LANDING_VISUAL_COLUMN_CLASS,
+} from "@/lib/constants/landingPage";
 
 export const MunicipalitiesSection = () => {
   const { t } = useTranslation();
@@ -41,8 +49,13 @@ export const MunicipalitiesSection = () => {
   return (
     <div className="bg-black w-full flex flex-col items-center min-h-screen pt-24 lg:pt-72">
       <div className="w-full container max-w-7xl mx-auto px-4">
-        <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:gap-12">
-          <div className="order-2 lg:order-2 w-full lg:w-3/5 flex flex-col gap-3">
+        <div className={LANDING_SECTION_ROW_CLASS}>
+          <div
+            className={cn(
+              "order-2 flex flex-col gap-3 lg:order-2",
+              LANDING_VISUAL_COLUMN_CLASS,
+            )}
+          >
             <div className="flex flex-wrap items-center gap-3 md:pt-4">
               <div className="inline-flex rounded-md border border-black-1 bg-black-2 p-1">
                 <button
@@ -112,18 +125,23 @@ export const MunicipalitiesSection = () => {
             </div>
           </div>
 
-          <div className="order-1 lg:order-1 w-full lg:w-2/5 flex flex-col gap-24 lg:pt-4">
+          <div
+            className={cn(
+              "order-1 flex flex-col gap-24 lg:order-1 lg:pt-4",
+              LANDING_TEXT_COLUMN_CLASS,
+            )}
+          >
             <div className="flex flex-col gap-4">
-              <Text className="text-3xl sm:text-4xl font-light">
+              <Text className={LANDING_SECTION_TITLE_CLASS}>
                 {sectionTitle}
               </Text>
-              <Text className="text-grey font-regular text-[18px]">
+              <Text className={LANDING_SECTION_BODY_CLASS}>
                 {sectionDescription}
               </Text>
             </div>
             <LocalizedLink
               to={explorePath}
-              className="hidden lg:flex self-end w-fit md:pt-2"
+              className="hidden landing-laptop:flex lg:flex self-end w-fit md:pt-2"
             >
               <Button
                 variant="outline"
@@ -144,7 +162,7 @@ export const MunicipalitiesSection = () => {
 
           <LocalizedLink
             to={explorePath}
-            className="lg:hidden order-3 self-start w-fit"
+            className="order-3 self-start w-fit landing-laptop:hidden lg:hidden"
           >
             <Button
               variant="outline"

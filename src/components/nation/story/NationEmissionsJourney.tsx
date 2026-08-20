@@ -454,16 +454,9 @@ export function NationEmissionsJourney({
                 animate={{ opacity: sectionStarted ? 1 : 0 }}
                 transition={captionTransition}
               >
-                <span className="md:hidden">
-                  {t("nation.story.journey.dataYearShort", {
-                    year: metrics.latestYear,
-                  })}
-                </span>
-                <span className="hidden md:inline">
-                  {t("nation.story.journey.dataYear", {
-                    year: metrics.latestYear,
-                  })}
-                </span>
+                {t("nation.story.journey.dataYear", {
+                  year: metrics.latestYear,
+                })}
               </motion.span>
             </p>
           </div>

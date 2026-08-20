@@ -12,6 +12,15 @@ import { Button } from "../ui/button";
 import { LocalizedLink } from "@/components/LocalizedLink";
 import { ArrowRight } from "lucide-react";
 import { CompanySearchInput } from "./CompanySearchInput";
+import { cn } from "@/lib/utils";
+import {
+  LANDING_CHART_PANEL_HEIGHT_CLASS,
+  LANDING_SECTION_BODY_CLASS,
+  LANDING_SECTION_ROW_CLASS,
+  LANDING_SECTION_TITLE_CLASS,
+  LANDING_TEXT_COLUMN_CLASS,
+  LANDING_VISUAL_COLUMN_CLASS,
+} from "@/lib/constants/landingPage";
 
 export const CompaniesSection = () => {
   const { t } = useTranslation();
@@ -51,7 +60,7 @@ export const CompaniesSection = () => {
           )
         : null;
     return (
-      <div className="w-full h-[520px]">
+      <div className={LANDING_CHART_PANEL_HEIGHT_CLASS}>
         <OverviewChart
           key={String(selectedCompany.wikidataId)}
           data={chartData}
@@ -78,20 +87,25 @@ export const CompaniesSection = () => {
   return (
     <div className="bg-black w-full flex flex-col items-center pt-44 md:pt-52">
       <div className="w-full container max-w-7xl mx-auto px-4">
-        <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:gap-12">
-          <div className="order-1 lg:order-2 w-full lg:w-2/5 flex flex-col gap-24 lg:pt-4">
+        <div className={LANDING_SECTION_ROW_CLASS}>
+          <div
+            className={cn(
+              "order-1 flex flex-col gap-24 lg:order-2 lg:pt-4",
+              LANDING_TEXT_COLUMN_CLASS,
+            )}
+          >
             <div className="flex flex-col gap-4">
-              <Text className="text-3xl sm:text-4xl font-light">
+              <Text className={LANDING_SECTION_TITLE_CLASS}>
                 {t("landingPage.companiesSection.title")}
               </Text>
-              <Text className="text-grey font-regular text-[18px]">
+              <Text className={LANDING_SECTION_BODY_CLASS}>
                 {t("landingPage.companiesSection.description")}
               </Text>
             </div>
 
             <LocalizedLink
               to="/explore/companies"
-              className="hidden lg:flex self-end w-fit shrink-0 md:pt-2"
+              className="hidden landing-laptop:flex lg:flex self-end w-fit shrink-0 md:pt-2"
             >
               <Button
                 variant="outline"
@@ -110,7 +124,12 @@ export const CompaniesSection = () => {
             </LocalizedLink>
           </div>
 
-          <div className="order-2 lg:order-1 w-full lg:w-3/5 flex flex-col gap-3">
+          <div
+            className={cn(
+              "order-2 flex flex-col gap-3 lg:order-1",
+              LANDING_VISUAL_COLUMN_CLASS,
+            )}
+          >
             <div className="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-start md:gap-6 md:pt-4">
               <CompanySearchInput
                 onSelect={setSelectedCompany}
@@ -128,7 +147,12 @@ export const CompaniesSection = () => {
             </div>
 
             {isCompanySearchBusy ? (
-              <div className="w-full h-[520px] animate-pulse bg-black-2 rounded-level-2" />
+              <div
+                className={cn(
+                  LANDING_CHART_PANEL_HEIGHT_CLASS,
+                  "animate-pulse bg-black-2 rounded-level-2",
+                )}
+              />
             ) : (
               chartSection
             )}
@@ -136,7 +160,7 @@ export const CompaniesSection = () => {
 
           <LocalizedLink
             to="/explore/companies"
-            className="lg:hidden order-3 self-start w-fit shrink-0"
+            className="landing-laptop:hidden lg:hidden order-3 self-start w-fit shrink-0"
           >
             <Button
               variant="outline"
