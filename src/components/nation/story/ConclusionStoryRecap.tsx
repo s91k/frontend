@@ -874,9 +874,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
                 {expandedItem.key === "onion" && (
                   <OnionRecapLegend metrics={metrics} compact />
                 )}
-                {expandedItem.key === "chart" && (
-                  <ChartRecapLegend compact />
-                )}
+                {expandedItem.key === "chart" && <ChartRecapLegend compact />}
               </div>
             </>
           ) : null}
