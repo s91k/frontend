@@ -30,8 +30,7 @@ export const LANDING_SECTION_BODY_CLASS =
 export const LANDING_SECTION_ROW_CLASS =
   "flex w-full flex-col items-start gap-8 landing-laptop:flex-row landing-laptop:gap-10 lg:flex-row lg:gap-12";
 
-export const LANDING_TEXT_COLUMN_CLASS =
-  "w-full landing-laptop:w-2/5 lg:w-2/5";
+export const LANDING_TEXT_COLUMN_CLASS = "w-full landing-laptop:w-2/5 lg:w-2/5";
 
 export const LANDING_VISUAL_COLUMN_CLASS =
   "w-full landing-laptop:w-3/5 lg:w-3/5";

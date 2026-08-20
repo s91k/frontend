@@ -169,7 +169,9 @@ function OnionRecapLegend({
 
   return (
     <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
-      <p className="text-white tabular-nums font-medium">{metrics.latestYear}</p>
+      <p className="text-white tabular-nums font-medium">
+        {metrics.latestYear}
+      </p>
       <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
         {rows.map((row, index) => (
           <RecapLegendRow
@@ -211,7 +213,9 @@ function ChartRecapLegend({
 
   return (
     <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
-      <p className="text-white tabular-nums font-medium">{metrics.latestYear}</p>
+      <p className="text-white tabular-nums font-medium">
+        {metrics.latestYear}
+      </p>
       <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
         {CHART_LAYERS.map((layer, index) => (
           <RecapLegendRow
@@ -757,11 +761,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
       headline: t("nation.story.conclusion.recap.chartHeadline"),
       delay: 0.18,
       renderVisual: (enlarged) => (
-        <ChartRecapSnapshot
-          metrics={metrics}
-          compact
-          fitDialog={enlarged}
-        />
+        <ChartRecapSnapshot metrics={metrics} compact fitDialog={enlarged} />
       ),
     },
     {
