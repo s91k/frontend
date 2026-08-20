@@ -15,7 +15,6 @@ import { useMunicipalitiesSection } from "./useMunicipalitiesSection";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { cn } from "@/lib/utils";
 import {
-  LANDING_MAP_HEIGHT_CLASS,
   LANDING_SECTION_BODY_CLASS,
   LANDING_SECTION_ROW_CLASS,
   LANDING_SECTION_TITLE_CLASS,
@@ -104,7 +103,7 @@ export const MunicipalitiesSection = () => {
               </div>
             </div>
 
-            <div className={LANDING_MAP_HEIGHT_CLASS}>
+            <div className="relative w-full h-[55vh] md:h-[65vh] lg:h-[75vh]">
               {mapLoading ? (
                 <div className="h-full w-full animate-pulse bg-black-2 rounded-level-2" />
               ) : (

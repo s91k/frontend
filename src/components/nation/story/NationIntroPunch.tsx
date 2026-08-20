@@ -135,8 +135,8 @@ const IntroSwedenMaps = memo(function IntroSwedenMaps({
   unitLong,
 }: IntroSwedenMapsProps) {
   return (
-    <div className="relative h-[clamp(165px,30svh,320px)] story-short:h-[clamp(140px,26svh,250px)] md:h-[clamp(200px,34svh,320px)] story-compact:h-[clamp(190px,32svh,300px)] lg:h-[clamp(240px,40svh,400px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
-      <div className="absolute inset-[4%] md:inset-[8%]">
+    <div className="relative h-[clamp(155px,28svh,300px)] story-short:h-[clamp(130px,24svh,230px)] landing-laptop:h-[clamp(280px,42svh,420px)] story-compact:landing-laptop:h-[clamp(240px,36svh,360px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+      <div className="absolute inset-[5%] landing-laptop:inset-[5%] xl:inset-[8%]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
           overflow="visible"

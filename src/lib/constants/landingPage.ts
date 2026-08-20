@@ -35,9 +35,6 @@ export const LANDING_TEXT_COLUMN_CLASS = "w-full landing-laptop:w-2/5 lg:w-2/5";
 export const LANDING_VISUAL_COLUMN_CLASS =
   "w-full landing-laptop:w-3/5 lg:w-3/5";
 
-export const LANDING_MAP_HEIGHT_CLASS =
-  "relative w-full h-[55vh] md:h-[65vh] landing-laptop:md:h-[72vh] lg:h-[75vh] landing-laptop:lg:h-[80vh]";
-
 export const LANDING_CHART_PANEL_HEIGHT_CLASS =
   "w-full h-[520px] landing-laptop:h-[600px]";
 
