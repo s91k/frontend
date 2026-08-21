@@ -48,7 +48,7 @@ export function NationStoryPage({
   useStoryAutoSnap();
 
   return (
-    <div className="bg-black text-white pb-10 md:pb-24">
+    <div className="bg-black text-white pb-10 story-landscape:pb-10 md:pb-24">
       <StoryNavChrome endRef={conclusionRef} />
 
       <section

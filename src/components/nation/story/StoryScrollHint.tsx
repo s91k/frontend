@@ -66,10 +66,10 @@ export function StoryScrollHint({ endRef }: StoryScrollHintProps) {
           aria-hidden
         />
         <span className="text-xs md:text-sm font-medium tracking-wide">
-          <span className="md:hidden">
+          <span className="story-landscape:inline md:hidden">
             {t("nation.story.scrollHint.swipe")}
           </span>
-          <span className="hidden md:inline">
+          <span className="hidden story-landscape:hidden md:inline">
             {t("nation.story.scrollHint.scrollDesktop")}
           </span>
         </span>

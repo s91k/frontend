@@ -33,22 +33,22 @@ export const NATION_STORY_TEXT = {
 export const NATION_STORY_TYPE = {
   /** Hero page title (intro) – one step above section titles on desktop */
   heroTitle:
-    "text-3xl story-short:text-2xl md:text-4xl story-compact:text-4xl lg:text-5xl xl:text-6xl font-light tracking-tight leading-tight",
+    "text-3xl story-short:text-2xl story-landscape:text-2xl md:text-4xl story-compact:text-4xl lg:text-5xl xl:text-6xl font-light tracking-tight leading-tight",
   /** Section titles (interlude, conclusion, stacked, bathtub) */
   title:
-    "text-3xl story-short:text-2xl md:text-3xl story-compact:text-3xl lg:text-4xl xl:text-5xl font-light tracking-tight leading-tight",
+    "text-3xl story-short:text-2xl story-landscape:text-2xl md:text-3xl story-compact:text-3xl lg:text-4xl xl:text-5xl font-light tracking-tight leading-tight",
   /** Narrative paragraphs and step body copy */
-  body: "text-base story-short:text-sm md:text-base story-compact:text-base lg:text-lg leading-snug",
+  body: "text-base story-short:text-sm story-landscape:text-sm md:text-base story-compact:text-base lg:text-lg leading-snug",
   /** Step/layer headers with color dots – same size as body, heavier weight */
   emphasis:
-    "text-base story-short:text-sm md:text-base story-compact:text-base lg:text-lg font-medium",
+    "text-base story-short:text-sm story-landscape:text-sm md:text-base story-compact:text-base lg:text-lg font-medium",
   /** Eyebrows like “Conclusion” */
   eyebrow: "text-sm md:text-sm story-compact:text-sm lg:text-base",
   /** Legend rows, data-year, bathtub captions */
-  meta: "text-sm md:text-sm story-compact:text-xs lg:text-base",
+  meta: "text-sm story-landscape:text-sm md:text-sm story-compact:text-xs lg:text-base",
   /** Large stats (conclusion totals, hero callouts) */
   display:
-    "text-4xl story-short:text-3xl md:text-4xl story-compact:text-4xl lg:text-5xl xl:text-display font-light tabular-nums leading-none",
+    "text-4xl story-short:text-3xl story-landscape:text-3xl md:text-4xl story-compact:text-4xl lg:text-5xl xl:text-display font-light tabular-nums leading-none",
   /** Mid stats (bathtub year, onion total) */
-  stat: "text-2xl md:text-3xl story-compact:text-3xl lg:text-4xl xl:text-5xl font-light tabular-nums tracking-tight",
+  stat: "text-2xl story-landscape:text-2xl md:text-3xl story-compact:text-3xl lg:text-4xl xl:text-5xl font-light tabular-nums tracking-tight",
 } as const;

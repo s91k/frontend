@@ -179,7 +179,7 @@ function StoryProgressBar({
   const { scrollYProgress } = useScroll();
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-12 z-40 hidden min-h-7 story-compact:min-h-6 lg:min-h-8 items-start justify-center px-3 story-compact:px-2 md:flex">
+    <div className="pointer-events-none fixed inset-x-0 top-12 z-40 hidden min-h-7 story-compact:min-h-6 lg:min-h-8 items-start justify-center px-3 story-compact:px-2 story-landscape:hidden md:flex">
       <motion.div
         aria-hidden
         className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-orange-3 to-pink-3"
@@ -213,7 +213,7 @@ function StoryMobileChapterMenu({
           type="button"
           aria-label={t("nation.story.nav.chaptersLabel")}
           className={cn(
-            "fixed z-40 flex max-w-[min(12rem,58vw)] items-center gap-1 rounded-sm md:hidden",
+            "fixed z-40 flex max-w-[min(12rem,58vw)] items-center gap-1 rounded-sm story-landscape:flex md:hidden",
             NATION_STORY_TYPE.meta,
             NATION_STORY_TEXT.secondary,
             "transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40",
@@ -233,7 +233,7 @@ function StoryMobileChapterMenu({
       <DropdownMenuContent
         align="start"
         sideOffset={6}
-        className="z-50 min-w-[12rem] border-white/15 bg-black/95 p-1 text-white backdrop-blur-sm md:hidden"
+        className="z-50 min-w-[12rem] border-white/15 bg-black/95 p-1 text-white backdrop-blur-sm story-landscape:block md:hidden"
       >
         {chapters.map((chapter) => (
           <DropdownMenuItem

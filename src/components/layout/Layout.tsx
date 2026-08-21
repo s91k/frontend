@@ -52,7 +52,7 @@ export function Layout({ children }: LayoutProps) {
         }
       >
         {children}
-        <div className={isStoryPage ? "hidden md:block" : undefined}>
+        <div className={isStoryPage ? "hidden story-landscape:hidden md:block" : undefined}>
           <ScrollToTop />
           <SuggestEdit />
         </div>

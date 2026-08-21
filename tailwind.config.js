@@ -25,6 +25,10 @@ export default {
         "story-compact": {
           raw: "(min-width: 768px) and (max-height: 820px)",
         },
+        /** Phones in landscape mode */
+        "story-landscape": {
+          raw: "(min-width: 667px) and (max-height: 420px)",
+        },
         /** Landing sections – typical laptop widths without changing large desktop */
         "landing-laptop": {
           raw: "(min-width: 768px) and (max-width: 1279px)",

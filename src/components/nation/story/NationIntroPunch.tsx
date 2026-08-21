@@ -135,7 +135,7 @@ const IntroSwedenMaps = memo(function IntroSwedenMaps({
   unitLong,
 }: IntroSwedenMapsProps) {
   return (
-    <div className="relative h-[clamp(155px,28svh,300px)] story-short:h-[clamp(130px,24svh,230px)] landing-laptop:h-[clamp(280px,42svh,420px)] story-compact:landing-laptop:h-[clamp(240px,36svh,360px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
+    <div className="relative story-landscape:w-[200px] h-[clamp(155px,28svh,300px)] story-short:h-[clamp(130px,24svh,230px)] story-landscape:max-h-[160px] landing-laptop:h-[clamp(280px,42svh,420px)] story-compact:landing-laptop:h-[clamp(240px,36svh,360px)] xl:h-[clamp(260px,44svh,460px)] aspect-[100/220] shrink-0 isolate">
       <div className="absolute inset-[5%] landing-laptop:inset-[5%] xl:inset-[8%]">
         <svg
           viewBox={SWEDEN_OUTLINE_VIEWBOX}
@@ -370,7 +370,7 @@ const IntroStatCallouts = memo(function IntroStatCallouts({
 
   return (
     <div
-      className={`grid w-full max-w-[22rem] grid-cols-2 gap-x-4 md:flex md:w-auto md:max-w-none md:flex-col md:items-start md:gap-5 lg:gap-6 md:shrink-0 ${className ?? ""}`}
+      className={`grid w-full max-w-[22rem] grid-cols-2 gap-x-4 story-landscape:grid md:flex md:w-auto md:max-w-none md:flex-col md:items-start md:gap-5 lg:gap-6 md:shrink-0 ${className ?? ""}`}
     >
       <StatCallout
         label={usualLabel}

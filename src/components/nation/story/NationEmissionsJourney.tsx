@@ -22,6 +22,7 @@ import { usePinnedSteps } from "@/components/nation/story/usePinnedSteps";
 import { useStorySectionJumping } from "@/components/nation/story/useStoryAutoSnap";
 import { useStoryCompactViewport } from "@/components/nation/story/useStoryCompactViewport";
 import { useStoryShortViewport } from "@/components/nation/story/useStoryShortViewport";
+import { useStoryLandscapeViewport } from "./useStoryLandscapeViewport";
 
 type JourneyStep = {
   key: string;
@@ -172,6 +173,7 @@ export function NationEmissionsJourney({
   const { currentLanguage } = useLanguage();
   const { isMobile, isTablet } = useScreenSize();
   const isStoryShort = useStoryShortViewport();
+  const isStoryLandscape = useStoryLandscapeViewport();
   const isStoryCompact = useStoryCompactViewport();
   const reducedMotion = useReducedMotion();
   const sectionJumping = useStorySectionJumping();
@@ -180,13 +182,14 @@ export function NationEmissionsJourney({
 
   const steps = buildSteps(metrics);
   const maxTotal = steps[steps.length - 1].total;
-  const maxDiameter = isMobile
-    ? isStoryShort
-      ? STORY_SHORT_MAX_DIAMETER
-      : MOBILE_MAX_DIAMETER
-    : isStoryCompact || isTablet
-      ? LAPTOP_MAX_DIAMETER
-      : DESKTOP_MAX_DIAMETER;
+  const maxDiameter =
+    isMobile || isStoryLandscape
+      ? isStoryShort || isStoryLandscape
+        ? STORY_SHORT_MAX_DIAMETER
+        : MOBILE_MAX_DIAMETER
+      : isStoryCompact || isTablet
+        ? LAPTOP_MAX_DIAMETER
+        : DESKTOP_MAX_DIAMETER;
 
   const { ref, step, exitProgress, mode, sectionVh, stageStyle } =
     usePinnedSteps(steps.length, JOURNEY_STEP_VH, {
@@ -476,7 +479,7 @@ export function NationEmissionsJourney({
               className="space-y-2 story-short:space-y-1 md:space-y-3"
             >
               <p
-                className={`hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
+                className={`hidden story-landscape:hidden md:block ${NATION_STORY_TYPE.eyebrow} ${NATION_STORY_TEXT.eyebrow}`}
               >
                 {t("nation.story.journey.stepCounter", {
                   current: step + 1,
@@ -506,7 +509,7 @@ export function NationEmissionsJourney({
                 already carries these numbers. Hidden while there is only one
                 layer (it would just repeat the header). */}
             {revealedLayers.length >= 2 && (
-              <div className="hidden md:block space-y-1 border-t border-white/10 pt-2 md:pt-3">
+              <div className="hidden story-landscape:hidden md:block space-y-1 border-t border-white/10 pt-2 md:pt-3">
                 {steps.slice(0, step + 1).map((s, i) => {
                   const deltaLabel = formatDeltaMton(s.delta, currentLanguage);
                   return (
