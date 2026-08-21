@@ -1644,7 +1644,7 @@
       "graph": {
         "territorialFossil": "Territorial",
         "productionBased": "Production-based emissions",
-        "productionBeyondTerritorial": "Shipping and airlines",
+        "productionBeyondTerritorial": "Swedish shipping companies and airlines abroad",
         "biogenic": "Biogenic",
         "consumptionAbroad": "Consumption-based abroad"
       },

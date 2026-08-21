@@ -1694,7 +1694,7 @@
       "graph": {
         "territorialFossil": "Territoriella",
         "productionBased": "Produktionsbaserade utsläpp",
-        "productionBeyondTerritorial": "Rederier och flygbolag",
+        "productionBeyondTerritorial": "Svenska rederier och flygbolag utomlands",
         "biogenic": "Biogena",
         "consumptionAbroad": "Konsumtionsbaserade utomlands"
       },
