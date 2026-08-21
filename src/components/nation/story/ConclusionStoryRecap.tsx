@@ -164,11 +164,7 @@ function ChartRecapLegend({ compact = false }: { compact?: boolean }) {
     <div className={compact ? RECAP_DIALOG_LEGEND_CLASS : RECAP_LEGEND_CLASS}>
       <div className={cn("flex flex-col", compact ? "gap-y-1" : "gap-y-1.5")}>
         {legendRows.map((row) => (
-          <RecapLegendRow
-            key={row.key}
-            color={row.color}
-            label={row.label}
-          />
+          <RecapLegendRow key={row.key} color={row.color} label={row.label} />
         ))}
       </div>
     </div>
@@ -796,9 +792,7 @@ export function ConclusionStoryRecap({ metrics }: ConclusionStoryRecapProps) {
                 >
                   {expandedItem.renderVisual(true)}
                 </RecapVisualFrame>
-                {expandedItem.key === "onion" && (
-                  <OnionRecapLegend compact />
-                )}
+                {expandedItem.key === "onion" && <OnionRecapLegend compact />}
                 {expandedItem.key === "chart" && <ChartRecapLegend compact />}
               </div>
             </>
