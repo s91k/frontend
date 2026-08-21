@@ -48,7 +48,9 @@ export function StoryShareLinks({ className }: { className?: string }) {
   }, []);
 
   const pageUrl =
-    typeof window !== "undefined" ? window.location.href : "https://klimatkollen.se";
+    typeof window !== "undefined"
+      ? window.location.href
+      : "https://klimatkollen.se";
   const shareText = t("nation.story.conclusion.shareText");
   const urls = buildShareUrls(pageUrl, shareText);
 
@@ -77,7 +79,9 @@ export function StoryShareLinks({ className }: { className?: string }) {
       id: "x",
       href: urls.x,
       labelKey: "nation.story.conclusion.shareX",
-      icon: <XIcon className="h-4 w-4 opacity-90 transition-opacity group-hover:opacity-100" />,
+      icon: (
+        <XIcon className="h-4 w-4 opacity-90 transition-opacity group-hover:opacity-100" />
+      ),
     },
     {
       id: "bluesky",
