@@ -1590,11 +1590,11 @@
       },
       "chapters": {
         "intro": "Intro",
-        "journey": "The onion",
+        "journey": "The Onion",
         "interlude": "Perspective",
         "stacked": "History",
         "bathtubBridge": "Accumulation",
-        "bathtub": "The bathtub",
+        "bathtub": "The Bathtub",
         "conclusion": "Conclusion"
       },
       "nav": {
@@ -1677,6 +1677,14 @@
         "ctaNation": "Explore Sweden's data",
         "ctaMunicipalities": "How does your municipality compare?",
         "shareCta": "Feel free to share on your social channels",
+        "shareText": "A story about Sweden's emissions ahead of the 2026 election – from territorial figures to the full picture.",
+        "shareNative": "Share this page",
+        "shareFacebook": "Share on Facebook",
+        "shareLinkedIn": "Share on LinkedIn",
+        "shareX": "Share on X",
+        "shareBluesky": "Share on Bluesky",
+        "copyLink": "Copy link",
+        "linkCopied": "Link copied!",
         "recap": {
           "onionHeadline": "Sweden's total emissions {{year}}",
           "chartHeadline": "Sweden's annual emissions since 1990",
