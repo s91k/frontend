@@ -1694,7 +1694,7 @@
       "graph": {
         "territorialFossil": "Territoriella",
         "productionBased": "Produktionsbaserade utsläpp",
-        "productionBeyondTerritorial": "Rederier och flygbolag",
+        "productionBeyondTerritorial": "Svenska rederier och flygbolag utomlands",
         "biogenic": "Biogena",
         "consumptionAbroad": "Konsumtionsbaserade utomlands"
       },
@@ -1727,6 +1727,14 @@
         "ctaNation": "Utforska Sveriges data",
         "ctaMunicipalities": "Hur ser det ut där du bor?",
         "shareCta": "Dela gärna vidare i dina sociala kanaler",
+        "shareText": "En berättelse om Sveriges utsläpp inför valet 2026 – från territoriella siffror till hela bilden.",
+        "shareNative": "Dela sidan",
+        "shareFacebook": "Dela på Facebook",
+        "shareLinkedIn": "Dela på LinkedIn",
+        "shareX": "Dela på X",
+        "shareBluesky": "Dela på Bluesky",
+        "copyLink": "Kopiera länk",
+        "linkCopied": "Länk kopierad!",
         "recap": {
           "onionHeadline": "Sveriges totala utsläpp {{year}}",
           "chartHeadline": "Sveriges årliga utsläpp sedan 1990",
