@@ -427,12 +427,14 @@ export function parseIndustryGroups(
     return ["all"];
   }
 
-  return (searchParams
+  const industryGroups = searchParams
     .get("industryGroups")
     ?.split(",")
-    .filter((s) => INDUSTRY_GROUP_OPTIONS.some((g) => g === s)) ?? [
-    "all",
-  ]) as IndustryGroupOption[];
+    .filter((s) => INDUSTRY_GROUP_OPTIONS.some((g) => g === s));
+
+  return (
+    industryGroups && industryGroups.length > 0 ? industryGroups : ["all"]
+  ) as IndustryGroupOption[];
 }
 
 export function buildCompanyFilterUi(
