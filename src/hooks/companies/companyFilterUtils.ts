@@ -328,12 +328,12 @@ export function parseCompanySectors(
     return ["all"];
   }
 
-  return (searchParams
+  const sectors = searchParams
     .get("sectors")
     ?.split(",")
-    .filter((s) => SECTORS.some((sector) => sector.value === s)) ?? [
-    "all",
-  ]) as CompanySector[];
+    .filter((s) => SECTORS.some((sector) => sector.value === s));
+
+  return (sectors && sectors.length > 0 ? sectors : ["all"]) as CompanySector[];
 }
 
 export function buildCompanyFilterUi(
