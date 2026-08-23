@@ -83,7 +83,7 @@ function matchesSearch(
   const industryGroupName = getCompanyIndustryGroupName(
     company,
     industryGroupNames,
-  ).toLocaleLowerCase();
+  ).toLowerCase();
 
   return searchTerms.some((term) => {
     const companyNamePattern = new RegExp(`\\b${term}`, "i");

@@ -95,10 +95,18 @@ export function FilterPopover({
     });
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setSearch("");
+    }
+
+    setFilterOpen(open);
+  };
+
   const isSearching = search.trim().length > 0;
 
   return (
-    <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+    <Popover open={filterOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
