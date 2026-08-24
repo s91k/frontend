@@ -21,22 +21,22 @@ function SourceList({
     <>
       {readMoreKey ? <p>{t(readMoreKey)}</p> : null}
       <ul className="list-disc pl-5 space-y-2">
-      {items.map((item) => (
-        <li key={item.labelKey}>
-          {item.href ? (
-            <a
-              href={item.href}
-              className="underline hover:text-white transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t(item.labelKey)}
-            </a>
-          ) : (
-            t(item.labelKey)
-          )}
-        </li>
-      ))}
+        {items.map((item) => (
+          <li key={item.labelKey}>
+            {item.href ? (
+              <a
+                href={item.href}
+                className="underline hover:text-white transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t(item.labelKey)}
+              </a>
+            ) : (
+              t(item.labelKey)
+            )}
+          </li>
+        ))}
       </ul>
     </>
   );
