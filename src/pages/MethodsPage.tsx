@@ -42,7 +42,10 @@ export function MethodsPage() {
       return "companyDataOverview";
     } else if (searchQuery === "municipality") {
       return "municipalityAndRegionDataOverview";
-    } else if (searchQuery === "nation" || searchQuery === "nationDataOverview") {
+    } else if (
+      searchQuery === "nation" ||
+      searchQuery === "nationDataOverview"
+    ) {
       return "nationEmissionsLayers";
     } else {
       return "parisAgreement";
