@@ -11,12 +11,16 @@ function Paragraph({ i18nKey }: { i18nKey: string }) {
 
 function SourceList({
   items,
+  readMoreKey,
 }: {
   items: { labelKey: string; href?: string }[];
+  readMoreKey?: string;
 }) {
   const { t } = useTranslation();
   return (
-    <ul className="list-disc pl-5 space-y-2">
+    <>
+      {readMoreKey ? <p>{t(readMoreKey)}</p> : null}
+      <ul className="list-disc pl-5 space-y-2">
       {items.map((item) => (
         <li key={item.labelKey}>
           {item.href ? (
@@ -33,7 +37,8 @@ function SourceList({
           )}
         </li>
       ))}
-    </ul>
+      </ul>
+    </>
   );
 }
 
@@ -81,6 +86,7 @@ export const NationEmissionsLayersContent = () => {
         <Paragraph i18nKey={`${base}.production.paragraph2`} />
         <Paragraph i18nKey={`${base}.production.paragraph3`} />
         <SourceList
+          readMoreKey={`${base}.readMore`}
           items={[
             {
               labelKey: `${base}.production.sources.scbBunker`,
@@ -106,6 +112,7 @@ export const NationEmissionsLayersContent = () => {
         <Paragraph i18nKey={`${base}.consumption.paragraph5`} />
         <Paragraph i18nKey={`${base}.consumption.paragraph6`} />
         <SourceList
+          readMoreKey={`${base}.readMore`}
           items={[
             {
               labelKey: `${base}.consumption.sources.gcp`,
@@ -157,16 +164,6 @@ export const NationEmissionsLayersContent = () => {
         <Paragraph i18nKey={`${base}.total.paragraph1`} />
         <Paragraph i18nKey={`${base}.total.paragraph2`} />
         <Paragraph i18nKey={`${base}.total.paragraph3`} />
-      </MethodSection>
-
-      <MethodSection title={t(`${base}.limitations.title`)}>
-        <Paragraph i18nKey={`${base}.limitations.paragraph1`} />
-        <ul className="list-disc pl-5 space-y-2">
-          <li>{t(`${base}.limitations.item1`)}</li>
-          <li>{t(`${base}.limitations.item2`)}</li>
-          <li>{t(`${base}.limitations.item3`)}</li>
-          <li>{t(`${base}.limitations.item4`)}</li>
-        </ul>
       </MethodSection>
     </div>
   );

@@ -29,7 +29,6 @@ export const methodologySections: MethodologySectionType = {
     { id: "municipalityKPIs", category: "municipalityAndRegion" },
   ],
   nation: [
-    { id: "nationDataOverview", category: "nation" },
     { id: "nationEmissionsLayers", category: "nation" },
   ],
   company: [
