@@ -267,7 +267,7 @@ function buildIndustryGroupFilterGroup(
   t: TFunction,
   industryGroupFilterOptionGroups: FilterOptionGroup[],
   industryGroups: IndustryGroupOption[],
-  setIndustryGroups: (sectors: IndustryGroupOption[]) => void,
+  setIndustryGroups: (industryGroups: IndustryGroupOption[]) => void,
 ): FilterGroup {
   return {
     heading: t("explorePage.companies.industryGroup"),
@@ -375,8 +375,9 @@ function buildCompanyActiveFilters(
       ? industryGroups.map((industryGroup) => ({
           type: "filter" as const,
           label:
-            industryGroupNames[industryGroup as keyof typeof sectorNames] ||
-            industryGroup,
+            industryGroupNames[
+              industryGroup as keyof typeof industryGroupNames
+            ] || industryGroup,
           onRemove: () =>
             setIndustryGroups(
               industryGroups.filter((s) => s !== industryGroup),
