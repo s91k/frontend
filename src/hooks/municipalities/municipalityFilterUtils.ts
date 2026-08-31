@@ -65,12 +65,16 @@ export function buildMunicipalityActiveFilters(
 }
 
 export function parseSelectedRegions(searchParams: URLSearchParams): string[] {
-  return (searchParams
+  const selectedRegions = searchParams
     .get("selectedRegions")
     ?.split(",")
     .filter(
       (s) => Object.keys(regions).some((region) => region === s) || s == "all",
-    ) ?? ["all"]) as string[];
+    );
+
+  return selectedRegions && selectedRegions.length > 0
+    ? selectedRegions
+    : ["all"];
 }
 
 export { buildMeetsParisFilterGroup };
