@@ -28,6 +28,7 @@ import {
   companyMatchesCountries,
 } from "./companyCountryFilterUtils";
 import { FilterBadge } from "@/components/companies/list/FilterBadges";
+import { buildSearchRegex } from "@/utils/data/search";
 
 type MeetsParisFilter = "all" | "yes" | "no" | "unknown";
 
@@ -86,13 +87,11 @@ function matchesSearch(
   ).toLowerCase();
 
   return searchTerms.some((term) => {
-    const companyNamePattern = new RegExp(`\\b${term}`, "i");
-    const sectorNamePattern = new RegExp(`\\b${term}`, "i");
-    const industryGroupNamePattern = new RegExp(`\\b${term}`, "i");
+    const pattern = buildSearchRegex(term);
     return (
-      companyNamePattern.test(companyName) ||
-      sectorNamePattern.test(sectorName) ||
-      industryGroupNamePattern.test(industryGroupName)
+      pattern.test(companyName) ||
+      pattern.test(sectorName) ||
+      pattern.test(industryGroupName)
     );
   });
 }
