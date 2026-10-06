@@ -121,7 +121,7 @@ export const OverviewChart: FC<OverviewChartProps> = ({
 
   const pathComparison = useMemo(() => {
     if (!hasFuturePaths) {
-      return { totalTrend: 0, totalParis: 0 };
+      return { totalTrend: 0, totalParis: 0, endTrend: 0, endParis: 0 };
     }
     return compareFuturePathTotals(projectedData, currentYear, chartEndYear);
   }, [hasFuturePaths, projectedData, currentYear, chartEndYear]);
@@ -273,8 +273,8 @@ export const OverviewChart: FC<OverviewChartProps> = ({
         {hasFuturePaths && (
           <FutureTotalsCaption
             year={chartEndYear}
-            totalTrend={pathComparison.totalTrend}
-            totalParis={pathComparison.totalParis}
+            trend={pathComparison.endTrend}
+            paris={pathComparison.endParis}
             translationPrefix={TRANSLATION_PREFIX}
           />
         )}

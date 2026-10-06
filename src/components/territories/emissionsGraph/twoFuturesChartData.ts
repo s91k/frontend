@@ -64,6 +64,10 @@ export function buildTwoFuturesRows(
 export type FutureTotalsComparison = {
   totalParis: number;
   totalTrend: number;
+  /** Trend emissions in endYear. */
+  endTrend: number;
+  /** Paris-path emissions in endYear. */
+  endParis: number;
   /**
    * (trend total − Paris total) / Paris total.
    * Positive is overshoot, negative is undershoot.
@@ -77,8 +81,9 @@ export type FutureTotalsComparison = {
 };
 
 /**
- * Compare the summed Paris path and the summed trend path from today
- * through endYear. The gap is a share of each total, not absolute tonnes.
+ * Compare the Paris path and the trend path from today through endYear.
+ * Totals are summed yearly emissions. endTrend and endParis are the values
+ * in endYear — the level the chart reaches, not the sum along the way.
  */
 export function compareFuturePathTotals(
   data: DataPoint[],
@@ -88,6 +93,8 @@ export function compareFuturePathTotals(
   let totalParis = 0;
   let totalTrend = 0;
   let counted = 0;
+  let endTrend = 0;
+  let endParis = 0;
 
   for (const point of data) {
     if (point.year < currentYear || point.year > endYear) continue;
@@ -95,12 +102,18 @@ export function compareFuturePathTotals(
     totalParis += point.carbonLaw;
     totalTrend += point.trend;
     counted += 1;
+    if (point.year === endYear) {
+      endTrend = point.trend;
+      endParis = point.carbonLaw;
+    }
   }
 
   if (counted === 0) {
     return {
       totalParis: 0,
       totalTrend: 0,
+      endTrend: 0,
+      endParis: 0,
       gapShareOfParis: null,
       gapShareOfTrend: null,
     };
@@ -111,6 +124,8 @@ export function compareFuturePathTotals(
   return {
     totalParis,
     totalTrend,
+    endTrend,
+    endParis,
     gapShareOfParis: totalParis > 0 ? gap / totalParis : null,
     gapShareOfTrend: totalTrend > 0 ? gap / totalTrend : null,
   };

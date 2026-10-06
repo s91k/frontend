@@ -5,28 +5,42 @@ import { formatEmissionsAbsolute } from "@/utils/formatting/localization";
 
 export type FutureTotalsCaptionProps = {
   year: number;
-  totalTrend: number;
-  totalParis: number;
+  /** Trend emissions in `year`. */
+  trend: number;
+  /** Paris-path emissions in `year`. */
+  paris: number;
   /** i18n prefix, e.g. `detailPage.graph` or `companies.emissionsHistory` */
   translationPrefix: string;
 };
 
 export function FutureTotalsCaption({
   year,
-  totalTrend,
-  totalParis,
+  trend,
+  paris,
   translationPrefix,
 }: FutureTotalsCaptionProps) {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
 
-  const caption = captionFromPathTotals(totalTrend, totalParis);
+  const caption = captionFromPathTotals(trend, paris);
   if (caption == null) return null;
 
   if (caption.kind === "aligned") {
     return (
       <p className="mb-0 max-w-3xl text-sm leading-relaxed text-white/80 md:text-base">
         {t(`${translationPrefix}.twoFuturesAligned`, { year })}
+      </p>
+    );
+  }
+
+  if (caption.kind === "overshootMild" || caption.kind === "undershootMild") {
+    const i18nKey =
+      caption.kind === "overshootMild"
+        ? `${translationPrefix}.twoFuturesOvershootMild`
+        : `${translationPrefix}.twoFuturesUndershootMild`;
+    return (
+      <p className="mb-0 max-w-3xl text-sm leading-relaxed text-white/80 md:text-base">
+        {t(i18nKey, { year })}
       </p>
     );
   }
