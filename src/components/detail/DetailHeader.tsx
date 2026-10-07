@@ -3,6 +3,11 @@ import { Text } from "@/components/ui/text";
 import { OverviewStat } from "@/components/companies/detail/overview/OverviewStat";
 import { SectionWithHelp } from "@/data-guide/SectionWithHelp";
 import { DataGuideItemId } from "@/data-guide/items";
+import { detailEntityNameClassName } from "@/components/detail/detailEntityTitle";
+import {
+  detailStatItemClassName,
+  detailStatsRowClassName,
+} from "@/components/detail/detailStatsLayout";
 import { cn } from "@/lib/utils";
 
 export interface DetailStat {
@@ -25,7 +30,7 @@ export interface DetailHeaderProps {
   headerChip?: ReactNode;
 }
 
-function DetailStatItem({ stat, dense }: { stat: DetailStat; dense: boolean }) {
+function DetailStatItem({ stat }: { stat: DetailStat }) {
   return (
     <OverviewStat
       variant="detail"
@@ -36,23 +41,9 @@ function DetailStatItem({ stat, dense }: { stat: DetailStat; dense: boolean }) {
       info={stat.info}
       infoText={stat.infoText}
       caption={stat.caption}
-      dense={dense}
       useFlex1={false}
     />
   );
-}
-
-function statsGridClass(count: number) {
-  if (count >= 4) {
-    return "grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4 xl:gap-10";
-  }
-  if (count === 3) {
-    return "grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12";
-  }
-  if (count === 2) {
-    return "grid-cols-1 gap-8 md:grid-cols-2 md:gap-12";
-  }
-  return "grid-cols-1 gap-8";
 }
 
 export function DetailHeader({
@@ -63,13 +54,11 @@ export function DetailHeader({
   supplementalData,
   headerChip,
 }: DetailHeaderProps) {
-  const dense = stats.length >= 4;
-
   return (
     <SectionWithHelp helpItems={helpItems}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <Text className="text-4xl md:text-8xl">{name}</Text>
+          <Text className={detailEntityNameClassName}>{name}</Text>
           {headerChip && <div className="w-fit shrink-0">{headerChip}</div>}
         </div>
         {logoUrl && (
@@ -81,9 +70,11 @@ export function DetailHeader({
         )}
       </div>
       {stats.length > 0 && (
-        <div className={cn("mt-8 grid", statsGridClass(stats.length))}>
+        <div className={cn("mt-8", detailStatsRowClassName)}>
           {stats.map((stat, index) => (
-            <DetailStatItem key={index} stat={stat} dense={dense} />
+            <div key={index} className={detailStatItemClassName}>
+              <DetailStatItem stat={stat} />
+            </div>
           ))}
         </div>
       )}
