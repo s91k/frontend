@@ -141,12 +141,8 @@ const SIMPLE_SEO_ROUTES: Record<
     descriptionKey: "newsletterArchivePage.description",
   },
   "/companies": {
-    titleKey: "companiesOverviewPage.title",
-    descriptionKey: "companiesOverviewPage.description",
-  },
-  "/sectors": {
-    titleKey: "sectorsOverviewPage.title",
-    descriptionKey: "sectorsOverviewPage.description",
+    titleKey: "companiesOverviewPage.paris.title",
+    descriptionKey: "companiesOverviewPage.paris.lead",
   },
   "/municipalities": {
     titleKey: "municipalitiesOverviewPage.title",
