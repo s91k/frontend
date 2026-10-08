@@ -354,6 +354,7 @@
       "companyNoun_other": "svenska företag",
       "heading": "av {{total}} {{companies}} {{scope}} minskar utsläppen tillräckligt snabbt för Parismålet.",
       "share": "Det är {{percent}} % av Sveriges {{count}} största bolag.",
+      "shareSector": "Det är {{percent}} % av de {{count}} företagen i {{sector}}.",
       "tooLittle_one": "{{count}} företag rapporterar för lite för att kunna bedömas.",
       "tooLittle_other": "{{count}} företag rapporterar för lite för att kunna bedömas.",
       "dotNote": "Varje prick är ett företag",

@@ -75,6 +75,7 @@ function BreakdownRow({
 
 export interface ParisAnswerCardProps {
   summary: ParisSummary;
+  companies: CompanyWithKPIs[];
   /** Sector title when one is selected, such as "Industrials Sector". */
   industryLabel: string | null;
 }
@@ -165,10 +166,16 @@ export function ParisAnswerCard({
             ease,
           }}
         >
-          {t("companiesOverviewPage.paris.share", {
-            percent: onTrackPercent,
-            count: total,
-          })}
+          {industryLabel
+            ? t("companiesOverviewPage.paris.shareSector", {
+                percent: onTrackPercent,
+                count: total,
+                sector: industryLabel,
+              })
+            : t("companiesOverviewPage.paris.share", {
+                percent: onTrackPercent,
+                count: total,
+              })}
           {unknown > 0 && (
             <>
               {" "}
