@@ -80,7 +80,7 @@ function buildDistributionStats<T, KPI extends KPIValue<T>>(
   belowAverageCount: number,
   nullCount: number,
 ): EntityStatistics<T>["distributionStats"] {
-  const entityPlural = t("header." + entityType).toLowerCase();
+  const entityPlural = t("header." + entityType);
   const aboveAverageLabel = t("rankedInsights.aboveAverage", { entityPlural });
   const belowAverageLabel = t("rankedInsights.belowAverage", { entityPlural });
   const kpiKey = String(selectedKPI.key);

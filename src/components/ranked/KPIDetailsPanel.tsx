@@ -149,7 +149,7 @@ function DistributionSection({
                   }}
                 />
                 <span className="text-white/70 text-sm md:text-base truncate">
-                  {lowercaseFirstLetter(stat.label)}
+                  {stat.label}
                 </span>
               </div>
               <span

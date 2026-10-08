@@ -79,7 +79,7 @@ export function BooleanSummaryBox({
             {stat.count}
           </div>
           <div className="text-white/70 text-sm leading-tight">
-            {stat.label}
+            {stat.label.charAt(0).toLocaleLowerCase() + stat.label.slice(1)}
           </div>
         </div>
       ))}
