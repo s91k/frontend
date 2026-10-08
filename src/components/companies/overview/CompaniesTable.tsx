@@ -25,7 +25,7 @@ import { buildSearchRegex } from "@/utils/data/search";
 import type { CompanyWithKPIs } from "@/types/company";
 import { cn } from "@/lib/utils";
 
-type SortKey = "index" | "name" | "industry" | "emissions" | "change" | "paris";
+type SortKey = "name" | "industry" | "emissions" | "change" | "paris";
 
 type MetricColumn = "industry" | "emissions" | "change" | "paris";
 
@@ -59,7 +59,6 @@ function metricColumnClass(
 
 /** Default direction per column the first time it is selected. */
 const DEFAULT_DIRECTION: Record<SortKey, "asc" | "desc"> = {
-  index: "asc",
   name: "asc",
   industry: "asc",
   emissions: "desc",
@@ -109,13 +108,8 @@ function compareCompanies(
   factor: number,
   locale: string,
   sectorNames: Record<string, string>,
-  sourceIndex: Map<string, number>,
 ): number {
   switch (sortKey) {
-    case "index":
-      return (
-        factor * ((sourceIndex.get(a.id) ?? 0) - (sourceIndex.get(b.id) ?? 0))
-      );
     case "name":
       return factor * a.name.localeCompare(b.name, locale);
     case "industry": {
@@ -233,12 +227,6 @@ export function CompaniesTable({ companies }: CompaniesTableProps) {
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [mobileColumn, setMobileColumn] = useState<MetricColumn>("paris");
 
-  const sourceIndex = useMemo(() => {
-    const map = new Map<string, number>();
-    companies.forEach((company, index) => map.set(company.id, index));
-    return map;
-  }, [companies]);
-
   const rows = useMemo(() => {
     const patterns = getSearchTerms(query).map((term) =>
       buildSearchRegex(term, currentLanguage, true),
@@ -256,25 +244,9 @@ export function CompaniesTable({ companies }: CompaniesTableProps) {
     const factor = direction === "asc" ? 1 : -1;
 
     return [...filtered].sort((a, b) =>
-      compareCompanies(
-        a,
-        b,
-        sortKey,
-        factor,
-        currentLanguage,
-        sectorNames,
-        sourceIndex,
-      ),
+      compareCompanies(a, b, sortKey, factor, currentLanguage, sectorNames),
     );
-  }, [
-    companies,
-    query,
-    sortKey,
-    direction,
-    currentLanguage,
-    sectorNames,
-    sourceIndex,
-  ]);
+  }, [companies, query, sortKey, direction, currentLanguage, sectorNames]);
 
   const shown = rows.slice(0, limit);
 
@@ -339,16 +311,9 @@ export function CompaniesTable({ companies }: CompaniesTableProps) {
         <Table className="table-fixed">
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
-              <SortableColumnHead
-                columnKey="index"
-                activeKey={sortKey}
-                direction={direction}
-                onSort={toggleSort}
-                align="end"
-                className="w-8 text-white/40 md:w-10"
-              >
+              <TableHead className="w-8 text-right text-white/40 md:w-10">
                 #
-              </SortableColumnHead>
+              </TableHead>
               <SortableColumnHead
                 columnKey="name"
                 activeKey={sortKey}
