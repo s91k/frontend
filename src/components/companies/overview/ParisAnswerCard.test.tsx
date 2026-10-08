@@ -75,7 +75,7 @@ function renderCard(
       <ParisAnswerCard
         summary={summary}
         companies={companies}
-        industryLabel={null}
+        industryTitle={null}
       />
     </MemoryRouter>,
   );
