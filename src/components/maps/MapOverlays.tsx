@@ -23,7 +23,7 @@ interface MapOverlaysProps {
   onAreaClick?: (id: string) => void;
   showTooltip?: boolean;
   legendPosition?: MapLegendPosition;
-  booleanColors?: { positive: string, negative: string };
+  booleanColors?: { positive: string; negative: string };
 }
 
 function MapOverlays({

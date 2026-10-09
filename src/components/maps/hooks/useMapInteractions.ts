@@ -16,7 +16,7 @@ interface UseMapInteractionsProps {
   values: number[];
   propertyNameField: string;
   gradientColors: TerritoryMapGradientColors;
-  booleanColors: { positive: string, negative: string }
+  booleanColors: { positive: string; negative: string };
   onAreaClick?: (id: string) => void;
   hoveredArea?: string | null;
   onHoveredAreaChange?: (area: string | null) => void;

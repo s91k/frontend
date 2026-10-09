@@ -3,19 +3,11 @@
  * (municipalities, regions, companies).
  */
 import { useTranslation } from "react-i18next";
-import { COLORS } from "@/lib/colors";
-
-const STAT_COLOR_MAP: Record<string, string> = {
-  "text-blue-3": COLORS.blue3,
-  "text-pink-3": COLORS.pink3,
-  "text-green-3": COLORS.green3,
-  "text-orange-2": COLORS.orange2,
-  "text-grey": COLORS.grey,
-};
 
 interface DistributionStat {
   count: number;
-  colorClass: string;
+  backgroundColor: string;
+  textColor: string;
   label: string;
 }
 
@@ -74,7 +66,7 @@ export function BooleanSummaryBox({
         <div key={stat.label || i} className="flex items-center gap-3">
           <div
             className="text-4xl font-bold"
-            style={{ color: STAT_COLOR_MAP[stat.colorClass] ?? COLORS.grey }}
+            style={{ color: stat.textColor ?? "var(--grey)" }}
           >
             {stat.count}
           </div>

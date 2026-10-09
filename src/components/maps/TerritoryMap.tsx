@@ -2,7 +2,10 @@ import { useMemo } from "react";
 import { FeatureCollection } from "geojson";
 import type L from "leaflet";
 import { cn } from "@/lib/utils";
-import { TERRITORY_MAP_COLORS, TerritoryMapGradientColors } from "@/utils/territoryMapUtils";
+import {
+  TERRITORY_MAP_COLORS,
+  TerritoryMapGradientColors,
+} from "@/utils/territoryMapUtils";
 import { DataItem, DataKPI, MapEntityType } from "@/types/rankings";
 import { calculateGeoBounds } from "./utils/geoBounds";
 import { useMapData } from "./hooks/useMapData";
@@ -15,7 +18,11 @@ import MapOverlays from "./MapOverlays";
 import type { MapLegendPosition } from "./MapLegend";
 
 import "leaflet/dist/leaflet.css";
-import { DEFAULT_BOOLEAN_DATA_COLORS, getPositiveIndicatorColor, isMeetsParisKpiKey } from "@/utils/ui/colors";
+import {
+  DEFAULT_NEGATIVE_BOOLEAN_COLOR,
+  getPositiveIndicatorColor,
+  isMeetsParisKpiKey,
+} from "@/utils/ui/colors";
 
 interface TerritoryMapProps {
   entityType: MapEntityType;
@@ -28,8 +35,8 @@ interface TerritoryMapProps {
   propertyNameField?: string;
   gradientColors?: TerritoryMapGradientColors;
   booleanColors?: {
-    positive: string,
-    negative: string,
+    positive: string;
+    negative: string;
   };
   mapBackgroundColor?: string;
   scrollWheelZoom?: boolean;
@@ -59,7 +66,7 @@ function TerritoryMap({
   gradientColors = TERRITORY_MAP_COLORS,
   booleanColors = {
     positive: getPositiveIndicatorColor(isMeetsParisKpiKey(selectedKPI.key)),
-    negative: DEFAULT_BOOLEAN_DATA_COLORS.negative,
+    negative: DEFAULT_NEGATIVE_BOOLEAN_COLOR,
   },
   mapBackgroundColor = "var(--black-2)",
   scrollWheelZoom = true,
