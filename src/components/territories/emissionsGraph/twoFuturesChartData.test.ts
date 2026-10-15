@@ -35,11 +35,153 @@ describe("buildTwoFuturesRows", () => {
     ];
 
     const rows = buildTwoFuturesRows(data, currentYear);
-    expect(rows[0].history).toBe(100);
-    expect(rows[0].trend).toBeUndefined();
-    expect(rows[1].history).toBe(80); // after last reported year → approximated
-    expect(rows[1].trend).toBe(80);
-    expect(rows[2].gap).toBe(20);
+    const row = (year: number) => rows.find((item) => item.year === year);
+
+    expect(row(2020)?.history).toBe(100);
+    expect(row(2020)?.trend).toBeUndefined();
+    expect(row(2020)?.historyEstimated).toBe(100);
+    expect(row(2020)?.historyIsEstimated).toBe(false);
+    expect(row(2021)?.history).toBeUndefined();
+    expect(row(2021)?.historyIsEstimated).toBe(true);
+    expect(row(currentYear)?.history).toBeUndefined();
+    expect(row(currentYear)?.historyEstimated).toBe(80);
+    expect(row(currentYear)?.historyIsEstimated).toBe(true);
+    expect(row(currentYear)?.trend).toBe(80);
+    expect(row(2027)?.gap).toBe(20);
+  });
+
+  it("bridges a gap between reported years with an approximated segment", () => {
+    const data: DataPoint[] = [
+      {
+        year: 2020,
+        total: 100,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+      {
+        year: 2023,
+        total: 40,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+    ];
+
+    const rows = buildTwoFuturesRows(data, currentYear);
+    const row = (year: number) => rows.find((item) => item.year === year);
+
+    expect(row(2020)?.history).toBe(100);
+    expect(row(2020)?.historyEstimated).toBe(100);
+    expect(row(2020)?.historyIsEstimated).toBe(false);
+    expect(row(2021)?.history).toBeUndefined();
+    expect(row(2021)?.historyEstimated).toBeCloseTo(80);
+    expect(row(2021)?.historyIsEstimated).toBe(true);
+    expect(row(2022)?.historyEstimated).toBeCloseTo(60);
+    expect(row(2022)?.historyIsEstimated).toBe(true);
+    expect(row(2023)?.history).toBe(40);
+    expect(row(2023)?.historyEstimated).toBe(40);
+    expect(row(2023)?.historyIsEstimated).toBe(false);
+  });
+
+  it("uses a modelled value for a missing year instead of the straight bridge", () => {
+    const data: DataPoint[] = [
+      {
+        year: 2020,
+        total: 100,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+      {
+        year: 2021,
+        total: undefined,
+        trend: undefined,
+        approximated: 77,
+        carbonLaw: undefined,
+      },
+      {
+        year: 2023,
+        total: 40,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+    ];
+
+    const rows = buildTwoFuturesRows(data, currentYear);
+    const row = (year: number) => rows.find((item) => item.year === year);
+
+    expect(row(2021)?.history).toBeUndefined();
+    expect(row(2021)?.historyEstimated).toBe(77);
+    expect(row(2021)?.historyIsEstimated).toBe(true);
+    expect(row(2022)?.historyEstimated).toBeCloseTo(60);
+  });
+
+  it("marks AI-extracted reported years and leaves verified years unmarked", () => {
+    const data: DataPoint[] = [
+      {
+        year: 2022,
+        total: 110,
+        isAIGenerated: true,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+      {
+        year: 2024,
+        total: 100,
+        isAIGenerated: false,
+        trend: undefined,
+        approximated: undefined,
+        carbonLaw: undefined,
+      },
+      {
+        year: currentYear,
+        total: undefined,
+        approximated: 80,
+        trend: 80,
+        carbonLaw: 60,
+        isAIGenerated: true,
+      },
+    ];
+
+    const rows = buildTwoFuturesRows(data, currentYear);
+    const row = (year: number) => rows.find((item) => item.year === year);
+
+    expect(row(2022)?.historyIsAIGenerated).toBe(true);
+    expect(row(2022)?.historyIsEstimated).toBe(false);
+    expect(row(2023)?.history).toBeUndefined();
+    expect(row(2023)?.historyIsEstimated).toBe(true);
+    expect(row(2023)?.historyIsAIGenerated).toBe(false);
+    expect(row(2024)?.historyIsAIGenerated).toBe(false);
+    expect(row(2024)?.historyIsEstimated).toBe(false);
+    expect(row(currentYear)?.historyIsAIGenerated).toBe(false);
+    expect(row(currentYear)?.historyIsEstimated).toBe(true);
+    expect(row(currentYear)?.history).toBeUndefined();
+  });
+
+  it("does not draw an estimated segment when every past year is reported", () => {
+    const data: DataPoint[] = [
+      {
+        year: 2020,
+        total: 100,
+        trend: undefined,
+        approximated: 100,
+        carbonLaw: undefined,
+      },
+      {
+        year: 2021,
+        total: 90,
+        trend: undefined,
+        approximated: 90,
+        carbonLaw: undefined,
+      },
+    ];
+
+    const rows = buildTwoFuturesRows(data, currentYear);
+    expect(rows.every((row) => row.historyEstimated == null)).toBe(true);
+    expect(rows.every((row) => !row.historyIsEstimated)).toBe(true);
   });
 });
 
