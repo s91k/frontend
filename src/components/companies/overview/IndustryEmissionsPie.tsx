@@ -7,13 +7,13 @@ import SectorPieChart, {
   type PieChartItem,
 } from "@/components/charts/sectorChart/SectorPieChart";
 import SectorPieLegend from "@/components/charts/sectorChart/SectorPieLegend";
-import type { IndustryBreakdownRow } from "@/hooks/companies/parisOverviewUtils";
 import { sectorColors } from "@/lib/constants/companyColors";
 import type { SectorCode } from "@/lib/constants/sectors";
 import { useSectorNames } from "@/hooks/companies/useCompanySectors";
+import type { PageIndustryBreakdown } from "@/types/pages";
 
 export interface IndustryEmissionsPieProps {
-  rows: IndustryBreakdownRow[];
+  rows: PageIndustryBreakdown[];
   /** Sector to mark in the chart and legend. Null keeps every slice equal. */
   selected: SectorCode | null;
 }
@@ -36,12 +36,15 @@ export function IndustryEmissionsPie({
 
   const data = useMemo<PieChartItem[]>(
     () =>
-      rows.map((row) => ({
-        key: row.code,
-        name: sectorNames[row.code],
-        value: row.emissions,
-        color: sectorColors[row.code].base,
-      })),
+      rows.map((row) => {
+        const code = row.code as SectorCode;
+        return {
+          key: code,
+          name: sectorNames[code],
+          value: row.emissions,
+          color: sectorColors[code].base,
+        };
+      }),
     [rows, sectorNames],
   );
 
